@@ -4,11 +4,11 @@ Device::~Device()
 {
 }
 
-void Device::parseInputData(const string& input, int& pos, bool& error, ofstream& err)
+void Device::parseInputData(const std::string& input, int& pos, bool& error, std::ofstream& err)
 {
     int totalParsedCharsCount{0}; // current total number of parsed input characters for the device (excluding comma)
     int position{pos}; // position in the input string to be stored in this temporary variable as it should only be written back to if error 4 does not occur
-    vector<int> fieldSizes; // stores the size of each input field read for the device
+    std::vector<int> fieldSizes; // stores the size of each input field read for the device
 
     fieldSizes.resize(mRequiredNrOfInputDataFields);
 
@@ -53,7 +53,7 @@ void Device::parseInputData(const string& input, int& pos, bool& error, ofstream
     }
 }
 
-void Device::writeDescriptionAndLabel(string& out) const
+void Device::writeDescriptionAndLabel(std::string& out) const
 {
     out += mDescription;
     out += ',';
@@ -81,8 +81,10 @@ int Device::getColumn() const
 }
 
 // the function also mentiones the error "coordinates" (row or cell from input .csv file where the error originated)
-void Device::handleError(ofstream& err)
+void Device::handleError(std::ofstream& err)
 {
+    using namespace std;
+
     switch(mErrorCode)
     {
     case 1:

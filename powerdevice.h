@@ -1,8 +1,6 @@
 #ifndef POWERDEVICE_H
 #define POWERDEVICE_H
 
-#include <map>
-
 #include "device.h"
 
 // PDU ports
@@ -18,9 +16,9 @@ public:
     void buildLabelText();
 
 protected:
-    string mPlacementType; // rack placement (vertical left/right, horizontal)
-    string mLoadSegmentNumber;
-    string mPortNumber;
+    std::string mPlacementType; // rack placement (vertical left/right, horizontal)
+    std::string mLoadSegmentNumber;
+    std::string mPortNumber;
 };
 
 // PDU extension bar ports
@@ -36,9 +34,9 @@ public:
     void buildLabelText();
 
 protected:
-    string mPlacementType; // rack placement (left/right)
-    string mPortNumber;
-    string mPlaceholder;
+    std::string mPlacementType; // rack placement (left/right)
+    std::string mPortNumber;
+    std::string mPlaceholder;
 };
 
 // UPS ports
@@ -54,9 +52,9 @@ public:
     void buildLabelText();
 
 protected:
-    string mLoadSegmentNumber;
-    string mPortNumber;
-    string mPlaceholder;
+    std::string mLoadSegmentNumber;
+    std::string mPortNumber;
+    std::string mPlaceholder;
 };
 
 // power supply ports (any power supply no matter the device type)
@@ -72,9 +70,9 @@ public:
     void buildLabelText();
 
 protected:
-    string mPowerSupplyNumber;
-    string mPlaceholder1;
-    string mPlaceholder2;
+    std::string mPowerSupplyNumber;
+    std::string mPlaceholder1;
+    std::string mPlaceholder2;
 };
 
 #endif // POWERDEVICE_H

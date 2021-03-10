@@ -16,9 +16,9 @@ public:
     void buildLabelText();
 
 protected:
-    string mPortNumber;
-    string mPlaceholder1;
-    string mPlaceholder2;
+    std::string mPortNumber;
+    std::string mPlaceholder1;
+    std::string mPlaceholder2;
 };
 
 // FC (SAN) switch ports
@@ -34,9 +34,9 @@ public:
     void buildLabelText();
 
 protected:
-    string mPortNumber;
-    string mPlaceholder1;
-    string mPlaceholder2;
+    std::string mPortNumber;
+    std::string mPlaceholder1;
+    std::string mPlaceholder2;
 };
 
 // Infiniband switch ports
@@ -52,9 +52,9 @@ public:
     void buildLabelText();
 
 protected:
-    string mPortNumber;
-    string mPlaceholder1;
-    string mPlaceholder2;
+    std::string mPortNumber;
+    std::string mPlaceholder1;
+    std::string mPlaceholder2;
 };
 
 // KVM switch ports
@@ -70,9 +70,9 @@ public:
     void buildLabelText();
 
 protected:
-    string mPortNumber;
-    string mPlaceholder1;
-    string mPlaceholder2;
+    std::string mPortNumber;
+    std::string mPlaceholder1;
+    std::string mPlaceholder2;
 };
 
 // server ports (embedded (incl. management), Ethernet, FC, IB, etc)
@@ -88,9 +88,9 @@ public:
     void buildLabelText();
 
 protected:
-    string mPortType;
-    string mPortNumber;
-    string mPlaceholder;
+    std::string mPortType;
+    std::string mPortNumber;
+    std::string mPlaceholder;
 };
 
 // storage FC ports
@@ -106,9 +106,9 @@ public:
     void buildLabelText();
 
 protected:
-    string mControllerNr; // can be the controller number (for FC storage) or IO module number (for JBODs)
-    string mPortNr;
-    string mPlaceholder;
+    std::string mControllerNr; // can be the controller number (for FC storage) or IO module number (for JBODs)
+    std::string mPortNr;
+    std::string mPlaceholder;
 };
 
 // blade system interconnect/management/uplink/downlink ports
@@ -124,9 +124,9 @@ public:
     void buildLabelText();
 
 protected:
-    string mModuleType; // blade system module type: interconnect, management module etc.
-    string mModuleNumber; // data module number
-    string mPortNumber;
+    std::string mModuleType; // blade system module type: interconnect, management module etc.
+    std::string mModuleNumber; // data module number
+    std::string mPortNumber;
 };
 
 #endif // DATADEVICE_H

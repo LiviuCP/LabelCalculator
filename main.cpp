@@ -1,3 +1,7 @@
+#include <iostream>
+#include <sstream>
+#include <cassert>
+
 #include "datadevice.h"
 #include "powerdevice.h"
 #include "error.h"
@@ -7,9 +11,9 @@
    An entry number is passed by caller as argument and updated by function.
    The part number of the cable is also required as argument.
 */
-void buildConnectionEntry(string& entry, Device* firstDevice, Device* secondDevice, int& entryNumber, const string& cablePartNumber)
+void buildConnectionEntry(std::string& entry, Device* firstDevice, Device* secondDevice, int& entryNumber, const std::string& cablePartNumber)
 {
-    stringstream str;
+    std::stringstream str;
 
     entry.clear();
     str << entryNumber;
@@ -31,7 +35,7 @@ void buildConnectionEntry(string& entry, Device* firstDevice, Device* secondDevi
 /* This function is responsible for creating the actual device objects which are then used for generating the connection output data (descriptions and labels)
    It implements the factory design pattern and returns a null pointer if the device cannot be created (unknown device)
 */
-Device* createDevice(const string& deviceType, int deviceNumber)
+Device* createDevice(const std::string& deviceType, int deviceNumber)
 {
     Device* dv{nullptr};
 
@@ -88,8 +92,10 @@ Device* createDevice(const string& deviceType, int deviceNumber)
     return dv;
 }
 
-bool init(string& connectionsFilename, string& inputFilename, string& outputFilename, ofstream& writeToOutput)
+bool init(std::string& connectionsFilename, std::string& inputFilename, std::string& outputFilename, std::ofstream& writeToOutput)
 {
+    using namespace std;
+
     bool commonFilesSuccessfullyOpened{false}; // for each option corresponding files (e.g. connectioninput.csv) should be successfully opened in the desired mode (read/write)
 
     ifstream readInput{c_ConfigurationFilename};
@@ -127,8 +133,10 @@ bool init(string& connectionsFilename, string& inputFilename, string& outputFile
     return commonFilesSuccessfullyOpened;
 }
 
-bool openFilesForFirstOption(ifstream& readConnections, ofstream& writeToInput, const string& connectionsFilename, const string& inputFilename)
+bool openFilesForFirstOption(std::ifstream& readConnections, std::ofstream& writeToInput, const std::string& connectionsFilename, const std::string& inputFilename)
 {
+    using namespace std;
+
     bool firstOptionFilesSuccessfullyOpened{false};
 
     readConnections.open(connectionsFilename);
@@ -158,7 +166,7 @@ bool openFilesForFirstOption(ifstream& readConnections, ofstream& writeToInput, 
     return firstOptionFilesSuccessfullyOpened;
 }
 
-bool openFilesForSecondOption(ifstream& readInput, const string& inputFilename)
+bool openFilesForSecondOption(std::ifstream& readInput, const std::string& inputFilename)
 {
     bool secondOptionFilesSuccessfullyOpened{true};
 
@@ -167,14 +175,14 @@ bool openFilesForSecondOption(ifstream& readInput, const string& inputFilename)
     if (!readInput.is_open())
     {
         system("clear");
-        cout<<"Error! File connectioninput.csv cannot be opened for reading"<<endl;
+        std::cout << "Error! File connectioninput.csv cannot be opened for reading" << std::endl;
         secondOptionFilesSuccessfullyOpened = false;
     }
 
     return secondOptionFilesSuccessfullyOpened;
 }
 
-void readConnectionDefinitions(ifstream& readConnections, vector<string>& connectionDefinitionRows, int& connectionDefinitionRowsCount)
+void readConnectionDefinitions(std::ifstream& readConnections, std::vector<std::string>& connectionDefinitionRows, int& connectionDefinitionRowsCount)
 {
     assert(readConnections.is_open());
 
@@ -191,7 +199,14 @@ void readConnectionDefinitions(ifstream& readConnections, vector<string>& connec
     readConnections.close();
 }
 
-bool parseConnectionDefinitions(ofstream& writeToError, vector<string>& mapping, vector<int>& uNumbers, vector<vector<int>>& connectedTo, vector<vector<int>>& connectionsCount, int& devicesCount, const vector<string>& connectionDefinitionRows, const int connectionDefinitionRowsCount)
+bool parseConnectionDefinitions(std::ofstream& writeToError,
+                                std::vector<std::string>& mapping,
+                                std::vector<int>& uNumbers,
+                                std::vector<std::vector<int>>& connectedTo,
+                                std::vector<std::vector<int>>& connectionsCount,
+                                int& devicesCount,
+                                const std::vector<std::string>& connectionDefinitionRows,
+                                const int connectionDefinitionRowsCount)
 {
     bool errorsOccured{false}; // true if at least one error occurred (but multiple errors can be logged in labellingtable.csv as well)
 
@@ -216,7 +231,7 @@ bool parseConnectionDefinitions(ofstream& writeToError, vector<string>& mapping,
     for (int rowIndex{0}; rowIndex < connectionDefinitionRowsCount; ++rowIndex)
     {
         int columnNumber{1}; // csv column
-        string currentCell; // current csv cell
+        std::string currentCell; // current csv cell
 
         // first cell on the row is ignored (contains the U number and is only used for informing the user about rack position; the row index is instead used in calculations in relationship with U number)
         int currentPosition{readDataField(connectionDefinitionRows[rowIndex],currentCell,0)};
@@ -362,7 +377,7 @@ bool parseConnectionDefinitions(ofstream& writeToError, vector<string>& mapping,
     return errorsOccured;
 }
 
-void readConnectionInput(ifstream& readInput, vector<string>& connectionInputRows, int& connectionInputRowsCount)
+void readConnectionInput(std::ifstream& readInput, std::vector<std::string>& connectionInputRows, int& connectionInputRowsCount)
 {
     assert(readInput.is_open());
 
@@ -370,7 +385,7 @@ void readConnectionInput(ifstream& readInput, vector<string>& connectionInputRow
     connectionInputRowsCount = 0;
 
     readInput.seekg(0);
-    string header;
+    std::string header;
     getline(readInput, header);
 
     while (!readInput.eof())
@@ -390,7 +405,13 @@ void readConnectionInput(ifstream& readInput, vector<string>& connectionInputRow
     }
 }
 
-bool parseConnectionInput(ofstream& writeToError, vector<Device*>& devices, vector<string>& cablePartNumbersEntries, int& numberOfDevices, int& cablePartNumbersEntriesCount, const vector<string>& connectionInputRows, const int connectionInputRowsCount)
+bool parseConnectionInput(std::ofstream& writeToError,
+                          std::vector<Device*>& devices,
+                          std::vector<std::string>& cablePartNumbersEntries,
+                          int& numberOfDevices,
+                          int& cablePartNumbersEntriesCount,
+                          const std::vector<std::string>& connectionInputRows,
+                          const int connectionInputRowsCount)
 {
     bool errorsOccured{false}; // true if at least one error occurred (but multiple errors can be logged in labellingtable.csv as well)
 
@@ -404,7 +425,7 @@ bool parseConnectionInput(ofstream& writeToError, vector<Device*>& devices, vect
     UnknownDeviceError* pUnknownDeviceError{nullptr};
     FewerCellsError* pFewerCellsError{nullptr};
 
-    for (int rowIndex{0}; rowIndex<connectionInputRowsCount; ++rowIndex)
+    for (int rowIndex{0}; rowIndex < connectionInputRowsCount; ++rowIndex)
     {
         const int inputRowsLength{static_cast<int>(connectionInputRows[rowIndex].size())}; // number of rows read from the file
         int currentPosition{0}; // current position in the current input row
@@ -413,7 +434,7 @@ bool parseConnectionInput(ofstream& writeToError, vector<Device*>& devices, vect
         int devicesStillNotParsedCount{2}; // devices that haven't still been parsed from the current input row (maximum 2 - one connection)
         bool isFirstCellParsed{false}; // flag: has the cable part number been parsed on current row?
 
-        string cablePartNumber; // stores the cable part number written on previous row
+        std::string cablePartNumber; // stores the cable part number written on previous row
 
         // walk through row as long as devices are left to read in the connection (when ready go to the next connection/row)
         while (devicesStillNotParsedCount > 0)
@@ -457,7 +478,7 @@ bool parseConnectionInput(ofstream& writeToError, vector<Device*>& devices, vect
                 continue;
             }
 
-            string deviceType;
+            std::string deviceType;
             currentPosition = readDataField(connectionInputRows[rowIndex], deviceType, currentPosition);
 
             bool isValidDevice{false};
@@ -507,8 +528,16 @@ bool parseConnectionInput(ofstream& writeToError, vector<Device*>& devices, vect
     return errorsOccured;
 }
 
-void buildConnectionsInputTemplate(vector<string>& outputRows, int& outputRowsCount, const vector<string>& mapping, const vector<int>& uNumbers, const vector<vector<int>>& connectedTo, const vector<vector<int>>& connectionsCount, const int devicesCount)
+void buildConnectionsInputTemplate(std::vector<std::string>& outputRows,
+                                   int& outputRowsCount,
+                                   const std::vector<std::string>& mapping,
+                                   const std::vector<int>& uNumbers,
+                                   const std::vector<std::vector<int>>& connectedTo,
+                                   const std::vector<std::vector<int>>& connectionsCount,
+                                   const int devicesCount)
 {
+    using namespace std;
+
     outputRows.clear();
     outputRowsCount = 0;
 
@@ -562,7 +591,11 @@ void buildConnectionsInputTemplate(vector<string>& outputRows, int& outputRowsCo
     }
 }
 
-void buildLabellingOutput(vector<string>& outputRows, const vector<Device*>& devices, const vector<string>& cablePartNumbersEntries, const int numberOfDevices, const int connectionInputRowsCount)
+void buildLabellingOutput(std::vector<std::string>& outputRows,
+                          const std::vector<Device*>& devices,
+                          const std::vector<std::string>& cablePartNumbersEntries,
+                          const int numberOfDevices,
+                          const int connectionInputRowsCount)
 {
     outputRows.clear();
 
@@ -592,21 +625,24 @@ void buildLabellingOutput(vector<string>& outputRows, const vector<Device*>& dev
     }
 }
 
-void writeOutputToFile(ofstream& output, const vector<string>& connectionInputRows, const int payloadRowsCount, const string& header)
+void writeOutputToFile(std::ofstream& output, const std::vector<std::string>& connectionInputRows, const int payloadRowsCount, const std::string& header)
 {
     assert(output.is_open());
 
-    output << header << endl;
+    output << header << std::endl;
 
     for (int rowIndex{0}; rowIndex < payloadRowsCount; ++rowIndex)
     {
-        output << connectionInputRows[rowIndex] << endl;
+        output << connectionInputRows[rowIndex] << std::endl;
     }
 }
 
-void displayErrorMessage(const string& inputFilename, const string& outputFilename)
+void displayErrorMessage(const std::string& inputFilename, const std::string& outputFilename)
 {
+    using namespace std;
+
     system("clear");
+
     cout << "One or more errors occured!" << endl << endl;
     cout << "Please check the error report in the output file: " << endl << endl; //TODO: create error.csv for errors (instead of labellingtable.csv)
     cout << outputFilename << endl << endl;
@@ -614,8 +650,10 @@ void displayErrorMessage(const string& inputFilename, const string& outputFilena
     cout << "Input file: " << endl << endl << inputFilename << endl << endl;
 }
 
-void displaySuccessMessage(const string& outputFilename, bool displayFurtherInstructions)
+void displaySuccessMessage(const std::string& outputFilename, bool displayFurtherInstructions)
 {
+    using namespace std;
+
     system("clear");
 
     cout << "The program ended succesfully. " << endl << endl;
@@ -630,6 +668,8 @@ void displaySuccessMessage(const string& outputFilename, bool displayFurtherInst
 
 void displayMenu()
 {
+    using namespace std;
+
     cout << "Please choose between following options:" << endl << endl;
     cout << "1 + ENTER: read the defined connections from file connectiondefinitions.csv and write the partial input data into file connectioninput.csv" << endl;
     cout << "2 + ENTER: read the input data from file connectioninput.csv and write the labeling information into file labellingtable.csv" << endl << endl;
@@ -639,11 +679,13 @@ void displayMenu()
 void displayVersion()
 {
     system("clear");
-    cout << "LabelCalculator v1.0" << endl << endl;
+    std::cout << "LabelCalculator v1.0" << std::endl << std::endl;
 }
 
 int main()
 {
+    using namespace std;
+
     ifstream readInput; // for reading from connectioninput.csv and configuration.txt
     ofstream writeToOutput; //for writing into labellingtable.csv
 

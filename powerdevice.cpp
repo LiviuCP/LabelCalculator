@@ -1,3 +1,5 @@
+#include <map>
+
 #include "powerdevice.h"
 
 PDU::PDU(int first)
@@ -29,6 +31,8 @@ PDU::PDU(int first)
 
 void PDU::buildDescriptionText()
 {
+    using namespace std;
+
     const map<string, string> c_PlacementTypesDescriptions
     {
         {"H", "Horizontal"},    // horizontal PDU
@@ -66,12 +70,12 @@ void PDU::buildLabelText()
     {
         if (mLoadSegmentNumber=="-")  // single load segment PDU
         {
-            const string c_PortNumberSubstring{"IN" == mPortNumber ? "_IN" : "_P" + mPortNumber}; //TODO: convert IN to lowercase
+            const std::string c_PortNumberSubstring{"IN" == mPortNumber ? "_IN" : "_P" + mPortNumber}; //TODO: convert IN to lowercase
             mLabel = "U" + mDeviceName + "_" + mPlacementType + "PDU" + c_PortNumberSubstring;
         }
         else // multiple load segments PDU
         {
-            const string c_LoadSegmentPortNumberSubstring{"IN" == mPortNumber ? "_IN" : "_P" + mLoadSegmentNumber + "." + mPortNumber}; //TODO: convert IN to lowercase
+            const std::string c_LoadSegmentPortNumberSubstring{"IN" == mPortNumber ? "_IN" : "_P" + mLoadSegmentNumber + "." + mPortNumber}; //TODO: convert IN to lowercase
             mLabel = "U" + mDeviceName + "_" + mPlacementType + "PDU" + c_LoadSegmentPortNumberSubstring;
         }
     }
@@ -133,7 +137,7 @@ void ExtensionBar::buildLabelText()
 {
     if ("L" == mPlacementType || "R" == mPlacementType)
     {
-        const string c_PortNumberSubstring{"IN" == mPortNumber ? "_IN" : "_P" + mPortNumber}; //TODO: convert IN to lowercase
+        const std::string c_PortNumberSubstring{"IN" == mPortNumber ? "_IN" : "_P" + mPortNumber}; //TODO: convert IN to lowercase
         mLabel = "U" + mDeviceName + "_" + mPlacementType + "EXT" + c_PortNumberSubstring;
     }
     else
