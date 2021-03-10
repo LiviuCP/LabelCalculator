@@ -254,7 +254,7 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
                 pUnknownDeviceError = new UnknownDeviceError;
             }
 
-            pUnknownDeviceError->setRow(rowIndex+2); // setting row index of the current cell (+2 deoarece in Excel (.csv) the rows start at 1 and first line is ignored);
+            pUnknownDeviceError->setRow(rowIndex + 2); // setting row index of the current cell (+2 deoarece in Excel (.csv) the rows start at 1 and first line is ignored);
             pUnknownDeviceError->setColumn(columnNumber); // setting column index for exact error localization
             pUnknownDeviceError->execute(writeToError);
 
@@ -267,7 +267,7 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
         // add discovered device to list of device U numbers
         ++devicesCount;
         uNumbers.resize(devicesCount);
-        uNumbers[devicesCount-1] = c_MaxNrOfRackUnits-rowIndex; // add the U number of the last discovered device
+        uNumbers[devicesCount - 1] = c_MaxNrOfRackUnits - rowIndex; // add the U number of the last discovered device
 
         // add device type to mapping table
         mapping[c_MaxNrOfRackUnits - 1 - rowIndex] = currentCell;
@@ -312,20 +312,20 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
                     pWrongUNumberError = new WrongUNumberError;
                 }
 
-                pWrongUNumberError->setRow(rowIndex+2);
+                pWrongUNumberError->setRow(rowIndex + 2);
                 pWrongUNumberError->setColumn(columnNumber);
                 pWrongUNumberError->execute(writeToError);
 
                 errorsOccured = true;
             }
-            else if (c_NoDevice == mapping[secondDevice-1]) // check if the second device is in the mapping table (otherwise the connection is to a non-existing device)
+            else if (c_NoDevice == mapping[secondDevice - 1]) // check if the second device is in the mapping table (otherwise the connection is to a non-existing device)
             {
                 if (!pNoDevicePresentError)
                 {
                     pNoDevicePresentError = new NoDevicePresentError;
                 }
 
-                pNoDevicePresentError->setRow(rowIndex+2);
+                pNoDevicePresentError->setRow(rowIndex + 2);
                 pNoDevicePresentError->setColumn(columnNumber);
                 pNoDevicePresentError->execute(writeToError);
 
@@ -338,7 +338,7 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
                     pDeviceConnectedToItselfError = new DeviceConnectedToItselfError;
                 }
 
-                pDeviceConnectedToItselfError->setRow(rowIndex+2);
+                pDeviceConnectedToItselfError->setRow(rowIndex + 2);
                 pDeviceConnectedToItselfError->setColumn(columnNumber);
                 pDeviceConnectedToItselfError->execute(writeToError);
 
@@ -351,7 +351,7 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
                     pNoConnectionsError = new NoConnectionsError;
                 }
 
-                pNoConnectionsError->setRow(rowIndex+2);
+                pNoConnectionsError->setRow(rowIndex + 2);
                 pNoConnectionsError->setColumn(columnNumber);
                 pNoConnectionsError->execute(writeToError);
 
@@ -359,10 +359,10 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
             }
             else
             {
-                connectedTo[devicesCount-1].resize(columnNumber-2); // add the device to the list of connected devices (to current device)
-                connectionsCount[devicesCount-1].resize(columnNumber-2); // same for the number of connections
-                connectedTo[devicesCount-1][columnNumber-3] = secondDevice; // add the U number of the second device
-                connectionsCount[devicesCount-1][columnNumber-3] = nrOfconnections; // add the number of connections between the current device and the second device
+                connectedTo[devicesCount - 1].resize(columnNumber - 2); // add the device to the list of connected devices (to current device)
+                connectionsCount[devicesCount - 1].resize(columnNumber - 2); // same for the number of connections
+                connectedTo[devicesCount - 1][columnNumber - 3] = secondDevice; // add the U number of the second device
+                connectionsCount[devicesCount - 1][columnNumber - 3] = nrOfconnections; // add the number of connections between the current device and the second device
             }
         }
     }
@@ -398,7 +398,7 @@ void readConnectionInput(std::ifstream& readInput, std::vector<std::string>& con
     readInput.close();
 
     // discard last row read from the input file if empty
-    if(0 == connectionInputRows[connectionInputRowsCount-1].size())
+    if(0 == connectionInputRows[connectionInputRowsCount - 1].size())
     {
         --connectionInputRowsCount;
         connectionInputRows.resize(connectionInputRowsCount);
@@ -448,7 +448,7 @@ bool parseConnectionInput(std::ofstream& writeToError,
                     pFewerCellsError = new FewerCellsError;
                 }
 
-                pFewerCellsError->setRow(rowIndex+2);
+                pFewerCellsError->setRow(rowIndex + 2);
                 pFewerCellsError->execute(writeToError);
                 errorsOccured = true;
                 break;
@@ -459,17 +459,17 @@ bool parseConnectionInput(std::ofstream& writeToError,
             {
                 ++cablePartNumbersEntriesCount;
                 cablePartNumbersEntries.resize(cablePartNumbersEntriesCount);
-                currentPosition=readDataField(connectionInputRows[rowIndex],cablePartNumbersEntries[cablePartNumbersEntriesCount-1],currentPosition);
+                currentPosition = readDataField(connectionInputRows[rowIndex], cablePartNumbersEntries[cablePartNumbersEntriesCount - 1], currentPosition);
 
-                if (0 == cablePartNumbersEntries[cablePartNumbersEntriesCount-1].size())
+                if (0 == cablePartNumbersEntries[cablePartNumbersEntriesCount - 1].size())
                 {
                     // if the parsed substring is empty the write the same value as for the previous row
-                    cablePartNumbersEntries[cablePartNumbersEntriesCount-1] = cablePartNumber;
+                    cablePartNumbersEntries[cablePartNumbersEntriesCount - 1] = cablePartNumber;
                 }
                 else
                 {
                     // if the substring is not empty it should also be stored within variable for further usage (in case next row has an empty substring)
-                    cablePartNumber = cablePartNumbersEntries[cablePartNumbersEntriesCount-1];
+                    cablePartNumber = cablePartNumbersEntries[cablePartNumbersEntriesCount - 1];
                 }
 
                 isFirstCellParsed = true;
@@ -501,7 +501,7 @@ bool parseConnectionInput(std::ofstream& writeToError,
                     pUnknownDeviceError = new UnknownDeviceError;
                 }
 
-                pUnknownDeviceError->setRow(rowIndex+2);
+                pUnknownDeviceError->setRow(rowIndex + 2);
                 pUnknownDeviceError->setColumn(columnNumber);
                 pUnknownDeviceError->execute(writeToError);
 
@@ -512,10 +512,10 @@ bool parseConnectionInput(std::ofstream& writeToError,
             ++columnNumber;
             ++numberOfDevices;
 
-            device->setRow(rowIndex+2);     // +2: csv lines start at 1 and first row is ignored
+            device->setRow(rowIndex + 2);     // +2: csv lines start at 1 and first row is ignored
             device->setColumn(columnNumber);
             devices.resize(numberOfDevices);
-            devices[numberOfDevices-1] = device;
+            devices[numberOfDevices - 1] = device;
             device->parseInputData(connectionInputRows[rowIndex], currentPosition, errorsOccured, writeToError);
             columnNumber = device->getColumn();
 
@@ -584,7 +584,7 @@ void buildConnectionsInputTemplate(std::vector<std::string>& outputRows,
             outputRows.resize(outputRowsCount);
 
             // write the resulting output string a number of times equal to the number of connections between the two devices
-            for (int connectionNumber{outputRowsCount-connectionsCount[currentDeviceIndex][connectedDeviceIndex]}; connectionNumber < outputRowsCount; connectionNumber++)
+            for (int connectionNumber{outputRowsCount - connectionsCount[currentDeviceIndex][connectedDeviceIndex]}; connectionNumber < outputRowsCount; connectionNumber++)
             {
                 outputRows[connectionNumber] = output;
             }

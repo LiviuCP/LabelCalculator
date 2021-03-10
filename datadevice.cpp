@@ -57,11 +57,11 @@ SANSwitch::SANSwitch(int first)
 
     if (first)
     {
-        mIsFirstDevice=false;
+        mIsFirstDevice = false;
     }
     else
     {
-        mIsFirstDevice=true;
+        mIsFirstDevice = true;
     }
 }
 
