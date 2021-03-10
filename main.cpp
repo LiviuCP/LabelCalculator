@@ -428,10 +428,11 @@ bool parseConnectionInput(std::ofstream& writeToError,
     for (int rowIndex{0}; rowIndex < connectionInputRowsCount; ++rowIndex)
     {
         const int inputRowsLength{static_cast<int>(connectionInputRows[rowIndex].size())}; // number of rows read from the file
+        const int c_MaxNrOfDevicesPerRow{2};
         int currentPosition{0}; // current position in the current input row
         int columnNumber{1}; // column number from connectioninput.csv
         Device* device; // current device in the connection
-        int devicesStillNotParsedCount{2}; // devices that haven't still been parsed from the current input row (maximum 2 - one connection)
+        int devicesStillNotParsedCount{c_MaxNrOfDevicesPerRow}; // devices that haven't still been parsed from the current input row (maximum 2 - one connection)
         bool isFirstCellParsed{false}; // flag: has the cable part number been parsed on current row?
 
         std::string cablePartNumber; // stores the cable part number written on previous row
@@ -485,7 +486,7 @@ bool parseConnectionInput(std::ofstream& writeToError,
 
             if (deviceType.size() > 0U)
             {
-                device = createDevice(deviceType,rowIndex);
+                device = createDevice(deviceType, devicesStillNotParsedCount % c_MaxNrOfDevicesPerRow);
 
                 if (nullptr != device)
                 {
