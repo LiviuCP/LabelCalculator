@@ -35,54 +35,54 @@ void buildConnectionEntry(std::string& entry, Device* firstDevice, Device* secon
 /* This function is responsible for creating the actual device objects which are then used for generating the connection output data (descriptions and labels)
    It implements the factory design pattern and returns a null pointer if the device cannot be created (unknown device)
 */
-Device* createDevice(const std::string& deviceType, int deviceNumber)
+Device* createDevice(const std::string& deviceType, bool isSourceDevice)
 {
     Device* dv{nullptr};
 
     // naming convention: for power connections the underscore is used at the beginning of the device type
     if ("_pdu" == deviceType)
     {
-        dv = new PDU(deviceNumber % 2); // PDU (with/without load segment)
+        dv = new PDU{isSourceDevice};
     }
     else if ("_ext" == deviceType)
     {
-        dv = new ExtensionBar(deviceNumber % 2); // PDU extension bar
+        dv = new ExtensionBar{isSourceDevice};
     }
     else if ("_ups" == deviceType)
     {
-        dv = new UPS(deviceNumber%2); // UPS
+        dv = new UPS{isSourceDevice};
     }
     else if ("_ps" == deviceType)
     {
-        dv = new PowerSupply(deviceNumber % 2); // power supply
+        dv = new PowerSupply{isSourceDevice};
     }
     else if ("lan" == deviceType)
     {
-        dv = new LANSwitch(deviceNumber % 2); //Ethernet switch
+        dv = new LANSwitch{isSourceDevice};
     }
     else if ("san"== deviceType)
     {
-        dv = new SANSwitch(deviceNumber % 2); // FC switch
+        dv = new SANSwitch{isSourceDevice};
     }
     else if ("ib" == deviceType)
     {
-        dv = new InfinibandSwitch(deviceNumber % 2); // Infiniband switch
+        dv = new InfinibandSwitch{isSourceDevice};
     }
     else if ("kvm" == deviceType)
     {
-        dv = new KVMSwitch(deviceNumber % 2); // KVM switch
+        dv = new KVMSwitch{isSourceDevice};
     }
     else if ("svr" == deviceType)
     {
-        dv = new Server(deviceNumber % 2); // server
+        dv = new Server{isSourceDevice};
     }
     else if ("sto" == deviceType)
     {
-        dv = new Storage(deviceNumber % 2); // storage
+        dv = new Storage{isSourceDevice};
     }
     else if ("bld" == deviceType)
     {
-        dv = new BladeServer(deviceNumber % 2); // blade system
+        dv = new BladeServer{isSourceDevice};
     }
     else
     {
@@ -245,7 +245,7 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
         }
 
         ++columnNumber;
-        Device* pDevice = createDevice(currentCell, 1);
+        Device* pDevice = createDevice(currentCell, true); // it doesn't matter if the device is created as source or destination device (it's just for checking if device is valid)
 
         if (!pDevice)
         {
@@ -486,7 +486,9 @@ bool parseConnectionInput(std::ofstream& writeToError,
 
             if (deviceType.size() > 0U)
             {
-                device = createDevice(deviceType, devicesStillNotParsedCount % c_MaxNrOfDevicesPerRow);
+                const bool c_IsSourceDevice{0 == devicesStillNotParsedCount % c_MaxNrOfDevicesPerRow};
+
+                device = createDevice(deviceType, c_IsSourceDevice);
 
                 if (nullptr != device)
                 {

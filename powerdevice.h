@@ -10,7 +10,7 @@ public:
     PDU() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    PDU(int first);
+    PDU(bool isSourceDevice);
 
     void buildDescriptionText();
     void buildLabelText();
@@ -28,7 +28,7 @@ public:
     ExtensionBar() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    ExtensionBar(int first);
+    ExtensionBar(bool isSourceDevice);
 
     void buildDescriptionText();
     void buildLabelText();
@@ -46,7 +46,7 @@ public:
     UPS() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    UPS(int first);
+    UPS(bool isSourceDevice);
 
     void buildDescriptionText();
     void buildLabelText();
@@ -64,7 +64,7 @@ public:
     PowerSupply() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    PowerSupply(int first);
+    PowerSupply(bool isSourceDevice);
 
     void buildDescriptionText();
     void buildLabelText();

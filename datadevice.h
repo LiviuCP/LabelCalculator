@@ -10,7 +10,7 @@ public:
     LANSwitch() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    LANSwitch(int first);
+    LANSwitch(bool isSourceDevice);
 
     void buildDescriptionText();
     void buildLabelText();
@@ -28,7 +28,7 @@ public:
     SANSwitch() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    SANSwitch(int first);
+    SANSwitch(bool isSourceDevice);
 
     void buildDescriptionText();
     void buildLabelText();
@@ -46,7 +46,7 @@ public:
     InfinibandSwitch() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    InfinibandSwitch(int first);
+    InfinibandSwitch(bool isSourceDevice);
 
     void buildDescriptionText();
     void buildLabelText();
@@ -64,7 +64,7 @@ public:
     KVMSwitch() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    KVMSwitch(int first);
+    KVMSwitch(bool isSourceDevice);
 
     void buildDescriptionText();
     void buildLabelText();
@@ -82,7 +82,7 @@ public:
     Server() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    Server(int first);
+    Server(bool isSourceDevice);
 
     void buildDescriptionText();
     void buildLabelText();
@@ -100,7 +100,7 @@ public:
     Storage() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    Storage(int first);
+    Storage(bool isSourceDevice);
 
     void buildDescriptionText();
     void buildLabelText();
@@ -118,7 +118,7 @@ public:
     BladeServer() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    BladeServer(int first);
+    BladeServer(bool isSourceDevice);
 
     void buildDescriptionText();
     void buildLabelText();

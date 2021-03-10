@@ -1,6 +1,6 @@
 #include "datadevice.h"
 
-LANSwitch::LANSwitch(int first)
+LANSwitch::LANSwitch(bool isSourceDevice)
 {
     mDeviceType = "lan";
     mErrorCode = 0;
@@ -17,14 +17,7 @@ LANSwitch::LANSwitch(int first)
     mInputData[2] = &mPlaceholder1;
     mInputData[3] = &mPlaceholder2;
 
-    if (first)
-    {
-        mIsFirstDevice = false;
-    }
-    else
-    {
-        mIsFirstDevice = true;
-    }
+    mIsSourceDevice = isSourceDevice;
 }
 
 void LANSwitch::buildDescriptionText()
@@ -38,7 +31,7 @@ void LANSwitch::buildLabelText()
 }
 
 
-SANSwitch::SANSwitch(int first)
+SANSwitch::SANSwitch(bool isSourceDevice)
 {
     mDeviceType = "san";
     mErrorCode = 0;
@@ -55,14 +48,7 @@ SANSwitch::SANSwitch(int first)
     mInputData[2] = &mPlaceholder1;
     mInputData[3] = &mPlaceholder2;
 
-    if (first)
-    {
-        mIsFirstDevice = false;
-    }
-    else
-    {
-        mIsFirstDevice = true;
-    }
+    mIsSourceDevice = isSourceDevice;
 }
 
 void SANSwitch::buildDescriptionText()
@@ -95,7 +81,7 @@ void SANSwitch::buildLabelText()
     }
 }
 
-InfinibandSwitch::InfinibandSwitch(int first)
+InfinibandSwitch::InfinibandSwitch(bool isSourceDevice)
 {
     mDeviceType = "ib";
     mErrorCode = 0;
@@ -112,14 +98,7 @@ InfinibandSwitch::InfinibandSwitch(int first)
     mInputData[2] = &mPlaceholder1;
     mInputData[3] = &mPlaceholder2;
 
-    if (first)
-    {
-        mIsFirstDevice = false;
-    }
-    else
-    {
-        mIsFirstDevice = true;
-    }
+    mIsSourceDevice = isSourceDevice;
 }
 
 void InfinibandSwitch::buildDescriptionText()
@@ -152,7 +131,7 @@ void InfinibandSwitch::buildLabelText()
     }
 }
 
-KVMSwitch::KVMSwitch(int first)
+KVMSwitch::KVMSwitch(bool isSourceDevice)
 {
     mDeviceType = "kvm";
     mErrorCode = 0;
@@ -169,14 +148,7 @@ KVMSwitch::KVMSwitch(int first)
     mInputData[2] = &mPlaceholder1;
     mInputData[3] = &mPlaceholder2;
 
-    if (first)
-    {
-        mIsFirstDevice = false;
-    }
-    else
-    {
-        mIsFirstDevice = true;
-    }
+    mIsSourceDevice = isSourceDevice;
 }
 
 void KVMSwitch::buildDescriptionText()
@@ -189,7 +161,7 @@ void KVMSwitch::buildLabelText()
     mLabel = "U" + mDeviceName + "_P" + mPortNumber;
 }
 
-Server::Server(int first)
+Server::Server(bool isSourceDevice)
 {
     mDeviceType = "svr";
     mErrorCode = 0;
@@ -206,14 +178,7 @@ Server::Server(int first)
     mInputData[2] = &mPortNumber;
     mInputData[3] = &mPlaceholder;
 
-    if (first)
-    {
-        mIsFirstDevice = false;
-    }
-    else
-    {
-        mIsFirstDevice = true;
-    }
+    mIsSourceDevice = isSourceDevice;
 }
 
 void Server::buildDescriptionText()
@@ -293,7 +258,7 @@ void Server::buildLabelText()
     }
 }
 
-Storage::Storage(int first)
+Storage::Storage(bool isSourceDevice)
 {
     mDeviceType = "sto";
     mErrorCode = 0;
@@ -310,14 +275,7 @@ Storage::Storage(int first)
     mInputData[2] = &mPortNr;
     mInputData[3] = &mPlaceholder;
 
-    if (first)
-    {
-        mIsFirstDevice = false;
-    }
-    else
-    {
-        mIsFirstDevice = true;
-    }
+    mIsSourceDevice = isSourceDevice;
 }
 
 void Storage::buildDescriptionText()
@@ -358,7 +316,7 @@ void Storage::buildLabelText()
     }
 }
 
-BladeServer::BladeServer(int first)
+BladeServer::BladeServer(bool isSourceDevice)
 {
     mDeviceType = "bld";
     mErrorCode = 0;
@@ -373,14 +331,7 @@ BladeServer::BladeServer(int first)
     mInputData[2] = &mModuleNumber;
     mInputData[3] = &mPortNumber;
 
-    if (first)
-    {
-        mIsFirstDevice = false;
-    }
-    else
-    {
-        mIsFirstDevice = true;
-    }
+    mIsSourceDevice = isSourceDevice;
 }
 
 void BladeServer::buildDescriptionText()

@@ -2,7 +2,7 @@
 
 #include "powerdevice.h"
 
-PDU::PDU(int first)
+PDU::PDU(bool isSourceDevice)
 {
     mDeviceType = "_pdu";
     mErrorCode = 0;
@@ -19,14 +19,7 @@ PDU::PDU(int first)
     mInputData[2] = &mLoadSegmentNumber;
     mInputData[3] = &mPortNumber;
 
-    if (first)
-    {
-        mIsFirstDevice = false;
-    }
-    else
-    {
-        mIsFirstDevice = true;
-    }
+    mIsSourceDevice = isSourceDevice;
 }
 
 void PDU::buildDescriptionText()
@@ -85,7 +78,7 @@ void PDU::buildLabelText()
     }
 }
 
-ExtensionBar::ExtensionBar(int first)
+ExtensionBar::ExtensionBar(bool isSourceDevice)
 {
     mDeviceType = "_ext";
     mErrorCode = 0;
@@ -102,14 +95,7 @@ ExtensionBar::ExtensionBar(int first)
     mInputData[2] = &mPortNumber;
     mInputData[3] = &mPlaceholder;
 
-    if (first)
-    {
-        mIsFirstDevice = false;
-    }
-    else
-    {
-        mIsFirstDevice = true;
-    }
+    mIsSourceDevice = isSourceDevice;
 }
 
 void ExtensionBar::buildDescriptionText()
@@ -146,7 +132,7 @@ void ExtensionBar::buildLabelText()
     }
 }
 
-UPS::UPS(int first)
+UPS::UPS(bool isSourceDevice)
 {
     mDeviceType = "_ups";
     mErrorCode = 0;
@@ -163,14 +149,7 @@ UPS::UPS(int first)
     mInputData[2] = &mPortNumber;
     mInputData[3] = &mPlaceholder;
 
-    if (first)
-    {
-        mIsFirstDevice = false;
-    }
-    else
-    {
-        mIsFirstDevice = true;
-    }
+    mIsSourceDevice = isSourceDevice;
 }
 
 void UPS::buildDescriptionText()
@@ -183,7 +162,7 @@ void UPS::buildLabelText()
     mLabel = "U" + mDeviceName + "_P" + mLoadSegmentNumber + "." + mPortNumber;
 }
 
-PowerSupply::PowerSupply(int first)
+PowerSupply::PowerSupply(bool isSourceDevice)
 {
     mDeviceType = "_ps";
     mErrorCode = 0;
@@ -200,14 +179,7 @@ PowerSupply::PowerSupply(int first)
     mInputData[2] = &mPlaceholder1;
     mInputData[3] = &mPlaceholder2;
 
-    if (first)
-    {
-        mIsFirstDevice = false;
-    }
-    else
-    {
-        mIsFirstDevice = true;
-    }
+    mIsSourceDevice = isSourceDevice;
 }
 
 void PowerSupply::buildDescriptionText()

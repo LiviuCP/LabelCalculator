@@ -34,7 +34,7 @@ protected:
     void handleError(std::ofstream& err); // error handling function, will write any error to output file by using the err stream
 
     std::string mDeviceName;  // device name (e.g. for PDU-A the name is "A")
-    bool mIsFirstDevice; // true if first of the two devices in each connection entered in the input .csv file
+    bool mIsSourceDevice; // true if first of the two devices in each connection entered in the input .csv file
     std::string mDeviceType;  // device type (ex: "pdu" for basic PDUs without load segments)
     std::string mDescription; // text to be written in the source (first device) / destination (second device) field of the labelling table (device description)
     std::string mLabel;       // text to be written in the source (first device) / destination (second device) field of the labelling table (device label)

@@ -93,7 +93,7 @@ void Device::handleError(std::ofstream& err)
         break;
     case 2:
         err << "Error: The total number of characters entered for the ";
-        if (mIsFirstDevice)
+        if (mIsSourceDevice)
         {
             err << "first ";
         }
