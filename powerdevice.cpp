@@ -3,23 +3,14 @@
 #include "powerdevice.h"
 
 PDU::PDU(bool isSourceDevice)
+    : Device{"_pdu", c_MaxAllowedNrOfChars.at("_pdu"), isSourceDevice}
 {
-    mDeviceType = "_pdu";
-    mErrorCode = 0;
-    mRow = 1;
-    mColumn = 1;
-    mRequiredNrOfInputDataFields = 4; // number of fields that should be filled in connectioninput.csv for this device type
-    mMaxAllowedNrOfChars = 6;  // maximum number of characters that can be filled in the connectioninput.csv file for this device type
-    mDeltaNrOfChars = 0;
+    mInputData.resize(Device::scRequiredNrOfInputDataFields);
 
-    // device parameters
-    mInputData.resize(mRequiredNrOfInputDataFields);
     mInputData[0] = &mDeviceName;
     mInputData[1] = &mPlacementType;
     mInputData[2] = &mLoadSegmentNumber;
     mInputData[3] = &mPortNumber;
-
-    mIsSourceDevice = isSourceDevice;
 }
 
 void PDU::buildDescriptionText()
@@ -79,23 +70,14 @@ void PDU::buildLabelText()
 }
 
 ExtensionBar::ExtensionBar(bool isSourceDevice)
+    : Device{"_ext", c_MaxAllowedNrOfChars.at("_ext"), isSourceDevice}
 {
-    mDeviceType = "_ext";
-    mErrorCode = 0;
-    mRow = 1;
-    mColumn = 1;
-    mRequiredNrOfInputDataFields = 4; // number of fields that should be filled in connectioninput.csv for this device type
-    mMaxAllowedNrOfChars = 8;  // maximum number of characters that can be filled in the connectioninput.csv file for this device type (including the placeholder where character '-' should be filled in)
-    mDeltaNrOfChars = 0;
+    mInputData.resize(Device::scRequiredNrOfInputDataFields);
 
-    // device parameters
-    mInputData.resize(mRequiredNrOfInputDataFields);
     mInputData[0] = &mDeviceName;
     mInputData[1] = &mPlacementType;
     mInputData[2] = &mPortNumber;
     mInputData[3] = &mPlaceholder;
-
-    mIsSourceDevice = isSourceDevice;
 }
 
 void ExtensionBar::buildDescriptionText()
@@ -133,23 +115,14 @@ void ExtensionBar::buildLabelText()
 }
 
 UPS::UPS(bool isSourceDevice)
+    : Device{"_ups", c_MaxAllowedNrOfChars.at("_ups"), isSourceDevice}
 {
-    mDeviceType = "_ups";
-    mErrorCode = 0;
-    mRow = 1;
-    mColumn = 1;
-    mRequiredNrOfInputDataFields = 4; // number of fields that should be filled in connectioninput.csv for this device type
-    mMaxAllowedNrOfChars = 11;  // maximum number of characters that can be filled in the connectioninput.csv file for this device type (including the placeholder where character '-' should be filled in)
-    mDeltaNrOfChars = 0;
+    mInputData.resize(Device::scRequiredNrOfInputDataFields);
 
-    // device parameters
-    mInputData.resize(mRequiredNrOfInputDataFields);
     mInputData[0] = &mDeviceName;
     mInputData[1] = &mLoadSegmentNumber;
     mInputData[2] = &mPortNumber;
     mInputData[3] = &mPlaceholder;
-
-    mIsSourceDevice = isSourceDevice;
 }
 
 void UPS::buildDescriptionText()
@@ -163,23 +136,14 @@ void UPS::buildLabelText()
 }
 
 PowerSupply::PowerSupply(bool isSourceDevice)
+    : Device{"_ps", c_MaxAllowedNrOfChars.at("_ps"), isSourceDevice}
 {
-    mDeviceType = "_ps";
-    mErrorCode = 0;
-    mRow = 1;
-    mColumn = 1;
-    mRequiredNrOfInputDataFields = 4; // number of fields that should be filled in connectioninput.csv for this device type
-    mMaxAllowedNrOfChars = 12;  // maximum number of characters that can be filled in the connectioninput.csv file for this device type (including the 2 placeholders where character '-' should be filled in)
-    mDeltaNrOfChars = 0;
+    mInputData.resize(Device::scRequiredNrOfInputDataFields);
 
-    // device parameters
-    mInputData.resize(mRequiredNrOfInputDataFields);
     mInputData[0] = &mDeviceName;
     mInputData[1] = &mPowerSupplyNumber;
     mInputData[2] = &mPlaceholder1;
     mInputData[3] = &mPlaceholder2;
-
-    mIsSourceDevice = isSourceDevice;
 }
 
 void PowerSupply::buildDescriptionText()

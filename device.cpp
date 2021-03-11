@@ -1,5 +1,30 @@
 #include "device.h"
 
+const int Device::scRequiredNrOfInputDataFields{4};
+
+Device::Device(const std::string& deviceType, int maxAllowedNrOfChars, bool isSourceDevice)
+    : mDeviceType{deviceType}
+    , mErrorCode{0}
+    , mRow{1}
+    , mColumn{1}
+    , mMaxAllowedNrOfChars{maxAllowedNrOfChars}
+    , mDeltaNrOfChars{0}
+    , mIsSourceDevice{isSourceDevice}
+{
+    assert(mMaxAllowedNrOfChars > 0);
+}
+
+Device::Device(int errorCode)
+    : mErrorCode{errorCode}
+    , mRow{0}
+    , mColumn{0}
+    , mMaxAllowedNrOfChars{0}
+    , mDeltaNrOfChars{0}
+    , mIsSourceDevice{false}
+{
+    assert(mErrorCode > 0);
+}
+
 Device::~Device()
 {
 }
@@ -10,9 +35,9 @@ void Device::parseInputData(const std::string& input, int& pos, bool& error, std
     int position{pos}; // position in the input string to be stored in this temporary variable as it should only be written back to if error 4 does not occur
     std::vector<int> fieldSizes; // stores the size of each input field read for the device
 
-    fieldSizes.resize(mRequiredNrOfInputDataFields);
+    fieldSizes.resize(scRequiredNrOfInputDataFields);
 
-    for (int fieldNumber{0}; fieldNumber < mRequiredNrOfInputDataFields; ++fieldNumber) //cat timp sunt inca substringuri de citit din sirul de intrare...
+    for (int fieldNumber{0}; fieldNumber < scRequiredNrOfInputDataFields; ++fieldNumber) //cat timp sunt inca substringuri de citit din sirul de intrare...
     {
         // check if characters are available for current (required) field
         if (-1 == position)

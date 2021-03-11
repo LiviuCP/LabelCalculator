@@ -1,23 +1,16 @@
+#include <map>
+
 #include "datadevice.h"
 
 LANSwitch::LANSwitch(bool isSourceDevice)
+    : Device{"lan", c_MaxAllowedNrOfChars.at("lan"), isSourceDevice}
 {
-    mDeviceType = "lan";
-    mErrorCode = 0;
-    mRow = 1;
-    mColumn = 1;
-    mRequiredNrOfInputDataFields = 4; // number of fields that should be filled in connectioninput.csv for this device type
-    mMaxAllowedNrOfChars = 13;  // maximum number of characters that can be filled in the connectioninput.csv file for this device type (including the 2 placeholders where character '-' should be filled in)
-    mDeltaNrOfChars = 0;
-
-    // device parameters
-    mInputData.resize(mRequiredNrOfInputDataFields);
+    // device parameters filled in connectioninput.csv
+    mInputData.resize(Device::scRequiredNrOfInputDataFields);
     mInputData[0] = &mDeviceName;
     mInputData[1] = &mPortNumber;
     mInputData[2] = &mPlaceholder1;
     mInputData[3] = &mPlaceholder2;
-
-    mIsSourceDevice = isSourceDevice;
 }
 
 void LANSwitch::buildDescriptionText()
@@ -32,23 +25,14 @@ void LANSwitch::buildLabelText()
 
 
 SANSwitch::SANSwitch(bool isSourceDevice)
+    : Device{"san", c_MaxAllowedNrOfChars.at("san"), isSourceDevice}
 {
-    mDeviceType = "san";
-    mErrorCode = 0;
-    mRow = 1;
-    mColumn = 1;
-    mRequiredNrOfInputDataFields = 4; // number of fields that should be filled in connectioninput.csv for this device type
-    mMaxAllowedNrOfChars = 10;  // maximum number of characters that can be filled in the connectioninput.csv file for this device type (including the 2 placeholders where character '-' should be filled in)
-    mDeltaNrOfChars = 0;
+    mInputData.resize(Device::scRequiredNrOfInputDataFields);
 
-    // device parameters
-    mInputData.resize(mRequiredNrOfInputDataFields);
     mInputData[0] = &mDeviceName;
     mInputData[1] = &mPortNumber;
     mInputData[2] = &mPlaceholder1;
     mInputData[3] = &mPlaceholder2;
-
-    mIsSourceDevice = isSourceDevice;
 }
 
 void SANSwitch::buildDescriptionText()
@@ -82,23 +66,14 @@ void SANSwitch::buildLabelText()
 }
 
 InfinibandSwitch::InfinibandSwitch(bool isSourceDevice)
+    : Device{"ib", c_MaxAllowedNrOfChars.at("ib"), isSourceDevice}
 {
-    mDeviceType = "ib";
-    mErrorCode = 0;
-    mRow = 1;
-    mColumn = 1;
-    mRequiredNrOfInputDataFields = 4; // number of fields that should be filled in connectioninput.csv for this device type
-    mMaxAllowedNrOfChars = 10;  // maximum number of characters that can be filled in the connectioninput.csv file for this device type (including the 2 placeholders where character '-' should be filled in)
-    mDeltaNrOfChars = 0;
+    mInputData.resize(Device::scRequiredNrOfInputDataFields);
 
-    // device parameters
-    mInputData.resize(mRequiredNrOfInputDataFields);
     mInputData[0] = &mDeviceName;
     mInputData[1] = &mPortNumber;
     mInputData[2] = &mPlaceholder1;
     mInputData[3] = &mPlaceholder2;
-
-    mIsSourceDevice = isSourceDevice;
 }
 
 void InfinibandSwitch::buildDescriptionText()
@@ -132,23 +107,14 @@ void InfinibandSwitch::buildLabelText()
 }
 
 KVMSwitch::KVMSwitch(bool isSourceDevice)
+    : Device{"kvm", c_MaxAllowedNrOfChars.at("kvm"), isSourceDevice}
 {
-    mDeviceType = "kvm";
-    mErrorCode = 0;
-    mRow = 1;
-    mColumn = 1;
-    mRequiredNrOfInputDataFields = 4; // number of fields that should be filled in connectioninput.csv for this device type
-    mMaxAllowedNrOfChars = 13;  // maximum number of characters that can be filled in the connectioninput.csv file for this device type (including the 2 placeholders where character '-' should be filled in)
-    mDeltaNrOfChars = 0;
+    mInputData.resize(Device::scRequiredNrOfInputDataFields);
 
-    // device parameters
-    mInputData.resize(mRequiredNrOfInputDataFields);
     mInputData[0] = &mDeviceName;
     mInputData[1] = &mPortNumber;
     mInputData[2] = &mPlaceholder1;
     mInputData[3] = &mPlaceholder2;
-
-    mIsSourceDevice = isSourceDevice;
 }
 
 void KVMSwitch::buildDescriptionText()
@@ -162,23 +128,14 @@ void KVMSwitch::buildLabelText()
 }
 
 Server::Server(bool isSourceDevice)
+    : Device{"svr", 8, isSourceDevice}
 {
-    mDeviceType = "svr";
-    mErrorCode = 0;
-    mRow = 1;
-    mColumn = 1;
-    mRequiredNrOfInputDataFields = 4; // number of fields that should be filled in connectioninput.csv for this device type
-    mMaxAllowedNrOfChars = 8;  // maximum number of characters that can be filled in the connectioninput.csv file for this device type (including the placeholder where character '-' should be filled in)
-    mDeltaNrOfChars = 0;
+    mInputData.resize(Device::scRequiredNrOfInputDataFields);
 
-    // device parameters
-    mInputData.resize(mRequiredNrOfInputDataFields);
     mInputData[0] = &mDeviceName;
     mInputData[1] = &mPortType;
     mInputData[2] = &mPortNumber;
     mInputData[3] = &mPlaceholder;
-
-    mIsSourceDevice = isSourceDevice;
 }
 
 void Server::buildDescriptionText()
@@ -259,23 +216,14 @@ void Server::buildLabelText()
 }
 
 Storage::Storage(bool isSourceDevice)
+    : Device{"sto", c_MaxAllowedNrOfChars.at("sto"), isSourceDevice}
 {
-    mDeviceType = "sto";
-    mErrorCode = 0;
-    mRow = 1;
-    mColumn = 1;
-    mRequiredNrOfInputDataFields = 4; // number of fields that should be filled in connectioninput.csv for this device type
-    mMaxAllowedNrOfChars = 7;  // maximum number of characters that can be filled in the connectioninput.csv file for this device type (including the placeholder where character '-' should be filled in)
-    mDeltaNrOfChars = 0;
+    mInputData.resize(Device::scRequiredNrOfInputDataFields);
 
-    // device parameters
-    mInputData.resize(mRequiredNrOfInputDataFields);
     mInputData[0] = &mDeviceName;
     mInputData[1] = &mControllerNr;
     mInputData[2] = &mPortNr;
     mInputData[3] = &mPlaceholder;
-
-    mIsSourceDevice = isSourceDevice;
 }
 
 void Storage::buildDescriptionText()
@@ -317,21 +265,14 @@ void Storage::buildLabelText()
 }
 
 BladeServer::BladeServer(bool isSourceDevice)
+    : Device{"bld", c_MaxAllowedNrOfChars.at("bld"), isSourceDevice}
 {
-    mDeviceType = "bld";
-    mErrorCode = 0;
-    mRow = 1;
-    mColumn = 1;
-    mRequiredNrOfInputDataFields = 4; // number of fields that should be filled in connectioninput.csv for this device type
-    mMaxAllowedNrOfChars = 7;  // maximum number of characters that can be filled in the connectioninput.csv file for this device type
-    mDeltaNrOfChars = 0;
-    mInputData.resize(mRequiredNrOfInputDataFields);
+    mInputData.resize(Device::scRequiredNrOfInputDataFields);
+
     mInputData[0] = &mDeviceName;
     mInputData[1] = &mModuleType;
     mInputData[2] = &mModuleNumber;
     mInputData[3] = &mPortNumber;
-
-    mIsSourceDevice = isSourceDevice;
 }
 
 void BladeServer::buildDescriptionText()

@@ -2,6 +2,7 @@
 #define LABELUTILS_H
 
 #include <string>
+#include <map>
 
 /* *CONSTANTS* */
 
@@ -12,6 +13,34 @@ static const std::string c_CablePartNumberPlaceholder{"CBL_PART_NR"};
 static const std::string c_InputHeader{"__Cable part number__,__Source device type__,__Source U number__,__Parameter1__,__Parameter2__,__Parameter3__,__Destination device type__,__Destination U number__,__Parameter1__,__Parameter2__,__Parameter3__"};
 static const std::string c_OutputHeader{"__Item number__,__Cable part number__,__Source device description__,__Source label__,__Destination device description__,__Destination label__"};
 static const std::string c_ConfigurationFilename{"/tmp/configuration.txt"};
+
+enum class ErrorTypes
+{
+    EMPTY_CELL = 1,
+    MAX_CHARS_EXCEEDED,
+    UNKNOWN_DEVICE,
+    FEWER_CELLS,
+    WRONG_CONNECTION_FORMAT,
+    PLACEMENT_OUT_OF_RANGE,
+    NO_DEVICE_PLACED_IN_POSITION,
+    DEVICE_CONNECTED_TO_ITSELF,
+    NULL_NR_OF_CONNECTIONS
+};
+
+static const std::map<std::string, int> c_MaxAllowedNrOfChars
+{
+    {"_pdu", 6},
+    {"_ext", 8},
+    {"_ups", 11},
+    {"_ps", 12},
+    {"lan", 13},
+    {"san", 10},
+    {"ib",  10},
+    {"kvm", 13},
+    {"svr", 8},
+    {"sto", 7},
+    {"bld", 7}
+};
 
 /* *FUNCTIONS* */
 

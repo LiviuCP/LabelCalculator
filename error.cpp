@@ -1,10 +1,8 @@
 #include "error.h"
 
 UnknownDeviceError::UnknownDeviceError()
+    : Device{static_cast<int>(ErrorTypes::UNKNOWN_DEVICE)}
 {
-    mErrorCode = 3;
-    mRow = 0;
-    mColumn = 0;
 }
 
 void UnknownDeviceError::execute(std::ofstream& err)
@@ -26,10 +24,8 @@ void UnknownDeviceError::parseInputData(const std::string&, int&, bool&, std::of
 }
 
 FewerCellsError::FewerCellsError()
+    : Device{static_cast<int>(ErrorTypes::FEWER_CELLS)}
 {
-    mErrorCode = 4;
-    mRow = 0;
-    mColumn = 0;
 }
 
 void FewerCellsError::execute(std::ofstream &err)
@@ -53,10 +49,8 @@ void FewerCellsError::parseInputData(const std::string&, int&, bool&, std::ofstr
 }
 
 WrongFormatError::WrongFormatError()
+    : Device{static_cast<int>(ErrorTypes::WRONG_CONNECTION_FORMAT)}
 {
-    mErrorCode = 5;
-    mRow = 0;
-    mColumn = 0;
 }
 
 void WrongFormatError::execute(std::ofstream &err)
@@ -80,10 +74,8 @@ void WrongFormatError::parseInputData(const std::string&, int&, bool&, std::ofst
 }
 
 WrongUNumberError::WrongUNumberError()
+    : Device{static_cast<int>(ErrorTypes::PLACEMENT_OUT_OF_RANGE)}
 {
-    mErrorCode = 6;
-    mRow = 0;
-    mColumn = 0;
 }
 
 void WrongUNumberError::execute(std::ofstream &err)
@@ -107,10 +99,8 @@ void WrongUNumberError::parseInputData(const std::string&, int&, bool&, std::ofs
 }
 
 NoDevicePresentError::NoDevicePresentError()
+    : Device{static_cast<int>(ErrorTypes::NO_DEVICE_PLACED_IN_POSITION)}
 {
-    mErrorCode = 7;
-    mRow = 0;
-    mColumn = 0;
 }
 
 void NoDevicePresentError::execute(std::ofstream &err)
@@ -134,10 +124,8 @@ void NoDevicePresentError::parseInputData(const std::string&, int&, bool&, std::
 }
 
 DeviceConnectedToItselfError::DeviceConnectedToItselfError()
+    : Device{static_cast<int>(ErrorTypes::DEVICE_CONNECTED_TO_ITSELF)}
 {
-    mErrorCode = 8;
-    mRow = 0;
-    mColumn = 0;
 }
 
 void DeviceConnectedToItselfError::execute(std::ofstream &err)
@@ -161,10 +149,8 @@ void DeviceConnectedToItselfError::parseInputData(const std::string&, int&, bool
 }
 
 NoConnectionsError::NoConnectionsError()
+    : Device{static_cast<int>(ErrorTypes::NULL_NR_OF_CONNECTIONS)}
 {
-    mErrorCode = 9;
-    mRow = 0;
-    mColumn = 0;
 }
 
 void NoConnectionsError::execute(std::ofstream &err)

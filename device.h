@@ -9,6 +9,9 @@
 class Device
 {
 public:
+    Device(const std::string& deviceType, int maxAllowedNrOfChars, bool isSourceDevice);
+    Device(int errorCode);
+
     virtual ~Device();
 
     virtual void buildDescriptionText() = 0; // creates the description for one side of the connection (source description / destination description)
@@ -34,7 +37,6 @@ protected:
     void handleError(std::ofstream& err); // error handling function, will write any error to output file by using the err stream
 
     std::string mDeviceName;  // device name (e.g. for PDU-A the name is "A")
-    bool mIsSourceDevice; // true if first of the two devices in each connection entered in the input .csv file
     std::string mDeviceType;  // device type (ex: "pdu" for basic PDUs without load segments)
     std::string mDescription; // text to be written in the source (first device) / destination (second device) field of the labelling table (device description)
     std::string mLabel;       // text to be written in the source (first device) / destination (second device) field of the labelling table (device label)
@@ -43,9 +45,12 @@ protected:
     int mColumn;         // input .csv column from which the error originated
 
     std::vector <std::string*> mInputData; // reference to substrings storing the fields parsed by parseInputData()
-    int mRequiredNrOfInputDataFields; // number of substrings to be parsed by parseInputData() - including device name
-    int mMaxAllowedNrOfChars; // maximum number of characters that can be parsed by parseInputData() for all substrings belonging to a specific device
+    int mRequiredNrOfInputDataFields;
+    int mMaxAllowedNrOfChars; // maximum number of characters that can be filled in the connectioninput.csv file for a specific device type (including any placeholders where character '-' could be filled in)
     int mDeltaNrOfChars; // number of characters above the maximum number (mMaxAllowedNrOfChars)
+    bool mIsSourceDevice; // true if first of the two devices in each connection entered in the input .csv file
+
+    static const int scRequiredNrOfInputDataFields; // number of fields that should be filled in connectioninput.csv for EACH device (not used fields can be filled in with '-')
 };
 
 // device identifier
