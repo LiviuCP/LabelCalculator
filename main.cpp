@@ -106,9 +106,10 @@ bool init(std::string& connectionsFilename, std::string& inputFilename, std::str
         string username;
         getline(readInput, username);
 
-        connectionsFilename = "/Users/" + username + "/Documents/connectiondefinitions.csv";
-        inputFilename = "/Users/" + username + "/Documents/connectioninput.csv";
-        outputFilename = "/Users/" + username + "/Documents/labellingtable.csv";
+        const string c_AppFilesDir{c_HomeDirParent + c_PathSeparator + username + c_PathSeparator + "Documents" + c_PathSeparator};
+        connectionsFilename = c_AppFilesDir + "connectiondefinitions.csv";
+        inputFilename = c_AppFilesDir + "connectioninput.csv";
+        outputFilename = c_AppFilesDir + "labellingtable.csv";
 
         writeToOutput.open(outputFilename);
 

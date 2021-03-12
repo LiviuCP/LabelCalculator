@@ -12,7 +12,22 @@ static const std::string c_NoDevice{"NoDevice"}; // no device placed in the rack
 static const std::string c_CablePartNumberPlaceholder{"CBL_PART_NR"};
 static const std::string c_InputHeader{"__Cable part number__,__Source device type__,__Source U number__,__Parameter1__,__Parameter2__,__Parameter3__,__Destination device type__,__Destination U number__,__Parameter1__,__Parameter2__,__Parameter3__"};
 static const std::string c_OutputHeader{"__Item number__,__Cable part number__,__Source device description__,__Source label__,__Destination device description__,__Destination label__"};
+
+#if defined (__APPLE__) && defined (__MACH__)
+static const std::string c_HomeDirParent{"/Users"};
+#elif defined (__unix__)
+static const std::string c_HomeDirParent{"/home"};
+#else
+static const std::string c_HomeDirParent{"C:\\Users"};
+#endif
+
+#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
 static const std::string c_ConfigurationFilename{"/tmp/configuration.txt"};
+static constexpr char c_PathSeparator{'/'};
+#else
+static const std::string c_ConfigurationFilename{"C:\\tmp\\configuration.txt"};
+static constexpr char c_PathSeparator{'\\'};
+#endif
 
 enum class ErrorTypes
 {
