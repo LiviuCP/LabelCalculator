@@ -4,9 +4,8 @@
 
 int readDataField(const std::string& src, std::string& dest, const int index)
 {
-    assert(index >= 0);
-
     const int c_Length{static_cast<int>(src.size())}; // no issue in converting to int as the size is reasonable (same for other similar situations in this project)
+
     int nextIndex{-1};
 
     if(c_Length > 0)
