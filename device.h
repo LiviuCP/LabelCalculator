@@ -53,21 +53,4 @@ protected:
     static const int scRequiredNrOfInputDataFields; // number of fields that should be filled in connectioninput.csv for EACH device (not used fields can be filled in with '-')
 };
 
-// device identifier
-class DeviceID
-{
-public:
-    DeviceID() = delete;
-    DeviceID(int connectionId, int deviceId);
-
-    bool operator<(const DeviceID& id) const;
-    bool operator<=(const DeviceID& id) const;
-    bool operator>(const DeviceID& id) const;
-    bool operator>=(const DeviceID& id) const;
-
-private:
-    int mConnectionId; // id describing a connection type (ex. 0 - Ethernet, 1 - FC etc.)
-    int mDeviceId;     // id describing a port type (ex. 0 - server ethernet port etc.)
-};
-
 #endif // DEVICE_H
