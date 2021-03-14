@@ -1,174 +1,175 @@
 #include "error.h"
 
-UnknownDeviceError::UnknownDeviceError()
-    : Device{static_cast<int>(ErrorTypes::UNKNOWN_DEVICE)}
+Error::Error(ErrorCode errorCode, std::ofstream& errorStream)
+    : mErrorStream{errorStream}
+    , mErrorCode{errorCode}
+{
+    const int c_ErrorCode{static_cast<int>(mErrorCode)};
+
+    assert(c_ErrorCode > 0 &&
+           c_ErrorCode < static_cast<int>(ErrorCode::ErrorCodesCount));
+
+    assert(mErrorStream.is_open());
+}
+
+Error::~Error()
 {
 }
 
-void UnknownDeviceError::execute(std::ofstream& err)
+void Error::execute()
 {
-    handleError(err);
+    mErrorStream << "Error code: " << static_cast<int>(mErrorCode) << std::endl << std::endl;
 }
 
-void UnknownDeviceError::buildDescriptionText()
+void Error::setRow(int row)
 {
-    // not used
-}
-void UnknownDeviceError::buildLabelText()
-{
-    // not used
-}
-void UnknownDeviceError::parseInputData(const std::string&, int&, bool&, std::ofstream&)
-{
-    // not used
+    mRow = row;
 }
 
-FewerCellsError::FewerCellsError()
-    : Device{static_cast<int>(ErrorTypes::FEWER_CELLS)}
+void Error::setColumn(int column)
 {
+    mColumn = column;
 }
 
-void FewerCellsError::execute(std::ofstream &err)
+int Error::getRow() const
 {
-    handleError(err);
+    return mRow;
 }
 
-void FewerCellsError::buildDescriptionText()
+int Error::getColumn() const
 {
-    // not used
+    return mColumn;
 }
 
-void FewerCellsError::buildLabelText()
-{
-    // not used
-}
-
-void FewerCellsError::parseInputData(const std::string&, int&, bool&, std::ofstream&)
-{
-    // not used
-}
-
-WrongFormatError::WrongFormatError()
-    : Device{static_cast<int>(ErrorTypes::WRONG_CONNECTION_FORMAT)}
+EmptyCellError::EmptyCellError(std::ofstream& errorStream)
+    : Error{ErrorCode::EMPTY_CELL, errorStream}
 {
 }
 
-void WrongFormatError::execute(std::ofstream &err)
+void EmptyCellError::execute()
 {
-    handleError(err);
+    mErrorStream << "Error: A cell is empty" << std::endl;
+    mErrorStream << "Row number: " << mRow << "    "<< "Column number: " << mColumn << std::endl;
+
+    Error::execute();
 }
 
-void WrongFormatError::buildDescriptionText()
-{
-    // not used
-}
-
-void WrongFormatError::buildLabelText()
-{
-    // not used
-}
-
-void WrongFormatError::parseInputData(const std::string&, int&, bool&, std::ofstream&)
-{
-    // not used
-}
-
-WrongUNumberError::WrongUNumberError()
-    : Device{static_cast<int>(ErrorTypes::PLACEMENT_OUT_OF_RANGE)}
+ExceedingCharsCountError::ExceedingCharsCountError(std::ofstream& errorStream, int maxAllowedNrOfChars, int deltaNrOfChars, bool isSourceDevice)
+    : Error{ErrorCode::MAX_CHARS_EXCEEDED, errorStream}
+    , mMaxAllowedNrOfChars{maxAllowedNrOfChars}
+    , mDeltaNrOfChars{deltaNrOfChars}
+    , mIsSourceDevice{isSourceDevice}
 {
 }
 
-void WrongUNumberError::execute(std::ofstream &err)
+void ExceedingCharsCountError::execute()
 {
-    handleError(err);
+    mErrorStream << "Error: The total number of characters entered for the ";
+
+    if (mIsSourceDevice)
+    {
+        mErrorStream << "first ";
+    }
+    else
+    {
+        mErrorStream << "second ";
+    }
+
+    mErrorStream << "device exceeds the maximum allowed (" << mMaxAllowedNrOfChars << " characters)" << std::endl;
+    mErrorStream << "Row number: " << mRow << std::endl;
+    mErrorStream << "Maximum total number of characters exceeded by " << mDeltaNrOfChars << std::endl;
+
+    Error::execute();
 }
 
-void WrongUNumberError::buildDescriptionText()
-{
-    // not used
-}
-
-void WrongUNumberError::buildLabelText()
-{
-    // not used
-}
-
-void WrongUNumberError::parseInputData(const std::string&, int&, bool&, std::ofstream&)
-{
-    // not used
-}
-
-NoDevicePresentError::NoDevicePresentError()
-    : Device{static_cast<int>(ErrorTypes::NO_DEVICE_PLACED_IN_POSITION)}
-{
-}
-
-void NoDevicePresentError::execute(std::ofstream &err)
-{
-    handleError(err);
-}
-
-void NoDevicePresentError::buildDescriptionText()
-{
-    // not used
-}
-
-void NoDevicePresentError::buildLabelText()
-{
-    // not used
-}
-
-void NoDevicePresentError::parseInputData(const std::string&, int&, bool&, std::ofstream&)
-{
-    // not used
-}
-
-DeviceConnectedToItselfError::DeviceConnectedToItselfError()
-    : Device{static_cast<int>(ErrorTypes::DEVICE_CONNECTED_TO_ITSELF)}
+UnknownDeviceError::UnknownDeviceError(std::ofstream& errorStream)
+    : Error{ErrorCode::UNKNOWN_DEVICE, errorStream}
 {
 }
 
-void DeviceConnectedToItselfError::execute(std::ofstream &err)
+void UnknownDeviceError::execute()
 {
-    handleError(err);
+    mErrorStream << "Error: an unknown device type has been entered in cell" << std::endl;
+    mErrorStream << "Row number: " << mRow << "    " << "Column number: " << mColumn << std::endl;
+
+    Error::execute();
 }
 
-void DeviceConnectedToItselfError::buildDescriptionText()
-{
-    // not used
-}
-
-void DeviceConnectedToItselfError::buildLabelText()
-{
-    // not used
-}
-
-void DeviceConnectedToItselfError::parseInputData(const std::string&, int&, bool&, std::ofstream&)
-{
-    // not used
-}
-
-NoConnectionsError::NoConnectionsError()
-    : Device{static_cast<int>(ErrorTypes::NULL_NR_OF_CONNECTIONS)}
+FewerCellsError::FewerCellsError(std::ofstream &errorStream)
+    : Error{ErrorCode::FEWER_CELLS, errorStream}
 {
 }
 
-void NoConnectionsError::execute(std::ofstream &err)
+void FewerCellsError::execute()
 {
-    handleError(err);
+    mErrorStream << "Error: less cells have been filled on the row than required in order to store the parameters of the 2 devices" << std::endl;
+    mErrorStream << "A total number of 11 contiguous cells are required to be filled (starting with the first cell on the row)" << std::endl;
+    mErrorStream << "Row number: " << mRow << std::endl;
+
+    Error::execute();
 }
 
-void NoConnectionsError::buildDescriptionText()
+WrongFormatError::WrongFormatError(std::ofstream& errorStream)
+    : Error{ErrorCode::WRONG_CONNECTION_FORMAT, errorStream}
 {
-    // not used
 }
 
-void NoConnectionsError::buildLabelText()
+void WrongFormatError::execute()
 {
-    // not used
+    mErrorStream << "Error: format of the connection is wrong" << std::endl;
+    mErrorStream << "Row number: " << mRow << "    "<<"Column number: "<< mColumn << std::endl;
+
+    Error::execute();
 }
 
-void NoConnectionsError::parseInputData(const std::string&, int&, bool&, std::ofstream&)
+WrongUNumberError::WrongUNumberError(std::ofstream& errorStream)
+    : Error{ErrorCode::PLACEMENT_OUT_OF_RANGE, errorStream}
 {
-    // not used
+}
+
+void WrongUNumberError::execute()
+{
+    mErrorStream << "Error: U number of the device is out of range (should be between 1 and 50)" << std::endl;
+    mErrorStream << "Row number: " << mRow << "    " << "Column number: " << mColumn << std::endl;
+
+    Error::execute();
+}
+
+NoDevicePresentError::NoDevicePresentError(std::ofstream& errorStream)
+    : Error{ErrorCode::NO_DEVICE_PLACED_IN_POSITION, errorStream}
+{
+}
+
+void NoDevicePresentError::execute()
+{
+    mErrorStream << "Error: connection to a non-existent device. No device is mounted in the rack in the mentioned U position" << std::endl;
+    mErrorStream << "Row number: " << mRow << "    " << "Column number: " << mColumn << std::endl;
+
+    Error::execute();
+}
+
+DeviceConnectedToItselfError::DeviceConnectedToItselfError(std::ofstream& errorStream)
+    : Error{ErrorCode::DEVICE_CONNECTED_TO_ITSELF, errorStream}
+{
+}
+
+void DeviceConnectedToItselfError::execute()
+{
+    mErrorStream << "Error: device is connected to itself. This is not allowed." << std::endl;
+    mErrorStream << "Row number: " << mRow << "    " << "Column number: " << mColumn << std::endl;
+
+    Error::execute();
+}
+
+NoConnectionsError::NoConnectionsError(std::ofstream& errorStream)
+    : Error{ErrorCode::NULL_NR_OF_CONNECTIONS, errorStream}
+{
+}
+
+void NoConnectionsError::execute()
+{
+    mErrorStream << "Error: number of connections between the 2 devices is 0." << std::endl;
+    mErrorStream << "Row number: " << mRow << "    " << "Column number: " << mColumn << std::endl;
+
+    Error::execute();
 }

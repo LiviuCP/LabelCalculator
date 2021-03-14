@@ -252,12 +252,12 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
         {
             if (!pUnknownDeviceError)
             {
-                pUnknownDeviceError = new UnknownDeviceError;
+                pUnknownDeviceError = new UnknownDeviceError{writeToError};
             }
 
             pUnknownDeviceError->setRow(rowIndex + 2); // setting row index of the current cell (+2 deoarece in Excel (.csv) the rows start at 1 and first line is ignored);
             pUnknownDeviceError->setColumn(columnNumber); // setting column index for exact error localization
-            pUnknownDeviceError->execute(writeToError);
+            pUnknownDeviceError->execute();
 
             errorsOccured = true;
             continue;
@@ -297,12 +297,12 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
             {
                 if (!pWrongFormatError)
                 {
-                    pWrongFormatError = new WrongFormatError;
+                    pWrongFormatError = new WrongFormatError{writeToError};
                 }
 
                 pWrongFormatError->setRow(rowIndex+2);
                 pWrongFormatError->setColumn(columnNumber);
-                pWrongFormatError->execute(writeToError);
+                pWrongFormatError->execute();
 
                 errorsOccured = true;
             }
@@ -310,12 +310,12 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
             {
                 if (!pWrongUNumberError)
                 {
-                    pWrongUNumberError = new WrongUNumberError;
+                    pWrongUNumberError = new WrongUNumberError{writeToError};
                 }
 
                 pWrongUNumberError->setRow(rowIndex + 2);
                 pWrongUNumberError->setColumn(columnNumber);
-                pWrongUNumberError->execute(writeToError);
+                pWrongUNumberError->execute();
 
                 errorsOccured = true;
             }
@@ -323,12 +323,12 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
             {
                 if (!pNoDevicePresentError)
                 {
-                    pNoDevicePresentError = new NoDevicePresentError;
+                    pNoDevicePresentError = new NoDevicePresentError{writeToError};
                 }
 
                 pNoDevicePresentError->setRow(rowIndex + 2);
                 pNoDevicePresentError->setColumn(columnNumber);
-                pNoDevicePresentError->execute(writeToError);
+                pNoDevicePresentError->execute();
 
                 errorsOccured = true;
             }
@@ -336,12 +336,12 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
             {
                 if (!pDeviceConnectedToItselfError)
                 {
-                    pDeviceConnectedToItselfError = new DeviceConnectedToItselfError;
+                    pDeviceConnectedToItselfError = new DeviceConnectedToItselfError{writeToError};
                 }
 
                 pDeviceConnectedToItselfError->setRow(rowIndex + 2);
                 pDeviceConnectedToItselfError->setColumn(columnNumber);
-                pDeviceConnectedToItselfError->execute(writeToError);
+                pDeviceConnectedToItselfError->execute();
 
                 errorsOccured = true;
             }
@@ -349,12 +349,12 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
             {
                 if (!pNoConnectionsError)
                 {
-                    pNoConnectionsError = new NoConnectionsError;
+                    pNoConnectionsError = new NoConnectionsError{writeToError};
                 }
 
                 pNoConnectionsError->setRow(rowIndex + 2);
                 pNoConnectionsError->setColumn(columnNumber);
-                pNoConnectionsError->execute(writeToError);
+                pNoConnectionsError->execute();
 
                 errorsOccured = true;
             }
@@ -446,11 +446,11 @@ bool parseConnectionInput(std::ofstream& writeToError,
             {
                 if (!pFewerCellsError)
                 {
-                    pFewerCellsError = new FewerCellsError;
+                    pFewerCellsError = new FewerCellsError{writeToError};
                 }
 
                 pFewerCellsError->setRow(rowIndex + 2);
-                pFewerCellsError->execute(writeToError);
+                pFewerCellsError->execute();
                 errorsOccured = true;
                 break;
             }
@@ -501,12 +501,12 @@ bool parseConnectionInput(std::ofstream& writeToError,
             {
                 if (!pUnknownDeviceError)
                 {
-                    pUnknownDeviceError = new UnknownDeviceError;
+                    pUnknownDeviceError = new UnknownDeviceError{writeToError};
                 }
 
                 pUnknownDeviceError->setRow(rowIndex + 2);
                 pUnknownDeviceError->setColumn(columnNumber);
-                pUnknownDeviceError->execute(writeToError);
+                pUnknownDeviceError->execute();
 
                 errorsOccured = true;
                 break;
@@ -519,7 +519,18 @@ bool parseConnectionInput(std::ofstream& writeToError,
             device->setColumn(columnNumber);
             devices.resize(numberOfDevices);
             devices[numberOfDevices - 1] = device;
-            device->parseInputData(connectionInputRows[rowIndex], currentPosition, errorsOccured, writeToError);
+            std::vector<Error*> parsingErrors{device->parseInputData(connectionInputRows[rowIndex], currentPosition, errorsOccured, writeToError)};
+
+            for(auto& error : parsingErrors)
+            {
+                if (nullptr != error)
+                {
+                    error->execute();
+                    delete error;
+                    error = nullptr;
+                }
+            }
+
             columnNumber = device->getColumn();
 
             --devicesStillNotParsedCount;

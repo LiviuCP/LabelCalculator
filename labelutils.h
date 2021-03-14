@@ -29,19 +29,6 @@ static const std::string c_ConfigurationFilename{"C:\\tmp\\configuration.txt"};
 static constexpr char c_PathSeparator{'\\'};
 #endif
 
-enum class ErrorTypes
-{
-    EMPTY_CELL = 1,
-    MAX_CHARS_EXCEEDED,
-    UNKNOWN_DEVICE,
-    FEWER_CELLS,
-    WRONG_CONNECTION_FORMAT,
-    PLACEMENT_OUT_OF_RANGE,
-    NO_DEVICE_PLACED_IN_POSITION,
-    DEVICE_CONNECTED_TO_ITSELF,
-    NULL_NR_OF_CONNECTIONS
-};
-
 static const std::map<std::string, int> c_MaxAllowedNrOfChars
 {
     {"_pdu", 6},

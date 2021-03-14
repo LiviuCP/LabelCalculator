@@ -3,98 +3,124 @@
 
 #include "device.h"
 
-// unknown device entered in connection definitions/input file
-class UnknownDeviceError : public Device
+enum class ErrorCode
+{
+    EMPTY_CELL = 1,
+    MAX_CHARS_EXCEEDED,
+    UNKNOWN_DEVICE,
+    FEWER_CELLS,
+    WRONG_CONNECTION_FORMAT,
+    PLACEMENT_OUT_OF_RANGE,
+    NO_DEVICE_PLACED_IN_POSITION,
+    DEVICE_CONNECTED_TO_ITSELF,
+    NULL_NR_OF_CONNECTIONS,
+    ErrorCodesCount
+};
+
+class Error
 {
 public:
-    UnknownDeviceError();
+    Error(ErrorCode errorCode, std::ofstream& errorStream);
+    virtual ~Error();
 
-    void execute(std::ofstream& err);
+    virtual void execute();
 
+    void setRow(int row);
+    void setColumn(int column);
 
-    void buildDescriptionText();
-    void buildLabelText();
-    void parseInputData(const std::string&, int&, bool&, std::ofstream&);
+    int getRow() const;
+    int getColumn() const;
+
+protected:
+    std::ofstream& mErrorStream;
+
+    ErrorCode mErrorCode;
+    int mRow;
+    int mColumn;
+};
+
+class EmptyCellError : public Error
+{
+public:
+    EmptyCellError(std::ofstream& errorStream);
+
+    void execute();
+};
+
+class ExceedingCharsCountError : public Error
+{
+public:
+    ExceedingCharsCountError(std::ofstream& errorStream, int maxAllowedNrOfChars, int deltaNrOfChars, bool isSourceDevice);
+
+    void execute();
+
+protected:
+    int mMaxAllowedNrOfChars;
+    int mDeltaNrOfChars;
+    bool mIsSourceDevice;
+};
+
+// unknown device entered in connection definitions/input file
+class UnknownDeviceError : public Error
+{
+public:
+    UnknownDeviceError(std::ofstream& errorStream);
+
+    void execute();
 };
 
 // fewer input cells than required (some are empty) in connection input file
-class FewerCellsError : public Device
+class FewerCellsError : public Error
 {
 public:
-    FewerCellsError();
+    FewerCellsError(std::ofstream& errorStream);
 
-    void execute(std::ofstream& err);
-
-    void buildDescriptionText();
-    void buildLabelText();
-    void parseInputData(const std::string&, int&, bool&, std::ofstream&);
+    void execute();
 };
 
 // wrong connection format in connection definitions file
-class WrongFormatError : public Device
+class WrongFormatError : public Error
 {
 public:
-    WrongFormatError();
+    WrongFormatError(std::ofstream& errorStream);
 
-    void execute(std::ofstream &err);
-
-    void buildDescriptionText();
-    void buildLabelText();
-    void parseInputData(const std::string&, int&, bool&, std::ofstream&);
-
+    void execute();
 };
 
 // invalid device placement U number in connection definitions file
-class WrongUNumberError : public Device
+class WrongUNumberError : public Error
 {
 public:
-    WrongUNumberError();
+    WrongUNumberError(std::ofstream& errorStream);
 
-    void execute(std::ofstream &err);
-
-    void buildDescriptionText();
-    void buildLabelText();
-    void parseInputData(const std::string&, int&, bool&, std::ofstream&);
+    void execute();
 };
 
 // device mentioned in connection definitions file not contained in the mapping table (connection to nothing)
-class NoDevicePresentError : public Device
+class NoDevicePresentError : public Error
 {
 public:
-    NoDevicePresentError();
+    NoDevicePresentError(std::ofstream& errorStream);
 
-    void execute(std::ofstream &err);
-
-    void buildDescriptionText();
-    void buildLabelText();
-    void parseInputData(const std::string&, int&, bool&, std::ofstream&);
+    void execute();
 };
 
 // device mentioned in connection definitions file is connected to itself
-class DeviceConnectedToItselfError : public Device
+class DeviceConnectedToItselfError : public Error
 {
 public:
-    DeviceConnectedToItselfError();
+    DeviceConnectedToItselfError(std::ofstream& errorStream);
 
-    void execute(std::ofstream &err);
-
-    void buildDescriptionText();
-    void buildLabelText();
-    void parseInputData(const std::string&, int&, bool&, std::ofstream&);
-
+    void execute();
 };
 
 // device marked as connected, number of connections mentioned in connection definitions file is 0
-class NoConnectionsError:public Device
+class NoConnectionsError : public Error
 {
 public:
-    NoConnectionsError();
+    NoConnectionsError(std::ofstream& errorStream);
 
-    void execute(std::ofstream &err);
-
-    void buildDescriptionText();
-    void buildLabelText();
-    void parseInputData(const std::string&, int&, bool&, std::ofstream&);
+    void execute();
 };
 
 #endif // ERROR_H
