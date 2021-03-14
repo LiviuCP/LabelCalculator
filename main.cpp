@@ -120,14 +120,14 @@ bool init(std::string& connectionsFilename, std::string& inputFilename, std::str
         }
         else
         {
-            system("clear");
+            system(c_ClearScreenCommand.c_str());
             cout << "Error! File labellingtable.csv cannot be opened for writing" << endl;
             cout << "File path: " << outputFilename << endl;
         }
     }
     else
     {
-        system("clear");
+        system(c_ClearScreenCommand.c_str());
         cout << "Error! File " << c_ConfigurationFilename << " cannot be opened for reading" << endl;
     }
 
@@ -152,14 +152,14 @@ bool openFilesForFirstOption(std::ifstream& readConnections, std::ofstream& writ
         }
         else
         {
-            system("clear");
+            system(c_ClearScreenCommand.c_str());
             cout << "Error! File connectioninput.csv cannot be opened for writing" << endl;
             cout << "File path: "<< inputFilename << endl;
         }
     }
     else
     {
-        system("clear");
+        system(c_ClearScreenCommand.c_str());
         cout << "Error! File connectiondefinitions.csv cannot be opened for reading" << endl;
         cout << "File path: " << connectionsFilename << endl;
     }
@@ -175,7 +175,7 @@ bool openFilesForSecondOption(std::ifstream& readInput, const std::string& input
 
     if (!readInput.is_open())
     {
-        system("clear");
+        system(c_ClearScreenCommand.c_str());
         std::cout << "Error! File connectioninput.csv cannot be opened for reading" << std::endl;
         secondOptionFilesSuccessfullyOpened = false;
     }
@@ -656,7 +656,7 @@ void displayErrorMessage(const std::string& inputFilename, const std::string& ou
 {
     using namespace std;
 
-    system("clear");
+    system(c_ClearScreenCommand.c_str());
 
     cout << "One or more errors occured!" << endl << endl;
     cout << "Please check the error report in the output file: " << endl << endl; //TODO: create error.csv for errors (instead of labellingtable.csv)
@@ -669,7 +669,7 @@ void displaySuccessMessage(const std::string& outputFilename, bool displayFurthe
 {
     using namespace std;
 
-    system("clear");
+    system(c_ClearScreenCommand.c_str());
 
     cout << "The program ended succesfully. " << endl << endl;
     cout << "Please view the output file: " << endl << endl;
@@ -693,7 +693,7 @@ void displayMenu()
 
 void displayVersion()
 {
-    system("clear");
+    system(c_ClearScreenCommand.c_str());
     std::cout << "LabelCalculator v1.0" << std::endl << std::endl;
 }
 
@@ -814,7 +814,7 @@ int main()
         }
         else
         {
-            system("clear");
+            system(c_ClearScreenCommand.c_str());
             cout << "Application terminated by user" << endl << endl;
         }
 

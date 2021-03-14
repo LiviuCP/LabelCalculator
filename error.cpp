@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include "error.h"
 
 Error::Error(ErrorCode errorCode, std::ofstream& errorStream)

@@ -23,9 +23,11 @@ static const std::string c_HomeDirParent{"C:\\Users"};
 
 #if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
 static const std::string c_ConfigurationFilename{"/tmp/configuration.txt"};
+static const std::string c_ClearScreenCommand{"clear"};
 static constexpr char c_PathSeparator{'/'};
 #else
 static const std::string c_ConfigurationFilename{"C:\\tmp\\configuration.txt"};
+static const std::string c_ClearScreenCommand{"cls"};
 static constexpr char c_PathSeparator{'\\'};
 #endif
 
