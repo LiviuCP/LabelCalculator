@@ -209,8 +209,6 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
                                 const std::vector<std::string>& connectionDefinitionRows,
                                 const int connectionDefinitionRowsCount)
 {
-    bool errorsOccured{false}; // true if at least one error occurred (but multiple errors can be logged in labellingtable.csv as well)
-
     mapping.clear();
     uNumbers.clear();
     connectedTo.clear();
@@ -245,11 +243,11 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
 
         if (!pDevice)
         {
-            Error* error{new UnknownDeviceError{writeToError}};
-            error->setRow(rowIndex + 2); // setting row index of the current cell (+2 deoarece in Excel (.csv) the rows start at 1 and first line is ignored);
-            error->setColumn(columnNumber); // setting column index for exact error localization
+            Error* pError{new UnknownDeviceError{writeToError}};
+            pError->setRow(rowIndex + 2); // setting row index of the current cell (+2 deoarece in Excel (.csv) the rows start at 1 and first line is ignored);
+            pError->setColumn(columnNumber); // setting column index for exact error localization
 
-            parsingErrors.push_back(error);
+            parsingErrors.push_back(pError);
 
             continue;
         }
@@ -284,27 +282,27 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
             int nrOfconnections; // temporarily stores the number of connections of each device to the current one
             const bool isConnectionFormattingInvalid{!parseConnectionFormatting(currentCell,secondDevice,nrOfconnections)};
 
-            Error* error{nullptr};
+            Error* pError{nullptr};
 
             if(isConnectionFormattingInvalid) // checking if the connection format is correct
             {
-                error = new WrongFormatError{writeToError};
+                pError = new WrongFormatError{writeToError};
             }
             else if (secondDevice <= 0 || secondDevice > c_MaxNrOfRackUnits) // checking if the device is in the accepted U interval within rack
             {
-                error = new WrongUNumberError{writeToError};
+                pError = new WrongUNumberError{writeToError};
             }
             else if (c_NoDevice == mapping[secondDevice - 1]) // check if the second device is in the mapping table (otherwise the connection is to a non-existing device)
             {
-                error = new NoDevicePresentError{writeToError};
+                pError = new NoDevicePresentError{writeToError};
             }
             else if (c_MaxNrOfRackUnits - rowIndex == secondDevice) // connection of a device to itself is not allowed
             {
-                error = new DeviceConnectedToItselfError{writeToError};
+                pError = new DeviceConnectedToItselfError{writeToError};
             }
             else if (0 == nrOfconnections) // if the devices are marked as connected there should be minimum 1 connection between them
             {
-                error = new NoConnectionsError{writeToError};
+                pError = new NoConnectionsError{writeToError};
             }
             else
             {
@@ -314,28 +312,25 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
                 connectionsCount[devicesCount - 1][columnNumber - 3] = nrOfconnections; // add the number of connections between the current device and the second device
             }
 
-            if (nullptr != error)
+            if (nullptr != pError)
             {
-                error->setRow(rowIndex + 2);
-                error->setColumn(columnNumber);
-                parsingErrors.push_back(error);
+                pError->setRow(rowIndex + 2);
+                pError->setColumn(columnNumber);
+                parsingErrors.push_back(pError);
             }
         }
     }
 
-    if (parsingErrors.size() > 0)
-    {
-        for (auto& error: parsingErrors)
-        {
-            error->execute();
-            delete error;
-            error = nullptr;
-        }
+    const bool c_ErrorsOccurred{parsingErrors.size() > 0};
 
-        errorsOccured = true;
+    for (auto& error: parsingErrors)
+    {
+        error->execute();
+        delete error;
+        error = nullptr;
     }
 
-    return errorsOccured;
+    return c_ErrorsOccurred;
 }
 
 void readConnectionInput(std::ifstream& readInput, std::vector<std::string>& connectionInputRows, int& connectionInputRowsCount)
