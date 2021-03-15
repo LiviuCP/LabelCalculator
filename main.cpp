@@ -211,13 +211,6 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
 {
     bool errorsOccured{false}; // true if at least one error occurred (but multiple errors can be logged in labellingtable.csv as well)
 
-    UnknownDeviceError* pUnknownDeviceError{nullptr};
-    WrongFormatError* pWrongFormatError{nullptr};
-    WrongUNumberError* pWrongUNumberError{nullptr};
-    NoDevicePresentError* pNoDevicePresentError{nullptr};
-    DeviceConnectedToItselfError* pDeviceConnectedToItselfError{nullptr};
-    NoConnectionsError* pNoConnectionsError{nullptr};
-
     mapping.clear();
     uNumbers.clear();
     connectedTo.clear();
@@ -227,6 +220,8 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
     assert(writeToError.is_open());
 
     mapping.resize(c_MaxNrOfRackUnits, c_NoDevice); // initial value: no device
+
+    std::vector<Error*> parsingErrors;
 
     // each connection.csv row is parsed and checked for errors
     for (int rowIndex{0}; rowIndex < connectionDefinitionRowsCount; ++rowIndex)
@@ -250,16 +245,12 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
 
         if (!pDevice)
         {
-            if (!pUnknownDeviceError)
-            {
-                pUnknownDeviceError = new UnknownDeviceError{writeToError};
-            }
+            Error* error{new UnknownDeviceError{writeToError}};
+            error->setRow(rowIndex + 2); // setting row index of the current cell (+2 deoarece in Excel (.csv) the rows start at 1 and first line is ignored);
+            error->setColumn(columnNumber); // setting column index for exact error localization
 
-            pUnknownDeviceError->setRow(rowIndex + 2); // setting row index of the current cell (+2 deoarece in Excel (.csv) the rows start at 1 and first line is ignored);
-            pUnknownDeviceError->setColumn(columnNumber); // setting column index for exact error localization
-            pUnknownDeviceError->execute();
+            parsingErrors.push_back(error);
 
-            errorsOccured = true;
             continue;
         }
 
@@ -293,70 +284,27 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
             int nrOfconnections; // temporarily stores the number of connections of each device to the current one
             const bool isConnectionFormattingInvalid{!parseConnectionFormatting(currentCell,secondDevice,nrOfconnections)};
 
+            Error* error{nullptr};
+
             if(isConnectionFormattingInvalid) // checking if the connection format is correct
             {
-                if (!pWrongFormatError)
-                {
-                    pWrongFormatError = new WrongFormatError{writeToError};
-                }
-
-                pWrongFormatError->setRow(rowIndex+2);
-                pWrongFormatError->setColumn(columnNumber);
-                pWrongFormatError->execute();
-
-                errorsOccured = true;
+                error = new WrongFormatError{writeToError};
             }
             else if (secondDevice <= 0 || secondDevice > c_MaxNrOfRackUnits) // checking if the device is in the accepted U interval within rack
             {
-                if (!pWrongUNumberError)
-                {
-                    pWrongUNumberError = new WrongUNumberError{writeToError};
-                }
-
-                pWrongUNumberError->setRow(rowIndex + 2);
-                pWrongUNumberError->setColumn(columnNumber);
-                pWrongUNumberError->execute();
-
-                errorsOccured = true;
+                error = new WrongUNumberError{writeToError};
             }
             else if (c_NoDevice == mapping[secondDevice - 1]) // check if the second device is in the mapping table (otherwise the connection is to a non-existing device)
             {
-                if (!pNoDevicePresentError)
-                {
-                    pNoDevicePresentError = new NoDevicePresentError{writeToError};
-                }
-
-                pNoDevicePresentError->setRow(rowIndex + 2);
-                pNoDevicePresentError->setColumn(columnNumber);
-                pNoDevicePresentError->execute();
-
-                errorsOccured = true;
+                error = new NoDevicePresentError{writeToError};
             }
             else if (c_MaxNrOfRackUnits - rowIndex == secondDevice) // connection of a device to itself is not allowed
             {
-                if (!pDeviceConnectedToItselfError)
-                {
-                    pDeviceConnectedToItselfError = new DeviceConnectedToItselfError{writeToError};
-                }
-
-                pDeviceConnectedToItselfError->setRow(rowIndex + 2);
-                pDeviceConnectedToItselfError->setColumn(columnNumber);
-                pDeviceConnectedToItselfError->execute();
-
-                errorsOccured = true;
+                error = new DeviceConnectedToItselfError{writeToError};
             }
             else if (0 == nrOfconnections) // if the devices are marked as connected there should be minimum 1 connection between them
             {
-                if (!pNoConnectionsError)
-                {
-                    pNoConnectionsError = new NoConnectionsError{writeToError};
-                }
-
-                pNoConnectionsError->setRow(rowIndex + 2);
-                pNoConnectionsError->setColumn(columnNumber);
-                pNoConnectionsError->execute();
-
-                errorsOccured = true;
+                error = new NoConnectionsError{writeToError};
             }
             else
             {
@@ -365,15 +313,27 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
                 connectedTo[devicesCount - 1][columnNumber - 3] = secondDevice; // add the U number of the second device
                 connectionsCount[devicesCount - 1][columnNumber - 3] = nrOfconnections; // add the number of connections between the current device and the second device
             }
+
+            if (nullptr != error)
+            {
+                error->setRow(rowIndex + 2);
+                error->setColumn(columnNumber);
+                parsingErrors.push_back(error);
+            }
         }
     }
 
-    delete pUnknownDeviceError;
-    delete pWrongFormatError;
-    delete pWrongUNumberError;
-    delete pNoDevicePresentError;
-    delete pDeviceConnectedToItselfError;
-    delete pNoConnectionsError;
+    if (parsingErrors.size() > 0)
+    {
+        for (auto& error: parsingErrors)
+        {
+            error->execute();
+            delete error;
+            error = nullptr;
+        }
+
+        errorsOccured = true;
+    }
 
     return errorsOccured;
 }
