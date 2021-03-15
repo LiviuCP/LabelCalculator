@@ -441,8 +441,8 @@ bool parseConnectionInput(std::ofstream& writeToError,
         // walk through row as long as devices are left to read in the connection (when ready go to the next connection/row)
         while (devicesStillNotParsedCount > 0)
         {
-            // if no character is left to read on current input row an error is triggered
-            if (currentPosition == inputRowsLength)
+            // total number of csv cells from the connection row (cable + 2 devices) is less than required (parsing of the row should stop at once)
+            if (currentPosition == inputRowsLength || -1 == currentPosition)
             {
                 if (!pFewerCellsError)
                 {
@@ -521,14 +521,27 @@ bool parseConnectionInput(std::ofstream& writeToError,
             devices[numberOfDevices - 1] = device;
             std::vector<Error*> parsingErrors{device->parseInputData(connectionInputRows[rowIndex], currentPosition, errorsOccured, writeToError)};
 
+            bool shouldStopConnectionParsing{false};
+
             for(auto& error : parsingErrors)
             {
                 if (nullptr != error)
                 {
+                    // the remaining row part (second device) should no longer be parsed if there are fewer cells (in total) than necessary
+                    if (nullptr != dynamic_cast<FewerCellsError*>(error) && 2 == devicesStillNotParsedCount)
+                    {
+                        shouldStopConnectionParsing = true;
+                    }
+
                     error->execute();
                     delete error;
                     error = nullptr;
                 }
+            }
+
+            if (shouldStopConnectionParsing)
+            {
+                break;
             }
 
             columnNumber = device->getColumn();

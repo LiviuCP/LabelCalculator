@@ -91,7 +91,7 @@ UnknownDeviceError::UnknownDeviceError(std::ofstream& errorStream)
 
 void UnknownDeviceError::execute()
 {
-    mErrorStream << "Error: an unknown device type has been entered in cell" << std::endl;
+    mErrorStream << "Error: an unknown or no device type has been entered" << std::endl;
     mErrorStream << "Row number: " << mRow << "    " << "Column number: " << mColumn << std::endl;
 
     Error::execute();
