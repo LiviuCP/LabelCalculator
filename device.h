@@ -21,7 +21,7 @@ public:
     /* reads and parses the input fields for the device from string starting position pos (which is subsequently updated)
        uses the ofstream for logging any errors in the corresponding file and the boolean to report the occurence of these errors
     */
-    std::vector<Error*> parseInputData(const std::string &s, int &pos, bool &error, std::ofstream& errorStream);
+    std::vector<Error*> parseInputData(const std::string &s, int &pos, std::ofstream& errorStream);
 
     // appends the description and label to the string
     void writeDescriptionAndLabel(std::string& out) const;

@@ -20,7 +20,7 @@ Device::~Device()
 {
 }
 
-std::vector<Error*> Device::parseInputData(const std::string& input, int& pos, bool& error, std::ofstream& errorStream)
+std::vector<Error*> Device::parseInputData(const std::string& input, int& pos, std::ofstream& errorStream)
 {
     std::vector<Error*> parsingErrors;
 
@@ -41,7 +41,6 @@ std::vector<Error*> Device::parseInputData(const std::string& input, int& pos, b
             lastError->setRow(mRow);
             lastError->setColumn(mColumn);
             parsingErrors.push_back(lastError);
-            error = true;
             position = pos; //TODO: check if this instruction is necessary (or should it be pos = position???)
             break;
         }
@@ -55,7 +54,6 @@ std::vector<Error*> Device::parseInputData(const std::string& input, int& pos, b
             lastError->setRow(mRow);
             lastError->setColumn(mColumn);
             parsingErrors.push_back(lastError);
-            error = true;
         }
 
         ++mColumn;
@@ -72,7 +70,6 @@ std::vector<Error*> Device::parseInputData(const std::string& input, int& pos, b
             lastError->setRow(mRow);
             lastError->setColumn(mColumn);
             parsingErrors.push_back(lastError);
-            error = true;
         }
 
         pos = position;
