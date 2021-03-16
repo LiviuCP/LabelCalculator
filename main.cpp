@@ -7,10 +7,8 @@
 
 /* This function creates an entry for a connection between two devices.
    String is written to labellingtable.csv in a subsequent operation.
-   An entry number is passed by caller as argument and updated by function.
-   The part number of the cable is also required as argument.
 */
-void buildConnectionEntry(std::string& entry, Device* firstDevice, Device* secondDevice, int& entryNumber, const std::string& cablePartNumber)
+void buildConnectionEntry(std::string& entry, int& entryNumber, const Device* const pFirstDevice, const Device* const pSecondDevice, const std::string& cablePartNumber)
 {
     std::stringstream str;
 
@@ -20,15 +18,11 @@ void buildConnectionEntry(std::string& entry, Device* firstDevice, Device* secon
     entry += ',';
     entry += cablePartNumber;
     entry += ',';
-    firstDevice->writeDescriptionAndLabel(entry);
+    pFirstDevice->writeDescriptionAndLabel(entry);
     entry += ',';
-    secondDevice->writeDescriptionAndLabel(entry);
+    pSecondDevice->writeDescriptionAndLabel(entry);
 
     ++entryNumber;
-
-    //TODO: no de-allocation in this function !!!
-    delete firstDevice;
-    delete secondDevice;
 }
 
 bool init(std::string& connectionsFilename, std::string& inputFilename, std::string& outputFilename, std::ofstream& writeToOutput)
@@ -522,9 +516,9 @@ void buildLabellingOutput(std::vector<std::string>& outputRows,
     for (int connectionIndex{0}; connectionIndex < connectionInputRowsCount; ++connectionIndex)
     {
         buildConnectionEntry(outputRows[connectionIndex],
+                             connectionNumber,
                              devices[firstDeviceIndex],
                              devices[secondDeviceIndex],
-                             connectionNumber,
                              cablePartNumbersEntries[connectionIndex]);
 
         firstDeviceIndex += 2;
@@ -698,6 +692,16 @@ int main()
                 else
                 {
                     displayErrorMessage(inputFilename, outputFilename);
+                }
+
+                //TODO: implement smart pointers
+                for(auto& pDevice : devices)
+                {
+                    if (nullptr != pDevice)
+                    {
+                        delete pDevice;
+                        pDevice = nullptr;
+                    }
                 }
 
                 readInput.close();
