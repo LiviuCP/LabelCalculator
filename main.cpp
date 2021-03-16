@@ -353,8 +353,8 @@ void readConnectionInput(std::ifstream& readInput, std::vector<std::string>& con
 
     readInput.close();
 
-    // discard last row read from the input file if empty
-    if(0 == connectionInputRows[connectionInputRowsCount - 1].size())
+    // discard last empty row read from the input file if payload exists (trim)
+    if(connectionInputRowsCount > 1 && 0 == connectionInputRows[connectionInputRowsCount - 1].size())
     {
         --connectionInputRowsCount;
         connectionInputRows.resize(connectionInputRowsCount);
