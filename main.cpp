@@ -120,18 +120,18 @@ bool enableReadingConnectionInput(std::ifstream& readInput, const std::string& i
     return filesSuccessfullyOpened;
 }
 
-void readConnectionDefinitions(std::ifstream& readConnections, std::vector<std::string>& connectionDefinitionRows, int& connectionDefinitionRowsCount)
+void readConnectionDefinitions(std::ifstream& readConnections, std::vector<std::string>& connectionDefinitionRows)
 {
     assert(readConnections.is_open());
 
     connectionDefinitionRows.clear();
-    connectionDefinitionRowsCount = 0;
+    int connectionDefinitionRowsCount{0};
 
     while (!readConnections.eof() && connectionDefinitionRowsCount < c_MaxNrOfRackUnits)
     {
         ++connectionDefinitionRowsCount;
         connectionDefinitionRows.resize(connectionDefinitionRowsCount);
-        getline(readConnections,connectionDefinitionRows[connectionDefinitionRowsCount-1]);
+        getline(readConnections,connectionDefinitionRows[connectionDefinitionRowsCount - 1]);
     }
 
     readConnections.close();
@@ -143,8 +143,7 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
                                 std::vector<std::vector<int>>& connectedTo,
                                 std::vector<std::vector<int>>& connectionsCount,
                                 int& devicesCount,
-                                const std::vector<std::string>& connectionDefinitionRows,
-                                const int connectionDefinitionRowsCount)
+                                const std::vector<std::string>& connectionDefinitionRows)
 {
     mapping.clear();
     uNumbers.clear();
@@ -158,8 +157,9 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
 
     std::vector<Error*> parsingErrors;
 
-    // each connection.csv row is parsed and checked for errors
-    for (int rowIndex{0}; rowIndex < connectionDefinitionRowsCount; ++rowIndex)
+    const int c_ConnectionDefinitionRowsCount{static_cast<int>(connectionDefinitionRows.size())};
+
+    for (int rowIndex{0}; rowIndex < c_ConnectionDefinitionRowsCount; ++rowIndex)
     {
         int columnNumber{1}; // csv column
         std::string currentCell; // current csv cell
@@ -190,8 +190,7 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
 
         // add discovered device to list of device U numbers
         ++devicesCount;
-        uNumbers.resize(devicesCount);
-        uNumbers[devicesCount - 1] = c_MaxNrOfRackUnits - rowIndex; // add the U number of the last discovered device
+        uNumbers.push_back(c_MaxNrOfRackUnits - rowIndex); // add the U number of the last discovered device
 
         // add device type to mapping table
         mapping[c_MaxNrOfRackUnits - 1 - rowIndex] = currentCell;
@@ -212,13 +211,13 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
                 break;
             }
 
-            int secondDevice;    // temporarily stores each device that is connected to the current device
-            int nrOfconnections; // temporarily stores the number of connections of each device to the current one
+            int secondDevice;
+            int nrOfconnections;
             const bool isConnectionFormattingInvalid{!parseConnectionFormatting(currentCell,secondDevice,nrOfconnections)};
 
             Error* pError{nullptr};
 
-            if(isConnectionFormattingInvalid) // checking if the connection format is correct
+            if(isConnectionFormattingInvalid) // checking if the connection format is correct (e.g. 20/3: 3 connections to device located at U20)
             {
                 pError = new WrongFormatError{writeToError};
             }
@@ -226,11 +225,11 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
             {
                 pError = new WrongUNumberError{writeToError};
             }
-            else if (c_NoDevice == mapping[secondDevice - 1]) // check if the second device is in the mapping table (otherwise the connection is to a non-existing device)
+            else if (c_NoDevice == mapping[secondDevice - 1]) // check if the second device is actually placed within rack (contained in mapping table)
             {
                 pError = new NoDevicePresentError{writeToError};
             }
-            else if (c_MaxNrOfRackUnits - rowIndex == secondDevice) // connection of a device to itself is not allowed
+            else if (c_MaxNrOfRackUnits - rowIndex == secondDevice) // connection of a device to itself (connection loop) is not allowed
             {
                 pError = new DeviceConnectedToItselfError{writeToError};
             }
@@ -267,12 +266,12 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
     return c_ErrorsOccurred;
 }
 
-void readConnectionInput(std::ifstream& readInput, std::vector<std::string>& connectionInputRows, int& connectionInputRowsCount)
+void readConnectionInput(std::ifstream& readInput, std::vector<std::string>& connectionInputRows)
 {
     assert(readInput.is_open());
 
     connectionInputRows.clear();
-    connectionInputRowsCount = 0;
+    int connectionInputRowsCount{0};
 
     readInput.seekg(0);
     std::string header;
@@ -298,22 +297,21 @@ void readConnectionInput(std::ifstream& readInput, std::vector<std::string>& con
 bool parseConnectionInput(std::ofstream& writeToError,
                           std::vector<Device*>& devices,
                           std::vector<std::string>& cablePartNumbersEntries,
-                          int& numberOfDevices,
-                          int& cablePartNumbersEntriesCount,
-                          const std::vector<std::string>& connectionInputRows,
-                          const int connectionInputRowsCount)
+                          const std::vector<std::string>& connectionInputRows)
 {
     std::vector<Error*> allParsingErrors; // gather all parsing errors here and write them to output file once parsing is complete (if any errors)
 
     devices.clear();
     cablePartNumbersEntries.clear();
-    cablePartNumbersEntriesCount = 0;
 
     assert(writeToError.is_open());
 
     DeviceFactory deviceFactory;
 
-    for (int rowIndex{0}; rowIndex < connectionInputRowsCount; ++rowIndex)
+    int cablePartNumbersEntriesCount{0};
+    int c_ConnectionInputRowsCount{static_cast<int>(connectionInputRows.size())};
+
+    for (int rowIndex{0}; rowIndex < c_ConnectionInputRowsCount; ++rowIndex)
     {
         const int c_InputRowsLength{static_cast<int>(connectionInputRows[rowIndex].size())};
         const int c_MaxNrOfDevicesPerRow{2};
@@ -415,8 +413,6 @@ bool parseConnectionInput(std::ofstream& writeToError,
         }
     }
 
-    numberOfDevices = deviceFactory.getCreatedDevicesCount();
-
     const bool c_ErrorsOccurred{allParsingErrors.size() > 0};
 
     for(auto& pError : allParsingErrors)
@@ -430,7 +426,6 @@ bool parseConnectionInput(std::ofstream& writeToError,
 }
 
 void buildConnectionsInputTemplate(std::vector<std::string>& outputRows,
-                                   int& outputRowsCount,
                                    const std::vector<std::string>& mapping,
                                    const std::vector<int>& uNumbers,
                                    const std::vector<std::vector<int>>& connectedTo,
@@ -440,7 +435,6 @@ void buildConnectionsInputTemplate(std::vector<std::string>& outputRows,
     using namespace std;
 
     outputRows.clear();
-    outputRowsCount = 0;
 
     /* Used for calculating the rows to be written into connectioninput.csv
        Each string represents the first device from each row, namely: device type, device name (lowest U occupied in rack), device parameters (e.g. port number)
@@ -462,6 +456,8 @@ void buildConnectionsInputTemplate(std::vector<std::string>& outputRows,
         createPlaceholders(mapping[currentDeviceUPosition], deviceParameters[currentDeviceUPosition]); // add the placeholders for the device parameters (to be filled in the next step (option 2) in connectioninput.csv so the final table can be calculated)
     }
 
+    int outputRowsCount{0};
+
     // traverse the uNumbers vector again to check if each device is connected to devices placed in an upper U position
     for (int currentDeviceIndex{devicesCount-1}; currentDeviceIndex >= 0; --currentDeviceIndex)
     {
@@ -480,7 +476,7 @@ void buildConnectionsInputTemplate(std::vector<std::string>& outputRows,
                The decrease by 1 is necessary due to vector indexing (which starts at 0)
             */
             string output{c_CablePartNumberPlaceholder + "," + deviceParameters[currentDeviceUPosition] + "," + deviceParameters[connectedTo[currentDeviceIndex][connectedDeviceIndex] - 1]};
-            outputRowsCount += connectionsCount[currentDeviceIndex][connectedDeviceIndex]; //se actualizeaza dimensiunea vectorului out_ln
+            outputRowsCount += connectionsCount[currentDeviceIndex][connectedDeviceIndex];
             outputRows.resize(outputRowsCount);
 
             // write the resulting output string a number of times equal to the number of connections between the two devices
@@ -494,26 +490,27 @@ void buildConnectionsInputTemplate(std::vector<std::string>& outputRows,
 
 void buildLabellingOutput(std::vector<std::string>& outputRows,
                           const std::vector<Device*>& devices,
-                          const std::vector<std::string>& cablePartNumbersEntries,
-                          const int numberOfDevices,
-                          const int connectionInputRowsCount)
+                          const std::vector<std::string>& cablePartNumbersEntries)
 {
     outputRows.clear();
 
-    for (int deviceIndex{0}; deviceIndex < numberOfDevices; ++deviceIndex)
+    const int c_DevicesCount{static_cast<int>(devices.size())};
+    const int c_CablePartNumbersEntriesCount{static_cast<int>(cablePartNumbersEntries.size())};
+
+    for (int deviceIndex{0}; deviceIndex < c_DevicesCount; ++deviceIndex)
     {
         devices[deviceIndex]->buildDescriptionText(); // for each device the description is built by considering the even/odd index (even, e.g. 0: first device on the row; odd, e.g. 3: second device on the row)
         devices[deviceIndex]->buildLabelText(); // same for labels
     }
 
-    outputRows.resize(connectionInputRowsCount); // number of output rows should match the number of input rows
+    outputRows.resize(c_CablePartNumbersEntriesCount); // number of output rows should match the number of input rows
 
     int connectionNumber{1}; // number of the connection to be written on each row of the output file
     int firstDeviceIndex{0}; // index of the first device of the connection
     int secondDeviceIndex{1}; // index of the second device of the connection
 
     // calculate the row strings for the output file (labellingtable.csv)
-    for (int connectionIndex{0}; connectionIndex < connectionInputRowsCount; ++connectionIndex)
+    for (int connectionIndex{0}; connectionIndex < c_CablePartNumbersEntriesCount; ++connectionIndex)
     {
         buildConnectionEntry(outputRows[connectionIndex],
                              connectionNumber,
@@ -526,15 +523,15 @@ void buildLabellingOutput(std::vector<std::string>& outputRows,
     }
 }
 
-void writeOutputToFile(std::ofstream& output, const std::vector<std::string>& connectionInputRows, const int payloadRowsCount, const std::string& header)
+void writeOutputToFile(std::ofstream& output, const std::vector<std::string>& connectionInputRows, const std::string& header)
 {
     assert(output.is_open());
 
     output << header << std::endl;
 
-    for (int rowIndex{0}; rowIndex < payloadRowsCount; ++rowIndex)
+    for (const auto& payloadRow : connectionInputRows)
     {
-        output << connectionInputRows[rowIndex] << std::endl;
+        output << payloadRow << std::endl;
     }
 }
 
@@ -619,10 +616,9 @@ int main()
                 getline(readConnections, header); // the header is not used further
 
                 vector<string> connectionDefinitionRows; // stores rows read from connectiondefinitions.csv
-                int connectionDefinitionRowsCount; // stores the current number of elements of the connectionDefinitionRows vector
 
                 // maximum 50 lines are read from connectiondefinitions.csv (the rack can have maximum 50U)
-                readConnectionDefinitions(readConnections, connectionDefinitionRows, connectionDefinitionRowsCount);
+                readConnectionDefinitions(readConnections, connectionDefinitionRows);
 
                 /* Stores devices contained in the rack.
                    For each device the type will be memorized at the index representing the lowest U position occupied within rack.
@@ -640,15 +636,14 @@ int main()
 
                 int devicesCount; // total number of devices discovered in the rack
 
-                bool parsingErrorsOccured{parseConnectionDefinitions(writeToOutput, mapping, uNumbers, connectedTo, connectionsCount, devicesCount, connectionDefinitionRows, connectionDefinitionRowsCount)};
+                bool parsingErrorsOccured{parseConnectionDefinitions(writeToOutput, mapping, uNumbers, connectedTo, connectionsCount, devicesCount, connectionDefinitionRows)};
 
                 if (!parsingErrorsOccured)
                 {
                     vector<string> connectionInputRows; // stores rows to be written to connectioninput.csv
-                    int connectionInputRowsCount; // dimension of the vector containing the output strings to be written into connectioninput.csv
 
-                    buildConnectionsInputTemplate(connectionInputRows, connectionInputRowsCount, mapping, uNumbers, connectedTo, connectionsCount, devicesCount);
-                    writeOutputToFile(writeToInput, connectionInputRows, connectionInputRowsCount, c_InputHeader);
+                    buildConnectionsInputTemplate(connectionInputRows, mapping, uNumbers, connectedTo, connectionsCount, devicesCount);
+                    writeOutputToFile(writeToInput, connectionInputRows, c_InputHeader);
                     displaySuccessMessage(inputFilename, true);
                 }
                 else
@@ -667,26 +662,22 @@ int main()
             if (secondOptionFilesSuccessfullyOpened)
             {
                 vector<string> connectionInputRows; // stores rows read from connectioninput.csv
-                int connectionInputRowsCount; // stores the current number of elements of the connectionInputRows vector; final value will be used as the number of output rows (if no errors occured)
 
-                readConnectionInput(readInput, connectionInputRows, connectionInputRowsCount);
+                readConnectionInput(readInput, connectionInputRows);
 
                 vector<Device*> devices; // all created Device objects (except the ones used for checking device validity which are destroyed immediately)
                 vector<string> cablePartNumbersEntries; // the cable part number of each connection to be stored here
-                int numberOfDevices; // stores the current number of elements of the devices vector
-                int cablePartNumbersEntriesCount; // stores the current number of elements of the cablePartNumbersEntries vector
 
-                bool parsingErrorsOccured{parseConnectionInput(writeToOutput, devices, cablePartNumbersEntries, numberOfDevices, cablePartNumbersEntriesCount, connectionInputRows, connectionInputRowsCount)};
+                bool parsingErrorsOccured{parseConnectionInput(writeToOutput, devices, cablePartNumbersEntries, connectionInputRows)};
+
+                assert(cablePartNumbersEntries.size() == connectionInputRows.size());
 
                 if(!parsingErrorsOccured)
                 {
                     vector<string> outputRows; // stores rows to be written to labellingtable.csv
 
-                    buildLabellingOutput(outputRows, devices, cablePartNumbersEntries, numberOfDevices, connectionInputRowsCount);
-
-                    assert(connectionInputRowsCount == static_cast<int>(outputRows.size()));
-
-                    writeOutputToFile(writeToOutput, outputRows, connectionInputRowsCount, c_OutputHeader);
+                    buildLabellingOutput(outputRows, devices, cablePartNumbersEntries);
+                    writeOutputToFile(writeToOutput, outputRows, c_OutputHeader);
                     displaySuccessMessage(outputFilename, false);
                 }
                 else
