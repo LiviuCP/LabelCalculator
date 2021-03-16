@@ -2,8 +2,7 @@
 #include <sstream>
 #include <cassert>
 
-#include "datadevice.h"
-#include "powerdevice.h"
+#include "devicefactory.h"
 #include "error.h"
 
 /* This function creates an entry for a connection between two devices.
@@ -30,66 +29,6 @@ void buildConnectionEntry(std::string& entry, Device* firstDevice, Device* secon
     //TODO: no de-allocation in this function !!!
     delete firstDevice;
     delete secondDevice;
-}
-
-/* This function is responsible for creating the actual device objects which are then used for generating the connection output data (descriptions and labels)
-   It implements the factory design pattern and returns a null pointer if the device cannot be created (unknown device)
-*/
-Device* createDevice(const std::string& deviceType, bool isSourceDevice)
-{
-    Device* dv{nullptr};
-
-    // naming convention: for power connections the underscore is used at the beginning of the device type
-    if ("_pdu" == deviceType)
-    {
-        dv = new PDU{isSourceDevice};
-    }
-    else if ("_ext" == deviceType)
-    {
-        dv = new ExtensionBar{isSourceDevice};
-    }
-    else if ("_ups" == deviceType)
-    {
-        dv = new UPS{isSourceDevice};
-    }
-    else if ("_ps" == deviceType)
-    {
-        dv = new PowerSupply{isSourceDevice};
-    }
-    else if ("lan" == deviceType)
-    {
-        dv = new LANSwitch{isSourceDevice};
-    }
-    else if ("san"== deviceType)
-    {
-        dv = new SANSwitch{isSourceDevice};
-    }
-    else if ("ib" == deviceType)
-    {
-        dv = new InfinibandSwitch{isSourceDevice};
-    }
-    else if ("kvm" == deviceType)
-    {
-        dv = new KVMSwitch{isSourceDevice};
-    }
-    else if ("svr" == deviceType)
-    {
-        dv = new Server{isSourceDevice};
-    }
-    else if ("sto" == deviceType)
-    {
-        dv = new Storage{isSourceDevice};
-    }
-    else if ("bld" == deviceType)
-    {
-        dv = new BladeServer{isSourceDevice};
-    }
-    else
-    {
-        // no action, defensive programming
-    }
-
-    return dv;
 }
 
 bool init(std::string& connectionsFilename, std::string& inputFilename, std::string& outputFilename, std::ofstream& writeToOutput)
@@ -243,9 +182,8 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
         }
 
         ++columnNumber;
-        Device* pDevice = createDevice(currentCell, true); // it doesn't matter if the device is created as source or destination device (it's just for checking if device is valid)
 
-        if (!pDevice)
+        if (!DeviceFactory::isDeviceTypeValid(currentCell))
         {
             Error* pError{new UnknownDeviceError{writeToError}};
             pError->setRow(rowIndex + 2); // setting row index of the current cell (+2 deoarece in Excel (.csv) the rows start at 1 and first line is ignored);
@@ -255,8 +193,6 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
 
             continue;
         }
-
-        delete pDevice;
 
         // add discovered device to list of device U numbers
         ++devicesCount;
@@ -377,10 +313,11 @@ bool parseConnectionInput(std::ofstream& writeToError,
 
     devices.clear();
     cablePartNumbersEntries.clear();
-    numberOfDevices = 0;
     cablePartNumbersEntriesCount = 0;
 
     assert(writeToError.is_open());
+
+    DeviceFactory deviceFactory;
 
     for (int rowIndex{0}; rowIndex < connectionInputRowsCount; ++rowIndex)
     {
@@ -436,17 +373,15 @@ bool parseConnectionInput(std::ofstream& writeToError,
             {
                 const bool c_IsSourceDevice{0 == devicesStillNotParsedCount % c_MaxNrOfDevicesPerRow};
 
-                pDevice = createDevice(deviceType, c_IsSourceDevice);
+                pDevice = deviceFactory.createDevice(deviceType, c_IsSourceDevice);
 
                 if (nullptr != pDevice)
                 {
                     ++columnNumber;
-                    ++numberOfDevices;
 
                     pDevice->setRow(rowIndex + 2);     // +2: csv lines start at 1 and first row is ignored
                     pDevice->setColumn(columnNumber);
-                    devices.resize(numberOfDevices);
-                    devices[numberOfDevices - 1] = pDevice;
+                    devices.push_back(pDevice);
 
                     std::vector<Error*> deviceParsingErrors{pDevice->parseInputData(connectionInputRows[rowIndex], currentPosition, writeToError)};
 
@@ -485,6 +420,8 @@ bool parseConnectionInput(std::ofstream& writeToError,
             }
         }
     }
+
+    numberOfDevices = deviceFactory.getCreatedDevicesCount();
 
     const bool c_ErrorsOccurred{allParsingErrors.size() > 0};
 

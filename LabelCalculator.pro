@@ -6,6 +6,7 @@ CONFIG -= qt
 SOURCES += \
         datadevice.cpp \
         device.cpp \
+        devicefactory.cpp \
         error.cpp \
         labelutils.cpp \
         main.cpp \
@@ -14,6 +15,7 @@ SOURCES += \
 HEADERS += \
     datadevice.h \
     device.h \
+    devicefactory.h \
     error.h \
     labelutils.h \
     powerdevice.h
