@@ -22,7 +22,7 @@ static const std::string c_HomeDirParent{"C:\\Users"};
 #endif
 
 #if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
-static const std::string c_ConfigurationFilename{"/tmp/configuration.txt"};
+static const std::string c_ConfigurationFilePath{"/tmp/configuration.txt"};
 static const std::string c_ClearScreenCommand{"clear"};
 static constexpr char c_PathSeparator{'/'};
 #else
@@ -30,6 +30,11 @@ static const std::string c_ConfigurationFilename{"C:\\tmp\\configuration.txt"};
 static const std::string c_ClearScreenCommand{"cls"};
 static constexpr char c_PathSeparator{'\\'};
 #endif
+
+static const std::string c_DocumentsDirName{"Documents"};
+static const std::string c_ConnectionDefinitionsFilename{"connectiondefinitions.csv"};
+static const std::string c_ConnectionInputFilename{"connectioninput.csv"};
+static const std::string c_LabellingTableFilename{"labellingtable.csv"};
 
 static const std::map<std::string, int> c_MaxAllowedNrOfChars
 {

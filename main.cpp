@@ -98,7 +98,7 @@ bool init(std::string& connectionsFilename, std::string& inputFilename, std::str
 
     bool commonFilesSuccessfullyOpened{false}; // for each option corresponding files (e.g. connectioninput.csv) should be successfully opened in the desired mode (read/write)
 
-    ifstream readInput{c_ConfigurationFilename};
+    ifstream readInput{c_ConfigurationFilePath};
 
     if(readInput.is_open())
     {
@@ -106,14 +106,14 @@ bool init(std::string& connectionsFilename, std::string& inputFilename, std::str
         string username;
         getline(readInput, username);
 
-        const string c_AppFilesDir{c_HomeDirParent + c_PathSeparator + username + c_PathSeparator + "Documents" + c_PathSeparator};
-        connectionsFilename = c_AppFilesDir + "connectiondefinitions.csv";
-        inputFilename = c_AppFilesDir + "connectioninput.csv";
-        outputFilename = c_AppFilesDir + "labellingtable.csv";
+        const string c_AppFilesDir{c_HomeDirParent + c_PathSeparator + username + c_PathSeparator + c_DocumentsDirName + c_PathSeparator};
+        connectionsFilename = c_AppFilesDir + c_ConnectionDefinitionsFilename;
+        inputFilename = c_AppFilesDir + c_ConnectionInputFilename;
+        outputFilename = c_AppFilesDir + c_LabellingTableFilename;
 
         writeToOutput.open(outputFilename);
 
-        // labellingtable.csv should be opened from the very beginning as any errors for any chosen option are written here!
+        // labellingtable.csv should be opened from the very beginning as any errors for any chosen option are written here! (TODO: create dedicated error file)
         if (writeToOutput.is_open())
         {
             commonFilesSuccessfullyOpened = true;
@@ -121,24 +121,24 @@ bool init(std::string& connectionsFilename, std::string& inputFilename, std::str
         else
         {
             system(c_ClearScreenCommand.c_str());
-            cout << "Error! File labellingtable.csv cannot be opened for writing" << endl;
-            cout << "File path: " << outputFilename << endl;
+            cerr << "Error! File " << c_LabellingTableFilename << " cannot be opened for writing" << endl;
+            cerr << "File path: " << outputFilename << endl;
         }
     }
     else
     {
         system(c_ClearScreenCommand.c_str());
-        cout << "Error! File " << c_ConfigurationFilename << " cannot be opened for reading" << endl;
+        cerr << "Error! File " << c_ConfigurationFilePath << " cannot be opened for reading" << endl;
     }
 
     return commonFilesSuccessfullyOpened;
 }
 
-bool openFilesForFirstOption(std::ifstream& readConnections, std::ofstream& writeToInput, const std::string& connectionsFilename, const std::string& inputFilename)
+bool enableReadingConnectionDefinitions(std::ifstream& readConnections, std::ofstream& writeToInput, const std::string& connectionsFilename, const std::string& inputFilename)
 {
     using namespace std;
 
-    bool firstOptionFilesSuccessfullyOpened{false};
+    bool filesSuccessfullyOpened{false};
 
     readConnections.open(connectionsFilename);
 
@@ -148,39 +148,43 @@ bool openFilesForFirstOption(std::ifstream& readConnections, std::ofstream& writ
 
         if (writeToInput.is_open())
         {
-            firstOptionFilesSuccessfullyOpened = true;
+            filesSuccessfullyOpened = true;
         }
         else
         {
             system(c_ClearScreenCommand.c_str());
-            cout << "Error! File connectioninput.csv cannot be opened for writing" << endl;
-            cout << "File path: "<< inputFilename << endl;
+            cerr << "Error! File " << c_ConnectionInputFilename << " cannot be opened for writing" << endl;
+            cerr << "File path: "<< inputFilename << endl;
         }
     }
     else
     {
         system(c_ClearScreenCommand.c_str());
-        cout << "Error! File connectiondefinitions.csv cannot be opened for reading" << endl;
-        cout << "File path: " << connectionsFilename << endl;
+        cerr << "Error! File  " << c_ConnectionDefinitionsFilename << " cannot be opened for reading" << endl;
+        cerr << "File path: " << connectionsFilename << endl;
     }
 
-    return firstOptionFilesSuccessfullyOpened;
+    return filesSuccessfullyOpened;
 }
 
-bool openFilesForSecondOption(std::ifstream& readInput, const std::string& inputFilename)
+bool enableReadingConnectionInput(std::ifstream& readInput, const std::string& inputFilename)
 {
-    bool secondOptionFilesSuccessfullyOpened{true};
+    bool filesSuccessfullyOpened{false};
 
     readInput.open(inputFilename);
 
-    if (!readInput.is_open())
+    if (readInput.is_open())
+    {
+        filesSuccessfullyOpened = true;
+    }
+    else
     {
         system(c_ClearScreenCommand.c_str());
-        std::cout << "Error! File connectioninput.csv cannot be opened for reading" << std::endl;
-        secondOptionFilesSuccessfullyOpened = false;
+        std::cerr << "Error! File " << c_ConnectionInputFilename << " cannot be opened for reading" << std::endl;
+        std::cerr << "File path: "<< inputFilename << std::endl;
     }
 
-    return secondOptionFilesSuccessfullyOpened;
+    return filesSuccessfullyOpened;
 }
 
 void readConnectionDefinitions(std::ifstream& readConnections, std::vector<std::string>& connectionDefinitionRows, int& connectionDefinitionRowsCount)
@@ -676,7 +680,7 @@ int main()
             ifstream readConnections; // for reading from connectiondefinitions.csv
             ofstream writeToInput; // for writing into connectioninput.csv
 
-            bool firstOptionFilesSuccessfullyOpened{openFilesForFirstOption(readConnections, writeToInput, connectionsFilename, inputFilename)};
+            bool firstOptionFilesSuccessfullyOpened{enableReadingConnectionDefinitions(readConnections, writeToInput, connectionsFilename, inputFilename)};
 
             if (firstOptionFilesSuccessfullyOpened)
             {
@@ -727,7 +731,7 @@ int main()
         }
         else if ("2" == option) /* OPTION 2 + ENTER: READ connectioninput.csv, CHECK ERRORS and write final output to labellingtable.csv */
         {
-            bool secondOptionFilesSuccessfullyOpened{openFilesForSecondOption(readInput, inputFilename)};
+            bool secondOptionFilesSuccessfullyOpened{enableReadingConnectionInput(readInput, inputFilename)};
 
             if (secondOptionFilesSuccessfullyOpened)
             {
