@@ -37,7 +37,7 @@ static const std::string c_DocumentsDirName{"Documents"};
 static const std::string c_ConnectionDefinitionsFilename{"connectiondefinitions.csv"};
 static const std::string c_ConnectionInputFilename{"connectioninput.csv"};
 static const std::string c_LabellingTableFilename{"labellingtable.csv"};
-static const std::string c_ErrorFilename{"error.csv"};
+static const std::string c_ErrorFilename{"error.txt"};
 
 static const std::map<std::string, int> c_MaxAllowedNrOfChars
 {

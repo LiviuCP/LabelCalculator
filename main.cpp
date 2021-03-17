@@ -10,12 +10,12 @@ int main()
 {
     using namespace std;
 
-    ofstream errorStream; // for writing into error.csv
+    ofstream errorStream; // for writing into error.txt
 
     string connectionsFilename; // connectiondefinitions.csv (for each device it contains connected devices and number of connections)
     string inputFilename; // connectioninput.csv (contains each connection generated based on connectiondefinitions.csv - user should replace placeholders by filling in the required data)
     string outputFilename; // labellingtable.csv (contains labelling table generated based on connectioninput.csv)
-    string errorFilename; // error.csv (contains any errors that occured when choosing option 1 or 2)
+    string errorFilename; // error.txt (contains any errors that occured when choosing option 1 or 2)
 
     /* DETERMINE PATH OF THE FILES AND PROVIDING USER THE AVAILABLE OPTIONS */
     displayVersion();
