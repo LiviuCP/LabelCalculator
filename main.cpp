@@ -25,37 +25,37 @@ void buildConnectionEntry(std::string& entry, int& entryNumber, const Device* co
     ++entryNumber;
 }
 
-bool init(std::string& connectionsFilename, std::string& inputFilename, std::string& outputFilename, std::ofstream& writeToOutput)
+bool init(std::string& connectionsFilename, std::string& inputFilename, std::string& outputFilename, std::string& errorFilename, std::ofstream& errorStream)
 {
     using namespace std;
 
     bool commonFilesSuccessfullyOpened{false}; // for each option corresponding files (e.g. connectioninput.csv) should be successfully opened in the desired mode (read/write)
 
-    ifstream readInput{c_ConfigurationFilePath};
+    ifstream inputStream{c_ConfigurationFilePath};
 
-    if(readInput.is_open())
+    if(inputStream.is_open())
     {
         // username is used for determining the paths of all other relevant files (see below)
         string username;
-        getline(readInput, username);
+        getline(inputStream, username);
 
         const string c_AppFilesDir{c_HomeDirParent + c_PathSeparator + username + c_PathSeparator + c_DocumentsDirName + c_PathSeparator};
         connectionsFilename = c_AppFilesDir + c_ConnectionDefinitionsFilename;
         inputFilename = c_AppFilesDir + c_ConnectionInputFilename;
         outputFilename = c_AppFilesDir + c_LabellingTableFilename;
+        errorFilename = c_AppFilesDir + c_ErrorFilename;
 
-        writeToOutput.open(outputFilename);
+        errorStream.open(errorFilename);
 
-        // labellingtable.csv should be opened from the very beginning as any errors for any chosen option are written here! (TODO: create dedicated error file)
-        if (writeToOutput.is_open())
+        if (errorStream.is_open())
         {
             commonFilesSuccessfullyOpened = true;
         }
         else
         {
             system(c_ClearScreenCommand.c_str());
-            cerr << "Error! File " << c_LabellingTableFilename << " cannot be opened for writing" << endl;
-            cerr << "File path: " << outputFilename << endl;
+            cerr << "Error! File " << c_ErrorFilename << " cannot be opened for writing" << endl;
+            cerr << "File path: " << errorFilename << endl;
         }
     }
     else
@@ -67,77 +67,55 @@ bool init(std::string& connectionsFilename, std::string& inputFilename, std::str
     return commonFilesSuccessfullyOpened;
 }
 
-bool enableReadingConnectionDefinitions(std::ifstream& readConnections, std::ofstream& writeToInput, const std::string& connectionsFilename, const std::string& inputFilename)
+bool enableReadWriteOperations(std::ifstream& inputStream, std::ofstream& outputStream, const std::string& inputFilename, const std::string& outputFilename)
 {
     using namespace std;
 
     bool filesSuccessfullyOpened{false};
 
-    readConnections.open(connectionsFilename);
+    inputStream.open(inputFilename);
 
-    if (readConnections.is_open())
+    if (inputStream.is_open())
     {
-        writeToInput.open(inputFilename);
+        outputStream.open(outputFilename);
 
-        if (writeToInput.is_open())
+        if(outputStream.is_open())
         {
             filesSuccessfullyOpened = true;
         }
         else
         {
             system(c_ClearScreenCommand.c_str());
-            cerr << "Error! File " << c_ConnectionInputFilename << " cannot be opened for writing" << endl;
-            cerr << "File path: "<< inputFilename << endl;
+            cerr << "Error! Output file cannot be opened for writing" << endl;
+            cerr << "File path: "<< outputFilename << endl;
         }
     }
     else
     {
         system(c_ClearScreenCommand.c_str());
-        cerr << "Error! File  " << c_ConnectionDefinitionsFilename << " cannot be opened for reading" << endl;
-        cerr << "File path: " << connectionsFilename << endl;
-    }
-
-    return filesSuccessfullyOpened;
-}
-
-bool enableReadingConnectionInput(std::ifstream& readInput, const std::string& inputFilename)
-{
-    bool filesSuccessfullyOpened{false};
-
-    readInput.open(inputFilename);
-
-    if (readInput.is_open())
-    {
-        filesSuccessfullyOpened = true;
-    }
-    else
-    {
-        system(c_ClearScreenCommand.c_str());
-        std::cerr << "Error! File " << c_ConnectionInputFilename << " cannot be opened for reading" << std::endl;
+        std::cerr << "Error! Input file cannot be opened for reading" << std::endl;
         std::cerr << "File path: "<< inputFilename << std::endl;
     }
 
     return filesSuccessfullyOpened;
 }
 
-void readConnectionDefinitions(std::ifstream& readConnections, std::vector<std::string>& connectionDefinitionRows)
+void readConnectionDefinitions(std::ifstream& inputStream, std::vector<std::string>& connectionDefinitionRows)
 {
-    assert(readConnections.is_open());
+    assert(inputStream.is_open());
 
     connectionDefinitionRows.clear();
     int connectionDefinitionRowsCount{0};
 
-    while (!readConnections.eof() && connectionDefinitionRowsCount < c_MaxNrOfRackUnits)
+    while (!inputStream.eof() && connectionDefinitionRowsCount < c_MaxNrOfRackUnits)
     {
         ++connectionDefinitionRowsCount;
         connectionDefinitionRows.resize(connectionDefinitionRowsCount);
-        getline(readConnections,connectionDefinitionRows[connectionDefinitionRowsCount - 1]);
+        getline(inputStream,connectionDefinitionRows[connectionDefinitionRowsCount - 1]);
     }
-
-    readConnections.close();
 }
 
-bool parseConnectionDefinitions(std::ofstream& writeToError,
+bool parseConnectionDefinitions(std::ofstream& errorStream,
                                 std::vector<std::string>& mapping,
                                 std::vector<int>& uNumbers,
                                 std::vector<std::vector<int>>& connectedTo,
@@ -151,7 +129,7 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
     connectionsCount.clear();
     devicesCount = 0;
 
-    assert(writeToError.is_open());
+    assert(errorStream.is_open());
 
     mapping.resize(c_MaxNrOfRackUnits, c_NoDevice); // initial value: no device
 
@@ -179,7 +157,7 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
 
         if (!DeviceFactory::isDeviceTypeValid(currentCell))
         {
-            Error* pError{new UnknownDeviceError{writeToError}};
+            Error* pError{new UnknownDeviceError{errorStream}};
             pError->setRow(rowIndex + 2); // setting row index of the current cell (+2 deoarece in Excel (.csv) the rows start at 1 and first line is ignored);
             pError->setColumn(columnNumber); // setting column index for exact error localization
 
@@ -219,23 +197,23 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
 
             if(isConnectionFormattingInvalid) // checking if the connection format is correct (e.g. 20/3: 3 connections to device located at U20)
             {
-                pError = new WrongFormatError{writeToError};
+                pError = new WrongFormatError{errorStream};
             }
             else if (secondDevice <= 0 || secondDevice > c_MaxNrOfRackUnits) // checking if the device is in the accepted U interval within rack
             {
-                pError = new WrongUNumberError{writeToError};
+                pError = new WrongUNumberError{errorStream};
             }
             else if (c_NoDevice == mapping[secondDevice - 1]) // check if the second device is actually placed within rack (contained in mapping table)
             {
-                pError = new NoDevicePresentError{writeToError};
+                pError = new NoDevicePresentError{errorStream};
             }
             else if (c_MaxNrOfRackUnits - rowIndex == secondDevice) // connection of a device to itself (connection loop) is not allowed
             {
-                pError = new DeviceConnectedToItselfError{writeToError};
+                pError = new DeviceConnectedToItselfError{errorStream};
             }
             else if (0 == nrOfconnections) // if the devices are marked as connected there should be minimum 1 connection between them
             {
-                pError = new NoConnectionsError{writeToError};
+                pError = new NoConnectionsError{errorStream};
             }
             else
             {
@@ -266,25 +244,23 @@ bool parseConnectionDefinitions(std::ofstream& writeToError,
     return c_ErrorsOccurred;
 }
 
-void readConnectionInput(std::ifstream& readInput, std::vector<std::string>& connectionInputRows)
+void readConnectionInput(std::ifstream& inputStream, std::vector<std::string>& connectionInputRows)
 {
-    assert(readInput.is_open());
+    assert(inputStream.is_open());
 
     connectionInputRows.clear();
     int connectionInputRowsCount{0};
 
-    readInput.seekg(0);
+    inputStream.seekg(0);
     std::string header;
-    getline(readInput, header);
+    getline(inputStream, header);
 
-    while (!readInput.eof())
+    while (!inputStream.eof())
     {
         ++connectionInputRowsCount;
         connectionInputRows.resize(connectionInputRowsCount);
-        getline(readInput,connectionInputRows[connectionInputRowsCount-1]);
+        getline(inputStream,connectionInputRows[connectionInputRowsCount-1]);
     }
-
-    readInput.close();
 
     // discard last empty row read from the input file if payload exists (trim)
     if(connectionInputRowsCount > 1 && 0 == connectionInputRows[connectionInputRowsCount - 1].size())
@@ -294,7 +270,7 @@ void readConnectionInput(std::ifstream& readInput, std::vector<std::string>& con
     }
 }
 
-bool parseConnectionInput(std::ofstream& writeToError,
+bool parseConnectionInput(std::ofstream& errorStream,
                           std::vector<Device*>& devices,
                           std::vector<std::string>& cablePartNumbersEntries,
                           const std::vector<std::string>& connectionInputRows)
@@ -304,7 +280,7 @@ bool parseConnectionInput(std::ofstream& writeToError,
     devices.clear();
     cablePartNumbersEntries.clear();
 
-    assert(writeToError.is_open());
+    assert(errorStream.is_open());
 
     DeviceFactory deviceFactory;
 
@@ -327,7 +303,7 @@ bool parseConnectionInput(std::ofstream& writeToError,
             // total number of csv cells from the connection row (cable + 2 devices) is less than required (parsing of the row should stop at once)
             if (currentPosition == c_InputRowsLength || -1 == currentPosition)
             {
-                Error* pFewerCellsError{new FewerCellsError{writeToError}};
+                Error* pFewerCellsError{new FewerCellsError{errorStream}};
                 pFewerCellsError->setRow(rowIndex + 2);
                 pFewerCellsError->setColumn(columnNumber);
                 allParsingErrors.push_back(pFewerCellsError);
@@ -375,7 +351,7 @@ bool parseConnectionInput(std::ofstream& writeToError,
                     pDevice->setColumn(columnNumber);
                     devices.push_back(pDevice);
 
-                    std::vector<Error*> deviceParsingErrors{pDevice->parseInputData(connectionInputRows[rowIndex], currentPosition, writeToError)};
+                    std::vector<Error*> deviceParsingErrors{pDevice->parseInputData(connectionInputRows[rowIndex], currentPosition, errorStream)};
 
                     bool shouldStopConnectionParsing{false};
 
@@ -403,7 +379,7 @@ bool parseConnectionInput(std::ofstream& writeToError,
                 }
                 else
                 {
-                    Error* pUnknownDeviceError{new UnknownDeviceError{writeToError}};
+                    Error* pUnknownDeviceError{new UnknownDeviceError{errorStream}};
                     pUnknownDeviceError->setRow(rowIndex + 2);
                     pUnknownDeviceError->setColumn(columnNumber);
                     allParsingErrors.push_back(pUnknownDeviceError);
@@ -523,27 +499,27 @@ void buildLabellingOutput(std::vector<std::string>& outputRows,
     }
 }
 
-void writeOutputToFile(std::ofstream& output, const std::vector<std::string>& connectionInputRows, const std::string& header)
+void writeOutputToFile(std::ofstream& outputStream, const std::vector<std::string>& connectionInputRows, const std::string& header)
 {
-    assert(output.is_open());
+    assert(outputStream.is_open());
 
-    output << header << std::endl;
+    outputStream << header << std::endl;
 
     for (const auto& payloadRow : connectionInputRows)
     {
-        output << payloadRow << std::endl;
+        outputStream << payloadRow << std::endl;
     }
 }
 
-void displayErrorMessage(const std::string& inputFilename, const std::string& outputFilename)
+void displayErrorMessage(const std::string& inputFilename, const std::string& errorFilename)
 {
     using namespace std;
 
     system(c_ClearScreenCommand.c_str());
 
     cout << "One or more errors occured!" << endl << endl;
-    cout << "Please check the error report in the output file: " << endl << endl; //TODO: create error.csv for errors (instead of labellingtable.csv)
-    cout << outputFilename << endl << endl;
+    cout << "Please check the error report in the error file: " << endl << endl;
+    cout << errorFilename << endl << endl;
     cout << "Please correct the input file and then try again" << endl << endl;
     cout << "Input file: " << endl << endl << inputFilename << endl << endl;
 }
@@ -584,17 +560,17 @@ int main()
 {
     using namespace std;
 
-    ifstream readInput; // for reading from connectioninput.csv and configuration.txt
-    ofstream writeToOutput; //for writing into labellingtable.csv
+    ofstream errorStream; // for writing into error.csv
 
     string connectionsFilename; // connectiondefinitions.csv (for each device it contains connected devices and number of connections)
     string inputFilename; // connectioninput.csv (contains each connection generated based on connectiondefinitions.csv - user should replace placeholders by filling in the required data)
-    string outputFilename; // labellingtable.csv (contains labelling table generated based on connectioninput.csv or any errors that occured when choosing option 1 or 2)
+    string outputFilename; // labellingtable.csv (contains labelling table generated based on connectioninput.csv)
+    string errorFilename; // error.csv (contains any errors that occured when choosing option 1 or 2)
 
     /* DETERMINE PATH OF THE FILES AND PROVIDING USER THE AVAILABLE OPTIONS */
     displayVersion();
 
-    bool commonFilesSuccessfullyOpened{init(connectionsFilename, inputFilename, outputFilename, writeToOutput)};
+    bool commonFilesSuccessfullyOpened{init(connectionsFilename, inputFilename, outputFilename, errorFilename, errorStream)};
 
     if (commonFilesSuccessfullyOpened)
     {
@@ -605,20 +581,20 @@ int main()
 
         if ("1" == option) /* OPTION 1 + ENTER: READ connectiondefinitions.csv AND HANDLE ANY ERRORS; build connectioninput.csv content (including placeholders) and write it into file */
         {
-            ifstream readConnections; // for reading from connectiondefinitions.csv
-            ofstream writeToInput; // for writing into connectioninput.csv
+            ifstream inputStream; // for reading from connectiondefinitions.csv
+            ofstream outputStream; // for writing into connectioninput.csv
 
-            bool firstOptionFilesSuccessfullyOpened{enableReadingConnectionDefinitions(readConnections, writeToInput, connectionsFilename, inputFilename)};
+            bool firstOptionFilesSuccessfullyOpened{enableReadWriteOperations(inputStream, outputStream, connectionsFilename, inputFilename)};
 
             if (firstOptionFilesSuccessfullyOpened)
             {
                 string header;
-                getline(readConnections, header); // the header is not used further
+                getline(inputStream, header); // the header is not used further
 
                 vector<string> connectionDefinitionRows; // stores rows read from connectiondefinitions.csv
 
                 // maximum 50 lines are read from connectiondefinitions.csv (the rack can have maximum 50U)
-                readConnectionDefinitions(readConnections, connectionDefinitionRows);
+                readConnectionDefinitions(inputStream, connectionDefinitionRows);
 
                 /* Stores devices contained in the rack.
                    For each device the type will be memorized at the index representing the lowest U position occupied within rack.
@@ -636,39 +612,41 @@ int main()
 
                 int devicesCount; // total number of devices discovered in the rack
 
-                bool parsingErrorsOccured{parseConnectionDefinitions(writeToOutput, mapping, uNumbers, connectedTo, connectionsCount, devicesCount, connectionDefinitionRows)};
+                bool parsingErrorsOccured{parseConnectionDefinitions(errorStream, mapping, uNumbers, connectedTo, connectionsCount, devicesCount, connectionDefinitionRows)};
 
                 if (!parsingErrorsOccured)
                 {
                     vector<string> connectionInputRows; // stores rows to be written to connectioninput.csv
 
                     buildConnectionsInputTemplate(connectionInputRows, mapping, uNumbers, connectedTo, connectionsCount, devicesCount);
-                    writeOutputToFile(writeToInput, connectionInputRows, c_InputHeader);
+                    writeOutputToFile(outputStream, connectionInputRows, c_InputHeader);
                     displaySuccessMessage(inputFilename, true);
                 }
                 else
                 {
-                    displayErrorMessage(connectionsFilename, outputFilename);
+                    displayErrorMessage(connectionsFilename, errorFilename);
                 }
 
-                writeToInput.close();
-                writeToOutput.close();
+
             }
         }
         else if ("2" == option) /* OPTION 2 + ENTER: READ connectioninput.csv, CHECK ERRORS and write final output to labellingtable.csv */
         {
-            bool secondOptionFilesSuccessfullyOpened{enableReadingConnectionInput(readInput, inputFilename)};
+            ifstream inputStream; // for reading from connectioninput.csv
+            ofstream outputStream; //for writing into labellingtable.csv
+
+            bool secondOptionFilesSuccessfullyOpened{enableReadWriteOperations(inputStream, outputStream, inputFilename, outputFilename)};
 
             if (secondOptionFilesSuccessfullyOpened)
             {
                 vector<string> connectionInputRows; // stores rows read from connectioninput.csv
 
-                readConnectionInput(readInput, connectionInputRows);
+                readConnectionInput(inputStream, connectionInputRows);
 
                 vector<Device*> devices; // all created Device objects (except the ones used for checking device validity which are destroyed immediately)
                 vector<string> cablePartNumbersEntries; // the cable part number of each connection to be stored here
 
-                bool parsingErrorsOccured{parseConnectionInput(writeToOutput, devices, cablePartNumbersEntries, connectionInputRows)};
+                bool parsingErrorsOccured{parseConnectionInput(errorStream, devices, cablePartNumbersEntries, connectionInputRows)};
 
                 assert(cablePartNumbersEntries.size() == connectionInputRows.size());
 
@@ -677,12 +655,12 @@ int main()
                     vector<string> outputRows; // stores rows to be written to labellingtable.csv
 
                     buildLabellingOutput(outputRows, devices, cablePartNumbersEntries);
-                    writeOutputToFile(writeToOutput, outputRows, c_OutputHeader);
+                    writeOutputToFile(outputStream, outputRows, c_OutputHeader);
                     displaySuccessMessage(outputFilename, false);
                 }
                 else
                 {
-                    displayErrorMessage(inputFilename, outputFilename);
+                    displayErrorMessage(inputFilename, errorFilename);
                 }
 
                 //TODO: implement smart pointers
@@ -694,9 +672,6 @@ int main()
                         pDevice = nullptr;
                     }
                 }
-
-                readInput.close();
-                writeToOutput.close();
             }
         }
         else
