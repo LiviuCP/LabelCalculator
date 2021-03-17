@@ -517,11 +517,12 @@ void displayErrorMessage(const std::string& inputFilename, const std::string& er
 
     system(c_ClearScreenCommand.c_str());
 
-    cout << "One or more errors occured!" << endl << endl;
-    cout << "Please check the error report in the error file: " << endl << endl;
-    cout << errorFilename << endl << endl;
-    cout << "Please correct the input file and then try again" << endl << endl;
-    cout << "Input file: " << endl << endl << inputFilename << endl << endl;
+    cerr << "One or more errors occured!" << endl << endl;
+    cerr << "Please check the error report in the error file: " << endl << endl;
+    cerr << errorFilename << endl << endl;
+    cerr << "Please correct the input file and then try again" << endl << endl;
+    cerr << "Input file: " << endl << endl << inputFilename << endl << endl;
+    cerr << "Thank you for using LabelCalculator!" << endl << endl;
 }
 
 void displaySuccessMessage(const std::string& outputFilename, bool displayFurtherInstructions)
@@ -538,6 +539,14 @@ void displaySuccessMessage(const std::string& outputFilename, bool displayFurthe
     {
         cout << "Please go on with the next step by filling in the connectioninput.csv file with the needed info" << endl;
     }
+
+    cout << "Thank you for using LabelCalculator!" << endl << endl;
+}
+
+void displayAbortMessage()
+{
+    system(c_ClearScreenCommand.c_str());
+    std::cout << "Application terminated by user" << std::endl << std::endl;
 }
 
 void displayMenu()
@@ -626,8 +635,6 @@ int main()
                 {
                     displayErrorMessage(connectionsFilename, errorFilename);
                 }
-
-
             }
         }
         else if ("2" == option) /* OPTION 2 + ENTER: READ connectioninput.csv, CHECK ERRORS and write final output to labellingtable.csv */
@@ -676,11 +683,8 @@ int main()
         }
         else
         {
-            system(c_ClearScreenCommand.c_str());
-            cout << "Application terminated by user" << endl << endl;
+            displayAbortMessage();
         }
-
-        cout << "Thank you for using LabelCalculator!" << endl << endl;
     }
 
     return 0;
