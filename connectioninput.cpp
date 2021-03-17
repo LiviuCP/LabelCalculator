@@ -1,4 +1,5 @@
 #include <sstream>
+#include <cassert>
 
 #include "devicefactory.h"
 #include "error.h"
