@@ -1,5 +1,3 @@
-#include <map>
-
 #include "datadevice.h"
 
 LANSwitch::LANSwitch(bool isSourceDevice)

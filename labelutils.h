@@ -1,8 +1,10 @@
 #ifndef LABELUTILS_H
 #define LABELUTILS_H
 
-#include <string>
+#include <vector>
 #include <map>
+#include <fstream>
+#include <string>
 
 /* *CONSTANTS* */
 
@@ -59,13 +61,16 @@ static const std::map<std::string, int> c_MaxAllowedNrOfChars
 */
 int readDataField(const std::string& src, std::string& dest, const int index);
 
-/* This function checks the format of the connection of the first device from each row of the connectiondefinitions.csv file to another device from the row
-   If the format is correct (true returned) it will also fill in the two arguments with the U placement of the other device and the number of connections between the two
+/* This function initializes the application no matter which option is chosen (define connections, process connection input from user)
 */
-bool parseConnectionFormatting(const std::string& source, int& secondDevice, int& connectionsCount);
+bool init(std::string& connectionsFilename, std::string& inputFilename, std::string& outputFilename, std::string& errorFilename, std::ofstream& errorStream);
 
-/* This function fills in the placeholder information that will be written subsequently in connectioninput.csv along with the name and type of the device
+/* This function opens the input and output files for each of the options
 */
-void createPlaceholders(const std::string& deviceType, std::string& dest);
+bool enableReadWriteOperations(std::ifstream& inputStream, std::ofstream& outputStream, const std::string& inputFilename, const std::string& outputFilename);
+
+/* This function writes the resulting output to the corresponding file for each option
+*/
+void writeOutputToFile(std::ofstream& outputStream, const std::vector<std::string>& inputRows, const std::string& header);
 
 #endif // LABELUTILS_H

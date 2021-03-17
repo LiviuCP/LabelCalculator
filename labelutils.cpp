@@ -1,3 +1,4 @@
+#include <iostream>
 #include <cassert>
 
 #include "labelutils.h"
@@ -44,103 +45,89 @@ int readDataField(const std::string& src, std::string& dest, const int index)
     return nextIndex;
 }
 
-bool parseConnectionFormatting(const std::string& source, int& secondDevice, int& connectionsCount)
+bool init(std::string& connectionsFilename, std::string& inputFilename, std::string& outputFilename, std::string& errorFilename, std::ofstream& errorStream)
 {
-    bool isFormattingValid{true};
+    using namespace std;
 
-    const int sourceLength{static_cast<int>(source.size())};
-    int slashIndex{-1}; // index of '/'
+    bool commonFilesSuccessfullyOpened{false}; // for each option corresponding files (e.g. connectioninput.csv) should be successfully opened in the desired mode (read/write)
 
-    if (sourceLength > 0)
+    ifstream inputStream{c_ConfigurationFilePath};
+
+    if(inputStream.is_open())
     {
-        for (int index{0}; index < sourceLength; ++index)
+        // username is used for determining the paths of all other relevant files (see below)
+        string username;
+        getline(inputStream, username);
+
+        const string c_AppFilesDir{c_HomeDirParent + c_PathSeparator + username + c_PathSeparator + c_DocumentsDirName + c_PathSeparator};
+        connectionsFilename = c_AppFilesDir + c_ConnectionDefinitionsFilename;
+        inputFilename = c_AppFilesDir + c_ConnectionInputFilename;
+        outputFilename = c_AppFilesDir + c_LabellingTableFilename;
+        errorFilename = c_AppFilesDir + c_ErrorFilename;
+
+        errorStream.open(errorFilename);
+
+        if (errorStream.is_open())
         {
-            if (isdigit(source[index]))
-            {
-                continue;
-            }
-            else if ('/' == source[index])
-            {
-                if (-1 != slashIndex) // more than one slash
-                {
-                    isFormattingValid = false;
-                    break;
-                }
-                else
-                {
-                    slashIndex = index;
-                    continue;
-                }
-            }
-            else
-            {
-                isFormattingValid = false;
-                break;
-            }
+            commonFilesSuccessfullyOpened = true;
         }
-
-        // there should be exactly one slash character and it should not be located in the first/last string character position
-        isFormattingValid = isFormattingValid && (slashIndex > 0 && slashIndex < sourceLength-1);
-
-        if (isFormattingValid)
+        else
         {
-            secondDevice = stoi(source.substr(0, slashIndex));
-            connectionsCount = stoi(source.substr(slashIndex+1));
+            system(c_ClearScreenCommand.c_str());
+            cerr << "Error! File " << c_ErrorFilename << " cannot be opened for writing" << endl;
+            cerr << "File path: " << errorFilename << endl;
         }
     }
     else
     {
-        isFormattingValid = false;
+        system(c_ClearScreenCommand.c_str());
+        cerr << "Error! File " << c_ConfigurationFilePath << " cannot be opened for reading" << endl;
     }
 
-    return isFormattingValid;
+    return commonFilesSuccessfullyOpened;
 }
 
-void createPlaceholders(const std::string& deviceType, std::string& dest)
+bool enableReadWriteOperations(std::ifstream& inputStream, std::ofstream& outputStream, const std::string& inputFilename, const std::string& outputFilename)
 {
+    using namespace std;
 
-    if ("_pdu" == deviceType) //pdu
+    bool filesSuccessfullyOpened{false};
+
+    inputStream.open(inputFilename);
+
+    if (inputStream.is_open())
     {
-        dest += "PLACEMENT,LOAD SEGMENT NUMBER,PORT NUMBER";
+        outputStream.open(outputFilename);
+
+        if(outputStream.is_open())
+        {
+            filesSuccessfullyOpened = true;
+        }
+        else
+        {
+            system(c_ClearScreenCommand.c_str());
+            cerr << "Error! Output file cannot be opened for writing" << endl;
+            cerr << "File path: "<< outputFilename << endl;
+        }
     }
-    else if ("_ext" == deviceType) //extension bar
+    else
     {
-        dest += "PLACEMENT,PORT NUMBER,-";
+        system(c_ClearScreenCommand.c_str());
+        std::cerr << "Error! Input file cannot be opened for reading" << std::endl;
+        std::cerr << "File path: "<< inputFilename << std::endl;
     }
-    else if ("_ups" == deviceType) //ups
+
+    return filesSuccessfullyOpened;
+}
+
+void writeOutputToFile(std::ofstream& outputStream, const std::vector<std::string>& inputRows, const std::string& header)
+{
+    assert(outputStream.is_open());
+
+    outputStream << header << std::endl;
+
+    for (const auto& payloadRow : inputRows)
     {
-        dest += "LOAD SEGMENT NUMBER,PORT NUMBER,-";
-    }
-    else if ("_ps" == deviceType) //power supply
-    {
-        dest += "POWER SUPPLY NUMBER,-,-";
-    }
-    else if ("svr" == deviceType) //server
-    {
-        dest += "PORT TYPE,PORT NUMBER,-";
-    }
-    else if ("bld" == deviceType) //blade system
-    {
-        dest += "MODULE TYPE,MODULE NUMBER,PORT NUMBER";
-    }
-    else if ("sto" == deviceType) //storage device
-    {
-        dest += "CONTROLLER NUMBER,PORT NUMBER,-";
-    }
-    else if ("san" == deviceType) //SAN (FC) switch
-    {
-        dest += "PORT NUMBER,-,-";
-    }
-    else if ("lan" == deviceType) //LAN (Ethernet) switch
-    {
-        dest += "PORT NUMBER,-,-";
-    }
-    else if ("ib" == deviceType) //Infiniband switch
-    {
-        dest += "PORT NUMBER,-,-";
-    }
-    else if ("kvm" == deviceType) //KVM switch
-    {
-        dest += "PORT NUMBER,-,-";
+        outputStream << payloadRow << std::endl;
     }
 }
