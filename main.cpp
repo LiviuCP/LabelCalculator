@@ -1,7 +1,7 @@
 #include <iostream>
 #include <cassert>
 
-#include "connectiondefinition.h"
+#include "connectiondefinitionparser.h"
 #include "connectioninput.h"
 #include "labelutils.h"
 #include "displayutils.h"
@@ -38,38 +38,11 @@ int main()
 
             if (firstOptionFilesSuccessfullyOpened)
             {
-                string header;
-                getline(inputStream, header); // the header is not used further
+                ConnectionDefinitionParser connectionDefinitionsParser{inputStream, outputStream, errorStream};
+                const bool c_ParsingErrorsOccured{connectionDefinitionsParser.parse()};
 
-                vector<string> connectionDefinitionRows; // stores rows read from connectiondefinitions.csv
-
-                // maximum 50 lines are read from connectiondefinitions.csv (the rack can have maximum 50U)
-                readConnectionDefinitions(inputStream, connectionDefinitionRows);
-
-                /* Stores devices contained in the rack.
-                   For each device the type will be memorized at the index representing the lowest U position occupied within rack.
-                   The vector will have 50 elements (maximum rack size).
-                */
-                vector<string> mapping;
-
-                /* Stores the U positions (lowest in rack, e.g. U5 for a device occupying U5-10) of all discovered devices (in the order of their discovery)
-                   Storing occurs in decreasing order of their appearance (first device is the one from the highest U position)
-                */
-                vector<int> uNumbers;
-
-                vector<vector<int>> connectedTo; // stores the devices to which each device from a csv line connects
-                vector<vector<int>> connectionsCount; // stores the number of connections to each device mentioned in previous vector
-
-                int devicesCount; // total number of devices discovered in the rack
-
-                bool parsingErrorsOccured{parseConnectionDefinitions(errorStream, mapping, uNumbers, connectedTo, connectionsCount, devicesCount, connectionDefinitionRows)};
-
-                if (!parsingErrorsOccured)
+                if (!c_ParsingErrorsOccured)
                 {
-                    vector<string> connectionInputRows; // stores rows to be written to connectioninput.csv
-
-                    buildConnectionsInputTemplate(connectionInputRows, mapping, uNumbers, connectedTo, connectionsCount, devicesCount);
-                    writeOutputToFile(outputStream, connectionInputRows, c_InputHeader);
                     displaySuccessMessage(inputFilename, true);
                 }
                 else

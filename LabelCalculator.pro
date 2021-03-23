@@ -4,7 +4,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
-        connectiondefinition.cpp \
+        connectiondefinitionparser.cpp \
         connectioninput.cpp \
         datadevice.cpp \
         device.cpp \
@@ -16,7 +16,7 @@ SOURCES += \
         powerdevice.cpp
 
 HEADERS += \
-    connectiondefinition.h \
+    connectiondefinitionparser.h \
     connectioninput.h \
     datadevice.h \
     device.h \
