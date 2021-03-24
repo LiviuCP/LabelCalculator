@@ -2,7 +2,7 @@
 #include <cassert>
 
 #include "connectiondefinitionparser.h"
-#include "connectioninput.h"
+#include "connectioninputparser.h"
 #include "labelutils.h"
 #include "displayutils.h"
 
@@ -60,38 +60,16 @@ int main()
 
             if (secondOptionFilesSuccessfullyOpened)
             {
-                vector<string> connectionInputRows; // stores rows read from connectioninput.csv
+                ConnectionInputParser connectionInputParser{inputStream, outputStream, errorStream};
+                const bool c_ParsingErrorsOccurred{connectionInputParser.parse()};
 
-                readConnectionInput(inputStream, connectionInputRows);
-
-                vector<Device*> devices; // all created Device objects (except the ones used for checking device validity which are destroyed immediately)
-                vector<string> cablePartNumbersEntries; // the cable part number of each connection to be stored here
-
-                bool parsingErrorsOccured{parseConnectionInput(errorStream, devices, cablePartNumbersEntries, connectionInputRows)};
-
-                assert(cablePartNumbersEntries.size() == connectionInputRows.size());
-
-                if(!parsingErrorsOccured)
+                if (!c_ParsingErrorsOccurred)
                 {
-                    vector<string> outputRows; // stores rows to be written to labellingtable.csv
-
-                    buildLabellingOutput(outputRows, devices, cablePartNumbersEntries);
-                    writeOutputToFile(outputStream, outputRows, c_OutputHeader);
                     displaySuccessMessage(outputFilename, false);
                 }
                 else
                 {
                     displayErrorMessage(inputFilename, errorFilename);
-                }
-
-                //TODO: implement smart pointers
-                for(auto& pDevice : devices)
-                {
-                    if (nullptr != pDevice)
-                    {
-                        delete pDevice;
-                        pDevice = nullptr;
-                    }
                 }
             }
         }

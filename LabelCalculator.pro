@@ -5,7 +5,7 @@ CONFIG -= qt
 
 SOURCES += \
         connectiondefinitionparser.cpp \
-        connectioninput.cpp \
+        connectioninputparser.cpp \
         datadevice.cpp \
         device.cpp \
         devicefactory.cpp \
@@ -17,7 +17,7 @@ SOURCES += \
 
 HEADERS += \
     connectiondefinitionparser.h \
-    connectioninput.h \
+    connectioninputparser.h \
     datadevice.h \
     device.h \
     devicefactory.h \
