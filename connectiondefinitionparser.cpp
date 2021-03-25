@@ -41,20 +41,22 @@ bool ConnectionDefinitionParser::parse()
     {
         _reset(); // cleanup required after first usage
     }
+    else
+    {
+        mIsResetRequired = true;
+    }
 
     _readConnectionDefinitions();
 
-    const bool c_ParsingErrorsOccured{_parseConnectionDefinitions()};
+    const bool c_ParsingErrorsOccurred{_parseConnectionDefinitions()};
 
-    if (!c_ParsingErrorsOccured)
+    if (!c_ParsingErrorsOccurred)
     {
         _buildConnectionsInputTemplate();
         writeOutputToFile(mOutputStream, mConnectionInputRows, c_InputHeader);
     }
 
-    mIsResetRequired = true;
-
-    return c_ParsingErrorsOccured;
+    return c_ParsingErrorsOccurred;
 }
 
 void ConnectionDefinitionParser::_readConnectionDefinitions()

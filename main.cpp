@@ -39,9 +39,9 @@ int main()
             if (firstOptionFilesSuccessfullyOpened)
             {
                 ConnectionDefinitionParser connectionDefinitionsParser{inputStream, outputStream, errorStream};
-                const bool c_ParsingErrorsOccured{connectionDefinitionsParser.parse()};
+                const bool c_ParsingErrorsOccurred{connectionDefinitionsParser.parse()};
 
-                if (!c_ParsingErrorsOccured)
+                if (!c_ParsingErrorsOccurred)
                 {
                     displaySuccessMessage(inputFilename, true);
                 }
