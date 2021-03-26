@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include "labelutils.h"
 #include "parser.h"
 
