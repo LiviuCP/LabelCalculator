@@ -21,64 +21,34 @@ const std::map<std::string, std::string> ConnectionDefinitionParser::scConnectio
     {"kvm" , "PORT NUMBER,-,-"                          }
 };
 
-ConnectionDefinitionParser::ConnectionDefinitionParser(std::ifstream& inputStream, std::ofstream& outputStream, std::ofstream& errorStream)
-    : mInputStream{inputStream}
-    , mOutputStream{outputStream}
-    , mErrorStream{errorStream}
+ConnectionDefinitionParser::ConnectionDefinitionParser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream)
+    : Parser{pInputStream, pOutputStream, pErrorStream, c_InputHeader}
     , mDiscoveredDevicesCount{0}
-    , mIsResetRequired{false}
 {
-    assert(mInputStream.is_open());
-    assert(mOutputStream.is_open());
-    assert(mErrorStream.is_open());
-
     mMapping.resize(c_MaxNrOfRackUnits, c_NoDevice); // initial value: no device
 }
 
-bool ConnectionDefinitionParser::parse()
-{
-    if (mIsResetRequired)
-    {
-        _reset(); // cleanup required after first usage
-    }
-    else
-    {
-        mIsResetRequired = true;
-    }
-
-    _readConnectionDefinitions();
-
-    const bool c_ParsingErrorsOccurred{_parseConnectionDefinitions()};
-
-    if (!c_ParsingErrorsOccurred)
-    {
-        _buildConnectionsInputTemplate();
-        writeOutputToFile(mOutputStream, mConnectionInputRows, c_InputHeader);
-    }
-
-    return c_ParsingErrorsOccurred;
-}
-
-void ConnectionDefinitionParser::_readConnectionDefinitions()
+// Maximum 50 lines to be read from connection definition file (the rack can have maximum 50U)
+void ConnectionDefinitionParser::_readInput()
 {
     std::string header;
-    getline(mInputStream, header); // the header is not used further
+    getline(*mpInputStream, header); // the header is not used further
 
     int connectionDefinitionRowsCount{0};
 
-    while (!mInputStream.eof() && connectionDefinitionRowsCount < c_MaxNrOfRackUnits)
+    while (!mpInputStream->eof() && connectionDefinitionRowsCount < c_MaxNrOfRackUnits)
     {
         ++connectionDefinitionRowsCount;
-        mConnectionDefinitionRows.resize(connectionDefinitionRowsCount);
-        getline(mInputStream, mConnectionDefinitionRows[connectionDefinitionRowsCount - 1]);
+        mInputData.resize(connectionDefinitionRowsCount);
+        getline(*mpInputStream, mInputData[connectionDefinitionRowsCount - 1]);
     }
 }
 
-bool ConnectionDefinitionParser::_parseConnectionDefinitions()
+bool ConnectionDefinitionParser::_parseInput()
 {
     std::vector<Error*> parsingErrors;
 
-    const int c_ConnectionDefinitionRowsCount{static_cast<int>(mConnectionDefinitionRows.size())};
+    const int c_ConnectionDefinitionRowsCount{static_cast<int>(mInputData.size())};
 
     for (int rowIndex{0}; rowIndex < c_ConnectionDefinitionRowsCount; ++rowIndex)
     {
@@ -86,10 +56,10 @@ bool ConnectionDefinitionParser::_parseConnectionDefinitions()
         std::string currentCell; // current csv cell
 
         // first cell on the row is ignored (contains the U number and is only used for informing the user about rack position; the row index is instead used in calculations in relationship with U number)
-        int currentPosition{readDataField(mConnectionDefinitionRows[rowIndex],currentCell,0)};
+        int currentPosition{readDataField(mInputData[rowIndex],currentCell,0)};
 
         // second cell on the row: device type
-        currentPosition = readDataField(mConnectionDefinitionRows[rowIndex],currentCell,currentPosition);
+        currentPosition = readDataField(mInputData[rowIndex],currentCell,currentPosition);
 
         if (0 == currentCell.size())
         {
@@ -100,7 +70,7 @@ bool ConnectionDefinitionParser::_parseConnectionDefinitions()
 
         if (!DeviceFactory::isDeviceTypeValid(currentCell))
         {
-            Error* pError{new UnknownDeviceError{mErrorStream}};
+            Error* pError{new UnknownDeviceError{*mpErrorStream}};
             pError->setRow(rowIndex + 2); // setting row index of the current cell (+2 deoarece in Excel (.csv) the rows start at 1 and first line is ignored);
             pError->setColumn(columnNumber); // setting column index for exact error localization
 
@@ -125,7 +95,7 @@ bool ConnectionDefinitionParser::_parseConnectionDefinitions()
         {
             // read next cell (new current cell)
             ++columnNumber;
-            currentPosition = readDataField(mConnectionDefinitionRows[rowIndex],currentCell,currentPosition);
+            currentPosition = readDataField(mInputData[rowIndex],currentCell,currentPosition);
 
             if (0 == currentCell.size())
             {
@@ -140,23 +110,23 @@ bool ConnectionDefinitionParser::_parseConnectionDefinitions()
 
             if(isConnectionFormattingInvalid) // checking if the connection format is correct (e.g. 20/3: 3 connections to device located at U20)
             {
-                pError = new WrongFormatError{mErrorStream};
+                pError = new WrongFormatError{*mpErrorStream};
             }
             else if (secondDevice <= 0 || secondDevice > c_MaxNrOfRackUnits) // checking if the device is in the accepted U interval within rack
             {
-                pError = new WrongUNumberError{mErrorStream};
+                pError = new WrongUNumberError{*mpErrorStream};
             }
             else if (c_NoDevice == mMapping[secondDevice - 1]) // check if the second device is actually placed within rack (contained in mapping table)
             {
-                pError = new NoDevicePresentError{mErrorStream};
+                pError = new NoDevicePresentError{*mpErrorStream};
             }
             else if (c_MaxNrOfRackUnits - rowIndex == secondDevice) // connection of a device to itself (connection loop) is not allowed
             {
-                pError = new DeviceConnectedToItselfError{mErrorStream};
+                pError = new DeviceConnectedToItselfError{*mpErrorStream};
             }
             else if (0 == nrOfconnections) // if the devices are marked as connected there should be minimum 1 connection between them
             {
-                pError = new NoConnectionsError{mErrorStream};
+                pError = new NoConnectionsError{*mpErrorStream};
             }
             else
             {
@@ -187,7 +157,8 @@ bool ConnectionDefinitionParser::_parseConnectionDefinitions()
     return c_ErrorsOccurred;
 }
 
-void ConnectionDefinitionParser::_buildConnectionsInputTemplate()
+// Placeholders are included and need to be subsequently filled in by user before running the application with option 2 for getting the final labelling table
+void ConnectionDefinitionParser::_buildOutput()
 {
     using namespace std;
 
@@ -232,12 +203,12 @@ void ConnectionDefinitionParser::_buildConnectionsInputTemplate()
             */
             string output{c_CablePartNumberPlaceholder + "," + deviceParameters[currentDeviceUPosition] + "," + deviceParameters[mConnectedTo[currentDeviceIndex][connectedDeviceIndex] - 1]};
             outputRowsCount += mConnectionsCount[currentDeviceIndex][connectedDeviceIndex];
-            mConnectionInputRows.resize(outputRowsCount);
+            mOutputData.resize(outputRowsCount);
 
             // write the resulting output string a number of times equal to the number of connections between the two devices
             for (int connectionNumber{outputRowsCount - mConnectionsCount[currentDeviceIndex][connectedDeviceIndex]}; connectionNumber < outputRowsCount; connectionNumber++)
             {
-                mConnectionInputRows[connectionNumber] = output;
+                mOutputData[connectionNumber] = output;
             }
         }
     }
@@ -245,15 +216,15 @@ void ConnectionDefinitionParser::_buildConnectionsInputTemplate()
 
 void ConnectionDefinitionParser::_reset()
 {
-    mConnectionDefinitionRows.clear();
     mMapping.clear();
     mUNumbers.clear();
     mConnectedTo.clear();
     mConnectionsCount.clear();
-    mConnectionInputRows.clear();
     mDiscoveredDevicesCount = 0;
 
     mMapping.resize(c_MaxNrOfRackUnits, c_NoDevice); // initial value: no device
+
+    Parser::_reset();
 }
 
 bool ConnectionDefinitionParser::_parseConnectionFormatting(const std::string& source, int& secondDevice, int& connectionsCount)
@@ -292,12 +263,12 @@ bool ConnectionDefinitionParser::_parseConnectionFormatting(const std::string& s
         }
 
         // there should be exactly one slash character and it should not be located in the first/last string character position
-        isFormattingValid = isFormattingValid && (slashIndex > 0 && slashIndex < sourceLength-1);
+        isFormattingValid = isFormattingValid && (slashIndex > 0 && slashIndex < sourceLength - 1);
 
         if (isFormattingValid)
         {
             secondDevice = stoi(source.substr(0, slashIndex));
-            connectionsCount = stoi(source.substr(slashIndex+1));
+            connectionsCount = stoi(source.substr(slashIndex + 1));
         }
     }
     else

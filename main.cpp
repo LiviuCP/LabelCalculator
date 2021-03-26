@@ -38,7 +38,7 @@ int main()
 
             if (firstOptionFilesSuccessfullyOpened)
             {
-                ConnectionDefinitionParser connectionDefinitionsParser{inputStream, outputStream, errorStream};
+                ConnectionDefinitionParser connectionDefinitionsParser{&inputStream, &outputStream, &errorStream};
                 const bool c_ParsingErrorsOccurred{connectionDefinitionsParser.parse()};
 
                 if (!c_ParsingErrorsOccurred)
@@ -60,7 +60,7 @@ int main()
 
             if (secondOptionFilesSuccessfullyOpened)
             {
-                ConnectionInputParser connectionInputParser{inputStream, outputStream, errorStream};
+                ConnectionInputParser connectionInputParser{&inputStream, &outputStream, &errorStream};
                 const bool c_ParsingErrorsOccurred{connectionInputParser.parse()};
 
                 if (!c_ParsingErrorsOccurred)

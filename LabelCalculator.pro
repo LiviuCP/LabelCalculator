@@ -13,6 +13,7 @@ SOURCES += \
         error.cpp \
         labelutils.cpp \
         main.cpp \
+        parser.cpp \
         powerdevice.cpp
 
 HEADERS += \
@@ -24,4 +25,5 @@ HEADERS += \
     displayutils.h \
     error.h \
     labelutils.h \
+    parser.h \
     powerdevice.h
