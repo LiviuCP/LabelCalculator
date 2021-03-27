@@ -1,8 +1,8 @@
 #include <iostream>
 #include <cassert>
 
-#include "connectiondefinitionparser.h"
-#include "connectioninputparser.h"
+#include "parsercreator.h"
+#include "parser.h"
 #include "labelutils.h"
 #include "displayutils.h"
 
@@ -10,14 +10,13 @@ int main()
 {
     using namespace std;
 
-    ofstream errorStream; // for writing into error.txt
+    ofstream errorStream;       // for writing into error.txt
 
     string connectionsFilename; // connectiondefinitions.csv (for each device it contains connected devices and number of connections)
-    string inputFilename; // connectioninput.csv (contains each connection generated based on connectiondefinitions.csv - user should replace placeholders by filling in the required data)
-    string outputFilename; // labellingtable.csv (contains labelling table generated based on connectioninput.csv)
-    string errorFilename; // error.txt (contains any errors that occured when choosing option 1 or 2)
+    string inputFilename;       // connectioninput.csv (contains each connection generated based on connectiondefinitions.csv - user should replace placeholders by filling in the required data)
+    string outputFilename;      // labellingtable.csv (contains labelling table generated based on connectioninput.csv)
+    string errorFilename;       // error.txt (contains any errors that occured when choosing option 1 or 2)
 
-    /* DETERMINE PATH OF THE FILES AND PROVIDING USER THE AVAILABLE OPTIONS */
     displayVersion();
 
     bool commonFilesSuccessfullyOpened{init(connectionsFilename, inputFilename, outputFilename, errorFilename, errorStream)};
@@ -29,53 +28,55 @@ int main()
         string option;
         getline(cin, option);
 
-        if ("1" == option) /* OPTION 1 + ENTER: READ connectiondefinitions.csv AND HANDLE ANY ERRORS; build connectioninput.csv content (including placeholders) and write it into file */
+        ParserCreator::ParserTypes parserType{ParserCreator::ParserTypes::UNKNOWN};
+        bool displayFurtherInstructions{false};
+
+        if ("1" == option)
         {
-            ifstream inputStream; // for reading from connectiondefinitions.csv
-            ofstream outputStream; // for writing into connectioninput.csv
-
-            bool firstOptionFilesSuccessfullyOpened{enableReadWriteOperations(inputStream, outputStream, connectionsFilename, inputFilename)};
-
-            if (firstOptionFilesSuccessfullyOpened)
-            {
-                ConnectionDefinitionParser connectionDefinitionsParser{&inputStream, &outputStream, &errorStream};
-                const bool c_ParsingErrorsOccurred{connectionDefinitionsParser.parse()};
-
-                if (!c_ParsingErrorsOccurred)
-                {
-                    displaySuccessMessage(inputFilename, true);
-                }
-                else
-                {
-                    displayErrorMessage(connectionsFilename, errorFilename);
-                }
-            }
+            parserType = ParserCreator::ParserTypes::CONNECTION_DEFINITION;
+            displayFurtherInstructions = true;
         }
-        else if ("2" == option) /* OPTION 2 + ENTER: READ connectioninput.csv, CHECK ERRORS and write final output to labellingtable.csv */
+        else if ("2" == option)
         {
-            ifstream inputStream; // for reading from connectioninput.csv
-            ofstream outputStream; //for writing into labellingtable.csv
-
-            bool secondOptionFilesSuccessfullyOpened{enableReadWriteOperations(inputStream, outputStream, inputFilename, outputFilename)};
-
-            if (secondOptionFilesSuccessfullyOpened)
-            {
-                ConnectionInputParser connectionInputParser{&inputStream, &outputStream, &errorStream};
-                const bool c_ParsingErrorsOccurred{connectionInputParser.parse()};
-
-                if (!c_ParsingErrorsOccurred)
-                {
-                    displaySuccessMessage(outputFilename, false);
-                }
-                else
-                {
-                    displayErrorMessage(inputFilename, errorFilename);
-                }
-            }
+            parserType = ParserCreator::ParserTypes::CONNECTION_INPUT;
         }
         else
         {
             displayAbortMessage();
+        }
+
+        if (ParserCreator::ParserTypes::UNKNOWN != parserType)
+        {
+            const string c_InFile{ParserCreator::ParserTypes::CONNECTION_DEFINITION == parserType ? connectionsFilename : inputFilename};
+            const string c_OutFile{ParserCreator::ParserTypes::CONNECTION_DEFINITION == parserType ? inputFilename : outputFilename};
+            ifstream inputStream;
+            ofstream outputStream;
+
+            const bool inOutFilesSuccessfullyOpened{enableReadWriteOperations(inputStream, outputStream, c_InFile, c_OutFile)};
+
+            if (inOutFilesSuccessfullyOpened)
+            {
+                ParserCreator parserCreator;
+                assert(!parserCreator.isParserAlreadyCreated());
+
+                Parser* pParser{parserCreator.createParser(parserType, &inputStream, &outputStream, &errorStream)};
+
+                if (nullptr != pParser)
+                {
+                    const bool c_ParsingErrorsOccurred{pParser->parse()};
+
+                    if (!c_ParsingErrorsOccurred)
+                    {
+                        displaySuccessMessage(c_OutFile, displayFurtherInstructions);
+                    }
+                    else
+                    {
+                        displayErrorMessage(c_InFile, errorFilename);
+                    }
+                }
+
+                delete pParser;
+            }
         }
     }
 
