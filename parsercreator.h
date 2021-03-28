@@ -2,8 +2,11 @@
 #define PARSERCREATOR_H
 
 #include <fstream>
+#include <memory>
 
 class Parser;
+
+using ParserPtr = std::unique_ptr<Parser>;
 
 class ParserCreator
 {
@@ -20,7 +23,7 @@ public:
     ParserCreator(const ParserCreator& parserCreator) = delete;
     ParserCreator& operator=(const ParserCreator&) = delete;
 
-    Parser* createParser(ParserTypes parserType, std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream);
+    ParserPtr createParser(ParserTypes parserType, std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream);
 
     bool isParserAlreadyCreated() const;
 

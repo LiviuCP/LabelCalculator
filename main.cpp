@@ -59,7 +59,7 @@ int main()
                 ParserCreator parserCreator;
                 assert(!parserCreator.isParserAlreadyCreated());
 
-                Parser* pParser{parserCreator.createParser(parserType, &inputStream, &outputStream, &errorStream)};
+                ParserPtr pParser{parserCreator.createParser(parserType, &inputStream, &outputStream, &errorStream)};
 
                 if (nullptr != pParser)
                 {
@@ -74,8 +74,6 @@ int main()
                         displayErrorMessage(c_InFile, errorFilename);
                     }
                 }
-
-                delete pParser;
             }
         }
     }

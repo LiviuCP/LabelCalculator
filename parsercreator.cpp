@@ -7,19 +7,19 @@ ParserCreator::ParserCreator()
 {
 }
 
-Parser* ParserCreator::createParser(ParserCreator::ParserTypes parserType, std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream)
+ParserPtr ParserCreator::createParser(ParserCreator::ParserTypes parserType, std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream)
 {
-    Parser* pCreatedParser{nullptr};
+    ParserPtr pCreatedParser{nullptr};
 
     if (ParserTypes::UNKNOWN == mCreatedParserType) // the parser creator should create exactly ONE parser
     {
         if (ParserTypes::CONNECTION_DEFINITION == parserType)
         {
-            pCreatedParser = new ConnectionDefinitionParser{pInputStream, pOutputStream, pErrorStream};
+            pCreatedParser = std::make_unique<ConnectionDefinitionParser>(pInputStream, pOutputStream, pErrorStream);
         }
         else if (ParserTypes::CONNECTION_INPUT == parserType)
         {
-            pCreatedParser = new ConnectionInputParser{pInputStream, pOutputStream, pErrorStream};
+            pCreatedParser = std::make_unique<ConnectionInputParser>(pInputStream, pOutputStream, pErrorStream);
         }
         else
         {
