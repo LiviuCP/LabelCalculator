@@ -3,6 +3,7 @@
 
 #include <fstream>
 #include <vector>
+#include <memory>
 
 #include "labelutils.h"
 
@@ -50,5 +51,7 @@ protected:
 
     static const int scRequiredNrOfInputDataFields; // number of fields that should be filled in connectioninput.csv for EACH device (not used fields can be filled in with '-')
 };
+
+using DevicePtr = std::shared_ptr<Device>;
 
 #endif // DEVICE_H

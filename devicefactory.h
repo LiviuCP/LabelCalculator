@@ -4,7 +4,7 @@
 #include <string>
 #include <set>
 
-class Device;
+#include "device.h"
 
 class DeviceFactory
 {
@@ -16,7 +16,7 @@ public:
     /* This function is responsible for creating the actual device objects which are then used for generating the connection output data (descriptions and labels)
        It implements the factory design pattern and returns a null pointer if the device cannot be created (unknown device)
     */
-    Device* createDevice(const std::string& deviceType, bool isSourceDevice);
+    DevicePtr createDevice(const std::string& deviceType, bool isSourceDevice);
 
     int getCreatedDevicesCount() const;
 

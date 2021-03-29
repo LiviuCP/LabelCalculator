@@ -13,8 +13,6 @@ public:
     ConnectionInputParser(const ConnectionInputParser&) = delete;
     ConnectionInputParser& operator=(const ConnectionInputParser&) = delete;
 
-    ~ConnectionInputParser();
-
 protected:
     virtual void _readInput() override;
     virtual bool _parseInput() override;
@@ -27,12 +25,12 @@ protected:
     */
     static void _buildConnectionEntry(std::string& entry,
                                       int& entryNumber,
-                                      const Device* const pFirstDevice,
-                                      const Device* const pSecondDevice,
+                                      const DevicePtr pFirstDevice,
+                                      const DevicePtr pSecondDevice,
                                       const std::string& cablePartNumber);
 
     /* all created Device objects (except the ones used for checking device validity which are destroyed immediately) */
-    std::vector<Device*> mDevices;
+    std::vector<DevicePtr> mDevices;
 
     /* the cable part number of each connection to be stored here */
     std::vector<std::string> mCablePartNumbersEntries;

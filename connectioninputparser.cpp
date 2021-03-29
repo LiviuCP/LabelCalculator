@@ -10,19 +10,6 @@ ConnectionInputParser::ConnectionInputParser(std::ifstream* const pInputStream, 
 {
 }
 
-ConnectionInputParser::~ConnectionInputParser()
-{
-    //TODO: implement smart pointers
-    for(auto& pDevice : mDevices)
-    {
-        if (nullptr != pDevice)
-        {
-            delete pDevice;
-            pDevice = nullptr;
-        }
-    }
-}
-
 // It is assumed that the user has already filled in the placeholders with useful connection data.
 void ConnectionInputParser::_readInput()
 {
@@ -101,7 +88,7 @@ bool ConnectionInputParser::_parseInput()
                 continue;
             }
 
-            Device* pDevice{nullptr};
+            DevicePtr pDevice{nullptr};
 
             std::string deviceType;
             currentPosition = readDataField(mInputData[rowIndex], deviceType, currentPosition);
@@ -213,8 +200,8 @@ void ConnectionInputParser::_reset()
 
 void ConnectionInputParser::_buildConnectionEntry(std::string& entry,
                                                   int& entryNumber,
-                                                  const Device* const pFirstDevice,
-                                                  const Device* const pSecondDevice,
+                                                  const DevicePtr pFirstDevice,
+                                                  const DevicePtr pSecondDevice,
                                                   const std::string& cablePartNumber)
 {
     std::stringstream str;

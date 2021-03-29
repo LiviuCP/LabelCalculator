@@ -1,4 +1,3 @@
-#include "device.h"
 #include "datadevice.h"
 #include "powerdevice.h"
 #include "devicefactory.h"
@@ -27,66 +26,66 @@ DeviceFactory::DeviceFactory()
 {
 }
 
-Device* DeviceFactory::createDevice(const std::string& deviceType, bool isSourceDevice)
+DevicePtr DeviceFactory::createDevice(const std::string& deviceType, bool isSourceDevice)
 {
-    Device* device{nullptr};
+    DevicePtr pDevice{nullptr};
 
     // naming convention: for power connections the underscore is used at the beginning of the device type
     if ("_pdu" == deviceType)
     {
-        device = new PDU{isSourceDevice};
+        pDevice = std::make_shared<PDU>(isSourceDevice);
     }
     else if ("_ext" == deviceType)
     {
-        device = new ExtensionBar{isSourceDevice};
+        pDevice = std::make_shared<ExtensionBar>(isSourceDevice);
     }
     else if ("_ups" == deviceType)
     {
-        device = new UPS{isSourceDevice};
+        pDevice = std::make_shared<UPS>(isSourceDevice);
     }
     else if ("_ps" == deviceType)
     {
-        device = new PowerSupply{isSourceDevice};
+        pDevice = std::make_shared<PowerSupply>(isSourceDevice);
     }
     else if ("lan" == deviceType)
     {
-        device = new LANSwitch{isSourceDevice};
+        pDevice = std::make_shared<LANSwitch>(isSourceDevice);
     }
     else if ("san"== deviceType)
     {
-        device = new SANSwitch{isSourceDevice};
+        pDevice = std::make_shared<SANSwitch>(isSourceDevice);
     }
     else if ("ib" == deviceType)
     {
-        device = new InfinibandSwitch{isSourceDevice};
+        pDevice = std::make_shared<InfinibandSwitch>(isSourceDevice);
     }
     else if ("kvm" == deviceType)
     {
-        device = new KVMSwitch{isSourceDevice};
+        pDevice = std::make_shared<KVMSwitch>(isSourceDevice);
     }
     else if ("svr" == deviceType)
     {
-        device = new Server{isSourceDevice};
+        pDevice = std::make_shared<Server>(isSourceDevice);
     }
     else if ("sto" == deviceType)
     {
-        device = new Storage{isSourceDevice};
+        pDevice = std::make_shared<Storage>(isSourceDevice);
     }
     else if ("bld" == deviceType)
     {
-        device = new BladeServer{isSourceDevice};
+        pDevice = std::make_shared<BladeServer>(isSourceDevice);
     }
     else
     {
         // no action, defensive programming
     }
 
-    if (nullptr != device)
+    if (nullptr != pDevice)
     {
         ++mCreatedDevicesCount;
     }
 
-    return device;
+    return pDevice;
 }
 
 int DeviceFactory::getCreatedDevicesCount() const
