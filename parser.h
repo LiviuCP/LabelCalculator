@@ -4,6 +4,7 @@
 #include <fstream>
 #include <string>
 #include <vector>
+#include <memory>
 
 /* This is a generic parser class for .csv files.
    The content of an input .csv file is read, parsed and the resulting output written to an output .csv file.
@@ -51,5 +52,7 @@ protected:
     /* determines if the parser state needs to be reset before executing a parsing session */
     bool mIsResetRequired;
 };
+
+using ParserPtr = std::unique_ptr<Parser>;
 
 #endif // PARSER_H

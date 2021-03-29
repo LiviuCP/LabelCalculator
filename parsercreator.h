@@ -2,11 +2,8 @@
 #define PARSERCREATOR_H
 
 #include <fstream>
-#include <memory>
 
-class Parser;
-
-using ParserPtr = std::unique_ptr<Parser>;
+#include "parser.h"
 
 class ParserCreator
 {
