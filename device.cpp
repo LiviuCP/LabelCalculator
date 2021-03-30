@@ -1,6 +1,5 @@
 #include <cassert>
 
-#include "error.h"
 #include "device.h"
 
 const int Device::scRequiredNrOfInputDataFields{4};
@@ -20,9 +19,9 @@ Device::~Device()
 {
 }
 
-std::vector<Error*> Device::parseInputData(const std::string& input, int& pos, std::ofstream& errorStream)
+std::vector<ErrorPtr> Device::parseInputData(const std::string& input, int& pos, std::ofstream& errorStream)
 {
-    std::vector<Error*> parsingErrors;
+    std::vector<ErrorPtr> parsingErrors;
 
     int totalParsedCharsCount{0}; // current total number of parsed input characters for the device (excluding comma)
     int position{pos}; // position in the input string to be stored in this temporary variable as it should only be written back to if error 4 does not occur
@@ -30,14 +29,14 @@ std::vector<Error*> Device::parseInputData(const std::string& input, int& pos, s
 
     fieldSizes.resize(scRequiredNrOfInputDataFields);
 
-    Error* lastError{nullptr};
+    ErrorPtr lastError{nullptr};
 
     for (int fieldNumber{0}; fieldNumber < scRequiredNrOfInputDataFields; ++fieldNumber) //cat timp sunt inca substringuri de citit din sirul de intrare...
     {
         // check if characters are available for current (required) field
         if (-1 == position)
         {
-            lastError = new FewerCellsError{errorStream};
+            lastError = std::make_shared<FewerCellsError>(errorStream);
             lastError->setRow(mRow);
             lastError->setColumn(mColumn);
             parsingErrors.push_back(lastError);
@@ -50,7 +49,7 @@ std::vector<Error*> Device::parseInputData(const std::string& input, int& pos, s
 
         if (0 == fieldSizes[fieldNumber])
         {
-            lastError = new EmptyCellError{errorStream};
+            lastError = std::make_shared<EmptyCellError>(errorStream);
             lastError->setRow(mRow);
             lastError->setColumn(mColumn);
             parsingErrors.push_back(lastError);
@@ -60,13 +59,13 @@ std::vector<Error*> Device::parseInputData(const std::string& input, int& pos, s
         totalParsedCharsCount += fieldSizes[fieldNumber]; // comma (,) is not taken into consideration when updating the number of parsed characters
     }
 
-    if (nullptr == dynamic_cast<FewerCellsError*>(lastError))
+    if (nullptr == dynamic_cast<FewerCellsError*>(lastError.get()))
     {
         // check if the total number of characters from the parsed fields exceed the device-specific maximum allowed count (e.g. 8 chars for the PDU class)
         if (totalParsedCharsCount > mMaxAllowedNrOfChars)
         {
             mDeltaNrOfChars = totalParsedCharsCount - mMaxAllowedNrOfChars;
-            lastError = new ExceedingCharsCountError{errorStream, mMaxAllowedNrOfChars, mDeltaNrOfChars, mIsSourceDevice};
+            lastError = std::make_shared<ExceedingCharsCountError>(errorStream, mMaxAllowedNrOfChars, mDeltaNrOfChars, mIsSourceDevice);
             lastError->setRow(mRow);
             lastError->setColumn(mColumn);
             parsingErrors.push_back(lastError);

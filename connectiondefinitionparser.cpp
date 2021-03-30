@@ -46,7 +46,7 @@ void ConnectionDefinitionParser::_readInput()
 
 bool ConnectionDefinitionParser::_parseInput()
 {
-    std::vector<Error*> parsingErrors;
+    std::vector<ErrorPtr> parsingErrors;
 
     const int c_ConnectionDefinitionRowsCount{static_cast<int>(mInputData.size())};
 
@@ -70,7 +70,7 @@ bool ConnectionDefinitionParser::_parseInput()
 
         if (!DeviceFactory::isDeviceTypeValid(currentCell))
         {
-            Error* pError{new UnknownDeviceError{*mpErrorStream}};
+            ErrorPtr pError{std::make_shared<UnknownDeviceError>(*mpErrorStream)};
             pError->setRow(rowIndex + 2); // setting row index of the current cell (+2 deoarece in Excel (.csv) the rows start at 1 and first line is ignored);
             pError->setColumn(columnNumber); // setting column index for exact error localization
 
@@ -106,27 +106,27 @@ bool ConnectionDefinitionParser::_parseInput()
             int nrOfconnections;
             const bool isConnectionFormattingInvalid{!_parseConnectionFormatting(currentCell, secondDevice, nrOfconnections)};
 
-            Error* pError{nullptr};
+            ErrorPtr pError{nullptr};
 
             if(isConnectionFormattingInvalid) // checking if the connection format is correct (e.g. 20/3: 3 connections to device located at U20)
             {
-                pError = new WrongFormatError{*mpErrorStream};
+                pError = std::make_shared<WrongFormatError>(*mpErrorStream);
             }
             else if (secondDevice <= 0 || secondDevice > c_MaxNrOfRackUnits) // checking if the device is in the accepted U interval within rack
             {
-                pError = new WrongUNumberError{*mpErrorStream};
+                pError = std::make_shared<WrongUNumberError>(*mpErrorStream);
             }
             else if (c_NoDevice == mMapping[secondDevice - 1]) // check if the second device is actually placed within rack (contained in mapping table)
             {
-                pError = new NoDevicePresentError{*mpErrorStream};
+                pError = std::make_shared<NoDevicePresentError>(*mpErrorStream);
             }
             else if (c_MaxNrOfRackUnits - rowIndex == secondDevice) // connection of a device to itself (connection loop) is not allowed
             {
-                pError = new DeviceConnectedToItselfError{*mpErrorStream};
+                pError = std::make_shared<DeviceConnectedToItselfError>(*mpErrorStream);
             }
             else if (0 == nrOfconnections) // if the devices are marked as connected there should be minimum 1 connection between them
             {
-                pError = new NoConnectionsError{*mpErrorStream};
+                pError = std::make_shared<NoConnectionsError>(*mpErrorStream);
             }
             else
             {
@@ -150,8 +150,6 @@ bool ConnectionDefinitionParser::_parseInput()
     for (auto& error: parsingErrors)
     {
         error->execute();
-        delete error;
-        error = nullptr;
     }
 
     return c_ErrorsOccurred;

@@ -36,7 +36,7 @@ void ConnectionInputParser::_readInput()
 
 bool ConnectionInputParser::_parseInput()
 {
-    std::vector<Error*> allParsingErrors; // gather all parsing errors here and write them to output file once parsing is complete (if any errors)
+    std::vector<ErrorPtr> allParsingErrors; // gather all parsing errors here and write them to output file once parsing is complete (if any errors)
 
     DeviceFactory deviceFactory;
 
@@ -59,7 +59,7 @@ bool ConnectionInputParser::_parseInput()
             // total number of csv cells from the connection row (cable + 2 devices) is less than required (parsing of the row should stop at once)
             if (currentPosition == c_InputRowsLength || -1 == currentPosition)
             {
-                Error* pFewerCellsError{new FewerCellsError{*mpErrorStream}};
+                ErrorPtr pFewerCellsError{std::make_shared<FewerCellsError>(*mpErrorStream)};
                 pFewerCellsError->setRow(rowIndex + 2);
                 pFewerCellsError->setColumn(columnNumber);
                 allParsingErrors.push_back(pFewerCellsError);
@@ -107,16 +107,17 @@ bool ConnectionInputParser::_parseInput()
                     pDevice->setColumn(columnNumber);
                     mDevices.push_back(pDevice);
 
-                    std::vector<Error*> deviceParsingErrors{pDevice->parseInputData(mInputData[rowIndex], currentPosition, *mpErrorStream)};
+                    std::vector<ErrorPtr> deviceParsingErrors{pDevice->parseInputData(mInputData[rowIndex], currentPosition, *mpErrorStream)};
 
                     bool shouldStopConnectionParsing{false};
 
-                    for(auto pError : deviceParsingErrors)
+                    for(const auto& pError : deviceParsingErrors)
                     {
-                        if (nullptr != pError)
+                        if (nullptr != pError.get())
                         {
                             // the remaining row part (second device) should no longer be parsed if there are fewer cells (in total) than necessary
-                            if (nullptr != dynamic_cast<FewerCellsError*>(pError) && c_MaxNrOfDevicesPerRow == devicesStillNotParsedCount)
+                            if (nullptr != dynamic_cast<FewerCellsError*>(pError.get()) &&
+                                c_MaxNrOfDevicesPerRow == devicesStillNotParsedCount)
                             {
                                 shouldStopConnectionParsing = true;
                             }
@@ -135,7 +136,7 @@ bool ConnectionInputParser::_parseInput()
                 }
                 else
                 {
-                    Error* pUnknownDeviceError{new UnknownDeviceError{*mpErrorStream}};
+                    ErrorPtr pUnknownDeviceError{std::make_shared<UnknownDeviceError>(*mpErrorStream)};
                     pUnknownDeviceError->setRow(rowIndex + 2);
                     pUnknownDeviceError->setColumn(columnNumber);
                     allParsingErrors.push_back(pUnknownDeviceError);
@@ -152,8 +153,6 @@ bool ConnectionInputParser::_parseInput()
     for(auto& pError : allParsingErrors)
     {
         pError->execute();
-        delete pError;
-        pError = nullptr;
     }
 
     return c_ErrorsOccurred;

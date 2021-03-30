@@ -2,6 +2,7 @@
 #define ERROR_H
 
 #include <fstream>
+#include <memory>
 
 enum class ErrorCode
 {
@@ -46,6 +47,8 @@ public:
 
     void execute();
 };
+
+using ErrorPtr = std::shared_ptr<Error>;
 
 class ExceedingCharsCountError : public Error
 {
