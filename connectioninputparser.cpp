@@ -107,7 +107,8 @@ bool ConnectionInputParser::_parseInput()
                     pDevice->setColumn(columnNumber);
                     mDevices.push_back(pDevice);
 
-                    std::vector<ErrorPtr> deviceParsingErrors{pDevice->parseInputData(mInputData[rowIndex], currentPosition, *mpErrorStream)};
+                    std::vector<ErrorPtr> deviceParsingErrors;
+                    currentPosition = pDevice->parseInputData(mInputData[rowIndex], currentPosition, deviceParsingErrors, *mpErrorStream);
 
                     bool shouldStopConnectionParsing{false};
 

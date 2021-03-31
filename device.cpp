@@ -19,44 +19,43 @@ Device::~Device()
 {
 }
 
-std::vector<ErrorPtr> Device::parseInputData(const std::string& input, int& pos, std::ofstream& errorStream)
+int Device::parseInputData(const std::string& input, const int initialPosition, std::vector<ErrorPtr>& parsingErrors, std::ofstream& errorStream)
 {
-    std::vector<ErrorPtr> parsingErrors;
-
+    int currentPosition{initialPosition};
     int totalParsedCharsCount{0}; // current total number of parsed input characters for the device (excluding comma)
-    int position{pos}; // position in the input string to be stored in this temporary variable as it should only be written back to if error 4 does not occur
     std::vector<int> fieldSizes; // stores the size of each input field read for the device
-
-    fieldSizes.resize(scRequiredNrOfInputDataFields);
-
     ErrorPtr lastError{nullptr};
+
+    parsingErrors.clear();
+    fieldSizes.resize(scRequiredNrOfInputDataFields);
 
     for (int fieldNumber{0}; fieldNumber < scRequiredNrOfInputDataFields; ++fieldNumber) //cat timp sunt inca substringuri de citit din sirul de intrare...
     {
         // check if characters are available for current (required) field
-        if (-1 == position)
+        if (-1 != currentPosition)
+        {
+            currentPosition = readDataField(input, *mInputData[fieldNumber], currentPosition);
+            fieldSizes[fieldNumber] = mInputData[fieldNumber]->size();
+
+            if (0 == fieldSizes[fieldNumber])
+            {
+                lastError = std::make_shared<EmptyCellError>(errorStream);
+                lastError->setRow(mRow);
+                lastError->setColumn(mColumn);
+                parsingErrors.push_back(lastError);
+            }
+
+            ++mColumn;
+            totalParsedCharsCount += fieldSizes[fieldNumber]; // comma (,) is not taken into consideration when updating the number of parsed characters
+        }
+        else
         {
             lastError = std::make_shared<FewerCellsError>(errorStream);
             lastError->setRow(mRow);
             lastError->setColumn(mColumn);
             parsingErrors.push_back(lastError);
-            position = pos; //TODO: check if this instruction is necessary (or should it be pos = position???)
             break;
         }
-
-        position = readDataField(input, *mInputData[fieldNumber], position);
-        fieldSizes[fieldNumber] = mInputData[fieldNumber]->size();
-
-        if (0 == fieldSizes[fieldNumber])
-        {
-            lastError = std::make_shared<EmptyCellError>(errorStream);
-            lastError->setRow(mRow);
-            lastError->setColumn(mColumn);
-            parsingErrors.push_back(lastError);
-        }
-
-        ++mColumn;
-        totalParsedCharsCount += fieldSizes[fieldNumber]; // comma (,) is not taken into consideration when updating the number of parsed characters
     }
 
     if (nullptr == dynamic_cast<FewerCellsError*>(lastError.get()))
@@ -70,11 +69,9 @@ std::vector<ErrorPtr> Device::parseInputData(const std::string& input, int& pos,
             lastError->setColumn(mColumn);
             parsingErrors.push_back(lastError);
         }
-
-        pos = position;
     }
 
-    return parsingErrors;
+    return currentPosition;
 }
 
 void Device::writeDescriptionAndLabel(std::string& out) const
