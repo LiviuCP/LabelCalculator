@@ -6,6 +6,8 @@
 #include <vector>
 #include <memory>
 
+#include "error.h"
+
 /* This is a generic parser class for .csv files.
    The content of an input .csv file is read, parsed and the resulting output written to an output .csv file.
    If errors occur they are being logged to an error file. In this case the output file stays empty.
@@ -35,6 +37,15 @@ protected:
     */
     virtual void _reset();
 
+    /* Used for storing locally generated errors
+       Error location is setup at error storing point
+    */
+    virtual void _storeParsingErrorAndLocation(ErrorPtr pError, const int rowNumber, const int columnNumber);
+
+    /* Used for logging all parsing errors to file
+    */
+    virtual bool _logParsingErrorsToFile();
+
     /* file streams used by parser, each one should correspond to a file that had been previously correctly opened */
     std::ifstream* const mpInputStream;
     std::ofstream* const mpOutputStream;
@@ -51,6 +62,9 @@ protected:
 
     /* determines if the parser state needs to be reset before executing a parsing session */
     bool mIsResetRequired;
+
+    /* gather all parsing errors here and write them to output file once parsing is complete (if any errors) */
+    std::vector<ErrorPtr> mParsingErrors;
 };
 
 using ParserPtr = std::unique_ptr<Parser>;

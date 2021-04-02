@@ -53,3 +53,28 @@ void Parser::_reset()
     mInputData.clear();
     mOutputData.clear();
 }
+
+void Parser::_storeParsingErrorAndLocation(ErrorPtr pError, const int rowNumber, const int columnNumber)
+{
+    if (nullptr != pError)
+    {
+        pError->setRow(rowNumber);
+        pError->setColumn(columnNumber);
+        mParsingErrors.push_back(pError);
+    }
+}
+
+bool Parser::_logParsingErrorsToFile()
+{
+    const bool c_ParsingErrorsOccurred{mParsingErrors.size() > 0};
+
+    if (c_ParsingErrorsOccurred)
+    {
+        for(auto& pError : mParsingErrors)
+        {
+            pError->execute();
+        }
+    }
+
+    return c_ParsingErrorsOccurred;
+}

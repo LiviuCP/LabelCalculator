@@ -2,7 +2,6 @@
 #include <cassert>
 
 #include "devicefactory.h"
-#include "error.h"
 #include "labelutils.h"
 #include "connectiondefinitionparser.h"
 
@@ -46,8 +45,6 @@ void ConnectionDefinitionParser::_readInput()
 
 bool ConnectionDefinitionParser::_parseInput()
 {
-    std::vector<ErrorPtr> parsingErrors;
-
     const int c_ConnectionDefinitionRowsCount{static_cast<int>(mInputData.size())};
 
     for (int rowIndex{0}; rowIndex < c_ConnectionDefinitionRowsCount; ++rowIndex)
@@ -71,11 +68,8 @@ bool ConnectionDefinitionParser::_parseInput()
         if (!DeviceFactory::isDeviceTypeValid(currentCell))
         {
             ErrorPtr pError{std::make_shared<UnknownDeviceError>(*mpErrorStream)};
-            pError->setRow(rowIndex + 2); // setting row index of the current cell (+2 deoarece in Excel (.csv) the rows start at 1 and first line is ignored);
-            pError->setColumn(columnNumber); // setting column index for exact error localization
 
-            parsingErrors.push_back(pError);
-
+            _storeParsingErrorAndLocation(pError, rowIndex + c_RowNumberOffset, columnNumber);
             continue;
         }
 
@@ -138,19 +132,12 @@ bool ConnectionDefinitionParser::_parseInput()
 
             if (nullptr != pError)
             {
-                pError->setRow(rowIndex + 2);
-                pError->setColumn(columnNumber);
-                parsingErrors.push_back(pError);
+                _storeParsingErrorAndLocation(pError, rowIndex + c_RowNumberOffset, columnNumber);
             }
         }
     }
 
-    const bool c_ErrorsOccurred{parsingErrors.size() > 0};
-
-    for (auto& error: parsingErrors)
-    {
-        error->execute();
-    }
+    const bool c_ErrorsOccurred{_logParsingErrorsToFile()};
 
     return c_ErrorsOccurred;
 }

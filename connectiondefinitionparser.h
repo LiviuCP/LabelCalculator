@@ -5,7 +5,7 @@
 
 #include "parser.h"
 
-class ConnectionDefinitionParser : public Parser
+class ConnectionDefinitionParser final : public Parser
 {
 public:
     ConnectionDefinitionParser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream);
@@ -21,6 +21,7 @@ protected:
 
     void _reset() override;
 
+private:
     /* This function checks the format of the connection of the first device from each row of the connectiondefinitions.csv file to another device from the row
        If the format is correct (true returned) it will also fill in the two arguments with the U placement of the other device and the number of connections between the two
     */
