@@ -9,6 +9,7 @@ bool DeviceFactory::isDeviceTypeValid(const std::string& deviceType)
 }
 const std::set<std::string> DeviceFactory::scDeviceTypes
 {
+    "_pdu",
     "_ext",
     "_ups",
     "_ps" ,
