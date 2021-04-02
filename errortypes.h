@@ -3,7 +3,7 @@
 
 #include "error.h"
 
-class EmptyCellError : public Error
+class EmptyCellError final : public Error
 {
 public:
     EmptyCellError(std::ofstream& errorStream);
@@ -11,21 +11,21 @@ public:
     void execute();
 };
 
-class ExceedingCharsCountError : public Error
+class ExceedingCharsCountError final : public Error
 {
 public:
     ExceedingCharsCountError(std::ofstream& errorStream, int maxAllowedNrOfChars, int deltaNrOfChars, bool isSourceDevice);
 
     void execute();
 
-protected:
+private:
     int mMaxAllowedNrOfChars;
     int mDeltaNrOfChars;
     bool mIsSourceDevice;
 };
 
 // unknown device entered in connection definitions/input file
-class UnknownDeviceError : public Error
+class UnknownDeviceError final : public Error
 {
 public:
     UnknownDeviceError(std::ofstream& errorStream);
@@ -34,7 +34,7 @@ public:
 };
 
 // fewer input cells than required (some are empty) in connection input file
-class FewerCellsError : public Error
+class FewerCellsError final : public Error
 {
 public:
     FewerCellsError(std::ofstream& errorStream);
@@ -43,7 +43,7 @@ public:
 };
 
 // wrong connection format in connection definitions file
-class WrongFormatError : public Error
+class WrongFormatError final : public Error
 {
 public:
     WrongFormatError(std::ofstream& errorStream);
@@ -52,7 +52,7 @@ public:
 };
 
 // invalid device placement U number in connection definitions file
-class WrongUNumberError : public Error
+class WrongUNumberError final : public Error
 {
 public:
     WrongUNumberError(std::ofstream& errorStream);
@@ -61,7 +61,7 @@ public:
 };
 
 // device mentioned in connection definitions file not contained in the mapping table (connection to nothing)
-class NoDevicePresentError : public Error
+class NoDevicePresentError final : public Error
 {
 public:
     NoDevicePresentError(std::ofstream& errorStream);
@@ -70,7 +70,7 @@ public:
 };
 
 // device mentioned in connection definitions file is connected to itself
-class DeviceConnectedToItselfError : public Error
+class DeviceConnectedToItselfError final : public Error
 {
 public:
     DeviceConnectedToItselfError(std::ofstream& errorStream);
@@ -79,7 +79,7 @@ public:
 };
 
 // device marked as connected, number of connections mentioned in connection definitions file is 0
-class NoConnectionsError : public Error
+class NoConnectionsError final : public Error
 {
 public:
     NoConnectionsError(std::ofstream& errorStream);
