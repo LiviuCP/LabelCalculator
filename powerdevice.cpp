@@ -141,17 +141,17 @@ PowerSupply::PowerSupply(bool isSourceDevice)
     mInputData.resize(Device::scRequiredNrOfInputDataFields);
 
     mInputData[0] = &mDeviceName;
-    mInputData[1] = &mPowerSupplyNumber;
+    mInputData[1] = &mPortNumber; // port number is power supply number (a power supply normally has one port)
     mInputData[2] = &mPlaceholder1;
     mInputData[3] = &mPlaceholder2;
 }
 
 void PowerSupply::buildDescriptionText()
 {
-    mDescription = "Device placed at U" + mDeviceName + " - power supply " + mPowerSupplyNumber;
+    mDescription = "Device placed at U" + mDeviceName + " - power supply " + mPortNumber;
 }
 
 void PowerSupply::buildLabelText()
 {
-    mLabel = "U" + mDeviceName + "_PS" + mPowerSupplyNumber;
+    mLabel = "U" + mDeviceName + "_PS" + mPortNumber;
 }

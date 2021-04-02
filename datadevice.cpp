@@ -220,13 +220,13 @@ Storage::Storage(bool isSourceDevice)
 
     mInputData[0] = &mDeviceName;
     mInputData[1] = &mControllerNr;
-    mInputData[2] = &mPortNr;
+    mInputData[2] = &mPortNumber;
     mInputData[3] = &mPlaceholder;
 }
 
 void Storage::buildDescriptionText()
 {
-    const bool c_IsManagementPort{"m" == mPortNr || "M" == mPortNr};
+    const bool c_IsManagementPort{"m" == mPortNumber || "M" == mPortNumber};
     const bool c_IsManagementController{"m" == mControllerNr || "M" == mControllerNr};
 
     if (c_IsManagementController && c_IsManagementPort)
@@ -239,13 +239,13 @@ void Storage::buildDescriptionText()
     }
     else // general case: data port
     {
-        mDescription = "Storage device placed at U" + mDeviceName + " - controller " + mControllerNr + " - port " + mPortNr;
+        mDescription = "Storage device placed at U" + mDeviceName + " - controller " + mControllerNr + " - port " + mPortNumber;
     }
 }
 
 void Storage::buildLabelText()
 {
-    const bool c_IsManagementPort{"m" == mPortNr || "M" == mPortNr};
+    const bool c_IsManagementPort{"m" == mPortNumber || "M" == mPortNumber};
     const bool c_IsManagementController{"m" == mControllerNr || "M" == mControllerNr};
 
     if (c_IsManagementController && c_IsManagementPort)
@@ -258,7 +258,7 @@ void Storage::buildLabelText()
     }
     else
     {
-        mLabel = "U" + mDeviceName + "_C" + mControllerNr + "_P" + mPortNr;
+        mLabel = "U" + mDeviceName + "_C" + mControllerNr + "_P" + mPortNumber;
     }
 }
 

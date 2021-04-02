@@ -16,7 +16,6 @@ public:
     void buildLabelText();
 
 protected:
-    std::string mPortNumber;
     std::string mPlaceholder1;
     std::string mPlaceholder2;
 };
@@ -34,7 +33,6 @@ public:
     void buildLabelText();
 
 protected:
-    std::string mPortNumber;
     std::string mPlaceholder1;
     std::string mPlaceholder2;
 };
@@ -52,7 +50,6 @@ public:
     void buildLabelText();
 
 protected:
-    std::string mPortNumber;
     std::string mPlaceholder1;
     std::string mPlaceholder2;
 };
@@ -70,7 +67,6 @@ public:
     void buildLabelText();
 
 protected:
-    std::string mPortNumber;
     std::string mPlaceholder1;
     std::string mPlaceholder2;
 };
@@ -89,7 +85,6 @@ public:
 
 protected:
     std::string mPortType;
-    std::string mPortNumber;
     std::string mPlaceholder;
 };
 
@@ -107,7 +102,6 @@ public:
 
 protected:
     std::string mControllerNr; // can be the controller number (for FC storage) or IO module number (for JBODs)
-    std::string mPortNr;
     std::string mPlaceholder;
 };
 
@@ -126,7 +120,6 @@ public:
 protected:
     std::string mModuleType; // blade system module type: interconnect, management module etc.
     std::string mModuleNumber; // data module number
-    std::string mPortNumber;
 };
 
 #endif // DATADEVICE_H

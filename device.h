@@ -37,8 +37,11 @@ public:
 protected:
     std::string mDeviceName;  // device name (e.g. for PDU-A the name is "A")
     std::string mDeviceType;  // device type (ex: "pdu" for basic PDUs without load segments)
+    std::string mPortNumber;  // power or data port number that should be mentioned on the cable label
+
     std::string mDescription; // text to be written in the source (first device) / destination (second device) field of the labelling table (device description)
     std::string mLabel;       // text to be written in the source (first device) / destination (second device) field of the labelling table (device label)
+
     int mRow;            // input .csv row from which the error originated
     int mColumn;         // input .csv column from which the error originated
 
