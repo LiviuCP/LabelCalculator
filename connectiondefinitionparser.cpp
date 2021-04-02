@@ -3,6 +3,7 @@
 
 #include "devicefactory.h"
 #include "labelutils.h"
+#include "errortypes.h"
 #include "connectiondefinitionparser.h"
 
 const std::map<std::string, std::string> ConnectionDefinitionParser::scConnectionInputPlaceholders

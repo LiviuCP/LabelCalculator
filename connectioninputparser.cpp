@@ -2,6 +2,7 @@
 #include <cassert>
 
 #include "devicefactory.h"
+#include "errortypes.h"
 #include "connectioninputparser.h"
 
 ConnectionInputParser::ConnectionInputParser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream)

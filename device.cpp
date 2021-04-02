@@ -1,5 +1,6 @@
 #include <cassert>
 
+#include "errortypes.h"
 #include "device.h"
 
 const int Device::scRequiredNrOfInputDataFields{4};

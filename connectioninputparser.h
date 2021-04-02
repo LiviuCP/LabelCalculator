@@ -1,8 +1,8 @@
 #ifndef CONNECTIONINPUTPARSER_H
 #define CONNECTIONINPUTPARSER_H
 
-#include "parser.h"
 #include "device.h"
+#include "parser.h"
 
 class ConnectionInputParser final : public Parser
 {

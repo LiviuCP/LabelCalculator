@@ -56,6 +56,20 @@ static const std::map<std::string, int> c_MaxAllowedNrOfChars
     {"bld", 7}
 };
 
+enum class ErrorCode
+{
+    EMPTY_CELL = 1,
+    MAX_CHARS_EXCEEDED,
+    UNKNOWN_DEVICE,
+    FEWER_CELLS,
+    WRONG_CONNECTION_FORMAT,
+    PLACEMENT_OUT_OF_RANGE,
+    NO_DEVICE_PLACED_IN_POSITION,
+    DEVICE_CONNECTED_TO_ITSELF,
+    NULL_NR_OF_CONNECTIONS,
+    ErrorCodesCount
+};
+
 /* *FUNCTIONS* */
 
 /* This function reads a substring starting with index until reaching a comma character (end of .csv cell) or the string has no more characters

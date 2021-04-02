@@ -11,6 +11,7 @@ SOURCES += \
         devicefactory.cpp \
         displayutils.cpp \
         error.cpp \
+        errortypes.cpp \
         labelutils.cpp \
         main.cpp \
         parser.cpp \
@@ -25,6 +26,7 @@ HEADERS += \
     devicefactory.h \
     displayutils.h \
     error.h \
+    errortypes.h \
     labelutils.h \
     parser.h \
     parsercreator.h \
