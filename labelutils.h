@@ -10,7 +10,7 @@
 
 static constexpr int c_MaxNrOfRackUnits{50};
 static constexpr int c_RowNumberOffset{2}; // offset used for calculating the row number based on payload index (header row is ignored and row numbering starts at 1)
-static constexpr int c_MaxDevicesPerConnectionInputRow{2};
+static constexpr int c_DevicesPerConnectionInputRowCount{2};
 
 static const std::string c_NoDevice{"NoDevice"}; // no device placed in the rack U position
 static const std::string c_CablePartNumberPlaceholder{"CBL_PART_NR"};

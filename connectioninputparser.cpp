@@ -51,7 +51,7 @@ bool ConnectionInputParser::_parseInput()
 
         std::string cablePartNumber; // stores the cable part number written on previous row
 
-        mRowDevicesStillNotParsedCount = c_MaxDevicesPerConnectionInputRow; // devices that haven't been fully parsed on the current input csv row (maximum 2 - one connection)
+        mRowDevicesStillNotParsedCount = c_DevicesPerConnectionInputRowCount; // devices that haven't been fully parsed on the current input csv row (maximum 2 - one connection)
 
         while (mRowDevicesStillNotParsedCount > 0)
         {
@@ -92,7 +92,7 @@ bool ConnectionInputParser::_parseInput()
 
             if (deviceType.size() > 0U)
             {
-                const bool c_IsSourceDevice{0 == mRowDevicesStillNotParsedCount % c_MaxDevicesPerConnectionInputRow};
+                const bool c_IsSourceDevice{0 == mRowDevicesStillNotParsedCount % c_DevicesPerConnectionInputRowCount};
 
                 pDevice = deviceFactory.createDevice(deviceType, c_IsSourceDevice);
 
@@ -127,9 +127,14 @@ bool ConnectionInputParser::_parseInput()
         }
     }
 
-    assert(mCablePartNumbersEntries.size() == mInputData.size());
+    assert(mCablePartNumbersEntries.size() == mInputData.size()); // 1 cable per connection
 
     const bool c_ErrorsOccurred{_logParsingErrorsToFile()};
+
+    if (!c_ErrorsOccurred)
+    {
+        assert(deviceFactory.getCreatedDevicesCount() == static_cast<int>(mCablePartNumbersEntries.size()) * c_DevicesPerConnectionInputRowCount); // 1 cable, two connected devices
+    }
 
     return c_ErrorsOccurred;
 }
@@ -183,7 +188,7 @@ bool ConnectionInputParser::_storeExternalParsingErrors(const std::vector<ErrorP
         {
             // the remaining row part (second device) should no longer be parsed if there are fewer cells (in total) than necessary
             if (nullptr != dynamic_cast<FewerCellsError*>(pError.get()) &&
-                c_MaxDevicesPerConnectionInputRow == mRowDevicesStillNotParsedCount)
+                c_DevicesPerConnectionInputRowCount == mRowDevicesStillNotParsedCount)
             {
                 areFewerCellsOnCurrentRow = true;
             }
