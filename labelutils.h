@@ -89,4 +89,8 @@ bool enableReadWriteOperations(std::ifstream& inputStream, std::ofstream& output
 */
 void writeOutputToFile(std::ofstream& outputStream, const std::vector<std::string>& inputRows, const std::string& header);
 
+/* This function converts the string case to upper or lower
+*/
+void convertStringCase(std::string &source, std::string& destination, bool upperCase);
+
 #endif // LABELUTILS_H

@@ -35,7 +35,7 @@ SANSwitch::SANSwitch(bool isSourceDevice)
 
 void SANSwitch::buildDescriptionText()
 {
-    mDescription="SAN Switch placed at U" + mDeviceName;
+    mDescription = "SAN Switch placed at U" + mDeviceName;
 
     // management port vs. data port
     if ("m" == mPortNumber || "M" == mPortNumber)
@@ -138,7 +138,7 @@ Server::Server(bool isSourceDevice)
 
 void Server::buildDescriptionText()
 {
-    mPortType[0] = toupper(mPortType[0]);
+    convertStringCase(mPortType, mPortType, true);
     mDescription = "Server placed at U" + mDeviceName;
 
     if("m" == mPortNumber || "M" == mPortNumber) // management port
@@ -276,8 +276,7 @@ BladeServer::BladeServer(bool isSourceDevice)
 void BladeServer::buildDescriptionText()
 {
     mDescription = "Blade system placed at U" + mDeviceName;
-    mModuleType[0] = toupper(mModuleType[0]);
-    mModuleType[1] = toupper(mModuleType[1]);
+    convertStringCase(mModuleType, mModuleType, true);
 
     if ("DM" == mModuleType) // data module
     {

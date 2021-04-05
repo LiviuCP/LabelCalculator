@@ -131,3 +131,20 @@ void writeOutputToFile(std::ofstream& outputStream, const std::vector<std::strin
         outputStream << payloadRow << std::endl;
     }
 }
+
+/* source string should be copied into destination if they are not the same string,
+   otherwise the std::transform does not yield a correct result
+   (although the string value is correct an incorrect size string is "seen")
+*/
+void convertStringCase(std::string& source, std::string& destination, bool upperCase)
+{
+    auto transformation = upperCase ? [](char c){return std::toupper(c);} : [](char c){return std::tolower(c);};
+
+    if (&source != &destination)
+    {
+        destination = source;
+    }
+
+    std::transform(destination.begin(), destination.end(), destination.begin(), transformation);
+
+}

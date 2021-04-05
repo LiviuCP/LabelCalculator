@@ -24,10 +24,7 @@ void PDU::buildDescriptionText()
         {"R", "Vertical right"} // vertically right placed PDU
     };
 
-    for (auto iterator{mPlacementType.begin()}; iterator != mPlacementType.end(); ++iterator)
-    {
-        *iterator = toupper(*iterator);
-    }
+    convertStringCase(mPlacementType, mPlacementType, true);
 
     if (c_PlacementTypesDescriptions.find(mPlacementType) != c_PlacementTypesDescriptions.cend())
     {
@@ -52,14 +49,17 @@ void PDU::buildLabelText()
 {
     if ("L" == mPlacementType || "R" == mPlacementType || "H" == mPlacementType)
     {
+        std::string portNumberUpperCase;
+        convertStringCase(mPortNumber, portNumberUpperCase, true);
+
         if (mLoadSegmentNumber=="-")  // single load segment PDU
         {
-            const std::string c_PortNumberSubstring{"IN" == mPortNumber ? "_IN" : "_P" + mPortNumber}; //TODO: convert IN to lowercase
+            const std::string c_PortNumberSubstring{"IN" == portNumberUpperCase ? "_IN" : "_P" + mPortNumber};
             mLabel = "U" + mDeviceName + "_" + mPlacementType + "PDU" + c_PortNumberSubstring;
         }
         else // multiple load segments PDU
         {
-            const std::string c_LoadSegmentPortNumberSubstring{"IN" == mPortNumber ? "_IN" : "_P" + mLoadSegmentNumber + "." + mPortNumber}; //TODO: convert IN to lowercase
+            const std::string c_LoadSegmentPortNumberSubstring{"IN" == portNumberUpperCase ? "_IN" : "_P" + mLoadSegmentNumber + "." + mPortNumber};
             mLabel = "U" + mDeviceName + "_" + mPlacementType + "PDU" + c_LoadSegmentPortNumberSubstring;
         }
     }
@@ -82,10 +82,7 @@ ExtensionBar::ExtensionBar(bool isSourceDevice)
 
 void ExtensionBar::buildDescriptionText()
 {
-    for (auto iterator{mPlacementType.begin()}; iterator != mPlacementType.end(); ++iterator)
-    {
-        *iterator = toupper(*iterator);
-    }
+    convertStringCase(mPlacementType, mPlacementType, true);
 
     if ("L" == mPlacementType)
     {
@@ -97,15 +94,18 @@ void ExtensionBar::buildDescriptionText()
     }
     else
     {
-        mDescription="ERROR. THE EXTENSION BAR PLACEMENT TYPE YOU HAVE CHOSEN DOES NOT EXIST. PLEASE REVIEW INPUT FILE(connectioninput.csv).";
+        mDescription = "ERROR. THE EXTENSION BAR PLACEMENT TYPE YOU HAVE CHOSEN DOES NOT EXIST. PLEASE REVIEW INPUT FILE(connectioninput.csv).";
     }
 }
 
 void ExtensionBar::buildLabelText()
 {
+    std::string portNumberUpperCase;
+    convertStringCase(mPortNumber, portNumberUpperCase, true);
+
     if ("L" == mPlacementType || "R" == mPlacementType)
     {
-        const std::string c_PortNumberSubstring{"IN" == mPortNumber ? "_IN" : "_P" + mPortNumber}; //TODO: convert IN to lowercase
+        const std::string c_PortNumberSubstring{"IN" == portNumberUpperCase ? "_IN" : "_P" + mPortNumber};
         mLabel = "U" + mDeviceName + "_" + mPlacementType + "EXT" + c_PortNumberSubstring;
     }
     else
