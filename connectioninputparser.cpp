@@ -146,8 +146,8 @@ void ConnectionInputParser::_buildOutput()
 
     for (int deviceIndex{0}; deviceIndex < c_DevicesCount; ++deviceIndex)
     {
-        mDevices[deviceIndex]->buildDescriptionText(); // for each device the description is built by considering the even/odd index (even, e.g. 0: first device on the row; odd, e.g. 3: second device on the row)
-        mDevices[deviceIndex]->buildLabelText(); // same for labels
+        // for each device the description and lable are built by considering the even/odd index (even, e.g. 0: first device on the row; odd, e.g. 3: second device on the row)
+        mDevices[deviceIndex]->computeDescriptionAndLabel();
     }
 
     mOutputData.resize(c_CablePartNumbersEntriesCount); // number of output rows should match the number of input rows

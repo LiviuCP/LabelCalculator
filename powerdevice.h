@@ -10,8 +10,7 @@ public:
     PDU() = delete;
     PDU(bool isSourceDevice);
 
-    void buildDescriptionText();
-    void buildLabelText();
+    void computeDescriptionAndLabel() override;
 
 protected:
     std::string mPlacementType; // rack placement (vertical left/right, horizontal)
@@ -25,8 +24,7 @@ public:
     ExtensionBar() = delete;
     ExtensionBar(bool isSourceDevice);
 
-    void buildDescriptionText();
-    void buildLabelText();
+    void computeDescriptionAndLabel() override;
 
 protected:
     std::string mPlacementType; // rack placement (left/right)
@@ -40,8 +38,7 @@ public:
     UPS() = delete;
     UPS(bool isSourceDevice);
 
-    void buildDescriptionText();
-    void buildLabelText();
+    void computeDescriptionAndLabel() override;
 
 protected:
     std::string mLoadSegmentNumber;
@@ -55,8 +52,7 @@ public:
     PowerSupply() = delete;
     PowerSupply(bool isSourceDevice);
 
-    void buildDescriptionText();
-    void buildLabelText();
+    void computeDescriptionAndLabel() override;
 
 protected:
     std::string mPlaceholder1;

@@ -12,8 +12,7 @@ public:
     // first = 0: second device on the csv row; first = 1: first device on the row
     LANSwitch(bool isSourceDevice);
 
-    void buildDescriptionText();
-    void buildLabelText();
+    void computeDescriptionAndLabel() override;
 
 protected:
     std::string mPlaceholder1;
@@ -29,8 +28,7 @@ public:
     // first = 0: second device on the csv row; first = 1: first device on the row
     SANSwitch(bool isSourceDevice);
 
-    void buildDescriptionText();
-    void buildLabelText();
+    void computeDescriptionAndLabel() override;
 
 protected:
     std::string mPlaceholder1;
@@ -46,8 +44,7 @@ public:
     // first = 0: second device on the csv row; first = 1: first device on the row
     InfinibandSwitch(bool isSourceDevice);
 
-    void buildDescriptionText();
-    void buildLabelText();
+    void computeDescriptionAndLabel() override;
 
 protected:
     std::string mPlaceholder1;
@@ -63,8 +60,7 @@ public:
     // first = 0: second device on the csv row; first = 1: first device on the row
     KVMSwitch(bool isSourceDevice);
 
-    void buildDescriptionText();
-    void buildLabelText();
+    void computeDescriptionAndLabel() override;
 
 protected:
     std::string mPlaceholder1;
@@ -80,8 +76,7 @@ public:
     // first = 0: second device on the csv row; first = 1: first device on the row
     Server(bool isSourceDevice);
 
-    void buildDescriptionText();
-    void buildLabelText();
+    void computeDescriptionAndLabel() override;
 
 protected:
     std::string mPortType;
@@ -97,8 +92,7 @@ public:
     // first = 0: second device on the csv row; first = 1: first device on the row
     Storage(bool isSourceDevice);
 
-    void buildDescriptionText();
-    void buildLabelText();
+    void computeDescriptionAndLabel() override;
 
 protected:
     std::string mControllerNr; // can be the controller number (for FC storage) or IO module number (for JBODs)
@@ -114,8 +108,7 @@ public:
     // first = 0: second device on the csv row; first = 1: first device on the row
     BladeServer(bool isSourceDevice);
 
-    void buildDescriptionText();
-    void buildLabelText();
+    void computeDescriptionAndLabel() override;
 
 protected:
     std::string mModuleType; // blade system module type: interconnect, management module etc.

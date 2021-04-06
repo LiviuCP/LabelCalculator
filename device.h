@@ -15,8 +15,10 @@ public:
 
     virtual ~Device();
 
-    virtual void buildDescriptionText() = 0; // creates the description for one side of the connection (source description / destination description)
-    virtual void buildLabelText() = 0; // creates the label for one side of the connection (source label / destination label)
+    /* Calculates the description and label field for each device
+       This data will be subsequently used for building the final table
+    */
+    virtual void computeDescriptionAndLabel() = 0;
 
     /* reads and parses the input fields for the device from string starting position pos (which is subsequently updated)
        uses the ofstream for logging any errors in the corresponding file and the boolean to report the occurence of these errors

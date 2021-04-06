@@ -11,16 +11,11 @@ LANSwitch::LANSwitch(bool isSourceDevice)
     mInputData[3] = &mPlaceholder2;
 }
 
-void LANSwitch::buildDescriptionText()
+void LANSwitch::computeDescriptionAndLabel()
 {
     mDescription = "LAN switch placed at U" + mDeviceName + " - Ethernet port " + mPortNumber;
-}
-
-void LANSwitch::buildLabelText()
-{
     mLabel = "U" + mDeviceName + "_P" + mPortNumber;
 }
-
 
 SANSwitch::SANSwitch(bool isSourceDevice)
     : Device{"san", c_MaxAllowedNrOfChars.at("san"), isSourceDevice}
@@ -33,32 +28,20 @@ SANSwitch::SANSwitch(bool isSourceDevice)
     mInputData[3] = &mPlaceholder2;
 }
 
-void SANSwitch::buildDescriptionText()
+void SANSwitch::computeDescriptionAndLabel()
 {
     mDescription = "SAN Switch placed at U" + mDeviceName;
+    mLabel = "U" + mDeviceName;
 
     // management port vs. data port
     if ("m" == mPortNumber || "M" == mPortNumber)
     {
         mDescription = mDescription + " - management port";
-    }
-    else
-    {
-        mDescription = mDescription + " - FC port " + mPortNumber;
-    }
-}
-
-void SANSwitch::buildLabelText()
-{
-    mLabel = "U" + mDeviceName;
-
-    // management port vs. data port
-    if ("m" == mPortNumber  || "M" == mPortNumber)
-    {
         mLabel = mLabel + "_MGMT";
     }
     else
     {
+        mDescription = mDescription + " - FC port " + mPortNumber;
         mLabel = mLabel + "_P" + mPortNumber;
     }
 }
@@ -74,32 +57,20 @@ InfinibandSwitch::InfinibandSwitch(bool isSourceDevice)
     mInputData[3] = &mPlaceholder2;
 }
 
-void InfinibandSwitch::buildDescriptionText()
+void InfinibandSwitch::computeDescriptionAndLabel()
 {
     mDescription = "Infiniband switch placed at U" + mDeviceName;
+    mLabel = "U" + mDeviceName;
 
      // management port vs. data port
     if ("m" == mPortNumber  || "M" == mPortNumber )
     {
         mDescription = mDescription + " - management port";
-    }
-    else
-    {
-        mDescription = mDescription + " - port " + mPortNumber;
-    }
-}
-
-void InfinibandSwitch::buildLabelText()
-{
-    mLabel = "U" + mDeviceName;
-
-    // management port vs. data port
-    if ("m" == mPortNumber || "M" == mPortNumber)
-    {
         mLabel = mLabel + "_MGMT";
     }
     else
     {
+        mDescription = mDescription + " - port " + mPortNumber;
         mLabel = mLabel + "_P" + mPortNumber;
     }
 }
@@ -115,13 +86,9 @@ KVMSwitch::KVMSwitch(bool isSourceDevice)
     mInputData[3] = &mPlaceholder2;
 }
 
-void KVMSwitch::buildDescriptionText()
+void KVMSwitch::computeDescriptionAndLabel()
 {
     mDescription = "KVM switch placed at U" + mDeviceName + " - port " + mPortNumber;
-}
-
-void KVMSwitch::buildLabelText()
-{
     mLabel = "U" + mDeviceName + "_P" + mPortNumber;
 }
 
@@ -136,79 +103,51 @@ Server::Server(bool isSourceDevice)
     mInputData[3] = &mPlaceholder;
 }
 
-void Server::buildDescriptionText()
+void Server::computeDescriptionAndLabel()
 {
-    convertStringCase(mPortType, mPortType, true);
     mDescription = "Server placed at U" + mDeviceName;
+    mLabel = "U" + mDeviceName;
+
+    convertStringCase(mPortType, mPortType, true);
 
     if("m" == mPortNumber || "M" == mPortNumber) // management port
     {
         mDescription += " - management port";
-    }
-    else if("F" == mPortType) // FC port
-    {
-        mDescription += " - FC port " + mPortNumber;
-    }
-    else if("N" == mPortType) // Ethernet port (but not embedded but on PCIe public slot)
-    {
-        mDescription += " - Ethernet port " + mPortNumber;
-    }
-    else if ("E" == mPortType) // embedded port (Ethernet/Infiniband)
-    {
-        mDescription += " - embedded port " + mPortNumber;
-    }
-    else if ("I" == mPortType) // Infiniband port (but not embedded but on PCIe public slot)
-    {
-        mDescription+=" - Infiniband port " + mPortNumber;
-    }
-    else if ("S" == mPortType) // SAS port
-    {
-        mDescription += " - SAS port " + mPortNumber;
-    }
-    else if ("K" == mPortType) // KVM port
-    {
-        mDescription += " - KVM port";
-    }
-    else
-    {
-        mDescription += " - UNKNOWN PORT TYPE (PLEASE CHECK INPUT FILE connectioninput.csv)";
-    }
-}
-
-void Server::buildLabelText()
-{
-    mLabel = "U" + mDeviceName;
-
-    if("m" == mPortNumber || "M" == mPortNumber) // management port
-    {
         mLabel += "_MGMT";
     }
     else if("F" == mPortType) // FC port
     {
+        mDescription += " - FC port " + mPortNumber;
         mLabel += "_FC_P" + mPortNumber;
     }
     else if("N" == mPortType) // Ethernet port (but not embedded but on PCIe public slot)
     {
+        mDescription += " - Ethernet port " + mPortNumber;
         mLabel += "_ETH_P" + mPortNumber;
     }
-    else if("E" == mPortType) // embedded port (Ethernet sau IB)
+    else if ("E" == mPortType) // embedded port (Ethernet/Infiniband)
     {
+        mDescription += " - embedded port " + mPortNumber;
         mLabel += "_EMB_P" + mPortNumber;
     }
-    else if("I" == mPortType) // Infiniband port (but not embedded but on PCIe public slot)
+    else if ("I" == mPortType) // Infiniband port (but not embedded but on PCIe public slot)
     {
+        mDescription+=" - Infiniband port " + mPortNumber;
         mLabel += "_IB_P" + mPortNumber;
     }
-    else if("S" == mPortType) // SAS port
+    else if ("S" == mPortType) // SAS port
     {
+        mDescription += " - SAS port " + mPortNumber;
         mLabel += "_SAS_P" + mPortNumber;
     }
-    else if("K" == mPortType) // KVM port
+    else if ("K" == mPortType) // KVM port
     {
+        mDescription += " - KVM port";
         mLabel += "_KVM";
     }
     else
     {
+        mDescription += " - UNKNOWN PORT TYPE (PLEASE CHECK INPUT FILE connectioninput.csv)";
         mLabel += "ERROR!!!";
     }
 }
@@ -224,7 +163,7 @@ Storage::Storage(bool isSourceDevice)
     mInputData[3] = &mPlaceholder;
 }
 
-void Storage::buildDescriptionText()
+void Storage::computeDescriptionAndLabel()
 {
     const bool c_IsManagementPort{"m" == mPortNumber || "M" == mPortNumber};
     const bool c_IsManagementController{"m" == mControllerNr || "M" == mControllerNr};
@@ -232,32 +171,16 @@ void Storage::buildDescriptionText()
     if (c_IsManagementController && c_IsManagementPort)
     {
         mDescription = "Storage device placed at U" + mDeviceName + " - management port"; // special case: a single management port
-    }
-    else if (c_IsManagementPort) // special case: a management port per controller
-    {
-        mDescription = "Storage device placed at U" + mDeviceName + " - controller " + mControllerNr + " - management port";
-    }
-    else // general case: data port
-    {
-        mDescription = "Storage device placed at U" + mDeviceName + " - controller " + mControllerNr + " - port " + mPortNumber;
-    }
-}
-
-void Storage::buildLabelText()
-{
-    const bool c_IsManagementPort{"m" == mPortNumber || "M" == mPortNumber};
-    const bool c_IsManagementController{"m" == mControllerNr || "M" == mControllerNr};
-
-    if (c_IsManagementController && c_IsManagementPort)
-    {
         mLabel = "U" + mDeviceName + "_MGMT"; // special case: a single management port
     }
     else if (c_IsManagementPort) // special case: a management port per controller
     {
+        mDescription = "Storage device placed at U" + mDeviceName + " - controller " + mControllerNr + " - management port";
         mLabel = "U" + mDeviceName + "_C" + mControllerNr + "_MGMT";
     }
-    else
+    else // general case: data port
     {
+        mDescription = "Storage device placed at U" + mDeviceName + " - controller " + mControllerNr + " - port " + mPortNumber;
         mLabel = "U" + mDeviceName + "_C" + mControllerNr + "_P" + mPortNumber;
     }
 }
@@ -273,55 +196,36 @@ BladeServer::BladeServer(bool isSourceDevice)
     mInputData[3] = &mPortNumber;
 }
 
-void BladeServer::buildDescriptionText()
+void BladeServer::computeDescriptionAndLabel()
 {
     mDescription = "Blade system placed at U" + mDeviceName;
+    mLabel = "U" + mDeviceName;
+
     convertStringCase(mModuleType, mModuleType, true);
 
     if ("DM" == mModuleType) // data module
     {
         mDescription += " - data module " + mModuleNumber + " - port " + mPortNumber;
-    }
-    else if ("MG" == mModuleType) // management module
-    {
-        mDescription += " - management module " + mModuleNumber;
-    }
-    else if ("UP" == mModuleType) // management uplink port (for daisy chaining multiple blade systems)
-    {
-        mDescription += " - management uplink port";
-    }
-    else if ("DO" == mModuleType) // management downlink port (for daisy chaining multiple blade systems)
-    {
-        mDescription += " - management downlink port";
-    }
-    else
-    {
-        mDescription += " - UNKNOWN DEVICE! PLEASE CHECK INPUT FILE (connectioninput.csv)";
-    }
-}
-
-void BladeServer::buildLabelText()
-{
-    mLabel = "U" + mDeviceName;
-
-    if ("DM" == mModuleType) // data module
-    {
         mLabel += "_DMO" + mModuleNumber + "_P" + mPortNumber;
     }
     else if ("MG" == mModuleType) // management module
     {
+        mDescription += " - management module " + mModuleNumber;
         mLabel += "_MGMT" + mModuleNumber;
     }
-    else if ("UP" == mModuleType) // management module uplink port
+    else if ("UP" == mModuleType) // management uplink port (for daisy chaining multiple blade systems)
     {
+        mDescription += " - management uplink port";
         mLabel += "_MG_UP";
     }
-    else if ("DO" == mModuleType) // management module downlink port
+    else if ("DO" == mModuleType) // management downlink port (for daisy chaining multiple blade systems)
     {
+        mDescription += " - management downlink port";
         mLabel += "_MG_DO";
     }
     else
     {
+        mDescription += " - UNKNOWN DEVICE! PLEASE CHECK INPUT FILE (connectioninput.csv)";
         mLabel += " - ERROR!";
     }
 }
