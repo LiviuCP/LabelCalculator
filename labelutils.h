@@ -41,6 +41,21 @@ static const std::string c_ConnectionInputFilename{"connectioninput.csv"};
 static const std::string c_LabellingTableFilename{"labellingtable.csv"};
 static const std::string c_ErrorFilename{"error.txt"};
 
+static const std::map<std::string, int> c_RequiredNrOfInputParams
+{
+    {"_pdu", 4},
+    {"_ext", 3},
+    {"_ups", 3},
+    {"_ps", 2},
+    {"lan", 2},
+    {"san", 2},
+    {"ib",  2},
+    {"kvm", 2},
+    {"svr", 3},
+    {"sto", 3},
+    {"bld", 4}
+};
+
 static const std::map<std::string, int> c_MaxAllowedNrOfChars
 {
     {"_pdu", 6},

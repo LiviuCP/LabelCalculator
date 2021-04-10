@@ -11,7 +11,7 @@
 class Device
 {
 public:
-    Device(const std::string& deviceType, int maxAllowedNrOfChars, bool isSourceDevice);
+    Device(const std::string& deviceType, int requiredNumberOfParameters, int maxAllowedNrOfChars, bool isSourceDevice);
 
     virtual ~Device();
 
@@ -37,6 +37,8 @@ public:
     int getColumn() const;
 
 protected:
+    void _registerRequiredParameter(std::string* const pRequiredParameter);
+
     std::string mDeviceName;  // device name (e.g. for PDU-A the name is "A")
     std::string mDeviceType;  // device type (ex: "pdu" for basic PDUs without load segments)
     std::string mPortNumber;  // power or data port number that should be mentioned on the cable label
@@ -47,13 +49,15 @@ protected:
     int mRow;            // input .csv row from which the error originated
     int mColumn;         // input .csv column from which the error originated
 
-    std::vector <std::string*> mInputData; // reference to substrings storing the fields parsed by parseInputData()
-    int mRequiredNrOfInputDataFields;
     int mMaxAllowedNrOfChars; // maximum number of characters that can be filled in the connectioninput.csv file for a specific device type (including any placeholders where character '-' could be filled in)
     int mDeltaNrOfChars; // number of characters above the maximum number (mMaxAllowedNrOfChars)
     bool mIsSourceDevice; // true if first of the two devices in each connection entered in the input .csv file
 
-    static const int scRequiredNrOfInputDataFields; // number of fields that should be filled in connectioninput.csv for EACH device (not used fields can be filled in with '-')
+    static const int scMaxInputParametersCount; // number of fields that should be filled in connectioninput.csv for EACH device (not used fields can be filled in with '-')
+
+private:
+    std::vector<std::string*> mInputData; // reference to substrings storing the fields parsed by parseInputData()
+    int mInputParametersCount;
 };
 
 using DevicePtr = std::shared_ptr<Device>;

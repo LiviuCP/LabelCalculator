@@ -3,14 +3,12 @@
 #include "powerdevice.h"
 
 PDU::PDU(bool isSourceDevice)
-    : Device{"_pdu", c_MaxAllowedNrOfChars.at("_pdu"), isSourceDevice}
+    : Device{"_pdu", c_RequiredNrOfInputParams.at("_pdu"), c_MaxAllowedNrOfChars.at("_pdu"), isSourceDevice}
 {
-    mInputData.resize(Device::scRequiredNrOfInputDataFields);
-
-    mInputData[0] = &mDeviceName;
-    mInputData[1] = &mPlacementType;
-    mInputData[2] = &mLoadSegmentNumber;
-    mInputData[3] = &mPortNumber;
+    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mPlacementType);
+    _registerRequiredParameter(&mLoadSegmentNumber);
+    _registerRequiredParameter(&mPortNumber);
 }
 
 void PDU::computeDescriptionAndLabel()
@@ -56,14 +54,11 @@ void PDU::computeDescriptionAndLabel()
 }
 
 ExtensionBar::ExtensionBar(bool isSourceDevice)
-    : Device{"_ext", c_MaxAllowedNrOfChars.at("_ext"), isSourceDevice}
+    : Device{"_ext", c_RequiredNrOfInputParams.at("_ext"), c_MaxAllowedNrOfChars.at("_ext"), isSourceDevice}
 {
-    mInputData.resize(Device::scRequiredNrOfInputDataFields);
-
-    mInputData[0] = &mDeviceName;
-    mInputData[1] = &mPlacementType;
-    mInputData[2] = &mPortNumber;
-    mInputData[3] = &mPlaceholder;
+    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mPlacementType);
+    _registerRequiredParameter(&mPortNumber);
 }
 
 void ExtensionBar::computeDescriptionAndLabel()
@@ -89,14 +84,11 @@ void ExtensionBar::computeDescriptionAndLabel()
 }
 
 UPS::UPS(bool isSourceDevice)
-    : Device{"_ups", c_MaxAllowedNrOfChars.at("_ups"), isSourceDevice}
+    : Device{"_ups", c_RequiredNrOfInputParams.at("_ups"), c_MaxAllowedNrOfChars.at("_ups"), isSourceDevice}
 {
-    mInputData.resize(Device::scRequiredNrOfInputDataFields);
-
-    mInputData[0] = &mDeviceName;
-    mInputData[1] = &mLoadSegmentNumber;
-    mInputData[2] = &mPortNumber;
-    mInputData[3] = &mPlaceholder;
+    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mLoadSegmentNumber);
+    _registerRequiredParameter(&mPortNumber);
 }
 
 void UPS::computeDescriptionAndLabel()
@@ -106,14 +98,10 @@ void UPS::computeDescriptionAndLabel()
 }
 
 PowerSupply::PowerSupply(bool isSourceDevice)
-    : Device{"_ps", c_MaxAllowedNrOfChars.at("_ps"), isSourceDevice}
+    : Device{"_ps", c_RequiredNrOfInputParams.at("_ps"), c_MaxAllowedNrOfChars.at("_ps"), isSourceDevice}
 {
-    mInputData.resize(Device::scRequiredNrOfInputDataFields);
-
-    mInputData[0] = &mDeviceName;
-    mInputData[1] = &mPortNumber; // port number is power supply number (a power supply normally has one port)
-    mInputData[2] = &mPlaceholder1;
-    mInputData[3] = &mPlaceholder2;
+    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mPortNumber);
 }
 
 void PowerSupply::computeDescriptionAndLabel()

@@ -1,14 +1,10 @@
 #include "datadevice.h"
 
 LANSwitch::LANSwitch(bool isSourceDevice)
-    : Device{"lan", c_MaxAllowedNrOfChars.at("lan"), isSourceDevice}
+    : Device{"lan", c_RequiredNrOfInputParams.at("lan"), c_MaxAllowedNrOfChars.at("lan"), isSourceDevice}
 {
-    // device parameters filled in connectioninput.csv
-    mInputData.resize(Device::scRequiredNrOfInputDataFields);
-    mInputData[0] = &mDeviceName;
-    mInputData[1] = &mPortNumber;
-    mInputData[2] = &mPlaceholder1;
-    mInputData[3] = &mPlaceholder2;
+    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mPortNumber);
 }
 
 void LANSwitch::computeDescriptionAndLabel()
@@ -18,14 +14,10 @@ void LANSwitch::computeDescriptionAndLabel()
 }
 
 SANSwitch::SANSwitch(bool isSourceDevice)
-    : Device{"san", c_MaxAllowedNrOfChars.at("san"), isSourceDevice}
+    : Device{"san", c_RequiredNrOfInputParams.at("san"), c_MaxAllowedNrOfChars.at("san"), isSourceDevice}
 {
-    mInputData.resize(Device::scRequiredNrOfInputDataFields);
-
-    mInputData[0] = &mDeviceName;
-    mInputData[1] = &mPortNumber;
-    mInputData[2] = &mPlaceholder1;
-    mInputData[3] = &mPlaceholder2;
+    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mPortNumber);
 }
 
 void SANSwitch::computeDescriptionAndLabel()
@@ -47,14 +39,10 @@ void SANSwitch::computeDescriptionAndLabel()
 }
 
 InfinibandSwitch::InfinibandSwitch(bool isSourceDevice)
-    : Device{"ib", c_MaxAllowedNrOfChars.at("ib"), isSourceDevice}
+    : Device{"ib", c_RequiredNrOfInputParams.at("ib"), c_MaxAllowedNrOfChars.at("ib"), isSourceDevice}
 {
-    mInputData.resize(Device::scRequiredNrOfInputDataFields);
-
-    mInputData[0] = &mDeviceName;
-    mInputData[1] = &mPortNumber;
-    mInputData[2] = &mPlaceholder1;
-    mInputData[3] = &mPlaceholder2;
+    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mPortNumber);
 }
 
 void InfinibandSwitch::computeDescriptionAndLabel()
@@ -76,14 +64,10 @@ void InfinibandSwitch::computeDescriptionAndLabel()
 }
 
 KVMSwitch::KVMSwitch(bool isSourceDevice)
-    : Device{"kvm", c_MaxAllowedNrOfChars.at("kvm"), isSourceDevice}
+    : Device{"kvm", c_RequiredNrOfInputParams.at("kvm"), c_MaxAllowedNrOfChars.at("kvm"), isSourceDevice}
 {
-    mInputData.resize(Device::scRequiredNrOfInputDataFields);
-
-    mInputData[0] = &mDeviceName;
-    mInputData[1] = &mPortNumber;
-    mInputData[2] = &mPlaceholder1;
-    mInputData[3] = &mPlaceholder2;
+    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mPortNumber);
 }
 
 void KVMSwitch::computeDescriptionAndLabel()
@@ -93,14 +77,11 @@ void KVMSwitch::computeDescriptionAndLabel()
 }
 
 Server::Server(bool isSourceDevice)
-    : Device{"svr", 8, isSourceDevice}
+    : Device{"svr", c_RequiredNrOfInputParams.at("svr"), c_MaxAllowedNrOfChars.at("svr"), isSourceDevice}
 {
-    mInputData.resize(Device::scRequiredNrOfInputDataFields);
-
-    mInputData[0] = &mDeviceName;
-    mInputData[1] = &mPortType;
-    mInputData[2] = &mPortNumber;
-    mInputData[3] = &mPlaceholder;
+    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mPortType);
+    _registerRequiredParameter(&mPortNumber);
 }
 
 void Server::computeDescriptionAndLabel()
@@ -153,14 +134,11 @@ void Server::computeDescriptionAndLabel()
 }
 
 Storage::Storage(bool isSourceDevice)
-    : Device{"sto", c_MaxAllowedNrOfChars.at("sto"), isSourceDevice}
+    : Device{"sto", c_RequiredNrOfInputParams.at("sto"), c_MaxAllowedNrOfChars.at("sto"), isSourceDevice}
 {
-    mInputData.resize(Device::scRequiredNrOfInputDataFields);
-
-    mInputData[0] = &mDeviceName;
-    mInputData[1] = &mControllerNr;
-    mInputData[2] = &mPortNumber;
-    mInputData[3] = &mPlaceholder;
+    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mControllerNr);
+    _registerRequiredParameter(&mPortNumber);
 }
 
 void Storage::computeDescriptionAndLabel()
@@ -186,14 +164,12 @@ void Storage::computeDescriptionAndLabel()
 }
 
 BladeServer::BladeServer(bool isSourceDevice)
-    : Device{"bld", c_MaxAllowedNrOfChars.at("bld"), isSourceDevice}
+    : Device{"bld", c_RequiredNrOfInputParams.at("bld"), c_MaxAllowedNrOfChars.at("bld"), isSourceDevice}
 {
-    mInputData.resize(Device::scRequiredNrOfInputDataFields);
-
-    mInputData[0] = &mDeviceName;
-    mInputData[1] = &mModuleType;
-    mInputData[2] = &mModuleNumber;
-    mInputData[3] = &mPortNumber;
+    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mModuleType);
+    _registerRequiredParameter(&mModuleNumber);
+    _registerRequiredParameter(&mPortNumber);
 }
 
 void BladeServer::computeDescriptionAndLabel()
