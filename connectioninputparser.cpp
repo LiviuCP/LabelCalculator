@@ -211,12 +211,17 @@ void ConnectionInputParser::_buildConnectionEntry(std::string& entry,
     entry.clear();
     str << entryNumber;
     str >> entry;
-    entry += ',';
+
+    entry += c_CSVSeparator;
     entry += cablePartNumber;
-    entry += ',';
-    pFirstDevice->writeDescriptionAndLabel(entry);
-    entry += ',';
-    pSecondDevice->writeDescriptionAndLabel(entry);
+    entry += c_CSVSeparator;
+    entry += pFirstDevice->getDescription();
+    entry += c_CSVSeparator;
+    entry += pFirstDevice->getLabel();
+    entry += c_CSVSeparator;
+    entry += pSecondDevice->getDescription();
+    entry += c_CSVSeparator;
+    entry += pSecondDevice->getLabel();
 
     ++entryNumber;
 }

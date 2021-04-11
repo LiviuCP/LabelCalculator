@@ -25,9 +25,6 @@ public:
     */
     int parseInputData(const std::string &s, const int initialPosition, std::vector<ErrorPtr>& parsingErrors, std::ofstream& errorStream);
 
-    // appends the description and label to the string
-    void writeDescriptionAndLabel(std::string& out) const;
-
     // setters for the input .csv row and column index
     void setRow(int row);
     void setColumn(int column);
@@ -35,6 +32,8 @@ public:
     // getters
     int getRow() const;
     int getColumn() const;
+    std::string getDescription() const;
+    std::string getLabel() const;
 
 protected:
     void _registerRequiredParameter(std::string* const pRequiredParameter);

@@ -118,13 +118,6 @@ int Device::parseInputData(const std::string& input, const int initialPosition, 
     return currentPosition;
 }
 
-void Device::writeDescriptionAndLabel(std::string& out) const
-{
-    out += mDescription;
-    out += ',';
-    out += mLabel;
-}
-
 void Device::setRow(int row)
 {
     mRow = row;
@@ -143,6 +136,16 @@ int Device::getRow() const
 int Device::getColumn() const
 {
     return mColumn;
+}
+
+std::string Device::getDescription() const
+{
+    return mDescription;
+}
+
+std::string Device::getLabel() const
+{
+    return mLabel;
 }
 
 void Device::_registerRequiredParameter(std::string* const pRequiredParameter)

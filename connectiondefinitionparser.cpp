@@ -161,10 +161,10 @@ void ConnectionDefinitionParser::_buildOutput()
         stringstream str;
         string s;
         int currentDeviceUPosition = mUNumbers[deviceIndex] - 1; // in mapping vector numbering starts at 0 so it is necessary to decrease the U number by 1
-        deviceParameters[currentDeviceUPosition] += mMapping[currentDeviceUPosition]+','; // appending device type
+        deviceParameters[currentDeviceUPosition] += mMapping[currentDeviceUPosition] + c_CSVSeparator; // appending device type
         str << currentDeviceUPosition + 1; // recover the original U number (real position in rack)
         str >> s;
-        deviceParameters[currentDeviceUPosition] += s + ',';
+        deviceParameters[currentDeviceUPosition] += s + c_CSVSeparator;
         deviceParameters[currentDeviceUPosition] += scConnectionInputPlaceholders.at(mMapping[currentDeviceUPosition]); // add the placeholders for the device parameters (to be filled in the next step (option 2) in connectioninput.csv so the final table can be calculated)
     }
 

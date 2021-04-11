@@ -18,14 +18,14 @@ int readDataField(const std::string& src, std::string& dest, const int index)
 
         int currentIndex{index};
 
-        if (',' == src[currentIndex])
+        if (c_CSVSeparator == src[currentIndex])
         {
             ++currentIndex;
         }
 
         while(currentIndex < c_Length)
         {
-            if(src[currentIndex] != ',')
+            if(src[currentIndex] != c_CSVSeparator)
             {
                 dest += src[currentIndex];
             }

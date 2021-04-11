@@ -29,6 +29,7 @@ static const std::string c_HomeDirParent{"C:\\Users"};
 static const std::string c_ConfigurationFilePath{"/tmp/configuration.txt"};
 static const std::string c_ClearScreenCommand{"clear"};
 static constexpr char c_PathSeparator{'/'};
+static constexpr char c_CSVSeparator{','};
 #else
 static const std::string c_ConfigurationFilename{"C:\\tmp\\configuration.txt"};
 static const std::string c_ClearScreenCommand{"cls"};
@@ -88,7 +89,7 @@ enum class ErrorCode
 /* *FUNCTIONS* */
 
 /* This function reads a substring starting with index until reaching a comma character (end of .csv cell) or the string has no more characters
-   If the index points to ',' then reading starts with next character
+   If the index points to CSV separator (',') then reading starts with next character
 */
 int readDataField(const std::string& src, std::string& dest, const int index);
 
