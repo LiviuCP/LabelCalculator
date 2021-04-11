@@ -5,16 +5,15 @@
 
 const int Device::scMaxInputParametersCount{4};
 
-Device::Device(const std::string& deviceType, int requiredNumberOfParameters, int maxAllowedNrOfChars, bool isSourceDevice)
+Device::Device(const std::string& deviceType, int requiredNumberOfParameters, int maxAllowedCharsCount, bool isSourceDevice)
     : mDeviceType{deviceType}
     , mRow{1}
     , mColumn{1}
-    , mMaxAllowedNrOfChars{maxAllowedNrOfChars}
-    , mDeltaNrOfChars{0}
+    , mMaxAllowedCharsCount{maxAllowedCharsCount}
     , mIsSourceDevice{isSourceDevice}
     , mInputParametersCount{requiredNumberOfParameters}
 {
-    assert(mMaxAllowedNrOfChars > 0);
+    assert(mMaxAllowedCharsCount > 0);
     assert(mInputParametersCount > 1 &&
            mInputParametersCount <= scMaxInputParametersCount); // there should be at least two parameters (device name and port number)
 
@@ -102,10 +101,10 @@ int Device::parseInputData(const std::string& input, const int initialPosition, 
         parsingErrors.push_back(lastError);
 
     }
-    else if (totalParsedCharsCount > mMaxAllowedNrOfChars)
+    else if (totalParsedCharsCount > mMaxAllowedCharsCount)
     {
-        mDeltaNrOfChars = totalParsedCharsCount - mMaxAllowedNrOfChars;
-        lastError = std::make_shared<ExceedingCharsCountError>(errorStream, mMaxAllowedNrOfChars, mDeltaNrOfChars, mIsSourceDevice);
+        const int c_DeltaNrOfChars{totalParsedCharsCount - mMaxAllowedCharsCount};
+        lastError = std::make_shared<ExceedingCharsCountError>(errorStream, mMaxAllowedCharsCount, c_DeltaNrOfChars, mIsSourceDevice);
         lastError->setRow(mRow);
         lastError->setColumn(mColumn);
         parsingErrors.push_back(lastError);

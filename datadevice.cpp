@@ -1,7 +1,7 @@
 #include "datadevice.h"
 
 LANSwitch::LANSwitch(bool isSourceDevice)
-    : Device{"lan", c_RequiredNrOfInputParams.at("lan"), c_MaxAllowedNrOfChars.at("lan"), isSourceDevice}
+    : Device{"lan", c_RequiredNrOfInputParams.at("lan"), c_MaxAllowedCharsCount.at("lan"), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mPortNumber);
@@ -14,7 +14,7 @@ void LANSwitch::computeDescriptionAndLabel()
 }
 
 SANSwitch::SANSwitch(bool isSourceDevice)
-    : Device{"san", c_RequiredNrOfInputParams.at("san"), c_MaxAllowedNrOfChars.at("san"), isSourceDevice}
+    : Device{"san", c_RequiredNrOfInputParams.at("san"), c_MaxAllowedCharsCount.at("san"), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mPortNumber);
@@ -39,7 +39,7 @@ void SANSwitch::computeDescriptionAndLabel()
 }
 
 InfinibandSwitch::InfinibandSwitch(bool isSourceDevice)
-    : Device{"ib", c_RequiredNrOfInputParams.at("ib"), c_MaxAllowedNrOfChars.at("ib"), isSourceDevice}
+    : Device{"ib", c_RequiredNrOfInputParams.at("ib"), c_MaxAllowedCharsCount.at("ib"), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mPortNumber);
@@ -64,7 +64,7 @@ void InfinibandSwitch::computeDescriptionAndLabel()
 }
 
 KVMSwitch::KVMSwitch(bool isSourceDevice)
-    : Device{"kvm", c_RequiredNrOfInputParams.at("kvm"), c_MaxAllowedNrOfChars.at("kvm"), isSourceDevice}
+    : Device{"kvm", c_RequiredNrOfInputParams.at("kvm"), c_MaxAllowedCharsCount.at("kvm"), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mPortNumber);
@@ -77,7 +77,7 @@ void KVMSwitch::computeDescriptionAndLabel()
 }
 
 Server::Server(bool isSourceDevice)
-    : Device{"svr", c_RequiredNrOfInputParams.at("svr"), c_MaxAllowedNrOfChars.at("svr"), isSourceDevice}
+    : Device{"svr", c_RequiredNrOfInputParams.at("svr"), c_MaxAllowedCharsCount.at("svr"), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mPortType);
@@ -134,7 +134,7 @@ void Server::computeDescriptionAndLabel()
 }
 
 Storage::Storage(bool isSourceDevice)
-    : Device{"sto", c_RequiredNrOfInputParams.at("sto"), c_MaxAllowedNrOfChars.at("sto"), isSourceDevice}
+    : Device{"sto", c_RequiredNrOfInputParams.at("sto"), c_MaxAllowedCharsCount.at("sto"), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mControllerNr);
@@ -164,7 +164,7 @@ void Storage::computeDescriptionAndLabel()
 }
 
 BladeServer::BladeServer(bool isSourceDevice)
-    : Device{"bld", c_RequiredNrOfInputParams.at("bld"), c_MaxAllowedNrOfChars.at("bld"), isSourceDevice}
+    : Device{"bld", c_RequiredNrOfInputParams.at("bld"), c_MaxAllowedCharsCount.at("bld"), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mModuleType);

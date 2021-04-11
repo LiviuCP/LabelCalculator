@@ -13,10 +13,10 @@ void EmptyCellError::execute()
     Error::execute();
 }
 
-ExceedingCharsCountError::ExceedingCharsCountError(std::ofstream& errorStream, int maxAllowedNrOfChars, int deltaNrOfChars, bool isSourceDevice)
+ExceedingCharsCountError::ExceedingCharsCountError(std::ofstream& errorStream, int maxAllowedCharsCount, int deltaCharsCount, bool isSourceDevice)
     : Error{ErrorCode::MAX_CHARS_EXCEEDED, errorStream}
-    , mMaxAllowedNrOfChars{maxAllowedNrOfChars}
-    , mDeltaNrOfChars{deltaNrOfChars}
+    , mMaxAllowedCharsCount{maxAllowedCharsCount}
+    , mDeltaCharsCount{deltaCharsCount}
     , mIsSourceDevice{isSourceDevice}
 {
 }
@@ -34,9 +34,9 @@ void ExceedingCharsCountError::execute()
         mErrorStream << "second ";
     }
 
-    mErrorStream << "device exceeds the maximum allowed (" << mMaxAllowedNrOfChars << " characters)" << std::endl;
+    mErrorStream << "device exceeds the maximum allowed (" << mMaxAllowedCharsCount << " characters)" << std::endl;
     mErrorStream << "Row number: " << mRow << std::endl;
-    mErrorStream << "Maximum total number of characters exceeded by " << mDeltaNrOfChars << std::endl;
+    mErrorStream << "Maximum total number of characters exceeded by " << mDeltaCharsCount << std::endl;
 
     Error::execute();
 }

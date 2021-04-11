@@ -57,7 +57,7 @@ static const std::map<std::string, int> c_RequiredNrOfInputParams
     {"bld", 4}
 };
 
-static const std::map<std::string, int> c_MaxAllowedNrOfChars
+static const std::map<std::string, int> c_MaxAllowedCharsCount
 {
     {"_pdu", 6},
     {"_ext", 8},

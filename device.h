@@ -11,7 +11,7 @@
 class Device
 {
 public:
-    Device(const std::string& deviceType, int requiredNumberOfParameters, int maxAllowedNrOfChars, bool isSourceDevice);
+    Device(const std::string& deviceType, int requiredNumberOfParameters, int maxAllowedCharsCount, bool isSourceDevice);
 
     virtual ~Device();
 
@@ -48,8 +48,7 @@ protected:
     int mRow;            // input .csv row from which the error originated
     int mColumn;         // input .csv column from which the error originated
 
-    int mMaxAllowedNrOfChars; // maximum number of characters that can be filled in the connectioninput.csv file for a specific device type (including any placeholders where character '-' could be filled in)
-    int mDeltaNrOfChars; // number of characters above the maximum number (mMaxAllowedNrOfChars)
+    int mMaxAllowedCharsCount; // maximum number of characters that can be filled in the connectioninput.csv file for a specific device type (including any placeholders where character '-' could be filled in)
     bool mIsSourceDevice; // true if first of the two devices in each connection entered in the input .csv file
 
     static const int scMaxInputParametersCount; // number of fields that should be filled in connectioninput.csv for EACH device (not used fields can be filled in with '-')
