@@ -11,7 +11,7 @@
 class Device
 {
 public:
-    Device(const std::string& deviceType, int requiredNumberOfParameters, int maxAllowedCharsCount, bool isSourceDevice);
+    Device(int requiredNumberOfParameters, int maxAllowedCharsCount, bool isSourceDevice);
 
     virtual ~Device();
 
@@ -39,7 +39,6 @@ protected:
     void _registerRequiredParameter(std::string* const pRequiredParameter);
 
     std::string mDeviceName;  // device name (e.g. for PDU-A the name is "A")
-    std::string mDeviceType;  // device type (ex: "pdu" for basic PDUs without load segments)
     std::string mPortNumber;  // power or data port number that should be mentioned on the cable label
 
     std::string mDescription; // text to be written in the source (first device) / destination (second device) field of the labelling table (device description)

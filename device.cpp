@@ -5,9 +5,8 @@
 
 const int Device::scMaxInputParametersCount{4};
 
-Device::Device(const std::string& deviceType, int requiredNumberOfParameters, int maxAllowedCharsCount, bool isSourceDevice)
-    : mDeviceType{deviceType}
-    , mRow{1}
+Device::Device(int requiredNumberOfParameters, int maxAllowedCharsCount, bool isSourceDevice)
+    : mRow{1}
     , mColumn{1}
     , mMaxAllowedCharsCount{maxAllowedCharsCount}
     , mIsSourceDevice{isSourceDevice}
