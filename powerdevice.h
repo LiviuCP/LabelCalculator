@@ -28,7 +28,6 @@ public:
 
 protected:
     std::string mPlacementType; // rack placement (left/right)
-    std::string mPlaceholder;
 };
 
 // UPS ports
@@ -42,7 +41,6 @@ public:
 
 protected:
     std::string mLoadSegmentNumber;
-    std::string mPlaceholder;
 };
 
 // power supply ports (any power supply no matter the device type)
@@ -53,10 +51,6 @@ public:
     PowerSupply(bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
-
-protected:
-    std::string mPlaceholder1;
-    std::string mPlaceholder2;
 };
 
 #endif // POWERDEVICE_H

@@ -13,10 +13,6 @@ public:
     LANSwitch(bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
-
-protected:
-    std::string mPlaceholder1;
-    std::string mPlaceholder2;
 };
 
 // FC (SAN) switch ports
@@ -29,10 +25,6 @@ public:
     SANSwitch(bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
-
-protected:
-    std::string mPlaceholder1;
-    std::string mPlaceholder2;
 };
 
 // Infiniband switch ports
@@ -45,10 +37,6 @@ public:
     InfinibandSwitch(bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
-
-protected:
-    std::string mPlaceholder1;
-    std::string mPlaceholder2;
 };
 
 // KVM switch ports
@@ -61,10 +49,6 @@ public:
     KVMSwitch(bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
-
-protected:
-    std::string mPlaceholder1;
-    std::string mPlaceholder2;
 };
 
 // server ports (embedded (incl. management), Ethernet, FC, IB, etc)
@@ -80,7 +64,6 @@ public:
 
 protected:
     std::string mPortType;
-    std::string mPlaceholder;
 };
 
 // storage FC ports
@@ -96,7 +79,6 @@ public:
 
 protected:
     std::string mControllerNr; // can be the controller number (for FC storage) or IO module number (for JBODs)
-    std::string mPlaceholder;
 };
 
 // blade system interconnect/management/uplink/downlink ports
