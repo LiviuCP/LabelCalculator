@@ -67,7 +67,7 @@ bool ConnectionDefinitionParser::_parseInput()
 
         DeviceTypeID deviceTypeID{getDeviceTypeID(currentCell)};
 
-        if (DeviceTypeID::INVALID_DEVICE == deviceTypeID)
+        if (DeviceTypeID::UNKNOWN_DEVICE == deviceTypeID)
         {
             ErrorPtr pError{std::make_shared<UnknownDeviceError>(*mpErrorStream)};
 

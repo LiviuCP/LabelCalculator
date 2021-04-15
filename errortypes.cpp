@@ -48,7 +48,7 @@ UnknownDeviceError::UnknownDeviceError(std::ofstream& errorStream)
 
 void UnknownDeviceError::execute()
 {
-    mErrorStream << "Error: an unknown or no device type has been entered" << std::endl;
+    mErrorStream << "Error: an unknown or currently not supported device type has been entered" << std::endl;
     mErrorStream << "Row number: " << mRow << "    " << "Column number: " << mColumn << std::endl;
 
     Error::execute();

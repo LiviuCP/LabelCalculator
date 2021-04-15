@@ -43,7 +43,7 @@ static const std::string c_ErrorFilename{"error.txt"};
 
 enum class DeviceTypeID : int
 {
-    INVALID_DEVICE = -1, // invalid device type resulting from string conversion
+    UNKNOWN_DEVICE = -1, // invalid device type resulting from string conversion
     NO_DEVICE,           // no device placed STARTING WITH the given U position
     PDU,
     EXTENSION_BAR,

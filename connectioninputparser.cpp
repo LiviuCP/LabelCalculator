@@ -89,7 +89,10 @@ bool ConnectionInputParser::_parseInput()
             currentPosition = readDataField(mInputData[rowIndex], deviceType, currentPosition);
             const DeviceTypeID deviceTypeID{getDeviceTypeID(deviceType)};
 
-            if (DeviceTypeID::INVALID_DEVICE != deviceTypeID)
+            // the device should both be known (correct device type string entered by user) and supported (instantiatable) by device factory (code should be in place for factory instantiating it)
+            bool isDeviceKnown{false};
+
+            if (DeviceTypeID::UNKNOWN_DEVICE != deviceTypeID)
             {
                 const bool c_IsSourceDevice{0 == mRowDevicesStillNotParsedCount % c_DevicesPerConnectionInputRowCount};
 
@@ -115,9 +118,11 @@ bool ConnectionInputParser::_parseInput()
 
                     columnNumber = pDevice->getColumn();
                     --mRowDevicesStillNotParsedCount;
+                    isDeviceKnown = true;
                 }
             }
-            else
+
+            if (!isDeviceKnown)
             {
                 ErrorPtr pUnknownDeviceError{std::make_shared<UnknownDeviceError>(*mpErrorStream)};
                 _storeParsingErrorAndLocation(pUnknownDeviceError, rowIndex + c_RowNumberOffset, columnNumber);

@@ -135,7 +135,7 @@ void writeOutputToFile(std::ofstream& outputStream, const std::vector<std::strin
 
 DeviceTypeID getDeviceTypeID(const std::string& deviceType)
 {
-    DeviceTypeID deviceTypeID{DeviceTypeID::INVALID_DEVICE};
+    DeviceTypeID deviceTypeID{DeviceTypeID::UNKNOWN_DEVICE};
 
     std::string deviceTypeConverted{deviceType};
     convertStringCase(deviceTypeConverted, deviceTypeConverted, false);
