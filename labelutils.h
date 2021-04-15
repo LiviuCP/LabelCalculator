@@ -12,7 +12,6 @@ static constexpr int c_MaxNrOfRackUnits{50};
 static constexpr int c_RowNumberOffset{2}; // offset used for calculating the row number based on payload index (header row is ignored and row numbering starts at 1)
 static constexpr int c_DevicesPerConnectionInputRowCount{2};
 
-static const std::string c_NoDevice{"NoDevice"}; // no device placed in the rack U position
 static const std::string c_CablePartNumberPlaceholder{"CBL_PART_NR"};
 static const std::string c_InputHeader{"__Cable part number__,__Source device type__,__Source U number__,__Parameter1__,__Parameter2__,__Parameter3__,__Destination device type__,__Destination U number__,__Parameter1__,__Parameter2__,__Parameter3__"};
 static const std::string c_OutputHeader{"__Item number__,__Cable part number__,__Source device description__,__Source label__,__Destination device description__,__Destination label__"};
@@ -42,34 +41,66 @@ static const std::string c_ConnectionInputFilename{"connectioninput.csv"};
 static const std::string c_LabellingTableFilename{"labellingtable.csv"};
 static const std::string c_ErrorFilename{"error.txt"};
 
-static const std::map<std::string, int> c_RequiredNrOfInputParams
+enum class DeviceTypeID : int
 {
-    {"_pdu", 4},
-    {"_ext", 3},
-    {"_ups", 3},
-    {"_ps", 2},
-    {"lan", 2},
-    {"san", 2},
-    {"ib",  2},
-    {"kvm", 2},
-    {"svr", 3},
-    {"sto", 3},
-    {"bld", 4}
+    INVALID_DEVICE = -1, // invalid device type resulting from string conversion
+    NO_DEVICE,           // no device placed STARTING WITH the given U position
+    PDU,
+    EXTENSION_BAR,
+    UPS,
+    POWER_SUPPLY,
+    LAN_SWITCH,
+    SAN_SWITCH,
+    INFINIBAND_SWITCH,
+    KVM_SWITCH,
+    RACK_SERVER,
+    STORAGE,
+    BLADE_SERVER,
 };
 
-static const std::map<std::string, int> c_MaxAllowedCharsCount
+static const std::map<std::string, DeviceTypeID> c_DeviceTypeToIDMapping
 {
-    {"_pdu", 6},
-    {"_ext", 8},
-    {"_ups", 11},
-    {"_ps", 12},
-    {"lan", 13},
-    {"san", 10},
-    {"ib",  10},
-    {"kvm", 13},
-    {"svr", 8},
-    {"sto", 7},
-    {"bld", 7}
+    {    "_pdu",    DeviceTypeID::PDU                   },
+    {    "_ext",    DeviceTypeID::EXTENSION_BAR         },
+    {    "_ups",    DeviceTypeID::UPS                   },
+    {    "_ps",     DeviceTypeID::POWER_SUPPLY          },
+    {    "lan",     DeviceTypeID::LAN_SWITCH            },
+    {    "san",     DeviceTypeID::SAN_SWITCH            },
+    {    "ib",      DeviceTypeID::INFINIBAND_SWITCH     },
+    {    "kvm",     DeviceTypeID::KVM_SWITCH            },
+    {    "svr",     DeviceTypeID::RACK_SERVER           },
+    {    "sto",     DeviceTypeID::STORAGE               },
+    {    "bld",     DeviceTypeID::BLADE_SERVER          }
+};
+
+static const std::map<DeviceTypeID, int> c_RequiredNrOfInputParams
+{
+    {    DeviceTypeID::PDU,                 4    },
+    {    DeviceTypeID::EXTENSION_BAR,       3    },
+    {    DeviceTypeID::UPS,                 3    },
+    {    DeviceTypeID::POWER_SUPPLY,        2    },
+    {    DeviceTypeID::LAN_SWITCH,          2    },
+    {    DeviceTypeID::SAN_SWITCH,          2    },
+    {    DeviceTypeID::INFINIBAND_SWITCH,   2    },
+    {    DeviceTypeID::KVM_SWITCH,          2    },
+    {    DeviceTypeID::RACK_SERVER,         3    },
+    {    DeviceTypeID::STORAGE,             3    },
+    {    DeviceTypeID::BLADE_SERVER,        4    }
+};
+
+static const std::map<DeviceTypeID, int> c_MaxAllowedCharsCount
+{
+    {    DeviceTypeID::PDU,                 6    },
+    {    DeviceTypeID::EXTENSION_BAR,       8    },
+    {    DeviceTypeID::UPS,                11    },
+    {    DeviceTypeID::POWER_SUPPLY,       12    },
+    {    DeviceTypeID::LAN_SWITCH,         13    },
+    {    DeviceTypeID::SAN_SWITCH,         10    },
+    {    DeviceTypeID::INFINIBAND_SWITCH,  10    },
+    {    DeviceTypeID::KVM_SWITCH,         13    },
+    {    DeviceTypeID::RACK_SERVER,         8    },
+    {    DeviceTypeID::STORAGE,             7    },
+    {    DeviceTypeID::BLADE_SERVER,        7    }
 };
 
 enum class ErrorCode
@@ -104,6 +135,14 @@ bool enableReadWriteOperations(std::ifstream& inputStream, std::ofstream& output
 /* This function writes the resulting output to the corresponding file for each option
 */
 void writeOutputToFile(std::ofstream& outputStream, const std::vector<std::string>& inputRows, const std::string& header);
+
+/* This function converts the input string containing the device type into a numeric device type ID that is then used for further processing (Device object creation, etc)
+*/
+DeviceTypeID getDeviceTypeID(const std::string& deviceType);
+
+/* This function is used for getting the device type string for writing back into connection input file
+*/
+std::string getDeviceType(DeviceTypeID deviceTypeID);
 
 /* This function converts the string case to upper or lower
 */

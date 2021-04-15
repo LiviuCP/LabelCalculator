@@ -85,18 +85,17 @@ bool ConnectionInputParser::_parseInput()
                 continue;
             }
 
-            DevicePtr pDevice{nullptr};
-
             std::string deviceType;
             currentPosition = readDataField(mInputData[rowIndex], deviceType, currentPosition);
+            const DeviceTypeID deviceTypeID{getDeviceTypeID(deviceType)};
 
-            if (deviceType.size() > 0U)
+            if (DeviceTypeID::INVALID_DEVICE != deviceTypeID)
             {
                 const bool c_IsSourceDevice{0 == mRowDevicesStillNotParsedCount % c_DevicesPerConnectionInputRowCount};
 
-                pDevice = deviceFactory.createDevice(deviceType, c_IsSourceDevice);
+                DevicePtr pDevice{deviceFactory.createDevice(deviceTypeID, c_IsSourceDevice)};
 
-                if (nullptr != pDevice)
+                if(nullptr != pDevice)
                 {
                     ++columnNumber;
 
@@ -117,12 +116,12 @@ bool ConnectionInputParser::_parseInput()
                     columnNumber = pDevice->getColumn();
                     --mRowDevicesStillNotParsedCount;
                 }
-                else
-                {
-                    ErrorPtr pUnknownDeviceError{std::make_shared<UnknownDeviceError>(*mpErrorStream)};
-                    _storeParsingErrorAndLocation(pUnknownDeviceError, rowIndex + c_RowNumberOffset, columnNumber);
-                    break;
-                }
+            }
+            else
+            {
+                ErrorPtr pUnknownDeviceError{std::make_shared<UnknownDeviceError>(*mpErrorStream)};
+                _storeParsingErrorAndLocation(pUnknownDeviceError, rowIndex + c_RowNumberOffset, columnNumber);
+                break;
             }
         }
     }

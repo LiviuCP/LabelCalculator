@@ -3,6 +3,7 @@
 
 #include <map>
 
+#include "labelutils.h"
 #include "parser.h"
 
 class ConnectionDefinitionParser final : public Parser
@@ -31,7 +32,7 @@ private:
        For each device the type will be memorized at the index representing the lowest U position occupied within rack.
        The vector will have 50 elements (maximum rack size).
     */
-    std::vector<std::string> mMapping;
+    std::vector<DeviceTypeID> mMapping;
 
     /* Stores the U positions (lowest in rack, e.g. U5 for a device occupying U5-10) of all discovered devices (in the order of their discovery)
        Storing occurs in decreasing order of their appearance (first device is the one from the highest U position)
@@ -48,7 +49,7 @@ private:
     int mDiscoveredDevicesCount;
 
     /* placeholders used for creating the connection input template file (should be filled in by user in next step) */
-    static const std::map<std::string, std::string> scConnectionInputPlaceholders;
+    static const std::map<DeviceTypeID, std::string> scConnectionInputPlaceholders;
 };
 
 #endif // CONNECTIONDEFINITIONPARSER_H

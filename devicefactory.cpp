@@ -2,83 +2,52 @@
 #include "powerdevice.h"
 #include "devicefactory.h"
 
-bool DeviceFactory::isDeviceTypeValid(const std::string& deviceType)
-{
-    const bool c_IsValid{DeviceFactory::scDeviceTypes.find(deviceType) != scDeviceTypes.cend()};
-    return c_IsValid;
-}
-const std::set<std::string> DeviceFactory::scDeviceTypes
-{
-    "_pdu",
-    "_ext",
-    "_ups",
-    "_ps" ,
-    "lan" ,
-    "san" ,
-    "ib"  ,
-    "kvm" ,
-    "svr" ,
-    "sto" ,
-    "bld"
-};
-
 DeviceFactory::DeviceFactory()
     : mCreatedDevicesCount{0}
 {
 }
 
-DevicePtr DeviceFactory::createDevice(const std::string& deviceType, bool isSourceDevice)
+DevicePtr DeviceFactory::createDevice(DeviceTypeID deviceTypeID, bool isSourceDevice)
 {
     DevicePtr pDevice{nullptr};
 
-    // naming convention: for power connections the underscore is used at the beginning of the device type
-    if ("_pdu" == deviceType)
+    switch(deviceTypeID)
     {
+    case DeviceTypeID::PDU:
         pDevice = std::make_shared<PDU>(isSourceDevice);
-    }
-    else if ("_ext" == deviceType)
-    {
+        break;
+    case DeviceTypeID::EXTENSION_BAR:
         pDevice = std::make_shared<ExtensionBar>(isSourceDevice);
-    }
-    else if ("_ups" == deviceType)
-    {
+        break;
+    case DeviceTypeID::UPS:
         pDevice = std::make_shared<UPS>(isSourceDevice);
-    }
-    else if ("_ps" == deviceType)
-    {
+        break;
+    case DeviceTypeID::POWER_SUPPLY:
         pDevice = std::make_shared<PowerSupply>(isSourceDevice);
-    }
-    else if ("lan" == deviceType)
-    {
+        break;
+    case DeviceTypeID::LAN_SWITCH:
         pDevice = std::make_shared<LANSwitch>(isSourceDevice);
-    }
-    else if ("san"== deviceType)
-    {
+        break;
+    case DeviceTypeID::SAN_SWITCH:
         pDevice = std::make_shared<SANSwitch>(isSourceDevice);
-    }
-    else if ("ib" == deviceType)
-    {
+        break;
+    case DeviceTypeID::INFINIBAND_SWITCH:
         pDevice = std::make_shared<InfinibandSwitch>(isSourceDevice);
-    }
-    else if ("kvm" == deviceType)
-    {
+        break;
+    case DeviceTypeID::KVM_SWITCH:
         pDevice = std::make_shared<KVMSwitch>(isSourceDevice);
-    }
-    else if ("svr" == deviceType)
-    {
+        break;
+    case DeviceTypeID::RACK_SERVER:
         pDevice = std::make_shared<Server>(isSourceDevice);
-    }
-    else if ("sto" == deviceType)
-    {
+        break;
+    case DeviceTypeID::STORAGE:
         pDevice = std::make_shared<Storage>(isSourceDevice);
-    }
-    else if ("bld" == deviceType)
-    {
+        break;
+    case DeviceTypeID::BLADE_SERVER:
         pDevice = std::make_shared<BladeServer>(isSourceDevice);
-    }
-    else
-    {
-        // no action, defensive programming
+        break;
+    default:
+        break;
     }
 
     if (nullptr != pDevice)

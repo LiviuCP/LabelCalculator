@@ -3,7 +3,7 @@
 #include "powerdevice.h"
 
 PDU::PDU(bool isSourceDevice)
-    : Device{c_RequiredNrOfInputParams.at("_pdu"), c_MaxAllowedCharsCount.at("_pdu"), isSourceDevice}
+    : Device{c_RequiredNrOfInputParams.at(DeviceTypeID::PDU), c_MaxAllowedCharsCount.at(DeviceTypeID::PDU), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mPlacementType);
@@ -54,7 +54,7 @@ void PDU::computeDescriptionAndLabel()
 }
 
 ExtensionBar::ExtensionBar(bool isSourceDevice)
-    : Device{c_RequiredNrOfInputParams.at("_ext"), c_MaxAllowedCharsCount.at("_ext"), isSourceDevice}
+    : Device{c_RequiredNrOfInputParams.at(DeviceTypeID::EXTENSION_BAR), c_MaxAllowedCharsCount.at(DeviceTypeID::EXTENSION_BAR), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mPlacementType);
@@ -84,7 +84,7 @@ void ExtensionBar::computeDescriptionAndLabel()
 }
 
 UPS::UPS(bool isSourceDevice)
-    : Device{c_RequiredNrOfInputParams.at("_ups"), c_MaxAllowedCharsCount.at("_ups"), isSourceDevice}
+    : Device{c_RequiredNrOfInputParams.at(DeviceTypeID::UPS), c_MaxAllowedCharsCount.at(DeviceTypeID::UPS), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mLoadSegmentNumber);
@@ -98,7 +98,7 @@ void UPS::computeDescriptionAndLabel()
 }
 
 PowerSupply::PowerSupply(bool isSourceDevice)
-    : Device{c_RequiredNrOfInputParams.at("_ps"), c_MaxAllowedCharsCount.at("_ps"), isSourceDevice}
+    : Device{c_RequiredNrOfInputParams.at(DeviceTypeID::POWER_SUPPLY), c_MaxAllowedCharsCount.at(DeviceTypeID::POWER_SUPPLY), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mPortNumber);

@@ -133,6 +133,39 @@ void writeOutputToFile(std::ofstream& outputStream, const std::vector<std::strin
     }
 }
 
+DeviceTypeID getDeviceTypeID(const std::string& deviceType)
+{
+    DeviceTypeID deviceTypeID{DeviceTypeID::INVALID_DEVICE};
+
+    std::string deviceTypeConverted{deviceType};
+    convertStringCase(deviceTypeConverted, deviceTypeConverted, false);
+
+    std::map<std::string, DeviceTypeID>::const_iterator it{c_DeviceTypeToIDMapping.find(deviceTypeConverted)};
+
+    if (it != c_DeviceTypeToIDMapping.cend())
+    {
+        deviceTypeID = it->second;
+    }
+
+    return deviceTypeID;
+}
+
+std::string getDeviceType(DeviceTypeID deviceTypeID)
+{
+    std::string deviceType;
+
+    for (std::map<std::string, DeviceTypeID>::const_iterator it{c_DeviceTypeToIDMapping.cbegin()}; it != c_DeviceTypeToIDMapping.cend(); ++it)
+    {
+        if (deviceTypeID == it->second)
+        {
+            deviceType = it->first;
+            break;
+        }
+    }
+
+    return deviceType;
+}
+
 /* source string should be copied into destination if they are not the same string,
    otherwise the std::transform does not yield a correct result
    (although the string value is correct an incorrect size string is "seen")
