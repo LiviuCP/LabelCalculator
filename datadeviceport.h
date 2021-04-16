@@ -1,64 +1,64 @@
-#ifndef DATADEVICE_H
-#define DATADEVICE_H
+#ifndef DATADEVICEPORT_H
+#define DATADEVICEPORT_H
 
-#include "device.h"
+#include "deviceport.h"
 
 // Ethernet switch ports
-class LANSwitch : public Device
+class LANSwitchPort : public DevicePort
 {
 public:
-    LANSwitch() = delete;
+    LANSwitchPort() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    LANSwitch(bool isSourceDevice);
+    LANSwitchPort(bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 };
 
 // FC (SAN) switch ports
-class SANSwitch : public Device
+class SANSwitchPort : public DevicePort
 {
 public:
-    SANSwitch() = delete;
+    SANSwitchPort() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    SANSwitch(bool isSourceDevice);
+    SANSwitchPort(bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 };
 
 // Infiniband switch ports
-class InfinibandSwitch : public Device
+class InfinibandSwitchPort : public DevicePort
 {
 public:
-    InfinibandSwitch() = delete;
+    InfinibandSwitchPort() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    InfinibandSwitch(bool isSourceDevice);
+    InfinibandSwitchPort(bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 };
 
 // KVM switch ports
-class KVMSwitch : public Device
+class KVMSwitchPort : public DevicePort
 {
 public:
-    KVMSwitch() = delete;
+    KVMSwitchPort() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    KVMSwitch(bool isSourceDevice);
+    KVMSwitchPort(bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 };
 
 // server ports (embedded (incl. management), Ethernet, FC, IB, etc)
-class Server : public Device
+class ServerPort : public DevicePort
 {
 public:
-    Server() = delete;
+    ServerPort() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    Server(bool isSourceDevice);
+    ServerPort(bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 
@@ -67,13 +67,13 @@ protected:
 };
 
 // storage FC ports
-class Storage : public Device
+class StoragePort : public DevicePort
 {
 public:
-    Storage() = delete;
+    StoragePort() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    Storage(bool isSourceDevice);
+    StoragePort(bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 
@@ -82,13 +82,13 @@ protected:
 };
 
 // blade system interconnect/management/uplink/downlink ports
-class BladeServer : public Device
+class BladeServerPort : public DevicePort
 {
 public:
-    BladeServer() = delete;
+    BladeServerPort() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    BladeServer(bool isSourceDevice);
+    BladeServerPort(bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 
@@ -97,4 +97,4 @@ protected:
     std::string mModuleNumber; // data module number
 };
 
-#endif // DATADEVICE_H
+#endif // DATADEVICEPORT_H

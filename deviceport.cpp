@@ -1,11 +1,11 @@
 #include <cassert>
 
 #include "errortypes.h"
-#include "device.h"
+#include "deviceport.h"
 
-const int Device::scMaxInputParametersCount{4};
+const int DevicePort::scMaxInputParametersCount{4};
 
-Device::Device(int requiredNumberOfParameters, int maxAllowedCharsCount, bool isSourceDevice)
+DevicePort::DevicePort(int requiredNumberOfParameters, int maxAllowedCharsCount, bool isSourceDevice)
     : mRow{1}
     , mColumn{1}
     , mMaxAllowedCharsCount{maxAllowedCharsCount}
@@ -19,11 +19,11 @@ Device::Device(int requiredNumberOfParameters, int maxAllowedCharsCount, bool is
     mInputData.reserve(mInputParametersCount);
 }
 
-Device::~Device()
+DevicePort::~DevicePort()
 {
 }
 
-int Device::parseInputData(const std::string& input, const int initialPosition, std::vector<ErrorPtr>& parsingErrors, std::ofstream& errorStream)
+int DevicePort::parseInputData(const std::string& input, const int initialPosition, std::vector<ErrorPtr>& parsingErrors, std::ofstream& errorStream)
 {
     assert(static_cast<int>(mInputData.size()) == mInputParametersCount); // check if all required parameters have been registered by derived class
 
@@ -116,37 +116,37 @@ int Device::parseInputData(const std::string& input, const int initialPosition, 
     return currentPosition;
 }
 
-void Device::setRow(int row)
+void DevicePort::setRow(int row)
 {
     mRow = row;
 }
 
-void Device::setColumn(int column)
+void DevicePort::setColumn(int column)
 {
     mColumn = column;
 }
 
-int Device::getRow() const
+int DevicePort::getRow() const
 {
     return mRow;
 }
 
-int Device::getColumn() const
+int DevicePort::getColumn() const
 {
     return mColumn;
 }
 
-std::string Device::getDescription() const
+std::string DevicePort::getDescription() const
 {
     return mDescription;
 }
 
-std::string Device::getLabel() const
+std::string DevicePort::getLabel() const
 {
     return mLabel;
 }
 
-void Device::_registerRequiredParameter(std::string* const pRequiredParameter)
+void DevicePort::_registerRequiredParameter(std::string* const pRequiredParameter)
 {
     if (nullptr != pRequiredParameter)
     {

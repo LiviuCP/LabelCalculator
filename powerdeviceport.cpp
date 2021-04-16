@@ -1,17 +1,17 @@
 #include <map>
 
-#include "powerdevice.h"
+#include "powerdeviceport.h"
 
-PDU::PDU(bool isSourceDevice)
-    : Device{c_RequiredNrOfInputParams.at(DeviceTypeID::PDU), c_MaxAllowedCharsCount.at(DeviceTypeID::PDU), isSourceDevice}
+PDUPort::PDUPort(bool isSourceDevice)
+    : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::PDU), c_MaxAllowedCharsCount.at(DeviceTypeID::PDU), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
-    _registerRequiredParameter(&mPlacementType);
+    _registerRequiredParameter(&mDevicePlacementType);
     _registerRequiredParameter(&mLoadSegmentNumber);
     _registerRequiredParameter(&mPortNumber);
 }
 
-void PDU::computeDescriptionAndLabel()
+void PDUPort::computeDescriptionAndLabel()
 {
     using namespace std;
 
@@ -22,28 +22,28 @@ void PDU::computeDescriptionAndLabel()
         {"R", "Vertical right"} // vertically right placed PDU
     };
 
-    convertStringCase(mPlacementType, mPlacementType, true);
+    convertStringCase(mDevicePlacementType, mDevicePlacementType, true);
 
     std::string portNumberUpperCase;
     convertStringCase(mPortNumber, portNumberUpperCase, true);
 
-    if (c_PlacementTypesDescriptions.find(mPlacementType) != c_PlacementTypesDescriptions.cend())
+    if (c_PlacementTypesDescriptions.find(mDevicePlacementType) != c_PlacementTypesDescriptions.cend())
     {
-        const string c_ChosenPlacementDescription{c_PlacementTypesDescriptions.at(mPlacementType)};
+        const string c_ChosenPlacementDescription{c_PlacementTypesDescriptions.at(mDevicePlacementType)};
 
         if ("-" == mLoadSegmentNumber) // pdu with a single load segment (user fills in "-")
         {
             const std::string c_PortNumberSubstring{"IN" == portNumberUpperCase ? "_IN" : "_P" + mPortNumber};
 
             mDescription = c_ChosenPlacementDescription + " PDU placed at U" + mDeviceName + " - port number " + mPortNumber;
-            mLabel = "U" + mDeviceName + "_" + mPlacementType + "PDU" + c_PortNumberSubstring;
+            mLabel = "U" + mDeviceName + "_" + mDevicePlacementType + "PDU" + c_PortNumberSubstring;
         }
         else // pdu with multiple load segments
         {
             const std::string c_LoadSegmentPortNumberSubstring{"IN" == portNumberUpperCase ? "_IN" : "_P" + mLoadSegmentNumber + "." + mPortNumber};
 
             mDescription = c_ChosenPlacementDescription + " PDU placed at U" + mDeviceName + " - load segment number " + mLoadSegmentNumber + " - port number " + mPortNumber;
-            mLabel = "U" + mDeviceName + "_" + mPlacementType + "PDU" + c_LoadSegmentPortNumberSubstring;
+            mLabel = "U" + mDeviceName + "_" + mDevicePlacementType + "PDU" + c_LoadSegmentPortNumberSubstring;
         }
     }
     else
@@ -53,28 +53,28 @@ void PDU::computeDescriptionAndLabel()
     }
 }
 
-ExtensionBar::ExtensionBar(bool isSourceDevice)
-    : Device{c_RequiredNrOfInputParams.at(DeviceTypeID::EXTENSION_BAR), c_MaxAllowedCharsCount.at(DeviceTypeID::EXTENSION_BAR), isSourceDevice}
+ExtensionBarPort::ExtensionBarPort(bool isSourceDevice)
+    : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::EXTENSION_BAR), c_MaxAllowedCharsCount.at(DeviceTypeID::EXTENSION_BAR), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
-    _registerRequiredParameter(&mPlacementType);
+    _registerRequiredParameter(&mDevicePlacementType);
     _registerRequiredParameter(&mPortNumber);
 }
 
-void ExtensionBar::computeDescriptionAndLabel()
+void ExtensionBarPort::computeDescriptionAndLabel()
 {
-    convertStringCase(mPlacementType, mPlacementType, true);
+    convertStringCase(mDevicePlacementType, mDevicePlacementType, true);
 
     std::string portNumberUpperCase;
     convertStringCase(mPortNumber, portNumberUpperCase, true);
 
-    if ("L" == mPlacementType || "R" == mPlacementType)
+    if ("L" == mDevicePlacementType || "R" == mDevicePlacementType)
     {
-        const std::string c_PlacementSide{"L" == mPlacementType ? "Left" : "Right"};
+        const std::string c_PlacementSide{"L" == mDevicePlacementType ? "Left" : "Right"};
         const std::string c_PortNumberSubstring{"IN" == portNumberUpperCase ? "_IN" : "_P" + mPortNumber};
 
         mDescription = c_PlacementSide + " extension bar placed at U" + mDeviceName + " - port number " + mPortNumber;
-        mLabel = "U" + mDeviceName + "_" + mPlacementType + "EXT" + c_PortNumberSubstring;
+        mLabel = "U" + mDeviceName + "_" + mDevicePlacementType + "EXT" + c_PortNumberSubstring;
     }
     else
     {
@@ -83,22 +83,22 @@ void ExtensionBar::computeDescriptionAndLabel()
     }
 }
 
-UPS::UPS(bool isSourceDevice)
-    : Device{c_RequiredNrOfInputParams.at(DeviceTypeID::UPS), c_MaxAllowedCharsCount.at(DeviceTypeID::UPS), isSourceDevice}
+UPSPort::UPSPort(bool isSourceDevice)
+    : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::UPS), c_MaxAllowedCharsCount.at(DeviceTypeID::UPS), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mLoadSegmentNumber);
     _registerRequiredParameter(&mPortNumber);
 }
 
-void UPS::computeDescriptionAndLabel()
+void UPSPort::computeDescriptionAndLabel()
 {
     mDescription = "UPS placed at U" + mDeviceName + " - load segment " + mLoadSegmentNumber + " - port " + mPortNumber;
     mLabel = "U" + mDeviceName + "_P" + mLoadSegmentNumber + "." + mPortNumber;
 }
 
 PowerSupply::PowerSupply(bool isSourceDevice)
-    : Device{c_RequiredNrOfInputParams.at(DeviceTypeID::POWER_SUPPLY), c_MaxAllowedCharsCount.at(DeviceTypeID::POWER_SUPPLY), isSourceDevice}
+    : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::POWER_SUPPLY), c_MaxAllowedCharsCount.at(DeviceTypeID::POWER_SUPPLY), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mPortNumber);

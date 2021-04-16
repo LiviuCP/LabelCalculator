@@ -1,26 +1,26 @@
-#include "datadevice.h"
+#include "datadeviceport.h"
 
-LANSwitch::LANSwitch(bool isSourceDevice)
-    : Device{c_RequiredNrOfInputParams.at(DeviceTypeID::LAN_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::LAN_SWITCH), isSourceDevice}
+LANSwitchPort::LANSwitchPort(bool isSourceDevice)
+    : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::LAN_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::LAN_SWITCH), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mPortNumber);
 }
 
-void LANSwitch::computeDescriptionAndLabel()
+void LANSwitchPort::computeDescriptionAndLabel()
 {
     mDescription = "LAN switch placed at U" + mDeviceName + " - Ethernet port " + mPortNumber;
     mLabel = "U" + mDeviceName + "_P" + mPortNumber;
 }
 
-SANSwitch::SANSwitch(bool isSourceDevice)
-    : Device{c_RequiredNrOfInputParams.at(DeviceTypeID::SAN_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::SAN_SWITCH), isSourceDevice}
+SANSwitchPort::SANSwitchPort(bool isSourceDevice)
+    : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::SAN_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::SAN_SWITCH), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mPortNumber);
 }
 
-void SANSwitch::computeDescriptionAndLabel()
+void SANSwitchPort::computeDescriptionAndLabel()
 {
     mDescription = "SAN Switch placed at U" + mDeviceName;
     mLabel = "U" + mDeviceName;
@@ -38,14 +38,14 @@ void SANSwitch::computeDescriptionAndLabel()
     }
 }
 
-InfinibandSwitch::InfinibandSwitch(bool isSourceDevice)
-    : Device{c_RequiredNrOfInputParams.at(DeviceTypeID::INFINIBAND_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::INFINIBAND_SWITCH), isSourceDevice}
+InfinibandSwitchPort::InfinibandSwitchPort(bool isSourceDevice)
+    : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::INFINIBAND_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::INFINIBAND_SWITCH), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mPortNumber);
 }
 
-void InfinibandSwitch::computeDescriptionAndLabel()
+void InfinibandSwitchPort::computeDescriptionAndLabel()
 {
     mDescription = "Infiniband switch placed at U" + mDeviceName;
     mLabel = "U" + mDeviceName;
@@ -63,28 +63,28 @@ void InfinibandSwitch::computeDescriptionAndLabel()
     }
 }
 
-KVMSwitch::KVMSwitch(bool isSourceDevice)
-    : Device{c_RequiredNrOfInputParams.at(DeviceTypeID::KVM_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::KVM_SWITCH), isSourceDevice}
+KVMSwitchPort::KVMSwitchPort(bool isSourceDevice)
+    : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::KVM_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::KVM_SWITCH), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mPortNumber);
 }
 
-void KVMSwitch::computeDescriptionAndLabel()
+void KVMSwitchPort::computeDescriptionAndLabel()
 {
     mDescription = "KVM switch placed at U" + mDeviceName + " - port " + mPortNumber;
     mLabel = "U" + mDeviceName + "_P" + mPortNumber;
 }
 
-Server::Server(bool isSourceDevice)
-    : Device{c_RequiredNrOfInputParams.at(DeviceTypeID::RACK_SERVER), c_MaxAllowedCharsCount.at(DeviceTypeID::RACK_SERVER), isSourceDevice}
+ServerPort::ServerPort(bool isSourceDevice)
+    : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::RACK_SERVER), c_MaxAllowedCharsCount.at(DeviceTypeID::RACK_SERVER), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
 }
 
-void Server::computeDescriptionAndLabel()
+void ServerPort::computeDescriptionAndLabel()
 {
     mDescription = "Server placed at U" + mDeviceName;
     mLabel = "U" + mDeviceName;
@@ -133,15 +133,15 @@ void Server::computeDescriptionAndLabel()
     }
 }
 
-Storage::Storage(bool isSourceDevice)
-    : Device{c_RequiredNrOfInputParams.at(DeviceTypeID::STORAGE), c_MaxAllowedCharsCount.at(DeviceTypeID::STORAGE), isSourceDevice}
+StoragePort::StoragePort(bool isSourceDevice)
+    : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::STORAGE), c_MaxAllowedCharsCount.at(DeviceTypeID::STORAGE), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mControllerNr);
     _registerRequiredParameter(&mPortNumber);
 }
 
-void Storage::computeDescriptionAndLabel()
+void StoragePort::computeDescriptionAndLabel()
 {
     const bool c_IsManagementPort{"m" == mPortNumber || "M" == mPortNumber};
     const bool c_IsManagementController{"m" == mControllerNr || "M" == mControllerNr};
@@ -163,8 +163,8 @@ void Storage::computeDescriptionAndLabel()
     }
 }
 
-BladeServer::BladeServer(bool isSourceDevice)
-    : Device{c_RequiredNrOfInputParams.at(DeviceTypeID::BLADE_SERVER), c_MaxAllowedCharsCount.at(DeviceTypeID::BLADE_SERVER), isSourceDevice}
+BladeServerPort::BladeServerPort(bool isSourceDevice)
+    : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::BLADE_SERVER), c_MaxAllowedCharsCount.at(DeviceTypeID::BLADE_SERVER), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mModuleType);
@@ -172,7 +172,7 @@ BladeServer::BladeServer(bool isSourceDevice)
     _registerRequiredParameter(&mPortNumber);
 }
 
-void BladeServer::computeDescriptionAndLabel()
+void BladeServerPort::computeDescriptionAndLabel()
 {
     mDescription = "Blade system placed at U" + mDeviceName;
     mLabel = "U" + mDeviceName;

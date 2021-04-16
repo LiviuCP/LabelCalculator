@@ -1,5 +1,5 @@
-#ifndef DEVICE_H
-#define DEVICE_H
+#ifndef DEVICEPORT_H
+#define DEVICEPORT_H
 
 #include <fstream>
 #include <vector>
@@ -8,19 +8,19 @@
 #include "labelutils.h"
 #include "error.h"
 
-class Device
+class DevicePort
 {
 public:
-    Device(int requiredNumberOfParameters, int maxAllowedCharsCount, bool isSourceDevice);
+    DevicePort(int requiredNumberOfParameters, int maxAllowedCharsCount, bool isSourceDevice);
 
-    virtual ~Device();
+    virtual ~DevicePort();
 
-    /* Calculates the description and label field for each device
+    /* Calculates the description and label field for each device port
        This data will be subsequently used for building the final table
     */
     virtual void computeDescriptionAndLabel() = 0;
 
-    /* reads and parses the input fields for the device from string starting position pos (which is subsequently updated)
+    /* reads and parses the input fields for the device port from string starting position pos (which is subsequently updated)
        uses the ofstream for logging any errors in the corresponding file and the boolean to report the occurence of these errors
     */
     int parseInputData(const std::string &s, const int initialPosition, std::vector<ErrorPtr>& parsingErrors, std::ofstream& errorStream);
@@ -41,8 +41,8 @@ protected:
     std::string mDeviceName;  // device name (e.g. for PDU-A the name is "A")
     std::string mPortNumber;  // power or data port number that should be mentioned on the cable label
 
-    std::string mDescription; // text to be written in the source (first device) / destination (second device) field of the labelling table (device description)
-    std::string mLabel;       // text to be written in the source (first device) / destination (second device) field of the labelling table (device label)
+    std::string mDescription; // text to be written in the source (first device) / destination (second device) field of the labelling table (device port description)
+    std::string mLabel;       // text to be written in the source (first device) / destination (second device) field of the labelling table (device port label)
 
     int mRow;            // input .csv row from which the error originated
     int mColumn;         // input .csv column from which the error originated
@@ -57,6 +57,6 @@ private:
     int mInputParametersCount;
 };
 
-using DevicePtr = std::shared_ptr<Device>;
+using DevicePortPtr = std::shared_ptr<DevicePort>;
 
-#endif // DEVICE_H
+#endif // DEVICEPORT_H

@@ -1,7 +1,7 @@
 #ifndef CONNECTIONINPUTPARSER_H
 #define CONNECTIONINPUTPARSER_H
 
-#include "device.h"
+#include "deviceport.h"
 #include "parser.h"
 
 class ConnectionInputParser final : public Parser
@@ -31,12 +31,12 @@ private:
     */
     static void _buildConnectionEntry(std::string& entry,
                                       int& entryNumber,
-                                      const DevicePtr pFirstDevice,
-                                      const DevicePtr pSecondDevice,
+                                      const DevicePortPtr pFirstDevicePort,
+                                      const DevicePortPtr pSecondDevicePort,
                                       const std::string& cablePartNumber);
 
-    /* all created Device objects (except the ones used for checking device validity which are destroyed immediately) */
-    std::vector<DevicePtr> mDevices;
+    /* all created DevicePort objects used for calculating labels and descriptions */
+    std::vector<DevicePortPtr> mDevicePorts;
 
     /* the cable part number of each connection to be stored here */
     std::vector<std::string> mCablePartNumbersEntries;

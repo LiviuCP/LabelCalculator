@@ -6,9 +6,9 @@ CONFIG -= qt
 SOURCES += \
         connectiondefinitionparser.cpp \
         connectioninputparser.cpp \
-        datadevice.cpp \
-        device.cpp \
-        devicefactory.cpp \
+        datadeviceport.cpp \
+        deviceport.cpp \
+        deviceportsfactory.cpp \
         displayutils.cpp \
         error.cpp \
         errortypes.cpp \
@@ -16,18 +16,18 @@ SOURCES += \
         main.cpp \
         parser.cpp \
         parsercreator.cpp \
-        powerdevice.cpp
+        powerdeviceport.cpp
 
 HEADERS += \
     connectiondefinitionparser.h \
     connectioninputparser.h \
-    datadevice.h \
-    device.h \
-    devicefactory.h \
+    datadeviceport.h \
+    deviceport.h \
+    deviceportsfactory.h \
     displayutils.h \
     error.h \
     errortypes.h \
     labelutils.h \
     parser.h \
     parsercreator.h \
-    powerdevice.h
+    powerdeviceport.h

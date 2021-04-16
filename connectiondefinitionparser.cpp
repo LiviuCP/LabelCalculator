@@ -1,7 +1,6 @@
 #include <sstream>
 #include <cassert>
 
-#include "devicefactory.h"
 #include "errortypes.h"
 #include "connectiondefinitionparser.h"
 
