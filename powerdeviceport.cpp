@@ -96,16 +96,3 @@ void UPSPort::computeDescriptionAndLabel()
     mDescription = "UPS placed at U" + mDeviceName + " - load segment " + mLoadSegmentNumber + " - port " + mPortNumber;
     mLabel = "U" + mDeviceName + "_P" + mLoadSegmentNumber + "." + mPortNumber;
 }
-
-PowerSupply::PowerSupply(bool isSourceDevice)
-    : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::POWER_SUPPLY), c_MaxAllowedCharsCount.at(DeviceTypeID::POWER_SUPPLY), isSourceDevice}
-{
-    _registerRequiredParameter(&mDeviceName);
-    _registerRequiredParameter(&mPortNumber);
-}
-
-void PowerSupply::computeDescriptionAndLabel()
-{
-    mDescription = "Device placed at U" + mDeviceName + " - power supply " + mPortNumber;
-    mLabel = "U" + mDeviceName + "_PS" + mPortNumber;
-}

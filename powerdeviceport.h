@@ -43,14 +43,4 @@ protected:
     std::string mLoadSegmentNumber;
 };
 
-// power supply ports (any power supply no matter the device type)
-class PowerSupply : public DevicePort
-{
-public:
-    PowerSupply() = delete;
-    PowerSupply(bool isSourceDevice);
-
-    void computeDescriptionAndLabel() override;
-};
-
 #endif // POWERDEVICEPORT_H

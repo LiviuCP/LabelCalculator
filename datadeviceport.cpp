@@ -4,37 +4,69 @@ LANSwitchPort::LANSwitchPort(bool isSourceDevice)
     : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::LAN_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::LAN_SWITCH), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
 }
 
 void LANSwitchPort::computeDescriptionAndLabel()
 {
-    mDescription = "LAN switch placed at U" + mDeviceName + " - Ethernet port " + mPortNumber;
-    mLabel = "U" + mDeviceName + "_P" + mPortNumber;
+    mDescription = "LAN switch placed at U" + mDeviceName;
+    mLabel = "U" + mDeviceName;
+
+    convertStringCase(mPortType, mPortType, true);
+
+    if ("N" == mPortType)
+    {
+        mDescription += " - Ethernet port " + mPortNumber;
+        mLabel += "_P" + mPortNumber;
+    }
+    else if ("P" == mPortType)
+    {
+        mDescription += " - power supply " + mPortNumber;
+        mLabel += "_PS" + mPortNumber;
+    }
+    else
+    {
+        mDescription += c_UnknownPortTypeErrorText;
+        mLabel += c_LabelErrorText;
+    }
 }
 
 SANSwitchPort::SANSwitchPort(bool isSourceDevice)
     : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::SAN_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::SAN_SWITCH), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
 }
 
 void SANSwitchPort::computeDescriptionAndLabel()
 {
-    mDescription = "SAN Switch placed at U" + mDeviceName;
+    mDescription = "SAN switch placed at U" + mDeviceName;
     mLabel = "U" + mDeviceName;
+
+    convertStringCase(mPortType, mPortType, true);
 
     // management port vs. data port
     if ("m" == mPortNumber || "M" == mPortNumber)
     {
-        mDescription = mDescription + " - management port";
+        mDescription += " - management port";
         mLabel = mLabel + "_MGMT";
+    }
+    else if ("F" == mPortType)
+    {
+        mDescription += " - FC port " + mPortNumber;
+        mLabel = mLabel + "_P" + mPortNumber;
+    }
+    else if ("P" == mPortType)
+    {
+        mDescription += " - power supply " + mPortNumber;
+        mLabel += "_PS" + mPortNumber;
     }
     else
     {
-        mDescription = mDescription + " - FC port " + mPortNumber;
-        mLabel = mLabel + "_P" + mPortNumber;
+        mDescription += c_UnknownPortTypeErrorText;
+        mLabel += c_LabelErrorText;
     }
 }
 
@@ -42,6 +74,7 @@ InfinibandSwitchPort::InfinibandSwitchPort(bool isSourceDevice)
     : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::INFINIBAND_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::INFINIBAND_SWITCH), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
 }
 
@@ -50,16 +83,28 @@ void InfinibandSwitchPort::computeDescriptionAndLabel()
     mDescription = "Infiniband switch placed at U" + mDeviceName;
     mLabel = "U" + mDeviceName;
 
+    convertStringCase(mPortType, mPortType, true);
+
      // management port vs. data port
     if ("m" == mPortNumber  || "M" == mPortNumber )
     {
-        mDescription = mDescription + " - management port";
-        mLabel = mLabel + "_MGMT";
+        mDescription += " - management port";
+        mLabel += "_MGMT";
+    }
+    else if ("I" == mPortType)
+    {
+        mDescription += + " - port " + mPortNumber;
+        mLabel += "_P" + mPortNumber;
+    }
+    else if ("P" == mPortType)
+    {
+        mDescription += " - power supply " + mPortNumber;
+        mLabel += "_PS" + mPortNumber;
     }
     else
     {
-        mDescription = mDescription + " - port " + mPortNumber;
-        mLabel = mLabel + "_P" + mPortNumber;
+        mDescription += c_UnknownPortTypeErrorText;
+        mLabel += c_LabelErrorText;
     }
 }
 
@@ -67,13 +112,32 @@ KVMSwitchPort::KVMSwitchPort(bool isSourceDevice)
     : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::KVM_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::KVM_SWITCH), isSourceDevice}
 {
     _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
 }
 
 void KVMSwitchPort::computeDescriptionAndLabel()
 {
-    mDescription = "KVM switch placed at U" + mDeviceName + " - port " + mPortNumber;
-    mLabel = "U" + mDeviceName + "_P" + mPortNumber;
+    mDescription = "KVM switch placed at U" + mDeviceName;
+    mLabel = "U" + mDeviceName;
+
+    convertStringCase(mPortType, mPortType, true);
+
+    if ("K" == mPortType)
+    {
+        mDescription += " - port " + mPortNumber;
+        mLabel += "_P" + mPortNumber;
+    }
+    else if ("P" == mPortType)
+    {
+        mDescription += " - power supply " + mPortNumber;
+        mLabel += "_PS" + mPortNumber;
+    }
+    else
+    {
+        mDescription += c_UnknownPortTypeErrorText;
+        mLabel += c_LabelErrorText;
+    }
 }
 
 ServerPort::ServerPort(bool isSourceDevice)
@@ -126,10 +190,15 @@ void ServerPort::computeDescriptionAndLabel()
         mDescription += " - KVM port";
         mLabel += "_KVM";
     }
+    else if ("P" == mPortType) // power supply
+    {
+        mDescription += " - power supply " + mPortNumber;
+        mLabel += "_PS" + mPortNumber;
+    }
     else
     {
-        mDescription += " - UNKNOWN PORT TYPE (PLEASE CHECK INPUT FILE connectioninput.csv)";
-        mLabel += "ERROR!!!";
+        mDescription += c_UnknownPortTypeErrorText;
+        mLabel += c_LabelErrorText;
     }
 }
 
@@ -138,31 +207,52 @@ StoragePort::StoragePort(bool isSourceDevice)
 {
     _registerRequiredParameter(&mDeviceName);
     _registerRequiredParameter(&mControllerNr);
+    _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
 }
 
 void StoragePort::computeDescriptionAndLabel()
 {
-    const bool c_IsManagementPort{"m" == mPortNumber || "M" == mPortNumber};
-    const bool c_IsManagementController{"m" == mControllerNr || "M" == mControllerNr};
+    mDescription = "Storage device placed at U" + mDeviceName;
+    mLabel = "U" + mDeviceName;
 
-    if (c_IsManagementController && c_IsManagementPort)
+    convertStringCase(mPortType, mPortType, true);
+
+    if ("m" == mPortNumber || "M" == mPortNumber)
     {
-        mDescription = "Storage device placed at U" + mDeviceName + " - management port"; // special case: a single management port
-        mLabel = "U" + mDeviceName + "_MGMT"; // special case: a single management port
+        if ("m" == mControllerNr || "M" == mControllerNr)
+        {
+            mDescription += " - management port"; // single management port
+            mLabel += "_MGMT";
+        }
+        else
+        {
+            mDescription += " - controller " + mControllerNr + " - management port"; // one management port per controller
+            mLabel += "_C" + mControllerNr + "_MGMT";
+        }
     }
-    else if (c_IsManagementPort) // special case: a management port per controller
-    {
-        mDescription = "Storage device placed at U" + mDeviceName + " - controller " + mControllerNr + " - management port";
-        mLabel = "U" + mDeviceName + "_C" + mControllerNr + "_MGMT";
-    }
-    else // general case: data port
+    else if ("D" == mPortType) // data port (FC, SAS, etc)
     {
         mDescription = "Storage device placed at U" + mDeviceName + " - controller " + mControllerNr + " - port " + mPortNumber;
         mLabel = "U" + mDeviceName + "_C" + mControllerNr + "_P" + mPortNumber;
     }
+    else if ("P" == mPortType) // power supply
+    {
+        mDescription += " - power supply " + mPortNumber;
+        mLabel += "_PS" + mPortNumber;
+    }
+    else
+    {
+        mDescription += c_UnknownPortTypeErrorText;
+        mLabel += c_LabelErrorText;
+    }
 }
 
+/* In order to avoid registering an additional parameter that might cause some confusion (and potential issues),
+   for blades the power supply is considered a module, not a port:
+    - instead of mPortType: mModuleType is used for power supply
+    - instead of mPortNumber: mModuleNumber is used for power supply number
+*/
 BladeServerPort::BladeServerPort(bool isSourceDevice)
     : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::BLADE_SERVER), c_MaxAllowedCharsCount.at(DeviceTypeID::BLADE_SERVER), isSourceDevice}
 {
@@ -199,9 +289,14 @@ void BladeServerPort::computeDescriptionAndLabel()
         mDescription += " - management downlink port";
         mLabel += "_MG_DO";
     }
+    else if ("P" == mModuleType)
+    {
+        mDescription += " - power supply " + mModuleNumber;
+        mLabel += "_PS" + mModuleNumber;
+    }
     else
     {
-        mDescription += " - UNKNOWN DEVICE! PLEASE CHECK INPUT FILE (connectioninput.csv)";
-        mLabel += " - ERROR!";
+        mDescription += c_UnknownModuleTypeErrorText;
+        mLabel += c_LabelErrorText;
     }
 }

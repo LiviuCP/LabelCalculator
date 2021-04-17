@@ -47,9 +47,6 @@ private:
 
     /* total number of actual physical devices discovered within rack during the parsing process */
     int mDiscoveredDevicesCount;
-
-    /* placeholders used for creating the connection input template file (should be filled in by user in next step) */
-    static const std::map<DeviceTypeID, std::string> scConnectionInputPlaceholders;
 };
 
 #endif // CONNECTIONDEFINITIONPARSER_H

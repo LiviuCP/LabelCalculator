@@ -4,21 +4,6 @@
 #include "errortypes.h"
 #include "connectiondefinitionparser.h"
 
-const std::map<DeviceTypeID, std::string> ConnectionDefinitionParser::scConnectionInputPlaceholders
-{
-    {   DeviceTypeID::PDU,                     "PLACEMENT,LOAD SEGMENT NUMBER,PORT NUMBER"     },
-    {   DeviceTypeID::EXTENSION_BAR,           "PLACEMENT,PORT NUMBER,-"                       },
-    {   DeviceTypeID::UPS,                     "LOAD SEGMENT NUMBER,PORT NUMBER,-"             },
-    {   DeviceTypeID::POWER_SUPPLY,            "POWER SUPPLY NUMBER,-,-"                       },
-    {   DeviceTypeID::RACK_SERVER,             "PORT TYPE,PORT NUMBER,-"                       },
-    {   DeviceTypeID::BLADE_SERVER,            "MODULE TYPE,MODULE NUMBER,PORT NUMBER"         },
-    {   DeviceTypeID::STORAGE,                 "CONTROLLER NUMBER,PORT NUMBER,-"               },
-    {   DeviceTypeID::SAN_SWITCH,              "PORT NUMBER,-,-"                               },
-    {   DeviceTypeID::LAN_SWITCH,              "PORT NUMBER,-,-"                               },
-    {   DeviceTypeID::INFINIBAND_SWITCH,       "PORT NUMBER,-,-"                               },
-    {   DeviceTypeID::KVM_SWITCH,              "PORT NUMBER,-,-"                               }
-};
-
 ConnectionDefinitionParser::ConnectionDefinitionParser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream)
     : Parser{pInputStream, pOutputStream, pErrorStream, c_InputHeader}
     , mDiscoveredDevicesCount{0}

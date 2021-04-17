@@ -22,9 +22,6 @@ DevicePortPtr DevicePortsFactory::createDevicePort(DeviceTypeID deviceTypeID, bo
     case DeviceTypeID::UPS:
         pDevicePort = std::make_shared<UPSPort>(isSourceDevice);
         break;
-    case DeviceTypeID::POWER_SUPPLY:
-        pDevicePort = std::make_shared<PowerSupply>(isSourceDevice);
-        break;
     case DeviceTypeID::LAN_SWITCH:
         pDevicePort = std::make_shared<LANSwitchPort>(isSourceDevice);
         break;

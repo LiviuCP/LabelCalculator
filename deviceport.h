@@ -36,6 +36,11 @@ public:
     std::string getLabel() const;
 
 protected:
+    /* Registers the required parameter so it can be requested from the connection input file:
+       - the registration order should match the order in which parameters are given in the file
+       for the specific device port
+       - the number of registered parameters should match the mInputParametersCount
+    */
     void _registerRequiredParameter(std::string* const pRequiredParameter);
 
     std::string mDeviceName;  // device name (e.g. for PDU-A the name is "A")
