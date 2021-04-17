@@ -29,27 +29,33 @@ void PDUPort::computeDescriptionAndLabel()
 
     if (c_PlacementTypesDescriptions.find(mDevicePlacementType) != c_PlacementTypesDescriptions.cend())
     {
-        const string c_ChosenPlacementDescription{c_PlacementTypesDescriptions.at(mDevicePlacementType)};
+        mDescription = c_PlacementTypesDescriptions.at(mDevicePlacementType) + " PDU placed at U" + mDeviceName;
+        mLabel = "U" + mDeviceName + "_" + mDevicePlacementType + "PDU";
 
-        if ("-" == mLoadSegmentNumber) // pdu with a single load segment (user fills in "-")
+        if ("M" == portNumberUpperCase) // management port
+        {
+            mDescription += " - management port";
+            mLabel += "_MGMT";
+        }
+        else if ("-" == mLoadSegmentNumber) // pdu with a single load segment (user fills in "-")
         {
             const std::string c_PortNumberSubstring{"IN" == portNumberUpperCase ? "_IN" : "_P" + mPortNumber};
 
-            mDescription = c_ChosenPlacementDescription + " PDU placed at U" + mDeviceName + " - port number " + mPortNumber;
-            mLabel = "U" + mDeviceName + "_" + mDevicePlacementType + "PDU" + c_PortNumberSubstring;
+            mDescription += " - port number " + mPortNumber;
+            mLabel += c_PortNumberSubstring;
         }
         else // pdu with multiple load segments
         {
             const std::string c_LoadSegmentPortNumberSubstring{"IN" == portNumberUpperCase ? "_IN" : "_P" + mLoadSegmentNumber + "." + mPortNumber};
 
-            mDescription = c_ChosenPlacementDescription + " PDU placed at U" + mDeviceName + " - load segment number " + mLoadSegmentNumber + " - port number " + mPortNumber;
-            mLabel = "U" + mDeviceName + "_" + mDevicePlacementType + "PDU" + c_LoadSegmentPortNumberSubstring;
+            mDescription += " - load segment number " + mLoadSegmentNumber + " - port number " + mPortNumber;
+            mLabel += c_LoadSegmentPortNumberSubstring;
         }
     }
     else
     {
-        mDescription = "ERROR. THE PDU PLACEMENT TYPE YOU HAVE CHOSEN DOES NOT EXIST. PLEASE REVIEW INPUT FILE (connectioninput.csv).";
-        mLabel = "ERROR. INVALID PLACEMENT TYPE.";
+        mDescription = c_InvalidPDUPlacementErrorText;
+        mLabel += c_LabelErrorText;
     }
 }
 
@@ -78,8 +84,8 @@ void ExtensionBarPort::computeDescriptionAndLabel()
     }
     else
     {
-        mDescription = "ERROR. THE EXTENSION BAR PLACEMENT TYPE YOU HAVE CHOSEN DOES NOT EXIST. PLEASE REVIEW INPUT FILE(connectioninput.csv).";
-        mLabel = "ERROR. INVALID PLACEMENT TYPE.";
+        mDescription = c_InvalidExtPlacementErrorText;
+        mLabel += c_LabelErrorText;
     }
 }
 
@@ -93,6 +99,17 @@ UPSPort::UPSPort(bool isSourceDevice)
 
 void UPSPort::computeDescriptionAndLabel()
 {
-    mDescription = "UPS placed at U" + mDeviceName + " - load segment " + mLoadSegmentNumber + " - port " + mPortNumber;
-    mLabel = "U" + mDeviceName + "_P" + mLoadSegmentNumber + "." + mPortNumber;
+    mDescription = "UPS placed at U" + mDeviceName;
+    mLabel = mLabel = "U" + mDeviceName;
+
+    if ("m" == mPortNumber || "M" == mPortNumber) // management port
+    {
+        mDescription += " - management port";
+        mLabel += "_MGMT";
+    }
+    else // power port
+    {
+        mDescription += " - load segment " + mLoadSegmentNumber + " - port " + mPortNumber;
+        mLabel += "_P" + mLoadSegmentNumber + "." + mPortNumber;
+    }
 }

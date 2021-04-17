@@ -17,6 +17,8 @@ static const std::string c_InputHeader{"__Cable part number__,__Source device ty
 static const std::string c_OutputHeader{"__Item number__,__Cable part number__,__Source device description__,__Source label__,__Destination device description__,__Destination label__"};
 static const std::string c_UnknownPortTypeErrorText{" - UNKNOWN PORT TYPE (PLEASE CHECK INPUT FILE connectioninput.csv)"};
 static const std::string c_UnknownModuleTypeErrorText{" - UNKNOWN MODULE TYPE (PLEASE CHECK INPUT FILE connectioninput.csv)"};
+static const std::string c_InvalidPDUPlacementErrorText{"ERROR. THE PDU PLACEMENT TYPE YOU HAVE CHOSEN DOES NOT EXIST. PLEASE REVIEW INPUT FILE (connectioninput.csv)."};
+static const std::string c_InvalidExtPlacementErrorText{"ERROR. THE EXTENSION BAR PLACEMENT TYPE YOU HAVE CHOSEN DOES NOT EXIST. PLEASE REVIEW INPUT FILE(connectioninput.csv)."};
 static const std::string c_LabelErrorText{"ERROR!!!"};
 
 #if defined (__APPLE__) && defined (__MACH__)
