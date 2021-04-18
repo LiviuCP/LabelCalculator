@@ -94,14 +94,16 @@ void WrongUNumberError::execute()
     Error::execute();
 }
 
-NoDevicePresentError::NoDevicePresentError(std::ofstream& errorStream)
-    : Error{ErrorCode::NO_DEVICE_PLACED_IN_POSITION, errorStream}
+InvalidTargetDevicePositionError::InvalidTargetDevicePositionError(std::ofstream& errorStream)
+    : Error{ErrorCode::INVALID_TARGET_DEVICE_POSITION, errorStream}
 {
 }
 
-void NoDevicePresentError::execute()
+void InvalidTargetDevicePositionError::execute()
 {
-    mErrorStream << "Error: connection to a non-existent device. No device is mounted in the rack in the mentioned U position" << std::endl;
+    mErrorStream << "Error: the target device position is invalid." << std::endl;
+    mErrorStream << "Either no device is mounted within rack in the mentioned U position or the target position is lower than the one of the source device." << std::endl;
+    mErrorStream << "Please note that the connections should always be defined bottom-up." << std::endl;
     mErrorStream << "Row number: " << mRow << "    " << "Column number: " << mColumn << std::endl;
 
     Error::execute();

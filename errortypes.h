@@ -61,10 +61,10 @@ public:
 };
 
 // device mentioned in connection definitions file not contained in the mapping table (connection to nothing)
-class NoDevicePresentError final : public Error
+class InvalidTargetDevicePositionError final : public Error
 {
 public:
-    NoDevicePresentError(std::ofstream& errorStream);
+    InvalidTargetDevicePositionError(std::ofstream& errorStream);
 
     void execute();
 };

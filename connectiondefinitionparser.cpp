@@ -98,7 +98,7 @@ bool ConnectionDefinitionParser::_parseInput()
             }
             else if (DeviceTypeID::NO_DEVICE == mMapping[secondDevice - 1]) // check if the second device is actually placed within rack (contained in mapping table)
             {
-                pError = std::make_shared<NoDevicePresentError>(*mpErrorStream);
+                pError = std::make_shared<InvalidTargetDevicePositionError>(*mpErrorStream);
             }
             else if (c_MaxNrOfRackUnits - rowIndex == secondDevice) // connection of a device to itself (connection loop) is not allowed
             {
