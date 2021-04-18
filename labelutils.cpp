@@ -137,10 +137,10 @@ DeviceTypeID getDeviceTypeID(const std::string& deviceType)
 {
     DeviceTypeID deviceTypeID{DeviceTypeID::UNKNOWN_DEVICE};
 
-    std::string deviceTypeConverted{deviceType};
-    convertStringCase(deviceTypeConverted, deviceTypeConverted, false);
+    std::string deviceTypeLowerCase{deviceType};
+    convertStringCase(deviceTypeLowerCase, false);
 
-    std::map<std::string, DeviceTypeID>::const_iterator it{c_DeviceTypeToIDMapping.find(deviceTypeConverted)};
+    std::map<std::string, DeviceTypeID>::const_iterator it{c_DeviceTypeToIDMapping.find(deviceTypeLowerCase)};
 
     if (it != c_DeviceTypeToIDMapping.cend())
     {
@@ -166,19 +166,10 @@ std::string getDeviceType(DeviceTypeID deviceTypeID)
     return deviceType;
 }
 
-/* source string should be copied into destination if they are not the same string,
-   otherwise the std::transform does not yield a correct result
-   (although the string value is correct an incorrect size string is "seen")
+/* converts a string "in place" to upper- or lowercase
 */
-void convertStringCase(std::string& source, std::string& destination, bool upperCase)
+void convertStringCase(std::string& str, bool upperCase)
 {
     auto transformation = upperCase ? [](char c){return std::toupper(c);} : [](char c){return std::tolower(c);};
-
-    if (&source != &destination)
-    {
-        destination = source;
-    }
-
-    std::transform(destination.begin(), destination.end(), destination.begin(), transformation);
-
+    std::transform(str.begin(), str.end(), str.begin(), transformation);
 }

@@ -22,10 +22,10 @@ void PDUPort::computeDescriptionAndLabel()
         {"R", "Vertical right"} // vertically right placed PDU
     };
 
-    convertStringCase(mDevicePlacementType, mDevicePlacementType, true);
+    convertStringCase(mDevicePlacementType, true);
 
-    std::string portNumberUpperCase;
-    convertStringCase(mPortNumber, portNumberUpperCase, true);
+    std::string portNumberUpperCase{mPortNumber};
+    convertStringCase(portNumberUpperCase, true);
 
     if (c_PlacementTypesDescriptions.find(mDevicePlacementType) != c_PlacementTypesDescriptions.cend())
     {
@@ -69,10 +69,10 @@ ExtensionBarPort::ExtensionBarPort(bool isSourceDevice)
 
 void ExtensionBarPort::computeDescriptionAndLabel()
 {
-    convertStringCase(mDevicePlacementType, mDevicePlacementType, true);
+    convertStringCase(mDevicePlacementType, true);
 
-    std::string portNumberUpperCase;
-    convertStringCase(mPortNumber, portNumberUpperCase, true);
+    std::string portNumberUpperCase{mPortNumber};
+    convertStringCase(portNumberUpperCase, true);
 
     if ("L" == mDevicePlacementType || "R" == mDevicePlacementType)
     {

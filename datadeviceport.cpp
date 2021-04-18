@@ -13,7 +13,7 @@ void LANSwitchPort::computeDescriptionAndLabel()
     mDescription = "LAN switch placed at U" + mDeviceName;
     mLabel = "U" + mDeviceName;
 
-    convertStringCase(mPortType, mPortType, true);
+    convertStringCase(mPortType, true);
 
     if ("N" == mPortType)
     {
@@ -45,7 +45,7 @@ void SANSwitchPort::computeDescriptionAndLabel()
     mDescription = "SAN switch placed at U" + mDeviceName;
     mLabel = "U" + mDeviceName;
 
-    convertStringCase(mPortType, mPortType, true);
+    convertStringCase(mPortType, true);
 
     // management port vs. data port
     if ("m" == mPortNumber || "M" == mPortNumber)
@@ -83,7 +83,7 @@ void InfinibandSwitchPort::computeDescriptionAndLabel()
     mDescription = "Infiniband switch placed at U" + mDeviceName;
     mLabel = "U" + mDeviceName;
 
-    convertStringCase(mPortType, mPortType, true);
+    convertStringCase(mPortType, true);
 
      // management port vs. data port
     if ("m" == mPortNumber  || "M" == mPortNumber )
@@ -121,7 +121,7 @@ void KVMSwitchPort::computeDescriptionAndLabel()
     mDescription = "KVM switch placed at U" + mDeviceName;
     mLabel = "U" + mDeviceName;
 
-    convertStringCase(mPortType, mPortType, true);
+    convertStringCase(mPortType, true);
 
     if ("K" == mPortType)
     {
@@ -153,7 +153,7 @@ void ServerPort::computeDescriptionAndLabel()
     mDescription = "Server placed at U" + mDeviceName;
     mLabel = "U" + mDeviceName;
 
-    convertStringCase(mPortType, mPortType, true);
+    convertStringCase(mPortType, true);
 
     if("m" == mPortNumber || "M" == mPortNumber) // management port
     {
@@ -216,7 +216,7 @@ void StoragePort::computeDescriptionAndLabel()
     mDescription = "Storage device placed at U" + mDeviceName;
     mLabel = "U" + mDeviceName;
 
-    convertStringCase(mPortType, mPortType, true);
+    convertStringCase(mPortType, true);
 
     if ("m" == mPortNumber || "M" == mPortNumber)
     {
@@ -267,7 +267,7 @@ void BladeServerPort::computeDescriptionAndLabel()
     mDescription = "Blade system placed at U" + mDeviceName;
     mLabel = "U" + mDeviceName;
 
-    convertStringCase(mModuleType, mModuleType, true);
+    convertStringCase(mModuleType, true);
 
     if ("DM" == mModuleType) // data module
     {

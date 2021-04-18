@@ -162,6 +162,6 @@ std::string getDeviceType(DeviceTypeID deviceTypeID);
 
 /* This function converts the string case to upper or lower
 */
-void convertStringCase(std::string &source, std::string& destination, bool upperCase);
+void convertStringCase(std::string& str, bool upperCase);
 
 #endif // LABELUTILS_H
