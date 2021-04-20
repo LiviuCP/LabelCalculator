@@ -47,9 +47,23 @@ int DevicePort::parseInputData(const std::string& input, const int initialPositi
             currentPosition = readDataField(input, *mInputData[currentParameter], currentPosition);
             fieldSizes[currentParameter] = mInputData[currentParameter]->size();
 
+            bool noErrorsDetectedInCell{false};
+
             if (0 == fieldSizes[currentParameter])
             {
                 lastError = std::make_shared<EmptyCellError>(errorStream);
+            }
+            else if (areInvalidCharactersContained(*mInputData[currentParameter]))
+            {
+                lastError = std::make_shared<InvalidCharactersError>(errorStream);
+            }
+            else
+            {
+                noErrorsDetectedInCell = true;
+            }
+
+            if (!noErrorsDetectedInCell)
+            {
                 lastError->setRow(mRow);
                 lastError->setColumn(mColumn);
                 parsingErrors.push_back(lastError);

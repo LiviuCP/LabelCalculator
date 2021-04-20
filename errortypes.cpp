@@ -135,3 +135,17 @@ void NoConnectionsError::execute()
     Error::execute();
 }
 
+
+InvalidCharactersError::InvalidCharactersError(std::ofstream& errorStream)
+    : Error{ErrorCode::INVALID_CHARS, errorStream}
+{
+}
+
+void InvalidCharactersError::execute()
+{
+    mErrorStream << "Error: the cell contains invalid characters." << std::endl;
+    mErrorStream << "Only \'-\', alphabet and numeric characters are allowed." << std::endl;
+    mErrorStream << "Row number: " << mRow << "    " << "Column number: " << mColumn << std::endl;
+
+    Error::execute();
+}

@@ -87,4 +87,15 @@ public:
     void execute();
 };
 
+// invalid characters contained in CSV cell
+class InvalidCharactersError final : public Error
+{
+public:
+    InvalidCharactersError(std::ofstream& errorStream);
+
+    void execute();
+};
+
+
+
 #endif // ERRORTYPES_H

@@ -133,6 +133,7 @@ enum class ErrorCode
     INVALID_TARGET_DEVICE_POSITION,
     DEVICE_CONNECTED_TO_ITSELF,
     NULL_NR_OF_CONNECTIONS,
+    INVALID_CHARS,
     ErrorCodesCount
 };
 
@@ -170,5 +171,10 @@ void convertStringCase(std::string& str, bool upperCase);
 /* This function checks if the string contains only digits
 */
 bool isDigitString(const std::string& str);
+
+/* This function checks if the string contains invalid characters
+   Only alphabet, numeric characters and '-' are considered valid.
+*/
+bool areInvalidCharactersContained(const std::string& str);
 
 #endif // LABELUTILS_H

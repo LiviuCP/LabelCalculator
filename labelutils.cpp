@@ -189,3 +189,21 @@ bool isDigitString(const std::string& str)
 
     return hasOnlyDigits;
 }
+
+bool areInvalidCharactersContained(const std::string& str)
+{
+    bool containsInvalidCharacters{false};
+
+    for (const auto& c : str)
+    {
+        if (!std::isdigit(c) &&
+            !std::isalpha(c) &&
+            '-' != c)
+        {
+            containsInvalidCharacters = true;
+            break;
+        }
+    }
+
+    return containsInvalidCharacters;
+}
