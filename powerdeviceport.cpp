@@ -23,39 +23,51 @@ void PDUPort::computeDescriptionAndLabel()
     };
 
     convertStringCase(mDevicePlacementType, true);
-
-    std::string portNumberUpperCase{mPortNumber};
-    convertStringCase(portNumberUpperCase, true);
+    convertStringCase(mPortNumber, true);
 
     if (c_PlacementTypesDescriptions.find(mDevicePlacementType) != c_PlacementTypesDescriptions.cend())
     {
         mDescription = c_PlacementTypesDescriptions.at(mDevicePlacementType) + " PDU placed at U" + mDeviceName;
         mLabel = "U" + mDeviceName + "_" + mDevicePlacementType + "PDU";
 
-        if ("M" == portNumberUpperCase) // management port
+        if ("M" == mPortNumber) // management port
         {
             mDescription += " - management port";
             mLabel += "_MGMT";
         }
-        else if ("-" == mLoadSegmentNumber) // pdu with a single load segment (user fills in "-")
+        else if ("IN" == mPortNumber)
         {
-            const std::string c_PortNumberSubstring{"IN" == portNumberUpperCase ? "_IN" : "_P" + mPortNumber};
-
             mDescription += " - port number " + mPortNumber;
-            mLabel += c_PortNumberSubstring;
+            mLabel += "_" + mPortNumber;
         }
-        else // pdu with multiple load segments
+        else if (isDigitString(mPortNumber))
         {
-            const std::string c_LoadSegmentPortNumberSubstring{"IN" == portNumberUpperCase ? "_IN" : "_P" + mLoadSegmentNumber + "." + mPortNumber};
-
-            mDescription += " - load segment number " + mLoadSegmentNumber + " - port number " + mPortNumber;
-            mLabel += c_LoadSegmentPortNumberSubstring;
+            if ("-" == mLoadSegmentNumber)
+            {
+                mDescription += " - port number" + mPortNumber;
+                mLabel += "_P" + mPortNumber;
+            }
+            else if (isDigitString(mLoadSegmentNumber))
+            {
+                mDescription += " - load segment number " + mLoadSegmentNumber + " - port number " + mPortNumber;
+                mLabel += "_P" + mLoadSegmentNumber + "." + mPortNumber;
+            }
+            else
+            {
+                mDescription = c_InvalidLoadSegmentNumberErrorText;
+                mLabel = c_LabelErrorText;
+            }
+        }
+        else
+        {
+            mDescription = c_InvalidPortNumberErrorText;
+            mLabel = c_LabelErrorText;
         }
     }
     else
     {
-        mDescription = c_InvalidPDUPlacementErrorText;
-        mLabel += c_LabelErrorText;
+        mDescription = c_InvalidPlacementErrorText;
+        mLabel = c_LabelErrorText;
     }
 }
 
@@ -70,22 +82,35 @@ ExtensionBarPort::ExtensionBarPort(bool isSourceDevice)
 void ExtensionBarPort::computeDescriptionAndLabel()
 {
     convertStringCase(mDevicePlacementType, true);
-
-    std::string portNumberUpperCase{mPortNumber};
-    convertStringCase(portNumberUpperCase, true);
+    convertStringCase(mPortNumber, true);
 
     if ("L" == mDevicePlacementType || "R" == mDevicePlacementType)
     {
         const std::string c_PlacementSide{"L" == mDevicePlacementType ? "Left" : "Right"};
-        const std::string c_PortNumberSubstring{"IN" == portNumberUpperCase ? "_IN" : "_P" + mPortNumber};
 
-        mDescription = c_PlacementSide + " extension bar placed at U" + mDeviceName + " - port number " + mPortNumber;
-        mLabel = "U" + mDeviceName + "_" + mDevicePlacementType + "EXT" + c_PortNumberSubstring;
+        mDescription = c_PlacementSide + " extension bar placed at U" + mDeviceName;
+        mLabel = "U" + mDeviceName + "_" + mDevicePlacementType + "EXT";
+
+        if ("IN" == mPortNumber)
+        {
+            mDescription += " - port number IN";
+            mLabel += "_IN";
+        }
+        else if (isDigitString(mPortNumber))
+        {
+            mDescription += " - port number " + mPortNumber;
+            mLabel += "_P" + mPortNumber;
+        }
+        else
+        {
+            mDescription = c_InvalidPortNumberErrorText;
+            mLabel = c_LabelErrorText;
+        }
     }
     else
     {
-        mDescription = c_InvalidExtPlacementErrorText;
-        mLabel += c_LabelErrorText;
+        mDescription = c_InvalidPlacementErrorText;
+        mLabel = c_LabelErrorText;
     }
 }
 
@@ -107,9 +132,22 @@ void UPSPort::computeDescriptionAndLabel()
         mDescription += " - management port";
         mLabel += "_MGMT";
     }
+    else if (isDigitString(mPortNumber))
+    {
+        if (isDigitString(mLoadSegmentNumber))
+        {
+            mDescription += " - load segment " + mLoadSegmentNumber + " - port " + mPortNumber;
+            mLabel += "_P" + mLoadSegmentNumber + "." + mPortNumber;
+        }
+        else
+        {
+            mDescription = c_InvalidLoadSegmentNumberErrorText;
+            mLabel = c_LabelErrorText;
+        }
+    }
     else // power port
     {
-        mDescription += " - load segment " + mLoadSegmentNumber + " - port " + mPortNumber;
-        mLabel += "_P" + mLoadSegmentNumber + "." + mPortNumber;
+        mDescription = c_InvalidPortNumberErrorText;
+        mLabel = c_LabelErrorText;
     }
 }

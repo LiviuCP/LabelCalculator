@@ -173,3 +173,19 @@ void convertStringCase(std::string& str, bool upperCase)
     auto transformation = upperCase ? [](char c){return std::toupper(c);} : [](char c){return std::tolower(c);};
     std::transform(str.begin(), str.end(), str.begin(), transformation);
 }
+
+bool isDigitString(const std::string& str)
+{
+    bool hasOnlyDigits{true};
+
+    for (const auto& c : str)
+    {
+        if (!std::isdigit(c))
+        {
+            hasOnlyDigits = false;
+            break;
+        }
+    }
+
+    return hasOnlyDigits;
+}

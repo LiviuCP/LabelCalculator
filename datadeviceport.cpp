@@ -15,20 +15,28 @@ void LANSwitchPort::computeDescriptionAndLabel()
 
     convertStringCase(mPortType, true);
 
-    if ("N" == mPortType)
+    if (isDigitString(mPortNumber)) // no management port
     {
-        mDescription += " - Ethernet port " + mPortNumber;
-        mLabel += "_P" + mPortNumber;
-    }
-    else if ("P" == mPortType)
-    {
-        mDescription += " - power supply " + mPortNumber;
-        mLabel += "_PS" + mPortNumber;
+        if ("N" == mPortType)
+        {
+            mDescription += " - Ethernet port " + mPortNumber;
+            mLabel += "_P" + mPortNumber;
+        }
+        else if ("P" == mPortType)
+        {
+            mDescription += " - power supply " + mPortNumber;
+            mLabel += "_PS" + mPortNumber;
+        }
+        else
+        {
+            mDescription = c_UnknownPortTypeErrorText;
+            mLabel = c_LabelErrorText;
+        }
     }
     else
     {
-        mDescription += c_UnknownPortTypeErrorText;
-        mLabel += c_LabelErrorText;
+        mDescription = c_InvalidPortNumberErrorText;
+        mLabel = c_LabelErrorText;
     }
 }
 
@@ -47,26 +55,33 @@ void SANSwitchPort::computeDescriptionAndLabel()
 
     convertStringCase(mPortType, true);
 
-    // management port vs. data port
-    if ("m" == mPortNumber || "M" == mPortNumber)
+    if ("m" == mPortNumber || "M" == mPortNumber) // management port
     {
         mDescription += " - management port";
         mLabel = mLabel + "_MGMT";
     }
-    else if ("F" == mPortType)
+    else if (isDigitString(mPortNumber)) // power or data port
     {
-        mDescription += " - FC port " + mPortNumber;
-        mLabel = mLabel + "_P" + mPortNumber;
-    }
-    else if ("P" == mPortType)
-    {
-        mDescription += " - power supply " + mPortNumber;
-        mLabel += "_PS" + mPortNumber;
+        if ("F" == mPortType)
+        {
+            mDescription += " - FC port " + mPortNumber;
+            mLabel = mLabel + "_P" + mPortNumber;
+        }
+        else if ("P" == mPortType)
+        {
+            mDescription += " - power supply " + mPortNumber;
+            mLabel += "_PS" + mPortNumber;
+        }
+        else
+        {
+            mDescription = c_UnknownPortTypeErrorText;
+            mLabel = c_LabelErrorText;
+        }
     }
     else
     {
-        mDescription += c_UnknownPortTypeErrorText;
-        mLabel += c_LabelErrorText;
+        mDescription = c_InvalidPortNumberErrorText;
+        mLabel = c_LabelErrorText;
     }
 }
 
@@ -85,26 +100,33 @@ void InfinibandSwitchPort::computeDescriptionAndLabel()
 
     convertStringCase(mPortType, true);
 
-     // management port vs. data port
-    if ("m" == mPortNumber  || "M" == mPortNumber )
+    if ("m" == mPortNumber || "M" == mPortNumber ) // management port
     {
         mDescription += " - management port";
         mLabel += "_MGMT";
     }
-    else if ("I" == mPortType)
+    else if (isDigitString(mPortNumber)) // power or data port
     {
-        mDescription += + " - port " + mPortNumber;
-        mLabel += "_P" + mPortNumber;
-    }
-    else if ("P" == mPortType)
-    {
-        mDescription += " - power supply " + mPortNumber;
-        mLabel += "_PS" + mPortNumber;
+        if ("I" == mPortType)
+        {
+            mDescription += + " - port " + mPortNumber;
+            mLabel += "_P" + mPortNumber;
+        }
+        else if ("P" == mPortType)
+        {
+            mDescription += " - power supply " + mPortNumber;
+            mLabel += "_PS" + mPortNumber;
+        }
+        else
+        {
+            mDescription = c_UnknownPortTypeErrorText;
+            mLabel = c_LabelErrorText;
+        }
     }
     else
     {
-        mDescription += c_UnknownPortTypeErrorText;
-        mLabel += c_LabelErrorText;
+        mDescription = c_InvalidPortNumberErrorText;
+        mLabel = c_LabelErrorText;
     }
 }
 
@@ -123,20 +145,28 @@ void KVMSwitchPort::computeDescriptionAndLabel()
 
     convertStringCase(mPortType, true);
 
-    if ("K" == mPortType)
+    if (isDigitString(mPortNumber))
     {
-        mDescription += " - port " + mPortNumber;
-        mLabel += "_P" + mPortNumber;
-    }
-    else if ("P" == mPortType)
-    {
-        mDescription += " - power supply " + mPortNumber;
-        mLabel += "_PS" + mPortNumber;
+        if ("K" == mPortType)
+        {
+            mDescription += " - port " + mPortNumber;
+            mLabel += "_P" + mPortNumber;
+        }
+        else if ("P" == mPortType)
+        {
+            mDescription += " - power supply " + mPortNumber;
+            mLabel += "_PS" + mPortNumber;
+        }
+        else
+        {
+            mDescription = c_UnknownPortTypeErrorText;
+            mLabel = c_LabelErrorText;
+        }
     }
     else
     {
-        mDescription += c_UnknownPortTypeErrorText;
-        mLabel += c_LabelErrorText;
+        mDescription = c_InvalidPortNumberErrorText;
+        mLabel = c_LabelErrorText;
     }
 }
 
@@ -160,45 +190,53 @@ void ServerPort::computeDescriptionAndLabel()
         mDescription += " - management port";
         mLabel += "_MGMT";
     }
-    else if("F" == mPortType) // FC port
-    {
-        mDescription += " - FC port " + mPortNumber;
-        mLabel += "_FC_P" + mPortNumber;
-    }
-    else if("N" == mPortType) // Ethernet port (but not embedded but on PCIe public slot)
-    {
-        mDescription += " - Ethernet port " + mPortNumber;
-        mLabel += "_ETH_P" + mPortNumber;
-    }
-    else if ("E" == mPortType) // embedded port (Ethernet/Infiniband)
-    {
-        mDescription += " - embedded port " + mPortNumber;
-        mLabel += "_EMB_P" + mPortNumber;
-    }
-    else if ("I" == mPortType) // Infiniband port (but not embedded but on PCIe public slot)
-    {
-        mDescription+=" - Infiniband port " + mPortNumber;
-        mLabel += "_IB_P" + mPortNumber;
-    }
-    else if ("S" == mPortType) // SAS port
-    {
-        mDescription += " - SAS port " + mPortNumber;
-        mLabel += "_SAS_P" + mPortNumber;
-    }
     else if ("K" == mPortType) // KVM port
     {
         mDescription += " - KVM port";
         mLabel += "_KVM";
     }
-    else if ("P" == mPortType) // power supply
+    else if (isDigitString(mPortNumber))
     {
-        mDescription += " - power supply " + mPortNumber;
-        mLabel += "_PS" + mPortNumber;
+        if("F" == mPortType) // FC port
+        {
+            mDescription += " - FC port " + mPortNumber;
+            mLabel += "_FC_P" + mPortNumber;
+        }
+        else if("N" == mPortType) // Ethernet port (but not embedded but on PCIe public slot)
+        {
+            mDescription += " - Ethernet port " + mPortNumber;
+            mLabel += "_ETH_P" + mPortNumber;
+        }
+        else if ("E" == mPortType) // embedded port (Ethernet/Infiniband)
+        {
+            mDescription += " - embedded port " + mPortNumber;
+            mLabel += "_EMB_P" + mPortNumber;
+        }
+        else if ("I" == mPortType) // Infiniband port (but not embedded but on PCIe public slot)
+        {
+            mDescription+=" - Infiniband port " + mPortNumber;
+            mLabel += "_IB_P" + mPortNumber;
+        }
+        else if ("S" == mPortType) // SAS port
+        {
+            mDescription += " - SAS port " + mPortNumber;
+            mLabel += "_SAS_P" + mPortNumber;
+        }
+        else if ("P" == mPortType) // power supply
+        {
+            mDescription += " - power supply " + mPortNumber;
+            mLabel += "_PS" + mPortNumber;
+        }
+        else
+        {
+            mDescription = c_UnknownPortTypeErrorText;
+            mLabel = c_LabelErrorText;
+        }
     }
     else
     {
-        mDescription += c_UnknownPortTypeErrorText;
-        mLabel += c_LabelErrorText;
+        mDescription = c_InvalidPortNumberErrorText;
+        mLabel = c_LabelErrorText;
     }
 }
 
@@ -231,20 +269,36 @@ void StoragePort::computeDescriptionAndLabel()
             mLabel += "_C" + mControllerNr + "_MGMT";
         }
     }
-    else if ("D" == mPortType) // data port (FC, SAS, etc)
+    else if (isDigitString(mPortNumber))
     {
-        mDescription = "Storage device placed at U" + mDeviceName + " - controller " + mControllerNr + " - port " + mPortNumber;
-        mLabel = "U" + mDeviceName + "_C" + mControllerNr + "_P" + mPortNumber;
-    }
-    else if ("P" == mPortType) // power supply
-    {
-        mDescription += " - power supply " + mPortNumber;
-        mLabel += "_PS" + mPortNumber;
+        if ("D" == mPortType) // data port (FC, SAS, etc)
+        {
+            if (isDigitString(mControllerNr))
+            {
+                mDescription = "Storage device placed at U" + mDeviceName + " - controller " + mControllerNr + " - port " + mPortNumber;
+                mLabel = "U" + mDeviceName + "_C" + mControllerNr + "_P" + mPortNumber;
+            }
+            else
+            {
+                mDescription = c_InvalidControllerNumberErrorText;
+                mLabel = c_LabelErrorText;
+            }
+        }
+        else if ("P" == mPortType) // power supply
+        {
+            mDescription += " - power supply " + mPortNumber;
+            mLabel += "_PS" + mPortNumber;
+        }
+        else
+        {
+            mDescription = c_UnknownPortTypeErrorText;
+            mLabel = c_LabelErrorText;
+        }
     }
     else
     {
-        mDescription += c_UnknownPortTypeErrorText;
-        mLabel += c_LabelErrorText;
+        mDescription = c_InvalidPortNumberErrorText;
+        mLabel = c_LabelErrorText;
     }
 }
 
@@ -269,17 +323,7 @@ void BladeServerPort::computeDescriptionAndLabel()
 
     convertStringCase(mModuleType, true);
 
-    if ("DM" == mModuleType) // data module
-    {
-        mDescription += " - data module " + mModuleNumber + " - port " + mPortNumber;
-        mLabel += "_DMO" + mModuleNumber + "_P" + mPortNumber;
-    }
-    else if ("MG" == mModuleType) // management module
-    {
-        mDescription += " - management module " + mModuleNumber;
-        mLabel += "_MGMT" + mModuleNumber;
-    }
-    else if ("UP" == mModuleType) // management uplink port (for daisy chaining multiple blade systems)
+    if ("UP" == mModuleType) // management uplink port (for daisy chaining multiple blade systems)
     {
         mDescription += " - management uplink port";
         mLabel += "_MG_UP";
@@ -289,14 +333,40 @@ void BladeServerPort::computeDescriptionAndLabel()
         mDescription += " - management downlink port";
         mLabel += "_MG_DO";
     }
-    else if ("P" == mModuleType)
+    else if (isDigitString(mModuleNumber))
     {
-        mDescription += " - power supply " + mModuleNumber;
-        mLabel += "_PS" + mModuleNumber;
+        if ("DM" == mModuleType) // data module
+        {
+            if (isDigitString(mPortNumber))
+            {
+                mDescription += " - data module " + mModuleNumber + " - port " + mPortNumber;
+                mLabel += "_DMO" + mModuleNumber + "_P" + mPortNumber;
+            }
+            else
+            {
+                mDescription = c_InvalidPortNumberErrorText;
+                mLabel = c_LabelErrorText;
+            }
+        }
+        else if ("MG" == mModuleType) // management module
+        {
+            mDescription += " - management module " + mModuleNumber;
+            mLabel += "_MGMT" + mModuleNumber;
+        }
+        else if ("P" == mModuleType)
+        {
+            mDescription += " - power supply " + mModuleNumber;
+            mLabel += "_PS" + mModuleNumber;
+        }
+        else
+        {
+            mDescription = c_UnknownModuleTypeErrorText;
+            mLabel = c_LabelErrorText;
+        }
     }
     else
     {
-        mDescription += c_UnknownModuleTypeErrorText;
-        mLabel += c_LabelErrorText;
+        mDescription = c_InvalidModuleNumberErrorText;
+        mLabel = c_LabelErrorText;
     }
 }
