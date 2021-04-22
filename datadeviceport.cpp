@@ -3,15 +3,15 @@
 LANSwitchPort::LANSwitchPort(bool isSourceDevice)
     : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::LAN_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::LAN_SWITCH), isSourceDevice}
 {
-    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mDeviceUPosition);
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
 }
 
 void LANSwitchPort::computeDescriptionAndLabel()
 {
-    mDescription = "LAN switch placed at U" + mDeviceName;
-    mLabel = "U" + mDeviceName;
+    mDescription = "LAN switch placed at U" + mDeviceUPosition;
+    mLabel = "U" + mDeviceUPosition;
 
     convertStringCase(mPortType, true);
 
@@ -43,15 +43,15 @@ void LANSwitchPort::computeDescriptionAndLabel()
 SANSwitchPort::SANSwitchPort(bool isSourceDevice)
     : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::SAN_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::SAN_SWITCH), isSourceDevice}
 {
-    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mDeviceUPosition);
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
 }
 
 void SANSwitchPort::computeDescriptionAndLabel()
 {
-    mDescription = "SAN switch placed at U" + mDeviceName;
-    mLabel = "U" + mDeviceName;
+    mDescription = "SAN switch placed at U" + mDeviceUPosition;
+    mLabel = "U" + mDeviceUPosition;
 
     convertStringCase(mPortType, true);
 
@@ -88,15 +88,15 @@ void SANSwitchPort::computeDescriptionAndLabel()
 InfinibandSwitchPort::InfinibandSwitchPort(bool isSourceDevice)
     : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::INFINIBAND_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::INFINIBAND_SWITCH), isSourceDevice}
 {
-    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mDeviceUPosition);
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
 }
 
 void InfinibandSwitchPort::computeDescriptionAndLabel()
 {
-    mDescription = "Infiniband switch placed at U" + mDeviceName;
-    mLabel = "U" + mDeviceName;
+    mDescription = "Infiniband switch placed at U" + mDeviceUPosition;
+    mLabel = "U" + mDeviceUPosition;
 
     convertStringCase(mPortType, true);
 
@@ -133,15 +133,15 @@ void InfinibandSwitchPort::computeDescriptionAndLabel()
 KVMSwitchPort::KVMSwitchPort(bool isSourceDevice)
     : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::KVM_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::KVM_SWITCH), isSourceDevice}
 {
-    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mDeviceUPosition);
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
 }
 
 void KVMSwitchPort::computeDescriptionAndLabel()
 {
-    mDescription = "KVM switch placed at U" + mDeviceName;
-    mLabel = "U" + mDeviceName;
+    mDescription = "KVM switch placed at U" + mDeviceUPosition;
+    mLabel = "U" + mDeviceUPosition;
 
     convertStringCase(mPortType, true);
 
@@ -173,15 +173,15 @@ void KVMSwitchPort::computeDescriptionAndLabel()
 ServerPort::ServerPort(bool isSourceDevice)
     : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::RACK_SERVER), c_MaxAllowedCharsCount.at(DeviceTypeID::RACK_SERVER), isSourceDevice}
 {
-    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mDeviceUPosition);
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
 }
 
 void ServerPort::computeDescriptionAndLabel()
 {
-    mDescription = "Server placed at U" + mDeviceName;
-    mLabel = "U" + mDeviceName;
+    mDescription = "Server placed at U" + mDeviceUPosition;
+    mLabel = "U" + mDeviceUPosition;
 
     convertStringCase(mPortType, true);
 
@@ -243,7 +243,7 @@ void ServerPort::computeDescriptionAndLabel()
 StoragePort::StoragePort(bool isSourceDevice)
     : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::STORAGE), c_MaxAllowedCharsCount.at(DeviceTypeID::STORAGE), isSourceDevice}
 {
-    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mDeviceUPosition);
     _registerRequiredParameter(&mControllerNr);
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
@@ -251,8 +251,8 @@ StoragePort::StoragePort(bool isSourceDevice)
 
 void StoragePort::computeDescriptionAndLabel()
 {
-    mDescription = "Storage device placed at U" + mDeviceName;
-    mLabel = "U" + mDeviceName;
+    mDescription = "Storage device placed at U" + mDeviceUPosition;
+    mLabel = "U" + mDeviceUPosition;
 
     convertStringCase(mPortType, true);
 
@@ -275,8 +275,8 @@ void StoragePort::computeDescriptionAndLabel()
         {
             if (isDigitString(mControllerNr))
             {
-                mDescription = "Storage device placed at U" + mDeviceName + " - controller " + mControllerNr + " - port " + mPortNumber;
-                mLabel = "U" + mDeviceName + "_C" + mControllerNr + "_P" + mPortNumber;
+                mDescription = "Storage device placed at U" + mDeviceUPosition + " - controller " + mControllerNr + " - port " + mPortNumber;
+                mLabel = "U" + mDeviceUPosition + "_C" + mControllerNr + "_P" + mPortNumber;
             }
             else
             {
@@ -310,7 +310,7 @@ void StoragePort::computeDescriptionAndLabel()
 BladeServerPort::BladeServerPort(bool isSourceDevice)
     : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::BLADE_SERVER), c_MaxAllowedCharsCount.at(DeviceTypeID::BLADE_SERVER), isSourceDevice}
 {
-    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mDeviceUPosition);
     _registerRequiredParameter(&mModuleType);
     _registerRequiredParameter(&mModuleNumber);
     _registerRequiredParameter(&mPortNumber);
@@ -318,8 +318,8 @@ BladeServerPort::BladeServerPort(bool isSourceDevice)
 
 void BladeServerPort::computeDescriptionAndLabel()
 {
-    mDescription = "Blade system placed at U" + mDeviceName;
-    mLabel = "U" + mDeviceName;
+    mDescription = "Blade system placed at U" + mDeviceUPosition;
+    mLabel = "U" + mDeviceUPosition;
 
     convertStringCase(mModuleType, true);
 

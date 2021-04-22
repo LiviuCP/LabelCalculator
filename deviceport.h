@@ -23,7 +23,7 @@ public:
     /* reads and parses the input fields for the device port from string starting position pos (which is subsequently updated)
        uses the ofstream for logging any errors in the corresponding file and the boolean to report the occurence of these errors
     */
-    int parseInputData(const std::string &s, const int initialPosition, std::vector<ErrorPtr>& parsingErrors, std::ofstream& errorStream);
+    int parseInputData(const std::string& input, const int initialPosition, std::vector<ErrorPtr>& parsingErrors, std::ofstream& errorStream);
 
     // setters for the input .csv row and column index
     void setRow(int row);
@@ -43,7 +43,7 @@ protected:
     */
     void _registerRequiredParameter(std::string* const pRequiredParameter);
 
-    std::string mDeviceName;  // device name (e.g. for PDU-A the name is "A")
+    std::string mDeviceUPosition;  // position of the device containing the port in rack
     std::string mPortNumber;  // power or data port number that should be mentioned on the cable label
 
     std::string mDescription; // text to be written in the source (first device) / destination (second device) field of the labelling table (device port description)

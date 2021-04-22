@@ -5,7 +5,7 @@
 PDUPort::PDUPort(bool isSourceDevice)
     : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::PDU), c_MaxAllowedCharsCount.at(DeviceTypeID::PDU), isSourceDevice}
 {
-    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mDeviceUPosition);
     _registerRequiredParameter(&mDevicePlacementType);
     _registerRequiredParameter(&mLoadSegmentNumber);
     _registerRequiredParameter(&mPortNumber);
@@ -27,8 +27,8 @@ void PDUPort::computeDescriptionAndLabel()
 
     if (c_PlacementTypesDescriptions.find(mDevicePlacementType) != c_PlacementTypesDescriptions.cend())
     {
-        mDescription = c_PlacementTypesDescriptions.at(mDevicePlacementType) + " PDU placed at U" + mDeviceName;
-        mLabel = "U" + mDeviceName + "_" + mDevicePlacementType + "PDU";
+        mDescription = c_PlacementTypesDescriptions.at(mDevicePlacementType) + " PDU placed at U" + mDeviceUPosition;
+        mLabel = "U" + mDeviceUPosition + "_" + mDevicePlacementType + "PDU";
 
         if ("M" == mPortNumber) // management port
         {
@@ -74,7 +74,7 @@ void PDUPort::computeDescriptionAndLabel()
 ExtensionBarPort::ExtensionBarPort(bool isSourceDevice)
     : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::EXTENSION_BAR), c_MaxAllowedCharsCount.at(DeviceTypeID::EXTENSION_BAR), isSourceDevice}
 {
-    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mDeviceUPosition);
     _registerRequiredParameter(&mDevicePlacementType);
     _registerRequiredParameter(&mPortNumber);
 }
@@ -88,8 +88,8 @@ void ExtensionBarPort::computeDescriptionAndLabel()
     {
         const std::string c_PlacementSide{"L" == mDevicePlacementType ? "Left" : "Right"};
 
-        mDescription = c_PlacementSide + " extension bar placed at U" + mDeviceName;
-        mLabel = "U" + mDeviceName + "_" + mDevicePlacementType + "EXT";
+        mDescription = c_PlacementSide + " extension bar placed at U" + mDeviceUPosition;
+        mLabel = "U" + mDeviceUPosition + "_" + mDevicePlacementType + "EXT";
 
         if ("IN" == mPortNumber)
         {
@@ -117,15 +117,15 @@ void ExtensionBarPort::computeDescriptionAndLabel()
 UPSPort::UPSPort(bool isSourceDevice)
     : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::UPS), c_MaxAllowedCharsCount.at(DeviceTypeID::UPS), isSourceDevice}
 {
-    _registerRequiredParameter(&mDeviceName);
+    _registerRequiredParameter(&mDeviceUPosition);
     _registerRequiredParameter(&mLoadSegmentNumber);
     _registerRequiredParameter(&mPortNumber);
 }
 
 void UPSPort::computeDescriptionAndLabel()
 {
-    mDescription = "UPS placed at U" + mDeviceName;
-    mLabel = mLabel = "U" + mDeviceName;
+    mDescription = "UPS placed at U" + mDeviceUPosition;
+    mLabel = mLabel = "U" + mDeviceUPosition;
 
     if ("m" == mPortNumber || "M" == mPortNumber) // management port
     {
