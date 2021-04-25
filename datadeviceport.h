@@ -10,7 +10,7 @@ public:
     LANSwitchPort() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    LANSwitchPort(bool isSourceDevice);
+    LANSwitchPort(const std::string& deviceUPosition, const bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 
@@ -25,7 +25,7 @@ public:
     SANSwitchPort() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    SANSwitchPort(bool isSourceDevice);
+    SANSwitchPort(const std::string& deviceUPosition, const bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 
@@ -40,7 +40,7 @@ public:
     InfinibandSwitchPort() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    InfinibandSwitchPort(bool isSourceDevice);
+    InfinibandSwitchPort(const std::string& deviceUPosition, const bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 
@@ -55,7 +55,7 @@ public:
     KVMSwitchPort() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    KVMSwitchPort(bool isSourceDevice);
+    KVMSwitchPort(const std::string& deviceUPosition, const bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 
@@ -70,7 +70,7 @@ public:
     ServerPort() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    ServerPort(bool isSourceDevice);
+    ServerPort(const std::string& deviceUPosition, const bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 
@@ -85,7 +85,7 @@ public:
     StoragePort() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    StoragePort(bool isSourceDevice);
+    StoragePort(const std::string& deviceUPosition, const bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 
@@ -101,7 +101,7 @@ public:
     BladeServerPort() = delete;
 
     // first = 0: second device on the csv row; first = 1: first device on the row
-    BladeServerPort(bool isSourceDevice);
+    BladeServerPort(const std::string& deviceUPosition, const bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 

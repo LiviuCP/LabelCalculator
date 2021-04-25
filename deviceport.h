@@ -11,7 +11,7 @@
 class DevicePort
 {
 public:
-    DevicePort(int requiredNumberOfParameters, int maxAllowedCharsCount, bool isSourceDevice);
+    DevicePort(const std::string& deviceUPosition, const int requiredNumberOfParameters, const int maxAllowedCharsCount, bool isSourceDevice);
 
     virtual ~DevicePort();
 
@@ -52,14 +52,13 @@ protected:
     int mRow;            // input .csv row from which the error originated
     int mColumn;         // input .csv column from which the error originated
 
-    int mMaxAllowedCharsCount; // maximum number of characters that can be filled in the connectioninput.csv file for a specific device type (including any placeholders where character '-' could be filled in)
-    bool mIsSourceDevice; // true if first of the two devices in each connection entered in the input .csv file
-
     static const int scMaxInputParametersCount; // number of fields that should be filled in connectioninput.csv for EACH device (not used fields can be filled in with '-')
 
 private:
     std::vector<std::string*> mInputData; // reference to substrings storing the fields parsed by parseInputData()
     int mInputParametersCount;
+    int mMaxAllowedCharsCount; // maximum number of characters that can be filled in the connectioninput.csv file for a specific device type (including any placeholders where character '-' could be filled in)
+    bool mIsSourceDevice; // true if first of the two devices in each connection entered in the input .csv file
 };
 
 using DevicePortPtr = std::shared_ptr<DevicePort>;

@@ -96,6 +96,13 @@ public:
     void execute();
 };
 
+// invalid characters contained in CSV cell
+class InvalidDeviceUPositionError final : public Error
+{
+public:
+    InvalidDeviceUPositionError(std::ofstream& errorStream);
 
+    void execute();
+};
 
 #endif // ERRORTYPES_H

@@ -62,7 +62,7 @@ enum class DeviceTypeID : int
     KVM_SWITCH,
     RACK_SERVER,
     STORAGE,
-    BLADE_SERVER,
+    BLADE_SERVER
 };
 
 static const std::map<std::string, DeviceTypeID> c_DeviceTypeToIDMapping
@@ -81,16 +81,16 @@ static const std::map<std::string, DeviceTypeID> c_DeviceTypeToIDMapping
 
 static const std::map<DeviceTypeID, int> c_RequiredNrOfInputParams
 {
-    {    DeviceTypeID::PDU,                 4    },
-    {    DeviceTypeID::EXTENSION_BAR,       3    },
-    {    DeviceTypeID::UPS,                 3    },
-    {    DeviceTypeID::LAN_SWITCH,          3    },
-    {    DeviceTypeID::SAN_SWITCH,          3    },
-    {    DeviceTypeID::INFINIBAND_SWITCH,   3    },
-    {    DeviceTypeID::KVM_SWITCH,          3    },
-    {    DeviceTypeID::RACK_SERVER,         3    },
-    {    DeviceTypeID::STORAGE,             4    },
-    {    DeviceTypeID::BLADE_SERVER,        4    }
+    {    DeviceTypeID::PDU,                 3    },
+    {    DeviceTypeID::EXTENSION_BAR,       2    },
+    {    DeviceTypeID::UPS,                 2    },
+    {    DeviceTypeID::LAN_SWITCH,          2    },
+    {    DeviceTypeID::SAN_SWITCH,          2    },
+    {    DeviceTypeID::INFINIBAND_SWITCH,   2    },
+    {    DeviceTypeID::KVM_SWITCH,          2    },
+    {    DeviceTypeID::RACK_SERVER,         2    },
+    {    DeviceTypeID::STORAGE,             3    },
+    {    DeviceTypeID::BLADE_SERVER,        3    }
 };
 
 static const std::map<DeviceTypeID, int> c_MaxAllowedCharsCount
@@ -134,6 +134,7 @@ enum class ErrorCode
     DEVICE_CONNECTED_TO_ITSELF,
     NULL_NR_OF_CONNECTIONS,
     INVALID_CHARS,
+    INVALID_DEVICE_U_POSITION,
     ErrorCodesCount
 };
 

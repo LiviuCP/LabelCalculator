@@ -8,7 +8,7 @@ class PDUPort : public DevicePort
 {
 public:
     PDUPort() = delete;
-    PDUPort(bool isSourceDevice);
+    PDUPort(const std::string& deviceUPosition, const bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 
@@ -22,7 +22,7 @@ class ExtensionBarPort : public DevicePort
 {
 public:
     ExtensionBarPort() = delete;
-    ExtensionBarPort(bool isSourceDevice);
+    ExtensionBarPort(const std::string& deviceUPosition, const bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 
@@ -35,7 +35,7 @@ class UPSPort : public DevicePort
 {
 public:
     UPSPort() = delete;
-    UPSPort(bool isSourceDevice);
+    UPSPort(const std::string& deviceUPosition, const bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 

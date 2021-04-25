@@ -3,14 +3,15 @@
 #include "errortypes.h"
 #include "deviceport.h"
 
-const int DevicePort::scMaxInputParametersCount{4};
+const int DevicePort::scMaxInputParametersCount{3};
 
-DevicePort::DevicePort(int requiredNumberOfParameters, int maxAllowedCharsCount, bool isSourceDevice)
-    : mRow{1}
+DevicePort::DevicePort(const std::string& deviceUPosition, const int requiredNumberOfParameters, const int maxAllowedCharsCount, bool isSourceDevice)
+    : mDeviceUPosition{deviceUPosition}
+    , mRow{1}
     , mColumn{1}
+    , mInputParametersCount{requiredNumberOfParameters}
     , mMaxAllowedCharsCount{maxAllowedCharsCount}
     , mIsSourceDevice{isSourceDevice}
-    , mInputParametersCount{requiredNumberOfParameters}
 {
     assert(mMaxAllowedCharsCount > 0);
     assert(mInputParametersCount > 1 &&

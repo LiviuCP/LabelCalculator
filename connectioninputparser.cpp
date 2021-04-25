@@ -94,31 +94,56 @@ bool ConnectionInputParser::_parseInput()
 
             if (DeviceTypeID::UNKNOWN_DEVICE != deviceTypeID)
             {
-                const bool c_IsSourceDevice{0 == mRowDevicesStillNotParsedCount % c_DevicesPerConnectionInputRowCount};
+                // the U position of the device should be valid (1U - 50U)
+                bool isDeviceUPositionValid{false};
+                std::string deviceUPosition;
 
-                DevicePortPtr pDevicePort{deviceFactory.createDevicePort(deviceTypeID, c_IsSourceDevice)};
+                currentPosition = readDataField(mInputData[rowIndex], deviceUPosition, currentPosition);
 
-                if(nullptr != pDevicePort)
+                if (deviceUPosition.size() > 0 &&
+                    isDigitString(deviceUPosition))
                 {
-                    ++columnNumber;
-
-                    pDevicePort->setRow(rowIndex + c_RowNumberOffset);     // +2: csv lines start at 1 and first row is ignored
-                    pDevicePort->setColumn(columnNumber);
-                    mDevicePorts.push_back(pDevicePort);
-
-                    std::vector<ErrorPtr> parsingErrors;
-                    currentPosition = pDevicePort->parseInputData(mInputData[rowIndex], currentPosition, parsingErrors, *mpErrorStream);
-
-                    const bool fewerCellsErrorOccurred{_storeExternalParsingErrors(parsingErrors)};
-
-                    if (fewerCellsErrorOccurred)
+                    const int c_DeviceUPositionNum{std::stoi(deviceUPosition)};
+                    if (c_DeviceUPositionNum > 0 && c_DeviceUPositionNum <= c_MaxNrOfRackUnits)
                     {
-                        break;
+                        isDeviceUPositionValid = true;
                     }
+                }
 
-                    columnNumber = pDevicePort->getColumn();
-                    --mRowDevicesStillNotParsedCount;
-                    isDeviceKnown = true;
+                if (isDeviceUPositionValid)
+                {
+                    const bool c_IsSourceDevice{0 == mRowDevicesStillNotParsedCount % c_DevicesPerConnectionInputRowCount};
+
+                    DevicePortPtr pDevicePort{deviceFactory.createDevicePort(deviceTypeID, deviceUPosition, c_IsSourceDevice)};
+
+                    if(nullptr != pDevicePort)
+                    {
+                        columnNumber += 2; // pass through the device type and device U position columns and move to the first device parameter column
+
+                        pDevicePort->setRow(rowIndex + c_RowNumberOffset);     // +2: csv lines start at 1 and first row is ignored
+                        pDevicePort->setColumn(columnNumber);
+                        mDevicePorts.push_back(pDevicePort);
+
+                        std::vector<ErrorPtr> parsingErrors;
+                        currentPosition = pDevicePort->parseInputData(mInputData[rowIndex], currentPosition, parsingErrors, *mpErrorStream);
+
+                        const bool c_FewerCellsErrorOccurred{_storeExternalParsingErrors(parsingErrors)};
+
+                        if (c_FewerCellsErrorOccurred)
+                        {
+                            break;
+                        }
+
+                        columnNumber = pDevicePort->getColumn();
+                        --mRowDevicesStillNotParsedCount;
+                        isDeviceKnown = true;
+                    }
+                }
+                else
+                {
+                    ErrorPtr pInvalidDeviceUPositionError{std::make_shared<InvalidDeviceUPositionError>(*mpErrorStream)};
+                    _storeParsingErrorAndLocation(pInvalidDeviceUPositionError, rowIndex + c_RowNumberOffset, columnNumber + 1);
+                    break;
                 }
             }
 

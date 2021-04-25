@@ -149,3 +149,18 @@ void InvalidCharactersError::execute()
 
     Error::execute();
 }
+
+InvalidDeviceUPositionError::InvalidDeviceUPositionError(std::ofstream& errorStream)
+    : Error{ErrorCode::INVALID_DEVICE_U_POSITION, errorStream}
+{
+}
+
+void InvalidDeviceUPositionError::execute()
+{
+    mErrorStream << "Error: the device U position is invalid." << std::endl;
+    mErrorStream << "The cell is empty, contains non-numeric characters or the number is not within the required range." << std::endl;
+    mErrorStream << "A integer between 0 and 50 should be entered." << std::endl;
+    mErrorStream << "Row number: " << mRow << "    " << "Column number: " << mColumn << std::endl;
+
+    Error::execute();
+}

@@ -2,10 +2,9 @@
 
 #include "powerdeviceport.h"
 
-PDUPort::PDUPort(bool isSourceDevice)
-    : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::PDU), c_MaxAllowedCharsCount.at(DeviceTypeID::PDU), isSourceDevice}
+PDUPort::PDUPort(const std::string& deviceUPosition, const bool isSourceDevice)
+    : DevicePort{deviceUPosition, c_RequiredNrOfInputParams.at(DeviceTypeID::PDU), c_MaxAllowedCharsCount.at(DeviceTypeID::PDU), isSourceDevice}
 {
-    _registerRequiredParameter(&mDeviceUPosition);
     _registerRequiredParameter(&mDevicePlacementType);
     _registerRequiredParameter(&mLoadSegmentNumber);
     _registerRequiredParameter(&mPortNumber);
@@ -71,10 +70,9 @@ void PDUPort::computeDescriptionAndLabel()
     }
 }
 
-ExtensionBarPort::ExtensionBarPort(bool isSourceDevice)
-    : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::EXTENSION_BAR), c_MaxAllowedCharsCount.at(DeviceTypeID::EXTENSION_BAR), isSourceDevice}
+ExtensionBarPort::ExtensionBarPort(const std::string& deviceUPosition, const bool isSourceDevice)
+    : DevicePort{deviceUPosition, c_RequiredNrOfInputParams.at(DeviceTypeID::EXTENSION_BAR), c_MaxAllowedCharsCount.at(DeviceTypeID::EXTENSION_BAR), isSourceDevice}
 {
-    _registerRequiredParameter(&mDeviceUPosition);
     _registerRequiredParameter(&mDevicePlacementType);
     _registerRequiredParameter(&mPortNumber);
 }
@@ -114,10 +112,9 @@ void ExtensionBarPort::computeDescriptionAndLabel()
     }
 }
 
-UPSPort::UPSPort(bool isSourceDevice)
-    : DevicePort{c_RequiredNrOfInputParams.at(DeviceTypeID::UPS), c_MaxAllowedCharsCount.at(DeviceTypeID::UPS), isSourceDevice}
+UPSPort::UPSPort(const std::string& deviceUPosition, const bool isSourceDevice)
+    : DevicePort{deviceUPosition, c_RequiredNrOfInputParams.at(DeviceTypeID::UPS), c_MaxAllowedCharsCount.at(DeviceTypeID::UPS), isSourceDevice}
 {
-    _registerRequiredParameter(&mDeviceUPosition);
     _registerRequiredParameter(&mLoadSegmentNumber);
     _registerRequiredParameter(&mPortNumber);
 }
