@@ -10,6 +10,7 @@
 
 static constexpr int c_MaxNrOfRackUnits{50};
 static constexpr int c_RowNumberOffset{2}; // offset used for calculating the row number based on payload index (header row is ignored and row numbering starts at 1)
+static constexpr int c_DevicePortParamsColumnOffset{2}; // offset used for calculating the column number of the first device port parameters (preceding columns are device type and device U position)
 static constexpr int c_DevicesPerConnectionInputRowCount{2};
 
 static const std::string c_CablePartNumberPlaceholder{"CBL_PART_NR"};
@@ -23,6 +24,7 @@ static const std::string c_InvalidModuleNumberErrorText{"ERROR: THE MODULE NUMBE
 static const std::string c_InvalidLoadSegmentNumberErrorText{"ERROR. THE LOAD SEGMENT NUMBER IS INVALID. PLEASE REVIEW INPUT FILE (connectioninput.csv)."};
 static const std::string c_InvalidPortNumberErrorText{"ERROR: THE PORT NUMBER IS INVALID. PLEASE REVIEW INPUT FILE (connectioninput.csv)."};
 static const std::string c_LabelErrorText{"ERROR!!!"};
+static const std::string c_MissingCablePNErrorText{"Error! The cable part number is missing."};
 
 #if defined (__APPLE__) && defined (__MACH__)
 static const std::string c_HomeDirParent{"/Users"};

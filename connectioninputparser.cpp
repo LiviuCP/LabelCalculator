@@ -41,6 +41,7 @@ bool ConnectionInputParser::_parseInput()
 
     int cablePartNumbersEntriesCount{0};
     const int c_ConnectionInputRowsCount{static_cast<int>(mInputData.size())};
+    std::string currentCablePartNumber; // stores the cable part number written on previous row
 
     for (int rowIndex{0}; rowIndex < c_ConnectionInputRowsCount; ++rowIndex)
     {
@@ -48,8 +49,6 @@ bool ConnectionInputParser::_parseInput()
         int currentPosition{0}; // current position in the current input row
         int columnNumber{1}; // column number from connectioninput.csv
         bool isFirstCellParsed{false}; // flag: has the cable part number been parsed on current row?
-
-        std::string cablePartNumber; // stores the cable part number written on previous row
 
         mRowDevicesStillNotParsedCount = c_DevicesPerConnectionInputRowCount; // devices that haven't been fully parsed on the current input csv row (maximum 2 - one connection)
 
@@ -73,11 +72,16 @@ bool ConnectionInputParser::_parseInput()
                 // if no cable PN entered on current row take the PN for previous row
                 if (0 == mCablePartNumbersEntries[cablePartNumbersEntriesCount - 1].size())
                 {
-                    mCablePartNumbersEntries[cablePartNumbersEntriesCount - 1] = cablePartNumber;
+                    if (0 == currentCablePartNumber.size())
+                    {
+                        currentCablePartNumber = c_MissingCablePNErrorText;
+                    }
+
+                    mCablePartNumbersEntries[cablePartNumbersEntriesCount - 1] = currentCablePartNumber;
                 }
                 else
                 {
-                    cablePartNumber = mCablePartNumbersEntries[cablePartNumbersEntriesCount - 1];
+                    currentCablePartNumber = mCablePartNumbersEntries[cablePartNumbersEntriesCount - 1];
                 }
 
                 isFirstCellParsed = true;
@@ -118,9 +122,10 @@ bool ConnectionInputParser::_parseInput()
 
                     if(nullptr != pDevicePort)
                     {
-                        columnNumber += 2; // pass through the device type and device U position columns and move to the first device parameter column
+                        // pass through the device type and device U position columns and move to the first device parameter column
+                        columnNumber += c_DevicePortParamsColumnOffset;
 
-                        pDevicePort->setCSVRowNumber(rowIndex + c_RowNumberOffset);     // +2: csv lines start at 1 and first row is ignored
+                        pDevicePort->setCSVRowNumber(rowIndex + c_RowNumberOffset);
                         pDevicePort->setCSVColumnNumber(columnNumber);
                         mDevicePorts.push_back(pDevicePort);
 
