@@ -26,12 +26,12 @@ public:
     int parseInputData(const std::string& input, const int initialPosition, std::vector<ErrorPtr>& parsingErrors, std::ofstream& errorStream);
 
     // setters for the input .csv row and column index
-    void setRow(int row);
-    void setColumn(int column);
+    void setCSVRowNumber(int rowNumber);
+    void setCSVColumnNumber(int columnNumber);
 
     // getters
-    int getRow() const;
-    int getColumn() const;
+    int getCSVRowNumber() const;
+    int getCSVColumnNumber() const;
     std::string getDescription() const;
     std::string getLabel() const;
 
@@ -49,8 +49,8 @@ protected:
     std::string mDescription; // text to be written in the source (first device) / destination (second device) field of the labelling table (device port description)
     std::string mLabel;       // text to be written in the source (first device) / destination (second device) field of the labelling table (device port label)
 
-    int mRow;            // input .csv row from which the error originated
-    int mColumn;         // input .csv column from which the error originated
+    int mCSVRowNumber;            // input CSV file row from which the device info is being parsed, used for error reporting
+    int mCSVColumnNumber;         // current CSV file column from which device info is being parsed, used for error reporting
 
     static const int scMaxInputParametersCount; // number of fields that should be filled in connectioninput.csv for EACH device (not used fields can be filled in with '-')
 

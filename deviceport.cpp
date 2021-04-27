@@ -7,8 +7,8 @@ const int DevicePort::scMaxInputParametersCount{3};
 
 DevicePort::DevicePort(const std::string& deviceUPosition, const int requiredNumberOfParameters, const int maxAllowedCharsCount, bool isSourceDevice)
     : mDeviceUPosition{deviceUPosition}
-    , mRow{1}
-    , mColumn{1}
+    , mCSVRowNumber{1}
+    , mCSVColumnNumber{1}
     , mInputParametersCount{requiredNumberOfParameters}
     , mMaxAllowedCharsCount{maxAllowedCharsCount}
     , mIsSourceDevice{isSourceDevice}
@@ -65,12 +65,12 @@ int DevicePort::parseInputData(const std::string& input, const int initialPositi
 
             if (!noErrorsDetectedInCell)
             {
-                lastError->setRow(mRow);
-                lastError->setColumn(mColumn);
+                lastError->setCSVRowNumber(mCSVRowNumber);
+                lastError->setCSVColumnNumber(mCSVColumnNumber);
                 parsingErrors.push_back(lastError);
             }
 
-            ++mColumn;
+            ++mCSVColumnNumber;
             totalParsedCharsCount += fieldSizes[currentParameter]; // comma (,) is not taken into consideration when updating the number of parsed characters
         }
         else
@@ -110,8 +110,8 @@ int DevicePort::parseInputData(const std::string& input, const int initialPositi
     if (fewerCellsProvided)
     {
         lastError = std::make_shared<FewerCellsError>(errorStream);
-        lastError->setRow(mRow);
-        lastError->setColumn(mColumn);
+        lastError->setCSVRowNumber(mCSVRowNumber);
+        lastError->setCSVColumnNumber(mCSVColumnNumber);
         parsingErrors.push_back(lastError);
 
     }
@@ -119,8 +119,8 @@ int DevicePort::parseInputData(const std::string& input, const int initialPositi
     {
         const int c_DeltaNrOfChars{totalParsedCharsCount - mMaxAllowedCharsCount};
         lastError = std::make_shared<ExceedingCharsCountError>(errorStream, mMaxAllowedCharsCount, c_DeltaNrOfChars, mIsSourceDevice);
-        lastError->setRow(mRow);
-        lastError->setColumn(mColumn);
+        lastError->setCSVRowNumber(mCSVRowNumber);
+        lastError->setCSVColumnNumber(mCSVColumnNumber);
         parsingErrors.push_back(lastError);
     }
     else
@@ -131,24 +131,24 @@ int DevicePort::parseInputData(const std::string& input, const int initialPositi
     return currentPosition;
 }
 
-void DevicePort::setRow(int row)
+void DevicePort::setCSVRowNumber(int rowNumber)
 {
-    mRow = row;
+    mCSVRowNumber = rowNumber;
 }
 
-void DevicePort::setColumn(int column)
+void DevicePort::setCSVColumnNumber(int columnNumber)
 {
-    mColumn = column;
+    mCSVColumnNumber = columnNumber;
 }
 
-int DevicePort::getRow() const
+int DevicePort::getCSVRowNumber() const
 {
-    return mRow;
+    return mCSVRowNumber;
 }
 
-int DevicePort::getColumn() const
+int DevicePort::getCSVColumnNumber() const
 {
-    return mColumn;
+    return mCSVColumnNumber;
 }
 
 std::string DevicePort::getDescription() const

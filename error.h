@@ -14,17 +14,17 @@ public:
 
     virtual void execute();
 
-    void setRow(int row);
-    void setColumn(int column);
+    void setCSVRowNumber(int rowNumber);
+    void setCSVColumnNumber(int columnNumber);
 
-    int getRow() const;
-    int getColumn() const;
+    int getCSVRowNumber() const;
+    int getCSVColumnNumber() const;
 
 protected:
     std::ofstream& mErrorStream;
     ErrorCode mErrorCode;
-    int mRow;
-    int mColumn;
+    int mCSVRowNumber;              // row from parsed CSV file where the error is located
+    int mCSVColumnNumber;           // column from parsed CSV file where the error is located
 };
 
 using ErrorPtr = std::shared_ptr<Error>;

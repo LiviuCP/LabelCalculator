@@ -23,22 +23,22 @@ void Error::execute()
     mErrorStream << "Error code: " << static_cast<int>(mErrorCode) << std::endl << std::endl;
 }
 
-void Error::setRow(int row)
+void Error::setCSVRowNumber(int rowNumber)
 {
-    mRow = row;
+    mCSVRowNumber = rowNumber;
 }
 
-void Error::setColumn(int column)
+void Error::setCSVColumnNumber(int columnNumber)
 {
-    mColumn = column;
+    mCSVColumnNumber = columnNumber;
 }
 
-int Error::getRow() const
+int Error::getCSVRowNumber() const
 {
-    return mRow;
+    return mCSVRowNumber;
 }
 
-int Error::getColumn() const
+int Error::getCSVColumnNumber() const
 {
-    return mColumn;
+    return mCSVColumnNumber;
 }

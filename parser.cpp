@@ -58,8 +58,8 @@ void Parser::_storeParsingErrorAndLocation(ErrorPtr pError, const int rowNumber,
 {
     if (nullptr != pError)
     {
-        pError->setRow(rowNumber);
-        pError->setColumn(columnNumber);
+        pError->setCSVRowNumber(rowNumber);
+        pError->setCSVColumnNumber(columnNumber);
         mParsingErrors.push_back(pError);
     }
 }

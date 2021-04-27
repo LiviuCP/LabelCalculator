@@ -120,8 +120,8 @@ bool ConnectionInputParser::_parseInput()
                     {
                         columnNumber += 2; // pass through the device type and device U position columns and move to the first device parameter column
 
-                        pDevicePort->setRow(rowIndex + c_RowNumberOffset);     // +2: csv lines start at 1 and first row is ignored
-                        pDevicePort->setColumn(columnNumber);
+                        pDevicePort->setCSVRowNumber(rowIndex + c_RowNumberOffset);     // +2: csv lines start at 1 and first row is ignored
+                        pDevicePort->setCSVColumnNumber(columnNumber);
                         mDevicePorts.push_back(pDevicePort);
 
                         std::vector<ErrorPtr> parsingErrors;
@@ -134,7 +134,7 @@ bool ConnectionInputParser::_parseInput()
                             break;
                         }
 
-                        columnNumber = pDevicePort->getColumn();
+                        columnNumber = pDevicePort->getCSVColumnNumber();
                         --mRowDevicesStillNotParsedCount;
                         isDeviceKnown = true;
                     }
