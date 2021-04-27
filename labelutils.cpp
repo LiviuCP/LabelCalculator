@@ -17,24 +17,34 @@ int readDataField(const std::string& src, std::string& dest, const int index)
         dest.clear();
 
         int currentIndex{index};
+        bool emptyStartingFieldParsed{false};
 
         if (c_CSVSeparator == src[currentIndex])
         {
+            // if the parsed cell is the first one AND empty it should be taken into consideration and an empty destination string should be returned
+            if (0 == currentIndex)
+            {
+                emptyStartingFieldParsed = true;
+            }
+
             ++currentIndex;
         }
 
-        while(currentIndex < c_Length)
+        if (!emptyStartingFieldParsed)
         {
-            if(src[currentIndex] != c_CSVSeparator)
+            while(currentIndex < c_Length)
             {
-                dest += src[currentIndex];
-            }
-            else
-            {
-                break;
-            }
+                if(src[currentIndex] != c_CSVSeparator)
+                {
+                    dest += src[currentIndex];
+                }
+                else
+                {
+                    break;
+                }
 
-            ++currentIndex;
+                ++currentIndex;
+            }
         }
 
         if(currentIndex != c_Length)
