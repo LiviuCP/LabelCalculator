@@ -24,7 +24,7 @@ static const std::string c_InvalidModuleNumberErrorText{"ERROR: THE MODULE NUMBE
 static const std::string c_InvalidLoadSegmentNumberErrorText{"ERROR. THE LOAD SEGMENT NUMBER IS INVALID. PLEASE REVIEW INPUT FILE (connectioninput.csv)."};
 static const std::string c_InvalidPortNumberErrorText{"ERROR: THE PORT NUMBER IS INVALID. PLEASE REVIEW INPUT FILE (connectioninput.csv)."};
 static const std::string c_LabelErrorText{"ERROR!!!"};
-static const std::string c_MissingCablePNErrorText{"Error! The cable part number is missing."};
+static const std::string c_InvalidCablePNErrorText{"Error! The cable part number is missing or contains invalid characters."};
 
 #if defined (__APPLE__) && defined (__MACH__)
 static const std::string c_HomeDirParent{"/Users"};

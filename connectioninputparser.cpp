@@ -55,7 +55,8 @@ bool ConnectionInputParser::_parseInput()
         while (mRowDevicesStillNotParsedCount > 0)
         {
             // total number of csv cells from the connection row (cable + 2 devices) is less than required (parsing of the row should stop at once)
-            if (currentPosition == c_InputRowsLength || -1 == currentPosition)
+            if (currentPosition == c_InputRowsLength ||
+                -1 == currentPosition)
             {
                 ErrorPtr pFewerCellsError{std::make_shared<FewerCellsError>(*mpErrorStream)};
                 _storeParsingErrorAndLocation(pFewerCellsError, rowIndex + c_RowNumberOffset, columnNumber);
@@ -72,16 +73,17 @@ bool ConnectionInputParser::_parseInput()
                 // if no cable PN entered on current row take the PN for previous row
                 if (0 == mCablePartNumbersEntries[cablePartNumbersEntriesCount - 1].size())
                 {
-                    if (0 == currentCablePartNumber.size())
-                    {
-                        currentCablePartNumber = c_MissingCablePNErrorText;
-                    }
-
                     mCablePartNumbersEntries[cablePartNumbersEntriesCount - 1] = currentCablePartNumber;
                 }
                 else
                 {
                     currentCablePartNumber = mCablePartNumbersEntries[cablePartNumbersEntriesCount - 1];
+                }
+
+                if (0 == mCablePartNumbersEntries[cablePartNumbersEntriesCount-1].size()                     ||
+                    areInvalidCharactersContained(mCablePartNumbersEntries[cablePartNumbersEntriesCount-1]))
+                {
+                    mCablePartNumbersEntries[cablePartNumbersEntriesCount-1] = c_InvalidCablePNErrorText;
                 }
 
                 isFirstCellParsed = true;
