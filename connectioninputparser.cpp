@@ -37,11 +37,12 @@ void ConnectionInputParser::_readInput()
 
 bool ConnectionInputParser::_parseInput()
 {
-    DevicePortsFactory deviceFactory;
+    DevicePortsFactory devicePortsFactory;
 
-    int cablePartNumbersEntriesCount{0};
     const int c_ConnectionInputRowsCount{static_cast<int>(mInputData.size())};
     std::string currentCablePartNumber; // stores the cable part number written on previous row
+
+    mCablePartNumbersEntries.resize(c_ConnectionInputRowsCount);
 
     for (int rowIndex{0}; rowIndex < c_ConnectionInputRowsCount; ++rowIndex)
     {
@@ -55,8 +56,8 @@ bool ConnectionInputParser::_parseInput()
         while (mRowDevicesStillNotParsedCount > 0)
         {
             // total number of csv cells from the connection row (cable + 2 devices) is less than required (parsing of the row should stop at once)
-            if (currentPosition == c_InputRowsLength ||
-                -1 == currentPosition)
+            if (currentPosition == c_InputRowsLength  ||
+                             -1 == currentPosition  )
             {
                 ErrorPtr pFewerCellsError{std::make_shared<FewerCellsError>(*mpErrorStream)};
                 _storeParsingErrorAndLocation(pFewerCellsError, rowIndex + c_RowNumberOffset, columnNumber);
@@ -66,24 +67,22 @@ bool ConnectionInputParser::_parseInput()
             // the cable field should only be parsed before parsing any device on the row
             if (!isFirstCellParsed)
             {
-                ++cablePartNumbersEntriesCount;
-                mCablePartNumbersEntries.resize(cablePartNumbersEntriesCount);
-                currentPosition = readDataField(mInputData[rowIndex], mCablePartNumbersEntries[cablePartNumbersEntriesCount - 1], currentPosition);
+                currentPosition = readDataField(mInputData[rowIndex], mCablePartNumbersEntries[rowIndex], currentPosition);
 
                 // if no cable PN entered on current row take the PN for previous row
-                if (0 == mCablePartNumbersEntries[cablePartNumbersEntriesCount - 1].size())
+                if (0 == mCablePartNumbersEntries[rowIndex].size())
                 {
-                    mCablePartNumbersEntries[cablePartNumbersEntriesCount - 1] = currentCablePartNumber;
+                    mCablePartNumbersEntries[rowIndex] = currentCablePartNumber;
                 }
                 else
                 {
-                    currentCablePartNumber = mCablePartNumbersEntries[cablePartNumbersEntriesCount - 1];
+                    currentCablePartNumber = mCablePartNumbersEntries[rowIndex];
                 }
 
-                if (0 == mCablePartNumbersEntries[cablePartNumbersEntriesCount-1].size()                     ||
-                    areInvalidCharactersContained(mCablePartNumbersEntries[cablePartNumbersEntriesCount-1]))
+                if (0 == mCablePartNumbersEntries[rowIndex].size()                     ||
+                    areInvalidCharactersContained(mCablePartNumbersEntries[rowIndex]))
                 {
-                    mCablePartNumbersEntries[cablePartNumbersEntriesCount-1] = c_InvalidCablePNErrorText;
+                    mCablePartNumbersEntries[rowIndex] = c_InvalidCablePNErrorText;
                 }
 
                 isFirstCellParsed = true;
@@ -120,7 +119,7 @@ bool ConnectionInputParser::_parseInput()
                 {
                     const bool c_IsSourceDevice{0 == mRowDevicesStillNotParsedCount % c_DevicesPerConnectionInputRowCount};
 
-                    DevicePortPtr pDevicePort{deviceFactory.createDevicePort(deviceTypeID, deviceUPosition, c_IsSourceDevice)};
+                    DevicePortPtr pDevicePort{devicePortsFactory.createDevicePort(deviceTypeID, deviceUPosition, c_IsSourceDevice)};
 
                     if(nullptr != pDevicePort)
                     {
@@ -169,7 +168,7 @@ bool ConnectionInputParser::_parseInput()
 
     if (!c_ErrorsOccurred)
     {
-        assert(deviceFactory.getCreatedDevicePortsCount() == static_cast<int>(mCablePartNumbersEntries.size()) * c_DevicesPerConnectionInputRowCount); // 1 cable, two connected devices
+        assert(devicePortsFactory.getCreatedDevicePortsCount() == static_cast<int>(mCablePartNumbersEntries.size()) * c_DevicesPerConnectionInputRowCount); // 1 cable, two connected devices
     }
 
     return c_ErrorsOccurred;
