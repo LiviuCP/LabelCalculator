@@ -1,6 +1,9 @@
 #ifndef CONNECTIONINPUTPARSER_H
 #define CONNECTIONINPUTPARSER_H
 
+#include <memory>
+
+#include "deviceportsfactory.h"
 #include "deviceport.h"
 #include "parser.h"
 
@@ -25,6 +28,10 @@ private:
     */
     int _parseCablePartNumber(const int rowIndex, const int currentPosition);
 
+    /* Used for parsing the data for one of the device ports contained in each CSV connection input row
+    */
+    bool _parseDevicePort(const int rowIndex);
+
     /* Used for storing externally generated errors (from Device class and its subclasses)
        It is assumed that the error location (row and column) has been correctly setup at error creation
     */
@@ -46,10 +53,21 @@ private:
     std::vector<std::string> mCablePartNumbersEntries;
 
     /* number of devices still not parsed on current row */
-    int mRowDevicesStillNotParsedCount;
+    int mRowPortsStillNotParsedCount;
 
     /* stores the cable part number determined for previous row */
     std::string mCurrentCablePartNumber;
+
+    /* device port factory used for creating the device port objects for each connection */
+    std::unique_ptr<DevicePortsFactory> mpDevicePortsFactory;
+
+    /* current character index in the currently parsed CSV row string */
+    int mCurrentPosition;
+
+    /* current connections input CSV column being parsed
+       (the numbering starts from 1 as in the CSV file as opened with a spreadsheet tool)
+    */
+    int mCurrentColumnNumber;
 };
 
 #endif // CONNECTIONINPUTPARSER_H
