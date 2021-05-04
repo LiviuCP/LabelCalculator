@@ -21,6 +21,10 @@ protected:
     virtual void _reset() override;
 
 private:
+    /* Used for processing the cable PN cell for each CSV row
+    */
+    int _parseCablePartNumber(const int rowIndex, const int currentPosition);
+
     /* Used for storing externally generated errors (from Device class and its subclasses)
        It is assumed that the error location (row and column) has been correctly setup at error creation
     */
@@ -43,6 +47,9 @@ private:
 
     /* number of devices still not parsed on current row */
     int mRowDevicesStillNotParsedCount;
+
+    /* stores the cable part number determined for previous row */
+    std::string mCurrentCablePartNumber;
 };
 
 #endif // CONNECTIONINPUTPARSER_H

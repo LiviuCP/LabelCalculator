@@ -40,7 +40,6 @@ bool ConnectionInputParser::_parseInput()
     DevicePortsFactory devicePortsFactory;
 
     const int c_ConnectionInputRowsCount{static_cast<int>(mInputData.size())};
-    std::string currentCablePartNumber; // stores the cable part number written on previous row
 
     mCablePartNumbersEntries.resize(c_ConnectionInputRowsCount);
 
@@ -67,24 +66,7 @@ bool ConnectionInputParser::_parseInput()
             // the cable field should only be parsed before parsing any device on the row
             if (!isFirstCellParsed)
             {
-                currentPosition = readDataField(mInputData[rowIndex], mCablePartNumbersEntries[rowIndex], currentPosition);
-
-                // if no cable PN entered on current row take the PN for previous row
-                if (0 == mCablePartNumbersEntries[rowIndex].size())
-                {
-                    mCablePartNumbersEntries[rowIndex] = currentCablePartNumber;
-                }
-                else
-                {
-                    currentCablePartNumber = mCablePartNumbersEntries[rowIndex];
-                }
-
-                if (0 == mCablePartNumbersEntries[rowIndex].size()                     ||
-                    areInvalidCharactersContained(mCablePartNumbersEntries[rowIndex]))
-                {
-                    mCablePartNumbersEntries[rowIndex] = c_InvalidCablePNErrorText;
-                }
-
+                currentPosition = _parseCablePartNumber(rowIndex, currentPosition);
                 isFirstCellParsed = true;
                 ++columnNumber;
                 continue;
@@ -211,6 +193,32 @@ void ConnectionInputParser::_reset()
     mCablePartNumbersEntries.clear();
 
     Parser::_reset();
+}
+
+int ConnectionInputParser::_parseCablePartNumber(const int rowIndex, const int currentPosition)
+{
+    assert(rowIndex >= 0 &&
+           rowIndex < static_cast<int>(mInputData.size()));
+
+    const int resultingPosition{readDataField(mInputData[rowIndex], mCablePartNumbersEntries[rowIndex], currentPosition)};
+
+    // if no cable PN entered on current row take the PN for previous row
+    if (0 == mCablePartNumbersEntries[rowIndex].size())
+    {
+        mCablePartNumbersEntries[rowIndex] = mCurrentCablePartNumber;
+    }
+    else
+    {
+        mCurrentCablePartNumber = mCablePartNumbersEntries[rowIndex];
+    }
+
+    if (0 == mCablePartNumbersEntries[rowIndex].size()                     ||
+        areInvalidCharactersContained(mCablePartNumbersEntries[rowIndex]))
+    {
+        mCablePartNumbersEntries[rowIndex] = c_InvalidCablePNErrorText;
+    }
+
+    return resultingPosition;
 }
 
 bool ConnectionInputParser::_storeExternalParsingErrors(const std::vector<ErrorPtr>& deviceParsingErrors)
