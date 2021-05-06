@@ -7,6 +7,8 @@
 ConnectionDefinitionParser::ConnectionDefinitionParser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream)
     : Parser{pInputStream, pOutputStream, pErrorStream, c_InputHeader}
     , mDiscoveredDevicesCount{0}
+    , mCurrentPosition{-1}
+    , mCurrentColumnNumber{1}
 {
     mMapping.resize(c_MaxNrOfRackUnits, DeviceTypeID::NO_DEVICE); // initial value: no device
 }
@@ -33,93 +35,19 @@ bool ConnectionDefinitionParser::_parseInput()
 
     for (int rowIndex{0}; rowIndex < c_ConnectionDefinitionRowsCount; ++rowIndex)
     {
-        int columnNumber{1}; // csv column
-        std::string currentCell; // current csv cell
+        mCurrentColumnNumber = 1;
+        std::string currentCell;
 
         // first cell on the row is ignored (contains the U number and is only used for informing the user about rack position; the row index is instead used in calculations in relationship with U number)
-        int currentPosition{readDataField(mInputData[rowIndex], currentCell, 0)};
+        _parseUPosition(rowIndex);
 
         // second cell on the row: device type
-        currentPosition = readDataField(mInputData[rowIndex], currentCell, currentPosition);
-
-        if (0 == currentCell.size())
-        {
-            continue;
-        }
-
-        ++columnNumber;
-
-        DeviceTypeID deviceTypeID{getDeviceTypeID(currentCell)};
-
-        if (DeviceTypeID::UNKNOWN_DEVICE == deviceTypeID)
-        {
-            ErrorPtr pError{std::make_shared<UnknownDeviceError>(*mpErrorStream)};
-
-            _storeParsingErrorAndLocation(pError, rowIndex + c_RowNumberOffset, columnNumber);
-            continue;
-        }
-
-        // add discovered device to list of device U numbers
-        ++mDiscoveredDevicesCount;
-        mUNumbers.push_back(c_MaxNrOfRackUnits - rowIndex); // add the U number of the last discovered device
-
-        // add device type to mapping table
-        mMapping[c_MaxNrOfRackUnits - 1 - rowIndex] = deviceTypeID;
-
-        // adjust vectors of connected devices and number of connections between each two devices
-        mConnectedTo.resize(mDiscoveredDevicesCount);
-        mConnectionsCount.resize(mDiscoveredDevicesCount);
+        const bool c_IsValidDeviceType{_parseDeviceType(rowIndex)};
 
         // read each device to which current device is connected, go to next row if no (more) connected devices are found
-        while(currentPosition > -1)
+        if (c_IsValidDeviceType)
         {
-            // read next cell (new current cell)
-            ++columnNumber;
-            currentPosition = readDataField(mInputData[rowIndex], currentCell, currentPosition);
-
-            if (0 == currentCell.size())
-            {
-                break;
-            }
-
-            int secondDevice;
-            int nrOfconnections;
-            const bool isConnectionFormattingInvalid{!_parseConnectionFormatting(currentCell, secondDevice, nrOfconnections)};
-
-            ErrorPtr pError{nullptr};
-
-            if(isConnectionFormattingInvalid) // checking if the connection format is correct (e.g. 20/3: 3 connections to device located at U20)
-            {
-                pError = std::make_shared<WrongFormatError>(*mpErrorStream);
-            }
-            else if (secondDevice <= 0 || secondDevice > c_MaxNrOfRackUnits) // checking if the device is in the accepted U interval within rack
-            {
-                pError = std::make_shared<WrongUNumberError>(*mpErrorStream);
-            }
-            else if (DeviceTypeID::NO_DEVICE == mMapping[secondDevice - 1]) // check if the second device is actually placed within rack (contained in mapping table)
-            {
-                pError = std::make_shared<InvalidTargetDevicePositionError>(*mpErrorStream);
-            }
-            else if (c_MaxNrOfRackUnits - rowIndex == secondDevice) // connection of a device to itself (connection loop) is not allowed
-            {
-                pError = std::make_shared<DeviceConnectedToItselfError>(*mpErrorStream);
-            }
-            else if (0 == nrOfconnections) // if the devices are marked as connected there should be minimum 1 connection between them
-            {
-                pError = std::make_shared<NoConnectionsError>(*mpErrorStream);
-            }
-            else
-            {
-                mConnectedTo[mDiscoveredDevicesCount - 1].resize(columnNumber - 2); // add the device to the list of connected devices (to current device)
-                mConnectionsCount[mDiscoveredDevicesCount - 1].resize(columnNumber - 2); // same for the number of connections
-                mConnectedTo[mDiscoveredDevicesCount - 1][columnNumber - 3] = secondDevice; // add the U number of the second device
-                mConnectionsCount[mDiscoveredDevicesCount - 1][columnNumber - 3] = nrOfconnections; // add the number of connections between the current device and the second device
-            }
-
-            if (nullptr != pError)
-            {
-                _storeParsingErrorAndLocation(pError, rowIndex + c_RowNumberOffset, columnNumber);
-            }
+            _parseRowConnections(rowIndex);
         }
     }
 
@@ -198,6 +126,111 @@ void ConnectionDefinitionParser::_reset()
     mMapping.resize(c_MaxNrOfRackUnits, DeviceTypeID::NO_DEVICE); // initial value: no device
 
     Parser::_reset();
+}
+
+void ConnectionDefinitionParser::_parseUPosition(const int rowIndex)
+{
+    std::string currentCell;
+
+    // first cell on the row is ignored (contains the U number and is only used for informing the user about rack position; the row index is instead used in calculations in relationship with U number)
+    mCurrentPosition = readDataField(mInputData[rowIndex], currentCell, 0);
+    ++mCurrentColumnNumber;
+}
+
+bool ConnectionDefinitionParser::_parseDeviceType(const int rowIndex)
+{
+    bool isValidDeviceType{false};
+    std::string currentCell;
+
+    // second cell on the row: device type
+    mCurrentPosition = readDataField(mInputData[rowIndex], currentCell, mCurrentPosition);
+
+    if (currentCell.size() > 0)
+    {
+        DeviceTypeID deviceTypeID{getDeviceTypeID(currentCell)};
+
+        if (DeviceTypeID::UNKNOWN_DEVICE != deviceTypeID)
+        {
+            isValidDeviceType = true;
+
+            // add discovered device to list of device U numbers
+            ++mDiscoveredDevicesCount;
+            mUNumbers.push_back(c_MaxNrOfRackUnits - rowIndex); // add the U number of the last discovered device
+
+            // add device type to mapping table
+            mMapping[c_MaxNrOfRackUnits - 1 - rowIndex] = deviceTypeID;
+
+            // adjust vectors of connected devices and number of connections between each two devices
+            mConnectedTo.resize(mDiscoveredDevicesCount);
+            mConnectionsCount.resize(mDiscoveredDevicesCount);
+        }
+        else
+        {
+            ErrorPtr pError{std::make_shared<UnknownDeviceError>(*mpErrorStream)};
+
+            _storeParsingErrorAndLocation(pError, rowIndex + c_RowNumberOffset, mCurrentColumnNumber);
+        }
+
+        ++mCurrentColumnNumber;
+    }
+
+    return isValidDeviceType;
+}
+
+void ConnectionDefinitionParser::_parseRowConnections(const int rowIndex)
+{
+    while(mCurrentPosition > -1)
+    {
+        // read next cell (new current cell)
+        std::string currentCell;
+        mCurrentPosition = readDataField(mInputData[rowIndex], currentCell, mCurrentPosition);
+
+        if (0 == currentCell.size())
+        {
+            break;
+        }
+
+        int secondDevice;
+        int nrOfconnections;
+        const bool c_IsConnectionFormattingInvalid{!_parseConnectionFormatting(currentCell, secondDevice, nrOfconnections)};
+
+        ErrorPtr pError{nullptr};
+
+        if(c_IsConnectionFormattingInvalid) // checking if the connection format is correct (e.g. 20/3: 3 connections to device located at U20)
+        {
+            pError = std::make_shared<WrongFormatError>(*mpErrorStream);
+        }
+        else if (secondDevice <= 0 || secondDevice > c_MaxNrOfRackUnits) // checking if the device is in the accepted U interval within rack
+        {
+            pError = std::make_shared<WrongUNumberError>(*mpErrorStream);
+        }
+        else if (DeviceTypeID::NO_DEVICE == mMapping[secondDevice - 1]) // check if the second device is actually placed within rack (contained in mapping table)
+        {
+            pError = std::make_shared<InvalidTargetDevicePositionError>(*mpErrorStream);
+        }
+        else if (c_MaxNrOfRackUnits - rowIndex == secondDevice) // connection of a device to itself (connection loop) is not allowed
+        {
+            pError = std::make_shared<DeviceConnectedToItselfError>(*mpErrorStream);
+        }
+        else if (0 == nrOfconnections) // if the devices are marked as connected there should be minimum 1 connection between them
+        {
+            pError = std::make_shared<NoConnectionsError>(*mpErrorStream);
+        }
+        else
+        {
+            mConnectedTo[mDiscoveredDevicesCount - 1].resize(mCurrentColumnNumber - 2); // add the device to the list of connected devices (to current device)
+            mConnectionsCount[mDiscoveredDevicesCount - 1].resize(mCurrentColumnNumber - 2); // same for the number of connections
+            mConnectedTo[mDiscoveredDevicesCount - 1][mCurrentColumnNumber - 3] = secondDevice; // add the U number of the second device
+            mConnectionsCount[mDiscoveredDevicesCount - 1][mCurrentColumnNumber - 3] = nrOfconnections; // add the number of connections between the current device and the second device
+        }
+
+        if (nullptr != pError)
+        {
+            _storeParsingErrorAndLocation(pError, rowIndex + c_RowNumberOffset, mCurrentColumnNumber);
+        }
+
+        ++mCurrentColumnNumber;
+    }
 }
 
 bool ConnectionDefinitionParser::_parseConnectionFormatting(const std::string& source, int& secondDevice, int& connectionsCount)

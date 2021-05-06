@@ -65,7 +65,7 @@ private:
     int mCurrentPosition;
 
     /* current connections input CSV column being parsed
-       (the numbering starts from 1 as in the CSV file as opened with a spreadsheet tool)
+       (the numbering starts from 1 as in the CSV file when opened with a spreadsheet tool)
     */
     int mCurrentColumnNumber;
 };

@@ -8,7 +8,7 @@ ConnectionInputParser::ConnectionInputParser(std::ifstream* const pInputStream, 
     : Parser(pInputStream, pOutputStream, pErrorStream, c_OutputHeader)
     , mRowPortsStillNotParsedCount{0}
     , mpDevicePortsFactory{nullptr}
-    , mCurrentPosition{0}
+    , mCurrentPosition{-1}
     , mCurrentColumnNumber{1}
 {
 }
