@@ -60,14 +60,6 @@ private:
 
     /* device port factory used for creating the device port objects for each connection */
     std::unique_ptr<DevicePortsFactory> mpDevicePortsFactory;
-
-    /* current character index in the currently parsed CSV row string */
-    int mCurrentPosition;
-
-    /* current connections input CSV column being parsed
-       (the numbering starts from 1 as in the CSV file when opened with a spreadsheet tool)
-    */
-    int mCurrentColumnNumber;
 };
 
 #endif // CONNECTIONINPUTPARSER_H

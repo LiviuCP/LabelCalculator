@@ -65,14 +65,6 @@ private:
 
     /* total number of actual physical devices discovered within rack during the parsing process */
     int mDiscoveredDevicesCount;
-
-    /* current character index in the currently parsed CSV row string */
-    int mCurrentPosition;
-
-    /* current connections input CSV column being parsed
-       (the numbering starts from 1 as in the CSV file when opened with a spreadsheet tool)
-    */
-    int mCurrentColumnNumber;
 };
 
 #endif // CONNECTIONDEFINITIONPARSER_H

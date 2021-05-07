@@ -65,6 +65,13 @@ protected:
 
     /* gather all parsing errors here and write them to output file once parsing is complete (if any errors) */
     std::vector<ErrorPtr> mParsingErrors;
+
+    /* current character index in the currently parsed CSV row string */
+    int mCurrentPosition;
+
+    /* current CSV column being parsed (the numbering starts from 1 as when opening the CSV with a spreadsheet tool)
+    */
+    int mCurrentColumnNumber;
 };
 
 using ParserPtr = std::unique_ptr<Parser>;

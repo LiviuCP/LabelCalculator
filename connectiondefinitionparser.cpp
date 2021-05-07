@@ -7,8 +7,6 @@
 ConnectionDefinitionParser::ConnectionDefinitionParser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream)
     : Parser{pInputStream, pOutputStream, pErrorStream, c_InputHeader}
     , mDiscoveredDevicesCount{0}
-    , mCurrentPosition{-1}
-    , mCurrentColumnNumber{1}
 {
     mMapping.resize(c_MaxNrOfRackUnits, DeviceTypeID::NO_DEVICE); // initial value: no device
 }
