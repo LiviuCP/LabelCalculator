@@ -71,7 +71,6 @@ bool ConnectionInputParser::_parseInput()
             {
                 mCurrentPosition = _parseCablePartNumber(rowIndex, mCurrentPosition);
                 isFirstCellParsed = true;
-                ++mCurrentColumnNumber;
                 continue;
             }
 
@@ -157,6 +156,8 @@ int ConnectionInputParser::_parseCablePartNumber(const int rowIndex, const int c
     {
         mCablePartNumbersEntries[rowIndex] = c_InvalidCablePNErrorText;
     }
+
+    ++mCurrentColumnNumber;
 
     return resultingPosition;
 }
