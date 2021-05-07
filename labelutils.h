@@ -67,7 +67,7 @@ enum class DeviceTypeID : int
     BLADE_SERVER
 };
 
-static const std::map<std::string, DeviceTypeID> c_DeviceTypeToIDMapping
+static const std::map<std::string, DeviceTypeID> c_DeviceTypeTextToIDMapping
 {
     {    "_pdu",    DeviceTypeID::PDU                   },
     {    "_ext",    DeviceTypeID::EXTENSION_BAR         },

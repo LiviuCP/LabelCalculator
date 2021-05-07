@@ -150,9 +150,9 @@ DeviceTypeID getDeviceTypeID(const std::string& deviceType)
     std::string deviceTypeLowerCase{deviceType};
     convertStringCase(deviceTypeLowerCase, false);
 
-    std::map<std::string, DeviceTypeID>::const_iterator it{c_DeviceTypeToIDMapping.find(deviceTypeLowerCase)};
+    std::map<std::string, DeviceTypeID>::const_iterator it{c_DeviceTypeTextToIDMapping.find(deviceTypeLowerCase)};
 
-    if (it != c_DeviceTypeToIDMapping.cend())
+    if (it != c_DeviceTypeTextToIDMapping.cend())
     {
         deviceTypeID = it->second;
     }
@@ -164,7 +164,7 @@ std::string getDeviceTypeAsString(DeviceTypeID deviceTypeID)
 {
     std::string deviceType;
 
-    for (std::map<std::string, DeviceTypeID>::const_iterator it{c_DeviceTypeToIDMapping.cbegin()}; it != c_DeviceTypeToIDMapping.cend(); ++it)
+    for (std::map<std::string, DeviceTypeID>::const_iterator it{c_DeviceTypeTextToIDMapping.cbegin()}; it != c_DeviceTypeTextToIDMapping.cend(); ++it)
     {
         if (deviceTypeID == it->second)
         {
