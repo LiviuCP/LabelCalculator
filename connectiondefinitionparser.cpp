@@ -72,7 +72,7 @@ void ConnectionDefinitionParser::_buildOutput()
         stringstream str;
         string s;
         const int c_CurrentDeviceUPosition = mUNumbers[deviceIndex] - 1; // in mapping vector numbering starts at 0 so it is necessary to decrease the U number by 1
-        const std::string c_DeviceType = getDeviceType(mMapping[c_CurrentDeviceUPosition]);
+        const std::string c_DeviceType = getDeviceTypeAsString(mMapping[c_CurrentDeviceUPosition]);
         assert(c_DeviceType.size() > 0); // there should always be a non-empty string describing the device type
         deviceParameters[c_CurrentDeviceUPosition] += c_DeviceType + c_CSVSeparator; // appending device type
         str << c_CurrentDeviceUPosition + 1; // recover the original U number (real position in rack)

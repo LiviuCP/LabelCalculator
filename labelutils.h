@@ -165,7 +165,7 @@ DeviceTypeID getDeviceTypeID(const std::string& deviceType);
 
 /* This function is used for getting the device type string for writing back into connection input file
 */
-std::string getDeviceType(DeviceTypeID deviceTypeID);
+std::string getDeviceTypeAsString(DeviceTypeID deviceTypeID);
 
 /* This function converts the string case to upper or lower
 */

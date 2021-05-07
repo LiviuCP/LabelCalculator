@@ -160,7 +160,7 @@ DeviceTypeID getDeviceTypeID(const std::string& deviceType)
     return deviceTypeID;
 }
 
-std::string getDeviceType(DeviceTypeID deviceTypeID)
+std::string getDeviceTypeAsString(DeviceTypeID deviceTypeID)
 {
     std::string deviceType;
 
