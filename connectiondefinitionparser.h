@@ -26,7 +26,7 @@ private:
     /* This function passes through the first cell on each CSV row (rack U position).
        It discards the cell content.
     */
-    void _parseUPosition(const int rowIndex);
+    void _parseUPosition(const size_t rowIndex);
 
     /* This function is used for parsing the device type (second CSV cell).
        There are 3 possible cases:
@@ -34,17 +34,17 @@ private:
         - invalid device type: stop CSV row parsing
         - valid device type: continue checking the upper U position devices to which it is connected
     */
-    bool _parseDeviceType(const int rowIndex);
+    bool _parseDeviceType(const size_t rowIndex);
 
     /* This function parses the devices connected to the device from current row (if its type is valid).
        Each connected device should be on a higher U position comparing to position contained by current row (connections are considered bottom-up).
     */
-    void _parseRowConnections(const int rowIndex);
+    void _parseRowConnections(const size_t rowIndex);
 
     /* This function checks the format of the connection of the first device from each row of the connectiondefinitions.csv file to another device from the row.
        If the format is correct (true returned) it will also fill in the two arguments with the U placement of the other device and the number of connections between the two.
     */
-    static bool _parseConnectionFormatting(const std::string& source, int& secondDevice, int& connectionsCount);
+    static bool _parseConnectionFormatting(const std::string& source, UNumber_t& secondDevice, size_t& connectionsCount);
 
     /* Stores devices contained in the rack.
        For each device the type will be memorized at the index representing the lowest U position occupied within rack.
@@ -55,16 +55,13 @@ private:
     /* Stores the U positions (lowest in rack, e.g. U5 for a device occupying U5-10) of all discovered devices (in the order of their discovery).
        Storing occurs in decreasing order of their appearance (first device is the one from the highest U position).
     */
-    std::vector<int> mUNumbers;
+    std::vector<UNumber_t> mUNumbers;
 
     /* stores the devices to which each device from a csv line connects */
-    std::vector<std::vector<int>> mConnectedTo;
+    std::vector<std::vector<UNumber_t>> mConnectedTo;
 
     /* stores the number of connections to each device mentioned in previous vector */
-    std::vector<std::vector<int>> mConnectionsCount;
-
-    /* total number of actual physical devices discovered within rack during the parsing process */
-    int mDiscoveredDevicesCount;
+    std::vector<std::vector<size_t>> mConnectionsCount;
 };
 
 #endif // CONNECTIONDEFINITIONPARSER_H

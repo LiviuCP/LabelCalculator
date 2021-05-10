@@ -8,13 +8,15 @@
 
 /* --CONSTANTS-- */
 
+using UNumber_t = size_t;
+
 // offset used for calculating the row number based on payload index (header row is ignored and row numbering starts at 1)
 static constexpr int c_RowNumberOffset{2};
 
 // offset used for calculating the column number of the first device port parameters (preceding columns are device type and device U position)
 static constexpr int c_DevicePortParamsColumnOffset{2};
 
-static constexpr int c_MaxNrOfRackUnits{50};
+static constexpr size_t c_MaxNrOfRackUnits{50u};
 static constexpr int c_DevicesPerConnectionInputRowCount{2};
 
 static const std::string c_CablePartNumberPlaceholder{"CBL_PART_NR"};

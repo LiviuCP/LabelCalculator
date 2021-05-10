@@ -6,7 +6,6 @@
 
 ConnectionDefinitionParser::ConnectionDefinitionParser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream)
     : Parser{pInputStream, pOutputStream, pErrorStream, c_InputHeader}
-    , mDiscoveredDevicesCount{0}
 {
     mMapping.resize(c_MaxNrOfRackUnits, DeviceTypeID::NO_DEVICE); // initial value: no device
 }
@@ -17,7 +16,7 @@ void ConnectionDefinitionParser::_readInput()
     std::string header;
     getline(*mpInputStream, header); // the header is not used further
 
-    int connectionDefinitionRowsCount{0};
+    size_t connectionDefinitionRowsCount{0u};
 
     while (!mpInputStream->eof() && connectionDefinitionRowsCount < c_MaxNrOfRackUnits)
     {
@@ -29,9 +28,9 @@ void ConnectionDefinitionParser::_readInput()
 
 bool ConnectionDefinitionParser::_parseInput()
 {
-    const int c_ConnectionDefinitionRowsCount{static_cast<int>(mInputData.size())};
+    const size_t c_ConnectionDefinitionRowsCount{mInputData.size()};
 
-    for (int rowIndex{0}; rowIndex < c_ConnectionDefinitionRowsCount; ++rowIndex)
+    for (size_t rowIndex{0u}; rowIndex < c_ConnectionDefinitionRowsCount; ++rowIndex)
     {
         mCurrentColumnNumber = 1;
         std::string currentCell;
@@ -62,52 +61,76 @@ void ConnectionDefinitionParser::_buildOutput()
     /* Used for calculating the rows to be written into connectioninput.csv
        Each string represents the first device from each row, namely: device type, device name (lowest U occupied in rack), device parameters (e.g. port number)
     */
-    vector<string> deviceParameters;
+    const size_t c_DevicesCount{mUNumbers.size()};
 
-    deviceParameters.resize(c_MaxNrOfRackUnits); // resize so it has same size as the mapping vector
-
-    // uNumbers is traversed starting with the device placed at highest U position within rack
-    for (int deviceIndex{mDiscoveredDevicesCount - 1}; deviceIndex >= 0; --deviceIndex)
+    if (c_DevicesCount > 0u)
     {
-        stringstream str;
-        string s;
-        const int c_CurrentDeviceUPosition = mUNumbers[deviceIndex] - 1; // in mapping vector numbering starts at 0 so it is necessary to decrease the U number by 1
-        const std::string c_DeviceType = getDeviceTypeAsString(mMapping[c_CurrentDeviceUPosition]);
-        assert(c_DeviceType.size() > 0); // there should always be a non-empty string describing the device type
-        deviceParameters[c_CurrentDeviceUPosition] += c_DeviceType + c_CSVSeparator; // appending device type
-        str << c_CurrentDeviceUPosition + 1; // recover the original U number (real position in rack)
-        str >> s;
-        deviceParameters[c_CurrentDeviceUPosition] += s + c_CSVSeparator;
-        deviceParameters[c_CurrentDeviceUPosition] += scConnectionInputPlaceholders.at(mMapping[c_CurrentDeviceUPosition]); // add the placeholders for the device parameters (to be filled in the next step (option 2) in connectioninput.csv so the final table can be calculated)
-    }
+        assert(c_DevicesCount == mConnectedTo.size() &&
+               c_DevicesCount == mConnectionsCount.size());
 
-    int outputRowsCount{0};
+        vector<string> deviceParameters;
+        deviceParameters.resize(c_MaxNrOfRackUnits); // resize so it has same size as the mapping vector
 
-    // traverse the uNumbers vector again to check if each device is connected to devices placed in an upper U position
-    for (int currentDeviceIndex{mDiscoveredDevicesCount - 1}; currentDeviceIndex >= 0; --currentDeviceIndex)
-    {
-        int currentDeviceUPosition{mUNumbers[currentDeviceIndex] - 1};
-        int connectedToLength{static_cast<int>(mConnectedTo[currentDeviceIndex].size())};
-
-        // proceed to next device if current device is not connected to anything
-        if (0 == connectedToLength)
+        // uNumbers is traversed starting with the device placed at highest U position within rack
+        for(auto deviceIter{mUNumbers.crbegin()}; deviceIter != mUNumbers.crend(); ++deviceIter)
         {
-            continue;
+            assert(*deviceIter > 0); // U positions start from 1
+
+            stringstream stream;
+            string currentDeviceUPosition;
+
+            const size_t c_CurrentDeviceUPositionAsIndex{static_cast<size_t>(*deviceIter - 1)}; // in mapping vector numbering starts at 0 so it is necessary to decrease the U number by 1
+            const string c_DeviceType = getDeviceTypeAsString(mMapping[c_CurrentDeviceUPositionAsIndex]);
+
+            assert(c_DeviceType.size() > 0); // there should always be a non-empty string describing the device type
+
+            deviceParameters[c_CurrentDeviceUPositionAsIndex] += c_DeviceType + c_CSVSeparator; // appending device type
+            stream << *deviceIter; // recover the original U number (real position in rack)
+            stream >> currentDeviceUPosition;
+            deviceParameters[c_CurrentDeviceUPositionAsIndex] += currentDeviceUPosition + c_CSVSeparator;
+            deviceParameters[c_CurrentDeviceUPositionAsIndex] += scConnectionInputPlaceholders.at(mMapping[c_CurrentDeviceUPositionAsIndex]); // add the placeholders for the device parameters (to be filled in the next step (option 2) in connectioninput.csv so the final table can be calculated)
         }
 
-        for (int connectedDeviceIndex{0}; connectedDeviceIndex < connectedToLength; ++connectedDeviceIndex)
-        {
-            /* The output string is calculated by adding following substrings: cable part number placeholder and the device parameters substrings calculated in previous step
-               The decrease by 1 is necessary due to vector indexing (which starts at 0)
-            */
-            string output{c_CablePartNumberPlaceholder + "," + deviceParameters[currentDeviceUPosition] + "," + deviceParameters[mConnectedTo[currentDeviceIndex][connectedDeviceIndex] - 1]};
-            outputRowsCount += mConnectionsCount[currentDeviceIndex][connectedDeviceIndex];
-            mOutputData.resize(outputRowsCount);
+        size_t outputRowsCount{0u};
 
-            // write the resulting output string a number of times equal to the number of connections between the two devices
-            for (int connectionNumber{outputRowsCount - mConnectionsCount[currentDeviceIndex][connectedDeviceIndex]}; connectionNumber < outputRowsCount; connectionNumber++)
+        // traverse the uNumbers vector again to check if each device is connected to devices placed in an upper U position
+        for(auto deviceIter{mUNumbers.crbegin()}; deviceIter != mUNumbers.crend(); ++deviceIter)
+        {
+            const size_t c_CurrentDeviceIndex{static_cast<size_t>(mUNumbers.crend() - 1 - deviceIter)};
+            const size_t c_CurrentDeviceUPositionAsIndex{static_cast<size_t>(*deviceIter - 1)};
+            const size_t c_CurrentDeviceConnectedToLength{mConnectedTo[c_CurrentDeviceIndex].size()};
+
+            if(c_CurrentDeviceConnectedToLength != mConnectionsCount[c_CurrentDeviceIndex].size())
             {
-                mOutputData[connectionNumber] = output;
+                fprintf(stderr, "mConnectedTo and mConnectionsCount have different sizes at index %d", static_cast<int>(c_CurrentDeviceIndex));
+                assert(false);
+            }
+
+            // proceed to next device if current device is not connected to anything
+            if (0u == c_CurrentDeviceConnectedToLength)
+            {
+                continue;
+            }
+
+            for (auto connectedDevIter{mConnectedTo[c_CurrentDeviceIndex].cbegin()}; connectedDevIter != mConnectedTo[c_CurrentDeviceIndex].cend(); ++connectedDevIter)
+            {
+                assert(*connectedDevIter > 0); // U positions start from 1
+
+                const size_t c_ConnectedDeviceIndex{static_cast<size_t>(connectedDevIter - mConnectedTo[c_CurrentDeviceIndex].cbegin())};
+
+                /* The output string is calculated by adding following substrings: cable part number placeholder and the device parameters substrings calculated in previous step
+                   The decrease by 1 is necessary due to vector indexing (which starts at 0)
+                */
+                string output{c_CablePartNumberPlaceholder + "," + deviceParameters[c_CurrentDeviceUPositionAsIndex] + "," + deviceParameters[*connectedDevIter - 1]};
+
+                outputRowsCount += mConnectionsCount[c_CurrentDeviceIndex][c_ConnectedDeviceIndex];
+                mOutputData.resize(outputRowsCount);
+
+                // write the resulting output string a number of times equal to the number of connections between the two devices
+                for (size_t connectionNumber{outputRowsCount - mConnectionsCount[c_CurrentDeviceIndex][c_ConnectedDeviceIndex]}; connectionNumber < outputRowsCount; ++connectionNumber)
+                {
+                    mOutputData[connectionNumber] = output;
+                }
             }
         }
     }
@@ -119,15 +142,16 @@ void ConnectionDefinitionParser::_reset()
     mUNumbers.clear();
     mConnectedTo.clear();
     mConnectionsCount.clear();
-    mDiscoveredDevicesCount = 0;
 
     mMapping.resize(c_MaxNrOfRackUnits, DeviceTypeID::NO_DEVICE); // initial value: no device
 
     Parser::_reset();
 }
 
-void ConnectionDefinitionParser::_parseUPosition(const int rowIndex)
+void ConnectionDefinitionParser::_parseUPosition(const size_t rowIndex)
 {
+    assert(rowIndex < c_MaxNrOfRackUnits);
+
     std::string currentCell;
 
     // first cell on the row is ignored (contains the U number and is only used for informing the user about rack position; the row index is instead used in calculations in relationship with U number)
@@ -135,15 +159,17 @@ void ConnectionDefinitionParser::_parseUPosition(const int rowIndex)
     ++mCurrentColumnNumber;
 }
 
-bool ConnectionDefinitionParser::_parseDeviceType(const int rowIndex)
+bool ConnectionDefinitionParser::_parseDeviceType(const size_t rowIndex)
 {
+    assert(rowIndex < c_MaxNrOfRackUnits);
+
     bool isValidDeviceType{false};
     std::string currentCell;
 
     // second cell on the row: device type
     mCurrentPosition = readDataField(mInputData[rowIndex], currentCell, mCurrentPosition);
 
-    if (currentCell.size() > 0)
+    if (currentCell.size() > 0u)
     {
         DeviceTypeID deviceTypeID{getDeviceTypeID(currentCell)};
 
@@ -152,21 +178,20 @@ bool ConnectionDefinitionParser::_parseDeviceType(const int rowIndex)
             isValidDeviceType = true;
 
             // add discovered device to list of device U numbers
-            ++mDiscoveredDevicesCount;
             mUNumbers.push_back(c_MaxNrOfRackUnits - rowIndex); // add the U number of the last discovered device
 
             // add device type to mapping table
             mMapping[c_MaxNrOfRackUnits - 1 - rowIndex] = deviceTypeID;
 
             // adjust vectors of connected devices and number of connections between each two devices
-            mConnectedTo.resize(mDiscoveredDevicesCount);
-            mConnectionsCount.resize(mDiscoveredDevicesCount);
+            mConnectedTo.push_back({});
+            mConnectionsCount.push_back({});
         }
         else
         {
             ErrorPtr pError{std::make_shared<UnknownDeviceError>(*mpErrorStream)};
 
-            _storeParsingErrorAndLocation(pError, rowIndex + c_RowNumberOffset, mCurrentColumnNumber);
+            _storeParsingErrorAndLocation(pError, static_cast<int>(rowIndex + c_RowNumberOffset), mCurrentColumnNumber); //TODO: row, column number to change to size_t in error functionality
         }
 
         ++mCurrentColumnNumber;
@@ -175,8 +200,16 @@ bool ConnectionDefinitionParser::_parseDeviceType(const int rowIndex)
     return isValidDeviceType;
 }
 
-void ConnectionDefinitionParser::_parseRowConnections(const int rowIndex)
+void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
 {
+    const size_t c_DevicesCount{mUNumbers.size()};
+
+    assert(c_DevicesCount > 0u &&
+           c_DevicesCount == mConnectedTo.size() &&
+           c_DevicesCount == mConnectionsCount.size());
+
+    assert(rowIndex < c_MaxNrOfRackUnits);
+
     while(mCurrentPosition > -1)
     {
         // read next cell (new current cell)
@@ -188,9 +221,9 @@ void ConnectionDefinitionParser::_parseRowConnections(const int rowIndex)
             break;
         }
 
-        int secondDevice;
-        int nrOfconnections;
-        const bool c_IsConnectionFormattingInvalid{!_parseConnectionFormatting(currentCell, secondDevice, nrOfconnections)};
+        UNumber_t secondDevice;
+        size_t connectionsCount;
+        const bool c_IsConnectionFormattingInvalid{!_parseConnectionFormatting(currentCell, secondDevice, connectionsCount)};
 
         ErrorPtr pError{nullptr};
 
@@ -210,28 +243,26 @@ void ConnectionDefinitionParser::_parseRowConnections(const int rowIndex)
         {
             pError = std::make_shared<DeviceConnectedToItselfError>(*mpErrorStream);
         }
-        else if (0 == nrOfconnections) // if the devices are marked as connected there should be minimum 1 connection between them
+        else if (0 == connectionsCount) // if the devices are marked as connected there should be minimum 1 connection between them
         {
             pError = std::make_shared<NoConnectionsError>(*mpErrorStream);
         }
         else
         {
-            mConnectedTo[mDiscoveredDevicesCount - 1].resize(mCurrentColumnNumber - 2); // add the device to the list of connected devices (to current device)
-            mConnectionsCount[mDiscoveredDevicesCount - 1].resize(mCurrentColumnNumber - 2); // same for the number of connections
-            mConnectedTo[mDiscoveredDevicesCount - 1][mCurrentColumnNumber - 3] = secondDevice; // add the U number of the second device
-            mConnectionsCount[mDiscoveredDevicesCount - 1][mCurrentColumnNumber - 3] = nrOfconnections; // add the number of connections between the current device and the second device
+            mConnectedTo[c_DevicesCount - 1].push_back(secondDevice); // add the U number of the second device to the list of connected devices (to current device)
+            mConnectionsCount[c_DevicesCount - 1].push_back(connectionsCount); // add the number of connections between the current device and the second device
         }
 
         if (nullptr != pError)
         {
-            _storeParsingErrorAndLocation(pError, rowIndex + c_RowNumberOffset, mCurrentColumnNumber);
+            _storeParsingErrorAndLocation(pError, static_cast<int>(rowIndex + c_RowNumberOffset), mCurrentColumnNumber); //TODO: row, column number to size_t in error
         }
 
         ++mCurrentColumnNumber;
     }
 }
 
-bool ConnectionDefinitionParser::_parseConnectionFormatting(const std::string& source, int& secondDevice, int& connectionsCount)
+bool ConnectionDefinitionParser::_parseConnectionFormatting(const std::string& source, UNumber_t& secondDevice, size_t& connectionsCount)
 {
     bool isFormattingValid{true};
 
@@ -242,11 +273,11 @@ bool ConnectionDefinitionParser::_parseConnectionFormatting(const std::string& s
     {
         for (int index{0}; index < sourceLength; ++index)
         {
-            if (isdigit(source[index]))
+            if (isdigit(source[static_cast<size_t>(index)]))
             {
                 continue;
             }
-            else if ('/' == source[index])
+            else if ('/' == source[static_cast<size_t>(index)])
             {
                 if (-1 != slashIndex) // more than one slash
                 {
@@ -271,8 +302,8 @@ bool ConnectionDefinitionParser::_parseConnectionFormatting(const std::string& s
 
         if (isFormattingValid)
         {
-            secondDevice = stoi(source.substr(0, slashIndex));
-            connectionsCount = stoi(source.substr(slashIndex + 1));
+            secondDevice = static_cast<size_t>(stoi(source.substr(0, static_cast<size_t>(slashIndex))));
+            connectionsCount = static_cast<size_t>(stoi(source.substr(static_cast<size_t>(slashIndex + 1))));
         }
     }
     else
