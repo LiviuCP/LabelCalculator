@@ -26,11 +26,11 @@ protected:
 private:
     /* Used for processing the cable PN cell for each CSV row
     */
-    int _parseCablePartNumber(const int rowIndex, const int currentPosition);
+    int _parseCablePartNumber(const size_t rowIndex, const int currentPosition);
 
     /* Used for parsing the data for one of the device ports contained in each CSV connection input row
     */
-    bool _parseDevicePort(const int rowIndex);
+    bool _parseDevicePort(const size_t rowIndex);
 
     /* Used for storing externally generated errors (from Device class and its subclasses)
        It is assumed that the error location (row and column) has been correctly setup at error creation
@@ -41,7 +41,7 @@ private:
        String is written to the labelling table in a subsequent operation.
     */
     static void _buildConnectionEntry(std::string& entry,
-                                      int& entryNumber,
+                                      size_t& entryNumber,
                                       const DevicePortPtr pFirstDevicePort,
                                       const DevicePortPtr pSecondDevicePort,
                                       const std::string& cablePartNumber);
@@ -53,7 +53,7 @@ private:
     std::vector<std::string> mCablePartNumbersEntries;
 
     /* number of devices still not parsed on current row */
-    int mRowPortsStillNotParsedCount;
+    int mRowPortsStillNotParsedCount; //TODO: size_t???
 
     /* stores the cable part number determined for previous row */
     std::string mCurrentCablePartNumber;
