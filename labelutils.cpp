@@ -4,25 +4,28 @@
 
 #include "labelutils.h"
 
+/* The input/output index need to be signed integer as value -1 can also be returned if the CSV string has been consumed.
+   However internally the processing of the string can be done with an unsigned int (size_t) when the index is "in bounds".
+*/
 int readDataField(const std::string& src, std::string& dest, const int index)
 {
-    const int c_Length{static_cast<int>(src.size())}; // no issue in converting to int as the size is reasonable (same for other similar situations in this project)
+    const size_t c_Length{src.size()};
 
     int nextIndex{-1};
 
-    if(c_Length > 0)
+    if(c_Length > 0u && index >= 0)
     {
-        assert(index < c_Length);
+        size_t currentIndex{static_cast<size_t>(index)};
+        assert(currentIndex < c_Length);
 
         dest.clear();
 
-        int currentIndex{index};
         bool emptyStartingFieldParsed{false};
 
         if (c_CSVSeparator == src[currentIndex])
         {
             // if the parsed cell is the first one AND empty it should be taken into consideration and an empty destination string should be returned
-            if (0 == currentIndex)
+            if (0u == currentIndex)
             {
                 emptyStartingFieldParsed = true;
             }
@@ -49,7 +52,8 @@ int readDataField(const std::string& src, std::string& dest, const int index)
 
         if(currentIndex != c_Length)
         {
-            nextIndex = currentIndex;
+            // no issue in converting to int as the size is reasonable (same for other similar situations in this project)
+            nextIndex = static_cast<int>(currentIndex);
         }
     }
 
