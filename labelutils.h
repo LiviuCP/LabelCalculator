@@ -90,7 +90,7 @@ static const std::map<std::string, DeviceTypeID> c_DeviceTypeTextToIDMapping
     {    "bld",     DeviceTypeID::BLADE_SERVER          }
 };
 
-static const std::map<DeviceTypeID, int> c_RequiredNrOfInputParams
+static const std::map<DeviceTypeID, size_t> c_RequiredNrOfInputParams
 {
     {    DeviceTypeID::PDU,                 3    },
     {    DeviceTypeID::EXTENSION_BAR,       2    },
@@ -104,7 +104,7 @@ static const std::map<DeviceTypeID, int> c_RequiredNrOfInputParams
     {    DeviceTypeID::BLADE_SERVER,        3    }
 };
 
-static const std::map<DeviceTypeID, int> c_MaxAllowedCharsCount
+static const std::map<DeviceTypeID, size_t> c_MaxAllowedCharsCount
 {
     {    DeviceTypeID::PDU,                 6    },
     {    DeviceTypeID::EXTENSION_BAR,       8    },

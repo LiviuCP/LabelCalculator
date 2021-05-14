@@ -11,7 +11,7 @@
 class DevicePort
 {
 public:
-    DevicePort(const std::string& deviceUPosition, const int requiredNumberOfParameters, const int maxAllowedCharsCount, bool isSourceDevice);
+    DevicePort(const std::string& deviceUPosition, const size_t requiredNumberOfParameters, const size_t maxAllowedCharsCount, bool isSourceDevice);
 
     virtual ~DevicePort();
 
@@ -26,12 +26,12 @@ public:
     int parseInputData(const std::string& input, const int initialPosition, std::vector<ErrorPtr>& parsingErrors, std::ofstream& errorStream);
 
     // setters for the input .csv row and column index
-    void setCSVRowNumber(int rowNumber);
-    void setCSVColumnNumber(int columnNumber);
+    void setCSVRowNumber(size_t rowNumber);
+    void setCSVColumnNumber(size_t columnNumber);
 
     // getters
-    int getCSVRowNumber() const;
-    int getCSVColumnNumber() const;
+    size_t getCSVRowNumber() const;
+    size_t getCSVColumnNumber() const;
     std::string getDescription() const;
     std::string getLabel() const;
 
@@ -49,15 +49,15 @@ protected:
     std::string mDescription; // text to be written in the source (first device) / destination (second device) field of the labelling table (device port description)
     std::string mLabel;       // text to be written in the source (first device) / destination (second device) field of the labelling table (device port label)
 
-    int mCSVRowNumber;            // input CSV file row from which the device info is being parsed, used for error reporting
-    int mCSVColumnNumber;         // current CSV file column from which device info is being parsed, used for error reporting
+    size_t mCSVRowNumber;            // input CSV file row from which the device info is being parsed, used for error reporting
+    size_t mCSVColumnNumber;         // current CSV file column from which device info is being parsed, used for error reporting
 
-    static const int scMaxInputParametersCount; // number of fields that should be filled in connectioninput.csv for EACH device (not used fields can be filled in with '-')
+    static const size_t scMaxInputParametersCount; // number of fields that should be filled in connectioninput.csv for EACH device (not used fields can be filled in with '-')
 
 private:
     std::vector<std::string*> mInputData; // reference to substrings storing the fields parsed by parseInputData()
-    int mInputParametersCount;
-    int mMaxAllowedCharsCount; // maximum number of characters that can be filled in the connectioninput.csv file for a specific device type (including any placeholders where character '-' could be filled in)
+    size_t mInputParametersCount;
+    size_t mMaxAllowedCharsCount; // maximum number of characters that can be filled in the connectioninput.csv file for a specific device type (including any placeholders where character '-' could be filled in)
     bool mIsSourceDevice; // true if first of the two devices in each connection entered in the input .csv file
 };
 

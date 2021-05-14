@@ -14,13 +14,13 @@ public:
 class ExceedingCharsCountError final : public Error
 {
 public:
-    ExceedingCharsCountError(std::ofstream& errorStream, int maxAllowedCharsCount, int deltaCharsCount, bool isSourceDevice);
+    ExceedingCharsCountError(std::ofstream& errorStream, size_t maxAllowedCharsCount, ssize_t deltaCharsCount, bool isSourceDevice);
 
     void execute();
 
 private:
-    int mMaxAllowedCharsCount;
-    int mDeltaCharsCount;
+    size_t mMaxAllowedCharsCount;
+    ssize_t mDeltaCharsCount;
     bool mIsSourceDevice;
 };
 

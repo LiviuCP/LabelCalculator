@@ -54,7 +54,7 @@ bool ConnectionInputParser::_parseInput()
         {
             const int c_CurrentInputRowLength{static_cast<int>(mInputData[rowIndex].size())};
             mCurrentPosition = 0; // current position in the current input row
-            mCurrentColumnNumber = 1; // column number from connectioninput.csv
+            mCurrentColumnNumber = 1u; // column number from connectioninput.csv
             bool isFirstCellParsed{false}; // flag: has the cable part number been parsed on current row?
 
             mRowPortsStillNotParsedCount = c_DevicesPerConnectionInputRowCount; // devices that haven't been fully parsed on the current input csv row (maximum 2 - one connection)
@@ -66,7 +66,7 @@ bool ConnectionInputParser::_parseInput()
                         -1 == mCurrentPosition  )
                 {
                     ErrorPtr pFewerCellsError{std::make_shared<FewerCellsError>(*mpErrorStream)};
-                    _storeParsingErrorAndLocation(pFewerCellsError, static_cast<int>(rowIndex + c_RowNumberOffset), mCurrentColumnNumber); //TODO: row, column number to change to size_t in error functionality
+                    _storeParsingErrorAndLocation(pFewerCellsError, rowIndex + c_RowNumberOffset, mCurrentColumnNumber);
                     break;
                 }
 
@@ -208,8 +208,8 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
                 // pass through the device type and device U position columns and move to the first device parameter column
                 mCurrentColumnNumber += c_DevicePortParamsColumnOffset;
 
-                pDevicePort->setCSVRowNumber(static_cast<int>(rowIndex + c_RowNumberOffset)); //TODO: update setCSV... (no int but size_t argument)
-                pDevicePort->setCSVColumnNumber(mCurrentColumnNumber); //TODO: same here
+                pDevicePort->setCSVRowNumber(rowIndex + c_RowNumberOffset);
+                pDevicePort->setCSVColumnNumber(mCurrentColumnNumber);
                 mDevicePorts.push_back(pDevicePort);
 
                 std::vector<ErrorPtr> parsingErrors;
@@ -232,7 +232,7 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
         else
         {
             ErrorPtr pInvalidDeviceUPositionError{std::make_shared<InvalidDeviceUPositionError>(*mpErrorStream)};
-            _storeParsingErrorAndLocation(pInvalidDeviceUPositionError, static_cast<int>(rowIndex + c_RowNumberOffset), mCurrentColumnNumber + 1); //TODO: row, column number to change to size_t in error functionality
+            _storeParsingErrorAndLocation(pInvalidDeviceUPositionError, rowIndex + c_RowNumberOffset, mCurrentColumnNumber + 1);
             successfullyParsed = false;
         }
     }
@@ -242,7 +242,7 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
         if (!isDeviceKnown)
         {
             ErrorPtr pUnknownDeviceError{std::make_shared<UnknownDeviceError>(*mpErrorStream)};
-            _storeParsingErrorAndLocation(pUnknownDeviceError, static_cast<int>(rowIndex + c_RowNumberOffset), mCurrentColumnNumber); //TODO: row, column number to change to size_t in error functionality
+            _storeParsingErrorAndLocation(pUnknownDeviceError, rowIndex + c_RowNumberOffset, mCurrentColumnNumber);
             successfullyParsed = false;
         }
     }

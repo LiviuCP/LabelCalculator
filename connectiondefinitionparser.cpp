@@ -32,7 +32,7 @@ bool ConnectionDefinitionParser::_parseInput()
 
     for (size_t rowIndex{0u}; rowIndex < c_ConnectionDefinitionRowsCount; ++rowIndex)
     {
-        mCurrentColumnNumber = 1;
+        mCurrentColumnNumber = 1u;
         std::string currentCell;
 
         // first cell on the row is ignored (contains the U number and is only used for informing the user about rack position; the row index is instead used in calculations in relationship with U number)
@@ -191,7 +191,7 @@ bool ConnectionDefinitionParser::_parseDeviceType(const size_t rowIndex)
         {
             ErrorPtr pError{std::make_shared<UnknownDeviceError>(*mpErrorStream)};
 
-            _storeParsingErrorAndLocation(pError, static_cast<int>(rowIndex + c_RowNumberOffset), mCurrentColumnNumber); //TODO: row, column number to change to size_t in error functionality
+            _storeParsingErrorAndLocation(pError, rowIndex + c_RowNumberOffset, mCurrentColumnNumber);
         }
 
         ++mCurrentColumnNumber;
@@ -216,7 +216,7 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
         std::string currentCell;
         mCurrentPosition = readDataField(mInputData[rowIndex], currentCell, mCurrentPosition);
 
-        if (0 == currentCell.size())
+        if (0u == currentCell.size())
         {
             break;
         }
@@ -255,7 +255,7 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
 
         if (nullptr != pError)
         {
-            _storeParsingErrorAndLocation(pError, static_cast<int>(rowIndex + c_RowNumberOffset), mCurrentColumnNumber); //TODO: row, column number to size_t in error
+            _storeParsingErrorAndLocation(pError, rowIndex + c_RowNumberOffset, mCurrentColumnNumber);
         }
 
         ++mCurrentColumnNumber;

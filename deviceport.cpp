@@ -3,18 +3,18 @@
 #include "errortypes.h"
 #include "deviceport.h"
 
-const int DevicePort::scMaxInputParametersCount{3};
+const size_t DevicePort::scMaxInputParametersCount{3u};
 
-DevicePort::DevicePort(const std::string& deviceUPosition, const int requiredNumberOfParameters, const int maxAllowedCharsCount, bool isSourceDevice)
+DevicePort::DevicePort(const std::string& deviceUPosition, const size_t requiredNumberOfParameters, const size_t maxAllowedCharsCount, bool isSourceDevice)
     : mDeviceUPosition{deviceUPosition}
-    , mCSVRowNumber{1}
-    , mCSVColumnNumber{1}
+    , mCSVRowNumber{1u}
+    , mCSVColumnNumber{1u}
     , mInputParametersCount{requiredNumberOfParameters}
     , mMaxAllowedCharsCount{maxAllowedCharsCount}
     , mIsSourceDevice{isSourceDevice}
 {
-    assert(mMaxAllowedCharsCount > 0);
-    assert(mInputParametersCount > 1 &&
+    assert(mMaxAllowedCharsCount > 0u);
+    assert(mInputParametersCount > 1u &&
            mInputParametersCount <= scMaxInputParametersCount); // there should be at least two parameters (device name and port number)
 
     mInputData.reserve(mInputParametersCount);
@@ -26,13 +26,13 @@ DevicePort::~DevicePort()
 
 int DevicePort::parseInputData(const std::string& input, const int initialPosition, std::vector<ErrorPtr>& parsingErrors, std::ofstream& errorStream)
 {
-    assert(static_cast<int>(mInputData.size()) == mInputParametersCount); // check if all required parameters have been registered by derived class
+    assert(mInputData.size() == mInputParametersCount); // check if all required parameters have been registered by derived class
 
     int currentPosition{initialPosition}; // position in input string (.csv row) where the input parameters of the device begin
-    int currentParameter{0};              // current field (cell) containining a device input parameter (e.g. device name)
-    int totalParsedCharsCount{0};         // current total number of parsed input characters for the device (excluding comma)
+    size_t currentParameter{0u};              // current field (cell) containining a device input parameter (e.g. device name)
+    size_t totalParsedCharsCount{0u};         // current total number of parsed input characters for the device (excluding comma)
     bool fewerCellsProvided{false};       // for checking if the "fewer cells" error occurred
-    std::vector<int> fieldSizes;          // stores the size of each input field read for the device
+    std::vector<size_t> fieldSizes;          // stores the size of each input field read for the device
     ErrorPtr lastError{nullptr};          // last found error
 
     parsingErrors.clear();
@@ -50,7 +50,7 @@ int DevicePort::parseInputData(const std::string& input, const int initialPositi
 
             bool noErrorsDetectedInCell{false};
 
-            if (0 == fieldSizes[currentParameter])
+            if (0u == fieldSizes[currentParameter])
             {
                 lastError = std::make_shared<EmptyCellError>(errorStream);
             }
@@ -117,7 +117,7 @@ int DevicePort::parseInputData(const std::string& input, const int initialPositi
     }
     else if (totalParsedCharsCount > mMaxAllowedCharsCount)
     {
-        const int c_DeltaNrOfChars{totalParsedCharsCount - mMaxAllowedCharsCount};
+        const ssize_t c_DeltaNrOfChars{static_cast<ssize_t>(totalParsedCharsCount - mMaxAllowedCharsCount)};
         lastError = std::make_shared<ExceedingCharsCountError>(errorStream, mMaxAllowedCharsCount, c_DeltaNrOfChars, mIsSourceDevice);
         lastError->setCSVRowNumber(mCSVRowNumber);
         lastError->setCSVColumnNumber(mCSVColumnNumber);
@@ -131,22 +131,22 @@ int DevicePort::parseInputData(const std::string& input, const int initialPositi
     return currentPosition;
 }
 
-void DevicePort::setCSVRowNumber(int rowNumber)
+void DevicePort::setCSVRowNumber(size_t rowNumber)
 {
     mCSVRowNumber = rowNumber;
 }
 
-void DevicePort::setCSVColumnNumber(int columnNumber)
+void DevicePort::setCSVColumnNumber(size_t columnNumber)
 {
     mCSVColumnNumber = columnNumber;
 }
 
-int DevicePort::getCSVRowNumber() const
+size_t DevicePort::getCSVRowNumber() const
 {
     return mCSVRowNumber;
 }
 
-int DevicePort::getCSVColumnNumber() const
+size_t DevicePort::getCSVColumnNumber() const
 {
     return mCSVColumnNumber;
 }

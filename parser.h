@@ -40,7 +40,7 @@ protected:
     /* Used for storing locally generated errors
        Error location is setup at error storing point
     */
-    virtual void _storeParsingErrorAndLocation(ErrorPtr pError, const int rowNumber, const int columnNumber);
+    virtual void _storeParsingErrorAndLocation(ErrorPtr pError, const size_t rowNumber, const size_t columnNumber);
 
     /* Used for logging all parsing errors to file
     */
@@ -71,7 +71,7 @@ protected:
 
     /* current CSV column being parsed (the numbering starts from 1 as when opening the CSV with a spreadsheet tool)
     */
-    int mCurrentColumnNumber;
+    size_t mCurrentColumnNumber;
 };
 
 using ParserPtr = std::unique_ptr<Parser>;

@@ -56,7 +56,7 @@ void Parser::_reset()
     mOutputData.clear();
 }
 
-void Parser::_storeParsingErrorAndLocation(ErrorPtr pError, const int rowNumber, const int columnNumber)
+void Parser::_storeParsingErrorAndLocation(ErrorPtr pError, const size_t rowNumber, const size_t columnNumber)
 {
     if (nullptr != pError)
     {

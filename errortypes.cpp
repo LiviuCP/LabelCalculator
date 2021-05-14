@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include "errortypes.h"
 
 EmptyCellError::EmptyCellError(std::ofstream& errorStream)
@@ -13,12 +15,13 @@ void EmptyCellError::execute()
     Error::execute();
 }
 
-ExceedingCharsCountError::ExceedingCharsCountError(std::ofstream& errorStream, int maxAllowedCharsCount, int deltaCharsCount, bool isSourceDevice)
+ExceedingCharsCountError::ExceedingCharsCountError(std::ofstream& errorStream, size_t maxAllowedCharsCount, ssize_t deltaCharsCount, bool isSourceDevice)
     : Error{ErrorCode::MAX_CHARS_EXCEEDED, errorStream}
     , mMaxAllowedCharsCount{maxAllowedCharsCount}
     , mDeltaCharsCount{deltaCharsCount}
     , mIsSourceDevice{isSourceDevice}
 {
+    assert(mDeltaCharsCount > 0);
 }
 
 void ExceedingCharsCountError::execute()
