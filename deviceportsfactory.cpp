@@ -3,7 +3,7 @@
 #include "deviceportsfactory.h"
 
 DevicePortsFactory::DevicePortsFactory()
-    : mCreatedDevicePortsCount{0}
+    : mCreatedDevicePortsCount{0u}
 {
 }
 
@@ -55,7 +55,7 @@ DevicePortPtr DevicePortsFactory::createDevicePort(const DeviceTypeID deviceType
     return pDevicePort;
 }
 
-int DevicePortsFactory::getCreatedDevicePortsCount() const
+size_t DevicePortsFactory::getCreatedDevicePortsCount() const
 {
     return mCreatedDevicePortsCount;
 }

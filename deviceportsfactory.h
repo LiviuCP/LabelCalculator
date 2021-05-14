@@ -18,10 +18,10 @@ public:
     */
     DevicePortPtr createDevicePort(const DeviceTypeID deviceTypeID, const std::string& deviceUPosition, const bool isSourceDevice);
 
-    int getCreatedDevicePortsCount() const;
+    size_t getCreatedDevicePortsCount() const;
 
 private:
-    int mCreatedDevicePortsCount;
+    size_t mCreatedDevicePortsCount;
 };
 
 #endif // DEVICEPORTSFACTORY_H

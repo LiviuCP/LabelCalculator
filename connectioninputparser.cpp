@@ -92,7 +92,7 @@ bool ConnectionInputParser::_parseInput()
 
     if (!c_ErrorsOccurred)
     {
-        assert(mpDevicePortsFactory->getCreatedDevicePortsCount() == static_cast<int>(mCablePartNumbersEntries.size()) * c_DevicesPerConnectionInputRowCount); // 1 cable, two connected devices
+        assert(mpDevicePortsFactory->getCreatedDevicePortsCount() == mCablePartNumbersEntries.size() * c_DevicesPerConnectionInputRowCount); // 1 cable, two connected devices
     }
 
     return c_ErrorsOccurred;
