@@ -67,7 +67,7 @@ protected:
     std::vector<ErrorPtr> mParsingErrors;
 
     /* current character index in the currently parsed CSV row string */
-    int mCurrentPosition;
+    ssize_t mCurrentPosition;
 
     /* current CSV column being parsed (the numbering starts from 1 as when opening the CSV with a spreadsheet tool)
     */

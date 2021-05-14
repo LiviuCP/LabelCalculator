@@ -24,11 +24,11 @@ DevicePort::~DevicePort()
 {
 }
 
-int DevicePort::parseInputData(const std::string& input, const int initialPosition, std::vector<ErrorPtr>& parsingErrors, std::ofstream& errorStream)
+ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initialPosition, std::vector<ErrorPtr>& parsingErrors, std::ofstream& errorStream)
 {
     assert(mInputData.size() == mInputParametersCount); // check if all required parameters have been registered by derived class
 
-    int currentPosition{initialPosition}; // position in input string (.csv row) where the input parameters of the device begin
+    ssize_t currentPosition{initialPosition}; // position in input string (.csv row) where the input parameters of the device begin
     size_t currentParameter{0u};              // current field (cell) containining a device input parameter (e.g. device name)
     size_t totalParsedCharsCount{0u};         // current total number of parsed input characters for the device (excluding comma)
     bool fewerCellsProvided{false};       // for checking if the "fewer cells" error occurred

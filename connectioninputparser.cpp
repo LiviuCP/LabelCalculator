@@ -141,11 +141,11 @@ void ConnectionInputParser::_reset()
     Parser::_reset();
 }
 
-int ConnectionInputParser::_parseCablePartNumber(const size_t rowIndex, const int currentPosition)
+ssize_t ConnectionInputParser::_parseCablePartNumber(const size_t rowIndex, const ssize_t currentPosition)
 {
     assert(rowIndex < mInputData.size());
 
-    const int resultingPosition{readDataField(mInputData[rowIndex], mCablePartNumbersEntries[rowIndex], currentPosition)};
+    const ssize_t resultingPosition{readDataField(mInputData[rowIndex], mCablePartNumbersEntries[rowIndex], currentPosition)};
 
     // if no cable PN entered on current row take the PN for previous row
     if (0u == mCablePartNumbersEntries[rowIndex].size())

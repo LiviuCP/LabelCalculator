@@ -7,11 +7,11 @@
 /* The input/output index need to be signed integer as value -1 can also be returned if the CSV string has been consumed.
    However internally the processing of the string can be done with an unsigned int (size_t) when the index is "in bounds".
 */
-int readDataField(const std::string& src, std::string& dest, const int index)
+ssize_t readDataField(const std::string& src, std::string& dest, const ssize_t index)
 {
     const size_t c_Length{src.size()};
 
-    int nextIndex{-1};
+    ssize_t nextIndex{-1};
 
     if(c_Length > 0u && index >= 0)
     {
@@ -53,7 +53,7 @@ int readDataField(const std::string& src, std::string& dest, const int index)
         if(currentIndex != c_Length)
         {
             // no issue in converting to int as the size is reasonable (same for other similar situations in this project)
-            nextIndex = static_cast<int>(currentIndex);
+            nextIndex = static_cast<ssize_t>(currentIndex);
         }
     }
 

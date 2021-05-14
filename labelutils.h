@@ -154,7 +154,7 @@ enum class ErrorCode
 /* This function reads a substring starting with index until reaching a comma character (end of .csv cell) or the string has no more characters
    If the index points to CSV separator (',') then reading starts with next character
 */
-int readDataField(const std::string& src, std::string& dest, const int index);
+ssize_t readDataField(const std::string& src, std::string& dest, const ssize_t index);
 
 /* This function initializes the application no matter which option is chosen (define connections, process connection input from user)
 */

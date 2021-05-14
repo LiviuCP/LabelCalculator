@@ -26,7 +26,7 @@ protected:
 private:
     /* Used for processing the cable PN cell for each CSV row
     */
-    int _parseCablePartNumber(const size_t rowIndex, const int currentPosition);
+    ssize_t _parseCablePartNumber(const size_t rowIndex, const ssize_t currentPosition);
 
     /* Used for parsing the data for one of the device ports contained in each CSV connection input row
     */
