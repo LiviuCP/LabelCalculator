@@ -6,10 +6,10 @@ Error::Error(ErrorCode errorCode, std::ofstream& errorStream)
     : mErrorStream{errorStream}
     , mErrorCode{errorCode}
 {
-    const int c_ErrorCode{static_cast<int>(mErrorCode)};
+    const unsigned short c_ErrorCode{static_cast<unsigned short>(mErrorCode)};
 
-    assert(c_ErrorCode > 0 &&
-           c_ErrorCode < static_cast<int>(ErrorCode::ErrorCodesCount));
+    assert(c_ErrorCode > 0u &&
+           c_ErrorCode < static_cast<unsigned short>(ErrorCode::ErrorCodesUpperBound));
 
     assert(mErrorStream.is_open());
 }

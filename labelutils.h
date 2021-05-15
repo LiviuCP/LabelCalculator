@@ -133,9 +133,9 @@ const std::map<DeviceTypeID, std::string> scConnectionInputPlaceholders
     {   DeviceTypeID::KVM_SWITCH,              "PORT TYPE,PORT NUMBER,-"                       }
 };
 
-enum class ErrorCode
+enum class ErrorCode : unsigned short
 {
-    EMPTY_CELL = 1,
+    EMPTY_CELL = 1u,
     MAX_CHARS_EXCEEDED,
     UNKNOWN_DEVICE,
     FEWER_CELLS,
@@ -146,7 +146,7 @@ enum class ErrorCode
     NULL_NR_OF_CONNECTIONS,
     INVALID_CHARS,
     INVALID_DEVICE_U_POSITION,
-    ErrorCodesCount
+    ErrorCodesUpperBound
 };
 
 /* --FUNCTIONS-- */
