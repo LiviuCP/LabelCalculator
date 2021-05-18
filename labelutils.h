@@ -44,7 +44,7 @@ static const std::string c_HomeDirParent{"C:\\Users"};
 #endif
 
 #if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
-static const std::string c_ConfigurationFilePath{"/tmp/configuration.txt"};
+static const std::string c_ConfigurationFile{"/tmp/configuration.txt"};
 static const std::string c_ClearScreenCommand{"clear"};
 static constexpr char c_PathSeparator{'/'};
 static constexpr char c_CSVSeparator{','};
@@ -155,14 +155,6 @@ enum class ErrorCode : unsigned short
    If the index points to CSV separator (',') then reading starts with next character
 */
 ssize_t readDataField(const std::string& src, std::string& dest, const ssize_t index);
-
-/* This function initializes the application no matter which option is chosen (define connections, process connection input from user)
-*/
-bool init(std::string& connectionsFilename, std::string& inputFilename, std::string& outputFilename, std::string& errorFilename, std::ofstream& errorStream);
-
-/* This function opens the input and output files for each of the options
-*/
-bool enableReadWriteOperations(std::ifstream& inputStream, std::ofstream& outputStream, const std::string& inputFilename, const std::string& outputFilename);
 
 /* This function writes the resulting output to the corresponding file for each option
 */

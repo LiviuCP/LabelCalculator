@@ -4,12 +4,12 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        application.cpp \
         connectiondefinitionparser.cpp \
         connectioninputparser.cpp \
         datadeviceport.cpp \
         deviceport.cpp \
         deviceportsfactory.cpp \
-        displayutils.cpp \
         error.cpp \
         errortypes.cpp \
         labelutils.cpp \
@@ -19,12 +19,12 @@ SOURCES += \
         powerdeviceport.cpp
 
 HEADERS += \
+    application.h \
     connectiondefinitionparser.h \
     connectioninputparser.h \
     datadeviceport.h \
     deviceport.h \
     deviceportsfactory.h \
-    displayutils.h \
     error.h \
     errortypes.h \
     labelutils.h \
