@@ -21,7 +21,8 @@ private:
         SUCCESS,
         FILE_NOT_OPENED,
         PARSING_ERROR,
-        PARSER_NOT_CREATED
+        PARSER_NOT_CREATED,
+        ABORTED_BY_USER
     };
 
     // file types (used for error message creation)
@@ -47,13 +48,15 @@ private:
 
     /* This function takes over the input from user and sets the parser type
     */
-    void _handleUserInput();
+    bool _handleUserInput();
 
     /* Output methods */
-    void _displaySuccessMessage(bool additionalOutputRequired);
-    void _displayParsingErrorMessage();
-    void _displayFileOpeningErrorMessage(FileType fileType);
+    void _displaySuccessMessage(bool additionalOutputRequired) const;
+    void _displayParsingErrorMessage() const;
+    void _displayFileOpeningErrorMessage(FileType fileType) const;
     static void _displayAbortMessage();
+    static void _displayInvalidInputMessage();
+    static void _displayParserNotCreatedMessage();
     static void _displayMenu();
     static void _displayVersion();
 

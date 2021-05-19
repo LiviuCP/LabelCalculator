@@ -26,9 +26,10 @@ int Application::run()
     {
         _displayVersion();
         _displayMenu();
-        _handleUserInput();
 
-        if (ParserCreator::ParserTypes::UNKNOWN != mParserType)
+        const bool c_InputProvided{_handleUserInput()};
+
+        if (c_InputProvided)
         {
             _enableCSVParsing();
 
@@ -57,9 +58,15 @@ int Application::run()
                 }
                 else
                 {
+                    _displayParserNotCreatedMessage();
                     result = ReturnCode::PARSER_NOT_CREATED;
                 }
             }
+        }
+        else
+        {
+            _displayAbortMessage();
+            result = ReturnCode::ABORTED_BY_USER;
         }
     }
 
@@ -149,26 +156,40 @@ void Application::_enableCSVParsing()
     }
 }
 
-void Application::_handleUserInput()
+bool Application::_handleUserInput()
 {
-    std::string option;
-    getline(std::cin, option);
+    bool validInputProvided{false};
 
-    if ("1" == option)
+    while (!validInputProvided)
     {
-        mParserType = ParserCreator::ParserTypes::CONNECTION_DEFINITION;
+        std::string option;
+        getline(std::cin, option);
+
+        if ("1" == option)
+        {
+            mParserType = ParserCreator::ParserTypes::CONNECTION_DEFINITION;
+            validInputProvided = true;
+        }
+        else if ("2" == option)
+        {
+            mParserType = ParserCreator::ParserTypes::CONNECTION_INPUT;
+            validInputProvided = true;
+        }
+        else if (0u == option.size())
+        {
+            break;
+        }
+        else
+        {
+            _displayInvalidInputMessage();
+            _displayMenu();
+        }
     }
-    else if ("2" == option)
-    {
-        mParserType = ParserCreator::ParserTypes::CONNECTION_INPUT;
-    }
-    else
-    {
-        _displayAbortMessage();
-    }
+
+    return validInputProvided;
 }
 
-void Application::_displaySuccessMessage(bool additionalOutputRequired)
+void Application::_displaySuccessMessage(bool additionalOutputRequired) const
 {
     using namespace std;
 
@@ -187,7 +208,7 @@ void Application::_displaySuccessMessage(bool additionalOutputRequired)
     cout << "Thank you for using LabelCalculator!" << endl << endl;
 }
 
-void Application::_displayParsingErrorMessage()
+void Application::_displayParsingErrorMessage() const
 {
     using namespace std;
 
@@ -202,7 +223,7 @@ void Application::_displayParsingErrorMessage()
     cerr << "Thank you for using LabelCalculator!" << endl << endl;
 }
 
-void Application::_displayFileOpeningErrorMessage(Application::FileType fileType)
+void Application::_displayFileOpeningErrorMessage(Application::FileType fileType) const
 {
     using namespace std;
 
@@ -235,6 +256,18 @@ void Application::_displayFileOpeningErrorMessage(Application::FileType fileType
     cerr << "File path: "<< file << endl << endl;
 }
 
+void Application::_displayInvalidInputMessage()
+{
+    system(c_ClearScreenCommand.c_str());
+    std::cout << "Invalid input. Please try again" << std::endl << std::endl;
+}
+
+void Application::_displayParserNotCreatedMessage()
+{
+    system(c_ClearScreenCommand.c_str());
+    std::cout << "Error in initializing parsing functionality. Application aborted" << std::endl << std::endl;
+}
+
 void Application::_displayAbortMessage()
 {
     system(c_ClearScreenCommand.c_str());
@@ -248,7 +281,7 @@ void Application::_displayMenu()
     cout << "Please choose between following options:" << endl << endl;
     cout << "1 + ENTER: read the defined connections from file connectiondefinitions.csv and write the partial input data into file connectioninput.csv" << endl;
     cout << "2 + ENTER: read the input data from file connectioninput.csv and write the labeling information into file labellingtable.csv" << endl << endl;
-    cout << "Choose any other combination + ENTER or directly press ENTER to exit the application" << endl << endl;
+    cout << "Press ENTER to exit the application" << endl << endl;
 }
 
 void Application::_displayVersion()
