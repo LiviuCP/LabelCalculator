@@ -33,6 +33,10 @@ protected:
     */
     virtual void _buildOutput() = 0;
 
+    /* This function writes the resulting output to file.
+    */
+    virtual void _writeOutput();
+
     /* This function resets the internal parser state after each parsing session.
     */
     virtual void _reset();

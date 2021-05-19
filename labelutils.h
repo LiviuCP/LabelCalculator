@@ -156,10 +156,6 @@ enum class ErrorCode : unsigned short
 */
 ssize_t readDataField(const std::string& src, std::string& dest, const ssize_t index);
 
-/* This function writes the resulting output to the corresponding file for each option
-*/
-void writeOutputToFile(std::ofstream& outputStream, const std::vector<std::string>& inputRows, const std::string& header);
-
 /* This function converts the input string containing the device type into a numeric device type ID that is then used for further processing (Device object creation, etc)
 */
 DeviceTypeID getDeviceTypeID(const std::string& deviceType);

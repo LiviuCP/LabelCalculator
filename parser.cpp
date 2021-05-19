@@ -44,10 +44,22 @@ bool Parser::parse()
     if(!c_ParsingErrorsOccurred)
     {
         _buildOutput();
-        writeOutputToFile(*mpOutputStream, mOutputData, mOutputHeader);
+        _writeOutput();
     }
 
     return c_ParsingErrorsOccurred;
+}
+
+void Parser::_writeOutput()
+{
+    assert(mpOutputStream->is_open());
+
+    *mpOutputStream << mOutputHeader << std::endl;
+
+    for (const auto& payloadRow : mOutputData)
+    {
+        *mpOutputStream << payloadRow << std::endl;
+    }
 }
 
 void Parser::_reset()

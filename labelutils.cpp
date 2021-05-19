@@ -60,18 +60,6 @@ ssize_t readDataField(const std::string& src, std::string& dest, const ssize_t i
     return nextIndex;
 }
 
-void writeOutputToFile(std::ofstream& outputStream, const std::vector<std::string>& inputRows, const std::string& header)
-{
-    assert(outputStream.is_open());
-
-    outputStream << header << std::endl;
-
-    for (const auto& payloadRow : inputRows)
-    {
-        outputStream << payloadRow << std::endl;
-    }
-}
-
 DeviceTypeID getDeviceTypeID(const std::string& deviceType)
 {
     DeviceTypeID deviceTypeID{DeviceTypeID::UNKNOWN_DEVICE};
