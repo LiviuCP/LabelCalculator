@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cassert>
 
-#include "parser.h"
 #include "application.h"
 
 std::shared_ptr<Application> Application::s_pApplication = nullptr;
@@ -20,11 +19,9 @@ int Application::run()
 {
     using namespace std;
 
-    ReturnCode result{ReturnCode::FILE_NOT_OPENED};
-
     if (mIsInitialized)
     {
-        _displayVersion();
+        _displayGreetingAndVersion();
         _displayMenu();
 
         const bool c_InputProvided{_handleUserInput()};
@@ -46,31 +43,33 @@ int Application::run()
 
                     if (!c_ParsingErrorsOccurred)
                     {
+                        mStatusCode = StatusCode::SUCCESS;
                         const bool c_DisplayFurtherInstructions{ParserCreator::ParserTypes::CONNECTION_DEFINITION == mParserType ? true : false};
                         _displaySuccessMessage(c_DisplayFurtherInstructions);
-                        result = ReturnCode::SUCCESS;
                     }
                     else
                     {
+                        mStatusCode = StatusCode::PARSING_ERROR;
                         _displayParsingErrorMessage();
-                        result = ReturnCode::PARSING_ERROR;
                     }
                 }
                 else
                 {
+                    mStatusCode = StatusCode::PARSER_NOT_CREATED;
                     _displayParserNotCreatedMessage();
-                    result = ReturnCode::PARSER_NOT_CREATED;
                 }
             }
         }
         else
         {
+            mStatusCode = StatusCode::ABORTED_BY_USER;
             _displayAbortMessage();
-            result = ReturnCode::ABORTED_BY_USER;
         }
     }
 
-    const int returnCode{static_cast<int>(result)};
+    // user abort is not considered an error so the success code is returned
+    const int returnCode{StatusCode::ABORTED_BY_USER == mStatusCode ? 0 : static_cast<int>(mStatusCode)};
+
     return returnCode;
 }
 
@@ -78,6 +77,7 @@ Application::Application()
     : mParserType{ParserCreator::ParserTypes::UNKNOWN}
     , mIsInitialized{false}
     , mIsCSVParsingEnabled{false}
+    , mStatusCode{StatusCode::UNINITIALIZED}
 {
     _init();
 }
@@ -90,14 +90,11 @@ void Application::_init()
 
     if (!mIsInitialized)
     {
-        ifstream inputStream{c_ConfigurationFile};
+        // username is used for determining the paths of all other relevant files (see below)
+        const string username{getUsername()};
 
-        if(inputStream.is_open())
+        if (username.size() > 0u)
         {
-            // username is used for determining the paths of all other relevant files (see below)
-            string username;
-            getline(inputStream, username);
-
             const string c_AppFilesDir{c_HomeDirParent + c_PathSeparator + username + c_PathSeparator + c_DocumentsDirName + c_PathSeparator};
             mConnectionDefinitionsFile = c_AppFilesDir + c_ConnectionDefinitionsFilename;
             mConnectionInputFile = c_AppFilesDir + c_ConnectionInputFilename;
@@ -112,12 +109,14 @@ void Application::_init()
             }
             else
             {
+                mStatusCode = StatusCode::FILE_NOT_OPENED;
                 _displayFileOpeningErrorMessage(FileType::ERROR);
             }
         }
         else
         {
-            _displayFileOpeningErrorMessage(FileType::CONFIGURATION);
+            mStatusCode = StatusCode::MISSING_USERNAME;
+            _displayMissingUsernameMessage();
         }
     }
 }
@@ -146,11 +145,13 @@ void Application::_enableCSVParsing()
             }
             else
             {
+                mStatusCode = StatusCode::FILE_NOT_OPENED;
                 _displayFileOpeningErrorMessage(FileType::OUTPUT);
             }
         }
         else
         {
+            mStatusCode = StatusCode::FILE_NOT_OPENED;
             _displayFileOpeningErrorMessage(FileType::INPUT);
         }
     }
@@ -242,9 +243,6 @@ void Application::_displayFileOpeningErrorMessage(Application::FileType fileType
     case FileType::ERROR:
         file = mParsingErrorsFile;
         break;
-    case FileType::CONFIGURATION:
-        file = c_ConfigurationFile;
-        break;
     default:
         assert(false);
     }
@@ -254,12 +252,19 @@ void Application::_displayFileOpeningErrorMessage(Application::FileType fileType
     system(c_ClearScreenCommand.c_str());
     cerr << "Error! File cannot be opened for " << c_Operation << "." << endl << endl;
     cerr << "File path: "<< file << endl << endl;
+    cerr << "The file might not exist or the user might not have the required permissions to open it." << endl << endl;
 }
 
 void Application::_displayInvalidInputMessage()
 {
     system(c_ClearScreenCommand.c_str());
     std::cout << "Invalid input. Please try again" << std::endl << std::endl;
+}
+
+void Application::_displayMissingUsernameMessage()
+{
+    system(c_ClearScreenCommand.c_str());
+    std::cout << "The username could not be retrieved. Please check your system settings and try again" << std::endl << std::endl;
 }
 
 void Application::_displayParserNotCreatedMessage()
@@ -284,10 +289,11 @@ void Application::_displayMenu()
     cout << "Press ENTER to exit the application" << endl << endl;
 }
 
-void Application::_displayVersion()
+void Application::_displayGreetingAndVersion()
 {
     system(c_ClearScreenCommand.c_str());
     std::cout << "LabelCalculator v1.0" << std::endl << std::endl;
+    std::cout << "Hello, " << getUsername() << "!" << std::endl << std::endl;
 }
 
 std::string Application::_getInputFile() const

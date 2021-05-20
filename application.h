@@ -16,12 +16,14 @@ public:
 
 private:
     // underlying type int for compatibility with the main() return type
-    enum class ReturnCode : int
+    enum class StatusCode : int
     {
+        UNINITIALIZED = -1,
         SUCCESS,
         FILE_NOT_OPENED,
         PARSING_ERROR,
         PARSER_NOT_CREATED,
+        MISSING_USERNAME,
         ABORTED_BY_USER
     };
 
@@ -30,8 +32,7 @@ private:
     {
         INPUT,
         OUTPUT,
-        ERROR,
-        CONFIGURATION
+        ERROR
     };
 
     /* Private constructor (singleton)
@@ -56,9 +57,10 @@ private:
     void _displayFileOpeningErrorMessage(FileType fileType) const;
     static void _displayAbortMessage();
     static void _displayInvalidInputMessage();
+    static void _displayMissingUsernameMessage();
     static void _displayParserNotCreatedMessage();
     static void _displayMenu();
-    static void _displayVersion();
+    static void _displayGreetingAndVersion();
 
     /* Getters */
     std::string _getInputFile() const;
@@ -81,6 +83,8 @@ private:
 
     bool mIsInitialized;
     bool mIsCSVParsingEnabled;
+
+    StatusCode mStatusCode;
 };
 
 #endif // APPLICATION_H

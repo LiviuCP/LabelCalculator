@@ -2,6 +2,10 @@
 #include <cassert>
 #include <algorithm>
 
+#if not defined (__APPLE__) && not defined (__MACH__) && not defined(__unix__)
+#include <windows.h>
+#endif
+
 #include "labelutils.h"
 
 /* The input/output index need to be signed integer as value -1 can also be returned if the CSV string has been consumed.
@@ -133,4 +137,25 @@ bool areInvalidCharactersContained(const std::string& str)
     }
 
     return containsInvalidCharacters;
+}
+
+std::string getUsername()
+{
+#if defined (__APPLE__) && defined (__MACH__)
+    const std::string username{getenv("USER")};
+#elif defined (__unix__)
+    const std::string username{getenv("USERNAME")};
+#else
+    std::string username;
+
+    char buffer[100];
+    DWORD length{sizeof(buffer)};
+    const bool c_IsValid{GetUserNameA(buffer, &length)};
+
+    if (c_IsValid)
+    {
+        username = std::string{buffer};
+    }
+#endif
+    return username;
 }

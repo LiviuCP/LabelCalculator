@@ -44,15 +44,14 @@ static const std::string c_HomeDirParent{"C:\\Users"};
 #endif
 
 #if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
-static const std::string c_ConfigurationFile{"/tmp/configuration.txt"};
 static const std::string c_ClearScreenCommand{"clear"};
 static constexpr char c_PathSeparator{'/'};
-static constexpr char c_CSVSeparator{','};
 #else
-static const std::string c_ConfigurationFilename{"C:\\tmp\\configuration.txt"};
 static const std::string c_ClearScreenCommand{"cls"};
 static constexpr char c_PathSeparator{'\\'};
 #endif
+
+static constexpr char c_CSVSeparator{','};
 
 static const std::string c_DocumentsDirName{"Documents"};
 static const std::string c_ConnectionDefinitionsFilename{"connectiondefinitions.csv"};
@@ -176,5 +175,10 @@ bool isDigitString(const std::string& str);
    Only alphabet, numeric characters and '-' are considered valid.
 */
 bool areInvalidCharactersContained(const std::string& str);
+
+/* This function retrieves the username
+   It is used for determining the paths of the application files
+*/
+std::string getUsername();
 
 #endif // LABELUTILS_H
