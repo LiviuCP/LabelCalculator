@@ -77,9 +77,9 @@ enum class DeviceTypeID : int
 
 static const std::map<std::string, DeviceTypeID> c_DeviceTypeTextToIDMapping
 {
-    {    "_pdu",    DeviceTypeID::PDU                   },
-    {    "_ext",    DeviceTypeID::EXTENSION_BAR         },
-    {    "_ups",    DeviceTypeID::UPS                   },
+    {    "pdu",     DeviceTypeID::PDU                   },
+    {    "ext",     DeviceTypeID::EXTENSION_BAR         },
+    {    "ups",     DeviceTypeID::UPS                   },
     {    "lan",     DeviceTypeID::LAN_SWITCH            },
     {    "san",     DeviceTypeID::SAN_SWITCH            },
     {    "ib",      DeviceTypeID::INFINIBAND_SWITCH     },
