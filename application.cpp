@@ -44,31 +44,25 @@ int Application::run()
                     if (!c_ParsingErrorsOccurred)
                     {
                         mStatusCode = StatusCode::SUCCESS;
-                        const bool c_DisplayFurtherInstructions{ParserCreator::ParserTypes::CONNECTION_DEFINITION == mParserType ? true : false};
-                        _displaySuccessMessage(c_DisplayFurtherInstructions);
                     }
                     else
                     {
                         mStatusCode = StatusCode::PARSING_ERROR;
-                        _displayParsingErrorMessage();
                     }
                 }
                 else
                 {
                     mStatusCode = StatusCode::PARSER_NOT_CREATED;
-                    _displayParserNotCreatedMessage();
                 }
             }
         }
         else
         {
             mStatusCode = StatusCode::ABORTED_BY_USER;
-            _displayAbortMessage();
         }
     }
 
-    // user abort is not considered an error so the success code is returned
-    const int returnCode{StatusCode::ABORTED_BY_USER == mStatusCode ? 0 : static_cast<int>(mStatusCode)};
+    const int returnCode{_handleStatusCode()};
 
     return returnCode;
 }
@@ -109,14 +103,12 @@ void Application::_init()
             }
             else
             {
-                mStatusCode = StatusCode::FILE_NOT_OPENED;
-                _displayFileOpeningErrorMessage(FileType::ERROR);
+                mStatusCode = StatusCode::ERROR_FILE_NOT_OPENED;
             }
         }
         else
         {
             mStatusCode = StatusCode::MISSING_USERNAME;
-            _displayMissingUsernameMessage();
         }
     }
 }
@@ -145,14 +137,12 @@ void Application::_enableCSVParsing()
             }
             else
             {
-                mStatusCode = StatusCode::FILE_NOT_OPENED;
-                _displayFileOpeningErrorMessage(FileType::OUTPUT);
+                mStatusCode = StatusCode::OUTPUT_FILE_NOT_OPENED;
             }
         }
         else
         {
-            mStatusCode = StatusCode::FILE_NOT_OPENED;
-            _displayFileOpeningErrorMessage(FileType::INPUT);
+            mStatusCode = StatusCode::INPUT_FILE_NOT_OPENED;
         }
     }
 }
@@ -190,6 +180,45 @@ bool Application::_handleUserInput()
     return validInputProvided;
 }
 
+int Application::_handleStatusCode() const
+{
+    switch(mStatusCode)
+    {
+    case StatusCode::UNINITIALIZED:
+        assert(false);
+        break;
+    case StatusCode::SUCCESS:
+    {
+        assert(ParserCreator::ParserTypes::UNKNOWN != mParserType);
+        const bool c_DisplayFurtherInstructions{ParserCreator::ParserTypes::CONNECTION_DEFINITION == mParserType ? true : false};
+        _displaySuccessMessage(c_DisplayFurtherInstructions);
+    }
+        break;
+    case StatusCode::MISSING_USERNAME:
+        _displayMissingUsernameMessage();
+        break;
+    case StatusCode::INPUT_FILE_NOT_OPENED:
+    case StatusCode::OUTPUT_FILE_NOT_OPENED:
+    case StatusCode::ERROR_FILE_NOT_OPENED:
+        _displayFileOpeningErrorMessage();
+        break;
+    case StatusCode::PARSER_NOT_CREATED:
+        _displayParserNotCreatedMessage();
+        break;
+    case StatusCode::PARSING_ERROR:
+        _displayParsingErrorMessage();
+        break;
+    case StatusCode::ABORTED_BY_USER:
+        _displayAbortMessage();
+        break;
+    }
+
+    // user abort is not considered an error so the success code is returned
+    const int returnCode{StatusCode::ABORTED_BY_USER == mStatusCode ? 0 : static_cast<int>(mStatusCode)};
+
+    return returnCode;
+}
+
 void Application::_displaySuccessMessage(bool additionalOutputRequired) const
 {
     using namespace std;
@@ -224,30 +253,30 @@ void Application::_displayParsingErrorMessage() const
     cerr << "Thank you for using LabelCalculator!" << endl << endl;
 }
 
-void Application::_displayFileOpeningErrorMessage(Application::FileType fileType) const
+void Application::_displayFileOpeningErrorMessage() const
 {
     using namespace std;
 
     string file;
 
-    switch(fileType)
+    switch(mStatusCode)
     {
-    case FileType::INPUT:
+    case StatusCode::INPUT_FILE_NOT_OPENED:
         assert(ParserCreator::ParserTypes::UNKNOWN != mParserType);
         file = _getInputFile();
         break;
-    case FileType::OUTPUT:
+    case StatusCode::OUTPUT_FILE_NOT_OPENED:
         assert(ParserCreator::ParserTypes::UNKNOWN != mParserType);
         file = _getOutputFile();
         break;
-    case FileType::ERROR:
+    case StatusCode::ERROR_FILE_NOT_OPENED:
         file = mParsingErrorsFile;
         break;
     default:
         assert(false);
     }
 
-    const string c_Operation{FileType::OUTPUT == fileType || FileType::ERROR == fileType ? "writing" : "reading"};
+    const string c_Operation{StatusCode::INPUT_FILE_NOT_OPENED == mStatusCode ? "reading" : "writing"};
 
     system(c_ClearScreenCommand.c_str());
     cerr << "Error! File cannot be opened for " << c_Operation << "." << endl << endl;

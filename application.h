@@ -20,19 +20,13 @@ private:
     {
         UNINITIALIZED = -1,
         SUCCESS,
-        FILE_NOT_OPENED,
-        PARSING_ERROR,
-        PARSER_NOT_CREATED,
         MISSING_USERNAME,
+        INPUT_FILE_NOT_OPENED,
+        OUTPUT_FILE_NOT_OPENED,
+        ERROR_FILE_NOT_OPENED,
+        PARSER_NOT_CREATED,
+        PARSING_ERROR,
         ABORTED_BY_USER
-    };
-
-    // file types (used for error message creation)
-    enum class FileType
-    {
-        INPUT,
-        OUTPUT,
-        ERROR
     };
 
     /* Private constructor (singleton)
@@ -51,10 +45,16 @@ private:
     */
     bool _handleUserInput();
 
+    /* This function displays a message for each resulting status code.
+       It also determines the return code of the application.
+       The goal of this method is to avoid spreading output messages among functions and to consolidate them instead.
+    */
+    int _handleStatusCode() const;
+
     /* Output methods */
     void _displaySuccessMessage(bool additionalOutputRequired) const;
     void _displayParsingErrorMessage() const;
-    void _displayFileOpeningErrorMessage(FileType fileType) const;
+    void _displayFileOpeningErrorMessage() const;
     static void _displayAbortMessage();
     static void _displayInvalidInputMessage();
     static void _displayMissingUsernameMessage();
