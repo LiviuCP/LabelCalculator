@@ -8,7 +8,7 @@ class LANSwitchPort : public DevicePort
 {
 public:
     LANSwitchPort() = delete;
-    LANSwitchPort(const std::string& deviceUPosition, const bool isSourceDevice);
+    LANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 
@@ -21,7 +21,7 @@ class SANSwitchPort : public DevicePort
 {
 public:
     SANSwitchPort() = delete;
-    SANSwitchPort(const std::string& deviceUPosition, const bool isSourceDevice);
+    SANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 
@@ -34,7 +34,7 @@ class InfinibandSwitchPort : public DevicePort
 {
 public:
     InfinibandSwitchPort() = delete;
-    InfinibandSwitchPort(const std::string& deviceUPosition, const bool isSourceDevice);
+    InfinibandSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 
@@ -47,7 +47,7 @@ class KVMSwitchPort : public DevicePort
 {
 public:
     KVMSwitchPort() = delete;
-    KVMSwitchPort(const std::string& deviceUPosition, const bool isSourceDevice);
+    KVMSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 
@@ -60,7 +60,7 @@ class ServerPort : public DevicePort
 {
 public:
     ServerPort() = delete;
-    ServerPort(const std::string& deviceUPosition, const bool isSourceDevice);
+    ServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 
@@ -73,7 +73,7 @@ class StoragePort : public DevicePort
 {
 public:
     StoragePort() = delete;
-    StoragePort(const std::string& deviceUPosition, const bool isSourceDevice);
+    StoragePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 
@@ -87,7 +87,7 @@ class BladeServerPort : public DevicePort
 {
 public:
     BladeServerPort() = delete;
-    BladeServerPort(const std::string& deviceUPosition, const bool isSourceDevice);
+    BladeServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
     void computeDescriptionAndLabel() override;
 

@@ -11,7 +11,7 @@
 class DevicePort
 {
 public:
-    DevicePort(const std::string& deviceUPosition, const size_t requiredNumberOfParameters, const size_t maxAllowedCharsCount, bool isSourceDevice);
+    DevicePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const size_t requiredNumberOfParameters, const size_t maxAllowedCharsCount, const bool isSourceDevice);
 
     virtual ~DevicePort();
 
@@ -24,10 +24,6 @@ public:
        uses the ofstream for logging any errors in the corresponding file and the boolean to report the occurence of these errors
     */
     ssize_t parseInputData(const std::string& input, const ssize_t initialPosition, std::vector<ErrorPtr>& parsingErrors, std::ofstream& errorStream);
-
-    // setters for the input .csv row and column index
-    void setCSVRowNumber(size_t rowNumber);
-    void setCSVColumnNumber(size_t columnNumber);
 
     // getters
     size_t getCSVRowNumber() const;
@@ -49,8 +45,8 @@ protected:
     std::string mDescription; // text to be written in the source (first device) / destination (second device) field of the labelling table (device port description)
     std::string mLabel;       // text to be written in the source (first device) / destination (second device) field of the labelling table (device port label)
 
-    size_t mCSVRowNumber;            // input CSV file row from which the device info is being parsed, used for error reporting
-    size_t mCSVColumnNumber;         // current CSV file column from which device info is being parsed, used for error reporting
+    size_t mFileRowNumber;            // input CSV file row from which the device info is being parsed, used for error reporting
+    size_t mFileColumnNumber;         // current CSV file column from which device info is being parsed, used for error reporting
 
     static const size_t scMaxInputParametersCount; // number of fields that should be filled in connectioninput.csv for EACH device (not used fields can be filled in with '-')
 

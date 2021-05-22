@@ -82,9 +82,9 @@ bool ConnectionInputParser::_parseInput()
                     continue;
                 }
 
-                const bool c_PortParsingSuccessful{_parseDevicePort(rowIndex)};
+                const bool c_CanContinueRowParsing{_parseDevicePort(rowIndex)};
 
-                if (!c_PortParsingSuccessful)
+                if (!c_CanContinueRowParsing)
                 {
                     break;
                 }
@@ -174,7 +174,7 @@ ssize_t ConnectionInputParser::_parseCablePartNumber(const size_t rowIndex, cons
 
 bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
 {
-    bool successfullyParsed{true};
+    bool canContinueRowParsing{true};
 
     std::string deviceType;
     mCurrentPosition = readDataField(mInputData[rowIndex], deviceType, mCurrentPosition);
@@ -205,15 +205,14 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
         {
             const bool c_IsSourceDevice{0 == mRowPortsStillNotParsedCount % c_DevicesPerConnectionInputRowCount};
 
-            DevicePortPtr pDevicePort{mpDevicePortsFactory->createDevicePort(deviceTypeID, deviceUPosition, c_IsSourceDevice)};
+            // new CSV column number: pass through the device type and device U position columns and move to the first device parameter column
+            const size_t c_NewColumnNumber{mCurrentColumnNumber + c_DevicePortParamsColumnOffset};
+
+            DevicePortPtr pDevicePort{mpDevicePortsFactory->createDevicePort(deviceTypeID, deviceUPosition, rowIndex + c_RowNumberOffset, c_NewColumnNumber, c_IsSourceDevice)};
 
             if(nullptr != pDevicePort)
             {
-                // pass through the device type and device U position columns and move to the first device parameter column
-                mCurrentColumnNumber += c_DevicePortParamsColumnOffset;
-
-                pDevicePort->setCSVRowNumber(rowIndex + c_RowNumberOffset);
-                pDevicePort->setCSVColumnNumber(mCurrentColumnNumber);
+                mCurrentColumnNumber = c_NewColumnNumber; // new CSV column number to be stored once device port is created
                 mDevicePorts.push_back(pDevicePort);
 
                 std::vector<ErrorPtr> parsingErrors;
@@ -229,7 +228,7 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
                 }
                 else
                 {
-                    successfullyParsed = false;
+                    canContinueRowParsing = false;
                 }
             }
         }
@@ -237,21 +236,21 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
         {
             ErrorPtr pInvalidDeviceUPositionError{std::make_shared<InvalidDeviceUPositionError>(*mpErrorStream)};
             _storeParsingErrorAndLocation(pInvalidDeviceUPositionError, rowIndex + c_RowNumberOffset, mCurrentColumnNumber + 1);
-            successfullyParsed = false;
+            canContinueRowParsing = false;
         }
     }
 
-    if (successfullyParsed)
+    if (canContinueRowParsing)
     {
         if (!isDeviceKnown)
         {
             ErrorPtr pUnknownDeviceError{std::make_shared<UnknownDeviceError>(*mpErrorStream)};
             _storeParsingErrorAndLocation(pUnknownDeviceError, rowIndex + c_RowNumberOffset, mCurrentColumnNumber);
-            successfullyParsed = false;
+            canContinueRowParsing = false;
         }
     }
 
-    return successfullyParsed;
+    return canContinueRowParsing;
 }
 
 bool ConnectionInputParser::_storeExternalParsingErrors(const std::vector<ErrorPtr>& deviceParsingErrors)

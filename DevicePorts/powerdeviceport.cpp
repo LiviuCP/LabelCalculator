@@ -2,8 +2,8 @@
 
 #include "powerdeviceport.h"
 
-PDUPort::PDUPort(const std::string& deviceUPosition, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, c_RequiredNrOfInputParams.at(DeviceTypeID::PDU), c_MaxAllowedCharsCount.at(DeviceTypeID::PDU), isSourceDevice}
+PDUPort::PDUPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::PDU), c_MaxAllowedCharsCount.at(DeviceTypeID::PDU), isSourceDevice}
 {
     _registerRequiredParameter(&mDevicePlacementType);
     _registerRequiredParameter(&mLoadSegmentNumber);
@@ -70,8 +70,8 @@ void PDUPort::computeDescriptionAndLabel()
     }
 }
 
-ExtensionBarPort::ExtensionBarPort(const std::string& deviceUPosition, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, c_RequiredNrOfInputParams.at(DeviceTypeID::EXTENSION_BAR), c_MaxAllowedCharsCount.at(DeviceTypeID::EXTENSION_BAR), isSourceDevice}
+ExtensionBarPort::ExtensionBarPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::EXTENSION_BAR), c_MaxAllowedCharsCount.at(DeviceTypeID::EXTENSION_BAR), isSourceDevice}
 {
     _registerRequiredParameter(&mDevicePlacementType);
     _registerRequiredParameter(&mPortNumber);
@@ -112,8 +112,8 @@ void ExtensionBarPort::computeDescriptionAndLabel()
     }
 }
 
-UPSPort::UPSPort(const std::string& deviceUPosition, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, c_RequiredNrOfInputParams.at(DeviceTypeID::UPS), c_MaxAllowedCharsCount.at(DeviceTypeID::UPS), isSourceDevice}
+UPSPort::UPSPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::UPS), c_MaxAllowedCharsCount.at(DeviceTypeID::UPS), isSourceDevice}
 {
     _registerRequiredParameter(&mLoadSegmentNumber);
     _registerRequiredParameter(&mPortNumber);
