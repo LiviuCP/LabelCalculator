@@ -43,6 +43,10 @@ bool ConnectionInputParser::_parseInput()
     {
         mpDevicePortsFactory = std::make_unique<DevicePortsFactory>();
     }
+    else
+    {
+        mpDevicePortsFactory->reset();
+    }
 
     const size_t c_ConnectionInputRowsCount{mInputData.size()};
 

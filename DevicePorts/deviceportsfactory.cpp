@@ -7,6 +7,11 @@ DevicePortsFactory::DevicePortsFactory()
 {
 }
 
+void DevicePortsFactory::reset()
+{
+    mCreatedDevicePortsCount = 0u;
+}
+
 DevicePortPtr DevicePortsFactory::createDevicePort(const DeviceTypeID deviceTypeID, const std::string& deviceUPosition, const bool isSourceDevice)
 {
     DevicePortPtr pDevicePort{nullptr};
