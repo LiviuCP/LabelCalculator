@@ -3,31 +3,37 @@ CONFIG += console c++11 c++14
 CONFIG -= app_bundle
 CONFIG -= qt
 
+INCLUDEPATH += \
+    Parsers \
+    DevicePorts \
+    ErrorHandling \
+    Utils
+
 SOURCES += \
-        application.cpp \
-        connectiondefinitionparser.cpp \
-        connectioninputparser.cpp \
-        datadeviceport.cpp \
-        deviceport.cpp \
-        deviceportsfactory.cpp \
-        error.cpp \
-        errortypes.cpp \
-        labelutils.cpp \
-        main.cpp \
-        parser.cpp \
-        parsercreator.cpp \
-        powerdeviceport.cpp
+    Application/main.cpp \
+    Application/application.cpp \
+    Parsers/parsercreator.cpp \
+    Parsers/parser.cpp \
+    Parsers/connectiondefinitionparser.cpp \
+    Parsers/connectioninputparser.cpp \
+    DevicePorts/deviceportsfactory.cpp \
+    DevicePorts/deviceport.cpp \
+    DevicePorts/datadeviceport.cpp \
+    DevicePorts/powerdeviceport.cpp \
+    ErrorHandling/error.cpp \
+    ErrorHandling/errortypes.cpp \
+    Utils/labelutils.cpp
 
 HEADERS += \
-    application.h \
-    connectiondefinitionparser.h \
-    connectioninputparser.h \
-    datadeviceport.h \
-    deviceport.h \
-    deviceportsfactory.h \
-    error.h \
-    errortypes.h \
-    labelutils.h \
-    parser.h \
-    parsercreator.h \
-    powerdeviceport.h
+    Application/application.h \
+    Parsers/parsercreator.h \
+    Parsers/parser.h \
+    Parsers/connectiondefinitionparser.h \
+    Parsers/connectioninputparser.h \
+    DevicePorts/deviceportsfactory.h \
+    DevicePorts/deviceport.h \
+    DevicePorts/datadeviceport.h \
+    DevicePorts/powerdeviceport.h \
+    ErrorHandling/error.h \
+    ErrorHandling/errortypes.h \
+    Utils/labelutils.h
