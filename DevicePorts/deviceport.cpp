@@ -127,12 +127,12 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
     return currentPosition;
 }
 
-size_t DevicePort::getCSVRowNumber() const
+size_t DevicePort::getFileRowNumber() const
 {
     return mFileRowNumber;
 }
 
-size_t DevicePort::getCSVColumnNumber() const
+size_t DevicePort::getFileColumnNumber() const
 {
     return mFileColumnNumber;
 }

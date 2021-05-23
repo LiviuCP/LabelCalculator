@@ -222,7 +222,7 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
 
                 if (!c_FewerCellsErrorOccurred)
                 {
-                    mCurrentColumnNumber = pDevicePort->getCSVColumnNumber();
+                    mCurrentColumnNumber = pDevicePort->getFileColumnNumber();
                     --mRowPortsStillNotParsedCount;
                     isDeviceKnown = true;
                 }

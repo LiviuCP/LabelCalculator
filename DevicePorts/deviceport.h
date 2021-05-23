@@ -26,8 +26,8 @@ public:
     ssize_t parseInputData(const std::string& input, const ssize_t initialPosition, std::vector<ErrorPtr>& parsingErrors, std::ofstream& errorStream);
 
     // getters
-    size_t getCSVRowNumber() const;
-    size_t getCSVColumnNumber() const;
+    size_t getFileRowNumber() const;
+    size_t getFileColumnNumber() const;
     std::string getDescription() const;
     std::string getLabel() const;
 
