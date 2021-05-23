@@ -44,7 +44,7 @@ protected:
     /* Used for storing locally generated errors
        Error location is setup at error storing point
     */
-    virtual void _storeParsingErrorAndLocation(ErrorPtr pError, const size_t rowNumber, const size_t columnNumber);
+    virtual void _storeParsingErrorAndLocation(ErrorPtr pError);
 
     /* Used for logging all parsing errors to file
     */

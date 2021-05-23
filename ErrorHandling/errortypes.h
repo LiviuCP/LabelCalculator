@@ -6,7 +6,7 @@
 class EmptyCellError final : public Error
 {
 public:
-    EmptyCellError(std::ofstream& errorStream);
+    EmptyCellError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
 
     void execute();
 };
@@ -14,7 +14,7 @@ public:
 class ExceedingCharsCountError final : public Error
 {
 public:
-    ExceedingCharsCountError(std::ofstream& errorStream, size_t maxAllowedCharsCount, ssize_t deltaCharsCount, bool isSourceDevice);
+    ExceedingCharsCountError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream, size_t maxAllowedCharsCount, ssize_t deltaCharsCount, bool isSourceDevice);
 
     void execute();
 
@@ -28,7 +28,7 @@ private:
 class UnknownDeviceError final : public Error
 {
 public:
-    UnknownDeviceError(std::ofstream& errorStream);
+    UnknownDeviceError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
 
     void execute();
 };
@@ -37,7 +37,7 @@ public:
 class FewerCellsError final : public Error
 {
 public:
-    FewerCellsError(std::ofstream& errorStream);
+    FewerCellsError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
 
     void execute();
 };
@@ -46,7 +46,7 @@ public:
 class WrongFormatError final : public Error
 {
 public:
-    WrongFormatError(std::ofstream& errorStream);
+    WrongFormatError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
 
     void execute();
 };
@@ -55,7 +55,7 @@ public:
 class WrongUNumberError final : public Error
 {
 public:
-    WrongUNumberError(std::ofstream& errorStream);
+    WrongUNumberError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
 
     void execute();
 };
@@ -64,7 +64,7 @@ public:
 class InvalidTargetDevicePositionError final : public Error
 {
 public:
-    InvalidTargetDevicePositionError(std::ofstream& errorStream);
+    InvalidTargetDevicePositionError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
 
     void execute();
 };
@@ -73,7 +73,7 @@ public:
 class DeviceConnectedToItselfError final : public Error
 {
 public:
-    DeviceConnectedToItselfError(std::ofstream& errorStream);
+    DeviceConnectedToItselfError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
 
     void execute();
 };
@@ -82,7 +82,7 @@ public:
 class NoConnectionsError final : public Error
 {
 public:
-    NoConnectionsError(std::ofstream& errorStream);
+    NoConnectionsError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
 
     void execute();
 };
@@ -91,7 +91,7 @@ public:
 class InvalidCharactersError final : public Error
 {
 public:
-    InvalidCharactersError(std::ofstream& errorStream);
+    InvalidCharactersError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
 
     void execute();
 };
@@ -100,7 +100,7 @@ public:
 class InvalidDeviceUPositionError final : public Error
 {
 public:
-    InvalidDeviceUPositionError(std::ofstream& errorStream);
+    InvalidDeviceUPositionError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
 
     void execute();
 };

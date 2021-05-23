@@ -189,9 +189,9 @@ bool ConnectionDefinitionParser::_parseDeviceType(const size_t rowIndex)
         }
         else
         {
-            ErrorPtr pError{std::make_shared<UnknownDeviceError>(*mpErrorStream)};
+            ErrorPtr pError{std::make_shared<UnknownDeviceError>(rowIndex + c_RowNumberOffset, mCurrentColumnNumber, *mpErrorStream)};
 
-            _storeParsingErrorAndLocation(pError, rowIndex + c_RowNumberOffset, mCurrentColumnNumber);
+            _storeParsingErrorAndLocation(pError);
         }
 
         ++mCurrentColumnNumber;
@@ -229,23 +229,23 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
 
         if(c_IsConnectionFormattingInvalid) // checking if the connection format is correct (e.g. 20/3: 3 connections to device located at U20)
         {
-            pError = std::make_shared<WrongFormatError>(*mpErrorStream);
+            pError = std::make_shared<WrongFormatError>(rowIndex + c_RowNumberOffset, mCurrentColumnNumber, *mpErrorStream);
         }
         else if (secondDevice <= 0 || secondDevice > c_MaxNrOfRackUnits) // checking if the device is in the accepted U interval within rack
         {
-            pError = std::make_shared<WrongUNumberError>(*mpErrorStream);
+            pError = std::make_shared<WrongUNumberError>(rowIndex + c_RowNumberOffset, mCurrentColumnNumber, *mpErrorStream);
         }
         else if (DeviceTypeID::NO_DEVICE == mMapping[secondDevice - 1]) // check if the second device is actually placed within rack (contained in mapping table)
         {
-            pError = std::make_shared<InvalidTargetDevicePositionError>(*mpErrorStream);
+            pError = std::make_shared<InvalidTargetDevicePositionError>(rowIndex + c_RowNumberOffset, mCurrentColumnNumber, *mpErrorStream);
         }
         else if (c_MaxNrOfRackUnits - rowIndex == secondDevice) // connection of a device to itself (connection loop) is not allowed
         {
-            pError = std::make_shared<DeviceConnectedToItselfError>(*mpErrorStream);
+            pError = std::make_shared<DeviceConnectedToItselfError>(rowIndex + c_RowNumberOffset, mCurrentColumnNumber, *mpErrorStream);
         }
         else if (0 == connectionsCount) // if the devices are marked as connected there should be minimum 1 connection between them
         {
-            pError = std::make_shared<NoConnectionsError>(*mpErrorStream);
+            pError = std::make_shared<NoConnectionsError>(rowIndex + c_RowNumberOffset, mCurrentColumnNumber, *mpErrorStream);
         }
         else
         {
@@ -255,7 +255,7 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
 
         if (nullptr != pError)
         {
-            _storeParsingErrorAndLocation(pError, rowIndex + c_RowNumberOffset, mCurrentColumnNumber);
+            _storeParsingErrorAndLocation(pError);
         }
 
         ++mCurrentColumnNumber;

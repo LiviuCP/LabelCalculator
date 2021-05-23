@@ -69,8 +69,8 @@ bool ConnectionInputParser::_parseInput()
                 if (mCurrentPosition == c_CurrentInputRowLength  ||
                         -1 == mCurrentPosition  )
                 {
-                    ErrorPtr pFewerCellsError{std::make_shared<FewerCellsError>(*mpErrorStream)};
-                    _storeParsingErrorAndLocation(pFewerCellsError, rowIndex + c_RowNumberOffset, mCurrentColumnNumber);
+                    ErrorPtr pFewerCellsError{std::make_shared<FewerCellsError>(rowIndex + c_RowNumberOffset, mCurrentColumnNumber, *mpErrorStream)};
+                    _storeParsingErrorAndLocation(pFewerCellsError);
                     break;
                 }
 
@@ -234,8 +234,8 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
         }
         else
         {
-            ErrorPtr pInvalidDeviceUPositionError{std::make_shared<InvalidDeviceUPositionError>(*mpErrorStream)};
-            _storeParsingErrorAndLocation(pInvalidDeviceUPositionError, rowIndex + c_RowNumberOffset, mCurrentColumnNumber + 1);
+            ErrorPtr pInvalidDeviceUPositionError{std::make_shared<InvalidDeviceUPositionError>(rowIndex + c_RowNumberOffset, mCurrentColumnNumber + 1, *mpErrorStream)};
+            _storeParsingErrorAndLocation(pInvalidDeviceUPositionError);
             canContinueRowParsing = false;
         }
     }
@@ -244,8 +244,8 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
     {
         if (!isDeviceKnown)
         {
-            ErrorPtr pUnknownDeviceError{std::make_shared<UnknownDeviceError>(*mpErrorStream)};
-            _storeParsingErrorAndLocation(pUnknownDeviceError, rowIndex + c_RowNumberOffset, mCurrentColumnNumber);
+            ErrorPtr pUnknownDeviceError{std::make_shared<UnknownDeviceError>(rowIndex + c_RowNumberOffset, mCurrentColumnNumber, *mpErrorStream)};
+            _storeParsingErrorAndLocation(pUnknownDeviceError);
             canContinueRowParsing = false;
         }
     }

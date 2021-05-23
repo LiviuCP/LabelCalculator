@@ -54,11 +54,11 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
 
             if (0u == fieldSizes[currentParameter])
             {
-                lastError = std::make_shared<EmptyCellError>(errorStream);
+                lastError = std::make_shared<EmptyCellError>(mFileRowNumber, mFileColumnNumber, errorStream);
             }
             else if (areInvalidCharactersContained(*mInputData[currentParameter]))
             {
-                lastError = std::make_shared<InvalidCharactersError>(errorStream);
+                lastError = std::make_shared<InvalidCharactersError>(mFileRowNumber, mFileColumnNumber, errorStream);
             }
             else
             {
@@ -67,8 +67,6 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
 
             if (!noErrorsDetectedInCell)
             {
-                lastError->setCSVRowNumber(mFileRowNumber);
-                lastError->setCSVColumnNumber(mFileColumnNumber);
                 parsingErrors.push_back(lastError);
             }
 
@@ -111,18 +109,14 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
     // handle parameter-independent errors
     if (fewerCellsProvided)
     {
-        lastError = std::make_shared<FewerCellsError>(errorStream);
-        lastError->setCSVRowNumber(mFileRowNumber);
-        lastError->setCSVColumnNumber(mFileColumnNumber);
+        lastError = std::make_shared<FewerCellsError>(mFileRowNumber, mFileColumnNumber, errorStream);
         parsingErrors.push_back(lastError);
 
     }
     else if (totalParsedCharsCount > mMaxAllowedCharsCount)
     {
         const ssize_t c_DeltaNrOfChars{static_cast<ssize_t>(totalParsedCharsCount - mMaxAllowedCharsCount)};
-        lastError = std::make_shared<ExceedingCharsCountError>(errorStream, mMaxAllowedCharsCount, c_DeltaNrOfChars, mIsSourceDevice);
-        lastError->setCSVRowNumber(mFileRowNumber);
-        lastError->setCSVColumnNumber(mFileColumnNumber);
+        lastError = std::make_shared<ExceedingCharsCountError>(mFileRowNumber, mFileColumnNumber, errorStream, mMaxAllowedCharsCount, c_DeltaNrOfChars, mIsSourceDevice);
         parsingErrors.push_back(lastError);
     }
     else

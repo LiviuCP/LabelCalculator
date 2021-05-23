@@ -68,12 +68,10 @@ void Parser::_reset()
     mOutputData.clear();
 }
 
-void Parser::_storeParsingErrorAndLocation(ErrorPtr pError, const size_t rowNumber, const size_t columnNumber)
+void Parser::_storeParsingErrorAndLocation(ErrorPtr pError)
 {
     if (nullptr != pError)
     {
-        pError->setCSVRowNumber(rowNumber);
-        pError->setCSVColumnNumber(columnNumber);
         mParsingErrors.push_back(pError);
     }
 }
