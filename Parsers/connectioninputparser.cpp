@@ -28,30 +28,47 @@ void ConnectionInputParser::_readInput()
     }
 
     // discard last empty row read from the input file if payload exists (trim)
-    if(connectionInputRowsCount > 1u                          &&
-       0u == mInputData[connectionInputRowsCount - 1].size())
+    if(connectionInputRowsCount > 0u &&
+       !areParseableCharactersContained(mInputData[connectionInputRowsCount - 1]))
     {
         --connectionInputRowsCount;
-        mInputData.resize(connectionInputRowsCount);
+        mInputData.pop_back();
+    }
+
+    if (connectionInputRowsCount > 0u)
+    {
+        for (auto it{mInputData.cbegin()}; it != mInputData.cend(); ++it)
+        {
+            if (!areParseableCharactersContained(*it))
+            {
+                --connectionInputRowsCount;
+            }
+        }
+
+        // if no parseable characters are contained in the payload then the connections input file is considered empty
+        if (0u == connectionInputRowsCount)
+        {
+            mInputData.clear();
+        }
     }
 }
 
 bool ConnectionInputParser::_parseInput()
 {
-    // lazy initialization of device factory
-    if (nullptr == mpDevicePortsFactory.get())
-    {
-        mpDevicePortsFactory = std::make_unique<DevicePortsFactory>();
-    }
-    else
-    {
-        mpDevicePortsFactory->reset();
-    }
-
     const size_t c_ConnectionInputRowsCount{mInputData.size()};
 
     if (c_ConnectionInputRowsCount > 0u)
     {
+        // lazy initialization of device factory
+        if (nullptr == mpDevicePortsFactory.get())
+        {
+            mpDevicePortsFactory = std::make_unique<DevicePortsFactory>();
+        }
+        else
+        {
+            mpDevicePortsFactory->reset();
+        }
+
         mCablePartNumbersEntries.resize(c_ConnectionInputRowsCount);
 
         for (size_t rowIndex{0u}; rowIndex < c_ConnectionInputRowsCount; ++rowIndex)
@@ -90,6 +107,11 @@ bool ConnectionInputParser::_parseInput()
                 }
             }
         }
+    }
+    else
+    {
+        ErrorPtr pEmptyConnectionsInputFileError{std::make_shared<EmptyConnectionsInputFileError>(*mpErrorStream)};
+        _storeParsingErrorAndLocation(pEmptyConnectionsInputFileError);
     }
 
     const bool c_ErrorsOccurred{_logParsingErrorsToFile()};

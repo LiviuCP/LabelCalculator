@@ -139,6 +139,22 @@ bool areInvalidCharactersContained(const std::string& str)
     return containsInvalidCharacters;
 }
 
+bool areParseableCharactersContained(const std::string& str)
+{
+    bool containsParseableCharacters{false};
+
+    for (const auto& c : str)
+    {
+        if (!std::isspace(c) && c_CSVSeparator != c)
+        {
+            containsParseableCharacters = true;
+            break;
+        }
+    }
+
+    return containsParseableCharacters;
+}
+
 std::string getUsername()
 {
 #if defined (__APPLE__) && defined (__MACH__)

@@ -145,6 +145,7 @@ enum class ErrorCode : unsigned short
     NULL_NR_OF_CONNECTIONS,
     INVALID_CHARS,
     INVALID_DEVICE_U_POSITION,
+    EMPTY_CONNECTIONS_INPUT_FILE,
     ErrorCodesUpperBound
 };
 
@@ -175,6 +176,12 @@ bool isDigitString(const std::string& str);
    Only alphabet, numeric characters and '-' are considered valid.
 */
 bool areInvalidCharactersContained(const std::string& str);
+
+/* This function checks if a string contains parseable characters
+   Any character that is not whitespace or comma is considered parseable
+   Parseable chars are not necessarily valid ones
+*/
+bool areParseableCharactersContained(const std::string& str);
 
 /* This function retrieves the username
    It is used for determining the paths of the application files

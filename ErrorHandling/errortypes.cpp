@@ -167,3 +167,15 @@ void InvalidDeviceUPositionError::execute()
 
     Error::execute();
 }
+
+EmptyConnectionsInputFileError::EmptyConnectionsInputFileError(std::ofstream& errorStream)
+    : Error{ErrorCode::EMPTY_CONNECTIONS_INPUT_FILE, 2u, 1u, errorStream}
+{
+}
+
+void EmptyConnectionsInputFileError::execute()
+{
+    mErrorStream << "Error: the connections input file contains no data." << std::endl;
+
+    Error::execute();
+}
