@@ -48,6 +48,27 @@ bool ConnectionDefinitionParser::_parseInput()
         }
     }
 
+    // if no parsing errors occurred, check whether this happened because there are actually no connected devices
+    if (0u == mParsingErrors.size())
+    {
+        bool areDeviceConnectionsDefined{false};
+
+        for (auto it{mConnectedTo.cbegin()}; it != mConnectedTo.cend(); ++it)
+        {
+            if (it->size() > 0u)
+            {
+                areDeviceConnectionsDefined = true;
+                break;
+            }
+        }
+
+        if (!areDeviceConnectionsDefined)
+        {
+            ErrorPtr pEmptyConnectionsInputFileError{std::make_shared<NoConnectedDevicesDefinedError>(*mpErrorStream)};
+            _storeParsingErrorAndLocation(pEmptyConnectionsInputFileError);
+        }
+    }
+
     const bool c_ErrorsOccurred{_logParsingErrorsToFile()};
 
     return c_ErrorsOccurred;
@@ -178,7 +199,7 @@ bool ConnectionDefinitionParser::_parseDeviceType(const size_t rowIndex)
             isValidDeviceType = true;
 
             // add discovered device to list of device U numbers
-            mUNumbers.push_back(c_MaxNrOfRackUnits - rowIndex); // add the U number of the last discovered device
+            mUNumbers.push_back(c_MaxNrOfRackUnits - rowIndex);
 
             // add device type to mapping table
             mMapping[c_MaxNrOfRackUnits - 1 - rowIndex] = deviceTypeID;

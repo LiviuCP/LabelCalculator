@@ -113,4 +113,12 @@ public:
     virtual void execute() override;
 };
 
+class NoConnectedDevicesDefinedError final : public Error
+{
+public:
+    NoConnectedDevicesDefinedError(std::ofstream& errorStream);
+
+    virtual void execute() override;
+};
+
 #endif // ERRORTYPES_H

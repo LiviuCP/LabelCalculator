@@ -176,6 +176,16 @@ EmptyConnectionsInputFileError::EmptyConnectionsInputFileError(std::ofstream& er
 void EmptyConnectionsInputFileError::execute()
 {
     mErrorStream << "Error: the connections input file contains no data." << std::endl;
+    Error::execute();
+}
 
+NoConnectedDevicesDefinedError::NoConnectedDevicesDefinedError(std::ofstream& errorStream)
+    : Error{ErrorCode::NO_CONNECTED_DEVICES, 2u, 1u, errorStream}
+{
+}
+
+void NoConnectedDevicesDefinedError::execute()
+{
+    mErrorStream << "Error: the connection definitions file contains no connected devices." << std::endl;
     Error::execute();
 }

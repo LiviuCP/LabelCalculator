@@ -146,6 +146,7 @@ enum class ErrorCode : unsigned short
     INVALID_CHARS,
     INVALID_DEVICE_U_POSITION,
     EMPTY_CONNECTIONS_INPUT_FILE,
+    NO_CONNECTED_DEVICES,
     ErrorCodesUpperBound
 };
 
