@@ -239,6 +239,22 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
 
         if (0u == currentCell.size())
         {
+            // If the device type contained on the row (second column) is valid then all the connections of the device should be entered contiguously starting with the third column
+            if (mCurrentPosition > -1)
+            {
+                // unparsed cells on the row
+                const std::string c_RemainingCells{mInputData[rowIndex].substr(static_cast<size_t>(mCurrentPosition))};
+
+                if (areParseableCharactersContained(c_RemainingCells))
+                {
+                    // trigger error but continue parsing the next cells from the row
+                    ErrorPtr pEmptyCellError{std::make_shared<EmptyCellError>(rowIndex + c_RowNumberOffset, mCurrentColumnNumber, *mpErrorStream)};
+                    _storeParsingErrorAndLocation(pEmptyCellError);
+                    ++mCurrentColumnNumber;
+                    continue;
+                }
+            }
+
             break;
         }
 
