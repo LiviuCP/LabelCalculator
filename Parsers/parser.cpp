@@ -10,7 +10,7 @@ Parser::Parser(std::ifstream* const pInputStream, std::ofstream* const pOutputSt
     , mOutputHeader{header}
     , mIsResetRequired{false}
     , mCurrentPosition{-1}
-    , mCurrentColumnNumber{1}
+    , mFileColumnNumber{1}
 {
     assert(nullptr != mpInputStream   &&
            mpInputStream->is_open());

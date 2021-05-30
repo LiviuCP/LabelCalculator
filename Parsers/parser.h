@@ -75,7 +75,7 @@ protected:
 
     /* current CSV column being parsed (the numbering starts from 1 as when opening the CSV with a spreadsheet tool)
     */
-    size_t mCurrentColumnNumber;
+    size_t mFileColumnNumber;
 };
 
 using ParserPtr = std::unique_ptr<Parser>;
