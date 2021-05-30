@@ -46,6 +46,11 @@ private:
     */
     static bool _parseConnectionFormatting(const std::string& source, UNumber_t& secondDevice, size_t& connectionsCount);
 
+    /* This function creates the template parameters (including device type and U position) for each device.
+       These parameters are being filled in into output file (connection input file) for each entry where the device is connected to another one.
+    */
+    void _buildTemplateDeviceParameters();
+
     /* Stores devices contained in the rack.
        For each device the type will be memorized at the index representing the lowest U position occupied within rack.
        The vector will have 50 elements (maximum rack size).
@@ -62,6 +67,11 @@ private:
 
     /* stores the number of connections to each device mentioned in previous vector */
     std::vector<std::vector<size_t>> mConnectionsCount;
+
+    /* stores the device parameters for each device (including device type and U position)
+       which will be used for creating the connection input file template
+    */
+    std::vector<std::string> mTemplateDeviceParameters;
 };
 
 #endif // CONNECTIONDEFINITIONPARSER_H
