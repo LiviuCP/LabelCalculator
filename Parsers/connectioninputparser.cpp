@@ -147,11 +147,11 @@ void ConnectionInputParser::_buildOutput()
         // calculate the row strings for the output file (labellingtable.csv)
         for (size_t connectionIndex{0u}; connectionIndex < c_CablePartNumbersEntriesCount; ++connectionIndex)
         {
-            _buildConnectionEntry(mOutputData[connectionIndex],
-                                  connectionNumber,                          //TODO: use separate variables for input and output connection number
-                                  mDevicePorts[srcDeviceIndex],
-                                  mDevicePorts[destDeviceIndex],
-                                  mCablePartNumbersEntries[connectionIndex]);
+            connectionNumber = _buildConnectionEntry(connectionNumber,
+                                                     mCablePartNumbersEntries[connectionIndex],
+                                                     mDevicePorts[srcDeviceIndex],
+                                                     mDevicePorts[destDeviceIndex],
+                                                     mOutputData[connectionIndex]);
 
             srcDeviceIndex += c_DevicesPerConnectionInputRowCount;
             destDeviceIndex += c_DevicesPerConnectionInputRowCount;
@@ -297,28 +297,30 @@ bool ConnectionInputParser::_storeExternalParsingErrors(const std::vector<ErrorP
     return areFewerCellsOnCurrentRow;
 }
 
-void ConnectionInputParser::_buildConnectionEntry(std::string& entry,
-                                                  size_t& entryNumber,
-                                                  const DevicePortPtr pFirstDevicePort,
-                                                  const DevicePortPtr pSecondDevicePort,
-                                                  const std::string& cablePartNumber)
+size_t ConnectionInputParser::_buildConnectionEntry(const size_t currentEntryNumber,
+                                                    const std::string& cablePartNumber,
+                                                    const DevicePortPtr pFirstDevicePort,
+                                                    const DevicePortPtr pSecondDevicePort,
+                                                    std::string& currentEntry)
 {
     std::stringstream str;
 
-    entry.clear();
-    str << entryNumber;
-    str >> entry;
+    currentEntry.clear();
+    str << currentEntryNumber;
+    str >> currentEntry;
 
-    entry += c_CSVSeparator;
-    entry += cablePartNumber;
-    entry += c_CSVSeparator;
-    entry += pFirstDevicePort->getDescription();
-    entry += c_CSVSeparator;
-    entry += pFirstDevicePort->getLabel();
-    entry += c_CSVSeparator;
-    entry += pSecondDevicePort->getDescription();
-    entry += c_CSVSeparator;
-    entry += pSecondDevicePort->getLabel();
+    currentEntry += c_CSVSeparator;
+    currentEntry += cablePartNumber;
+    currentEntry += c_CSVSeparator;
+    currentEntry += pFirstDevicePort->getDescription();
+    currentEntry += c_CSVSeparator;
+    currentEntry += pFirstDevicePort->getLabel();
+    currentEntry += c_CSVSeparator;
+    currentEntry += pSecondDevicePort->getDescription();
+    currentEntry += c_CSVSeparator;
+    currentEntry += pSecondDevicePort->getLabel();
 
-    ++entryNumber;
+    const size_t c_NewEntryNumber{currentEntryNumber + 1};
+
+    return c_NewEntryNumber;
 }

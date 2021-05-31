@@ -40,11 +40,11 @@ private:
     /* This function creates an entry for a connection between two devices.
        String is written to the labelling table in a subsequent operation.
     */
-    static void _buildConnectionEntry(std::string& entry,
-                                      size_t& entryNumber,
-                                      const DevicePortPtr pFirstDevicePort,
-                                      const DevicePortPtr pSecondDevicePort,
-                                      const std::string& cablePartNumber);
+    static size_t _buildConnectionEntry(const size_t currentEntryNumber,
+                                        const std::string& cablePartNumber,
+                                        const DevicePortPtr pFirstDevicePort,
+                                        const DevicePortPtr pSecondDevicePort,
+                                        std::string& currentEntry);
 
     /* all created DevicePort objects used for calculating labels and descriptions */
     std::vector<DevicePortPtr> mDevicePorts;
@@ -53,7 +53,7 @@ private:
     std::vector<std::string> mCablePartNumbersEntries;
 
     /* number of devices still not parsed on current row */
-    int mRowPortsStillNotParsedCount; //TODO: size_t???
+    int mRowPortsStillNotParsedCount;
 
     /* stores the cable part number determined for previous row */
     std::string mCurrentCablePartNumber;
