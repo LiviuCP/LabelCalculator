@@ -154,24 +154,3 @@ bool areParseableCharactersContained(const std::string& str)
 
     return containsParseableCharacters;
 }
-
-std::string getUsername()
-{
-#if defined (__APPLE__) && defined (__MACH__)
-    const std::string username{getenv("USER")};
-#elif defined (__unix__)
-    const std::string username{getenv("USERNAME")};
-#else
-    std::string username;
-
-    char buffer[100];
-    DWORD length{sizeof(buffer)};
-    const bool c_IsValid{GetUserNameA(buffer, &length)};
-
-    if (c_IsValid)
-    {
-        username = std::string{buffer};
-    }
-#endif
-    return username;
-}

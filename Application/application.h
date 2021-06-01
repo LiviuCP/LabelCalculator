@@ -20,7 +20,7 @@ private:
     {
         UNINITIALIZED = -1,
         SUCCESS,
-        MISSING_USERNAME,
+        INVALID_SETTINGS,
         INPUT_FILE_NOT_OPENED,
         OUTPUT_FILE_NOT_OPENED,
         ERROR_FILE_NOT_OPENED,
@@ -52,23 +52,23 @@ private:
     int _handleStatusCode() const;
 
     /* Output methods */
-    void _displaySuccessMessage(bool additionalOutputRequired) const;
-    void _displayParsingErrorMessage() const;
-    void _displayFileOpeningErrorMessage() const;
-    static void _displayAbortMessage();
-    static void _displayInvalidInputMessage();
-    static void _displayMissingUsernameMessage();
+    static void _displayInvalidSettingsMessage();
     static void _displayParserNotCreatedMessage();
     static void _displayMenu();
     static void _displayGreetingAndVersion();
+    static void _displayInvalidInputMessage();
+    static void _displayAbortMessage();
+    void _displayFileOpeningErrorMessage() const;
+    void _displayParsingErrorMessage() const;
+    void _displaySuccessMessage(bool additionalOutputRequired) const;
 
     /* Getters */
     std::string _getInputFile() const;
     std::string _getOutputFile() const;
 
-
-
+    /* Attributes */
     static std::shared_ptr<Application> s_pApplication;
+    static const std::string scClearScreenCommand;
 
     ParserCreator::ParserTypes mParserType;
 

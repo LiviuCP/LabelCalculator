@@ -7,6 +7,7 @@ INCLUDEPATH += \
     Parsers \
     DevicePorts \
     ErrorHandling \
+    Settings \
     Utils
 
 SOURCES += \
@@ -22,6 +23,7 @@ SOURCES += \
     DevicePorts/powerdeviceport.cpp \
     ErrorHandling/error.cpp \
     ErrorHandling/errortypes.cpp \
+    Settings/appsettings.cpp \
     Utils/labelutils.cpp
 
 HEADERS += \
@@ -36,4 +38,5 @@ HEADERS += \
     DevicePorts/powerdeviceport.h \
     ErrorHandling/error.h \
     ErrorHandling/errortypes.h \
+    Settings/appsettings.h \
     Utils/labelutils.h

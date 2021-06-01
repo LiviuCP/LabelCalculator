@@ -3,7 +3,6 @@
 
 #include <vector>
 #include <map>
-#include <fstream>
 #include <string>
 
 /* --CONSTANTS-- */
@@ -35,29 +34,7 @@ static const std::string c_InvalidPortNumberErrorText{"ERROR: THE PORT NUMBER IS
 static const std::string c_LabelErrorText{"ERROR!!!"};
 static const std::string c_InvalidCablePNErrorText{"Error! The cable part number is missing or contains invalid characters."};
 
-#if defined (__APPLE__) && defined (__MACH__)
-static const std::string c_HomeDirParent{"/Users"};
-#elif defined (__unix__)
-static const std::string c_HomeDirParent{"/home"};
-#else
-static const std::string c_HomeDirParent{"C:\\Users"};
-#endif
-
-#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
-static const std::string c_ClearScreenCommand{"clear"};
-static constexpr char c_PathSeparator{'/'};
-#else
-static const std::string c_ClearScreenCommand{"cls"};
-static constexpr char c_PathSeparator{'\\'};
-#endif
-
 static constexpr char c_CSVSeparator{','};
-
-static const std::string c_DocumentsDirName{"Documents"};
-static const std::string c_ConnectionDefinitionsFilename{"connectiondefinitions.csv"};
-static const std::string c_ConnectionInputFilename{"connectioninput.csv"};
-static const std::string c_LabellingTableFilename{"labellingtable.csv"};
-static const std::string c_ErrorFilename{"error.txt"};
 
 enum class DeviceTypeID : int
 {
@@ -183,10 +160,5 @@ bool areInvalidCharactersContained(const std::string& str);
    Parseable chars are not necessarily valid ones
 */
 bool areParseableCharactersContained(const std::string& str);
-
-/* This function retrieves the username
-   It is used for determining the paths of the application files
-*/
-std::string getUsername();
 
 #endif // LABELUTILS_H
