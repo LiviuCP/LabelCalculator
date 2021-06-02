@@ -1,5 +1,6 @@
 #include <cassert>
 
+#include "errorutils.h"
 #include "errortypes.h"
 
 EmptyCellError::EmptyCellError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
@@ -176,6 +177,8 @@ EmptyConnectionsInputFileError::EmptyConnectionsInputFileError(std::ofstream& er
 void EmptyConnectionsInputFileError::execute()
 {
     mErrorStream << "Error: the connections input file contains no data." << std::endl;
+    mErrorStream << "File: " << getConnectionInputFile() << std::endl;
+
     Error::execute();
 }
 
@@ -187,5 +190,7 @@ NoConnectedDevicesDefinedError::NoConnectedDevicesDefinedError(std::ofstream& er
 void NoConnectedDevicesDefinedError::execute()
 {
     mErrorStream << "Error: the connection definitions file contains no connected devices." << std::endl;
+    mErrorStream << "File: " << getConnectionDefinitionsFile() << std::endl;
+
     Error::execute();
 }

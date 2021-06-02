@@ -23,6 +23,7 @@ SOURCES += \
     DevicePorts/powerdeviceport.cpp \
     ErrorHandling/error.cpp \
     ErrorHandling/errortypes.cpp \
+    ErrorHandling/errorutils.cpp \
     Settings/appsettings.cpp \
     Utils/labelutils.cpp
 
@@ -38,5 +39,6 @@ HEADERS += \
     DevicePorts/powerdeviceport.h \
     ErrorHandling/error.h \
     ErrorHandling/errortypes.h \
+    ErrorHandling/errorutils.h \
     Settings/appsettings.h \
     Utils/labelutils.h
