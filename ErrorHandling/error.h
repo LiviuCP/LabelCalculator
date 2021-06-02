@@ -4,7 +4,23 @@
 #include <fstream>
 #include <memory>
 
-#include "labelutils.h"
+enum class ErrorCode : unsigned short
+{
+    EMPTY_CELL = 1u,
+    MAX_CHARS_EXCEEDED,
+    UNKNOWN_DEVICE,
+    FEWER_CELLS,
+    WRONG_CONNECTION_FORMAT,
+    PLACEMENT_OUT_OF_RANGE,
+    INVALID_TARGET_DEVICE_POSITION,
+    DEVICE_CONNECTED_TO_ITSELF,
+    NULL_NR_OF_CONNECTIONS,
+    INVALID_CHARS,
+    INVALID_DEVICE_U_POSITION,
+    EMPTY_CONNECTIONS_INPUT_FILE,
+    NO_CONNECTED_DEVICES,
+    ErrorCodesUpperBound
+};
 
 class Error
 {
