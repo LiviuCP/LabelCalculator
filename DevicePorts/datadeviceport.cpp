@@ -1,7 +1,10 @@
+#include "applicationdata.h"
+#include "applicationutils.h"
+#include "deviceportutils.h"
 #include "datadeviceport.h"
 
 LANSwitchPort::LANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::LAN_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::LAN_SWITCH), isSourceDevice}
+    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::LAN_SWITCH), c_MaxAllowedInputCharsCount.at(DeviceTypeID::LAN_SWITCH), isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
@@ -40,7 +43,7 @@ void LANSwitchPort::computeDescriptionAndLabel()
 }
 
 SANSwitchPort::SANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::SAN_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::SAN_SWITCH), isSourceDevice}
+    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::SAN_SWITCH), c_MaxAllowedInputCharsCount.at(DeviceTypeID::SAN_SWITCH), isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
@@ -84,7 +87,7 @@ void SANSwitchPort::computeDescriptionAndLabel()
 }
 
 InfinibandSwitchPort::InfinibandSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::INFINIBAND_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::INFINIBAND_SWITCH), isSourceDevice}
+    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::INFINIBAND_SWITCH), c_MaxAllowedInputCharsCount.at(DeviceTypeID::INFINIBAND_SWITCH), isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
@@ -128,7 +131,7 @@ void InfinibandSwitchPort::computeDescriptionAndLabel()
 }
 
 KVMSwitchPort::KVMSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::KVM_SWITCH), c_MaxAllowedCharsCount.at(DeviceTypeID::KVM_SWITCH), isSourceDevice}
+    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::KVM_SWITCH), c_MaxAllowedInputCharsCount.at(DeviceTypeID::KVM_SWITCH), isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
@@ -167,7 +170,7 @@ void KVMSwitchPort::computeDescriptionAndLabel()
 }
 
 ServerPort::ServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::RACK_SERVER), c_MaxAllowedCharsCount.at(DeviceTypeID::RACK_SERVER), isSourceDevice}
+    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::RACK_SERVER), c_MaxAllowedInputCharsCount.at(DeviceTypeID::RACK_SERVER), isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
@@ -236,7 +239,7 @@ void ServerPort::computeDescriptionAndLabel()
 }
 
 StoragePort::StoragePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::STORAGE), c_MaxAllowedCharsCount.at(DeviceTypeID::STORAGE), isSourceDevice}
+    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::STORAGE), c_MaxAllowedInputCharsCount.at(DeviceTypeID::STORAGE), isSourceDevice}
 {
     _registerRequiredParameter(&mControllerNr);
     _registerRequiredParameter(&mPortType);
@@ -302,7 +305,7 @@ void StoragePort::computeDescriptionAndLabel()
     - instead of mPortNumber: mModuleNumber is used for power supply number
 */
 BladeServerPort::BladeServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::BLADE_SERVER), c_MaxAllowedCharsCount.at(DeviceTypeID::BLADE_SERVER), isSourceDevice}
+    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::BLADE_SERVER), c_MaxAllowedInputCharsCount.at(DeviceTypeID::BLADE_SERVER), isSourceDevice}
 {
     _registerRequiredParameter(&mModuleType);
     _registerRequiredParameter(&mModuleNumber);

@@ -1,6 +1,5 @@
 #include <cassert>
 
-#include "labelutils.h"
 #include "parser.h"
 
 Parser::Parser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream, const std::string& header)

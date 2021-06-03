@@ -1,12 +1,12 @@
-#include <iostream>
 #include <cassert>
 #include <algorithm>
+
+#include "applicationdata.h"
+#include "applicationutils.h"
 
 #if not defined (__APPLE__) && not defined (__MACH__) && not defined(__unix__)
 #include <windows.h>
 #endif
-
-#include "labelutils.h"
 
 /* The input/output index need to be signed integer as value -1 can also be returned if the CSV string has been consumed.
    However internally the processing of the string can be done with an unsigned int (size_t) when the index is "in bounds".
@@ -62,39 +62,6 @@ ssize_t readDataField(const std::string& src, std::string& dest, const ssize_t i
     }
 
     return nextIndex;
-}
-
-DeviceTypeID getDeviceTypeID(const std::string& deviceType)
-{
-    DeviceTypeID deviceTypeID{DeviceTypeID::UNKNOWN_DEVICE};
-
-    std::string deviceTypeLowerCase{deviceType};
-    convertStringCase(deviceTypeLowerCase, false);
-
-    std::map<std::string, DeviceTypeID>::const_iterator it{c_DeviceTypeTextToIDMapping.find(deviceTypeLowerCase)};
-
-    if (it != c_DeviceTypeTextToIDMapping.cend())
-    {
-        deviceTypeID = it->second;
-    }
-
-    return deviceTypeID;
-}
-
-std::string getDeviceTypeAsString(DeviceTypeID deviceTypeID)
-{
-    std::string deviceType;
-
-    for (std::map<std::string, DeviceTypeID>::const_iterator it{c_DeviceTypeTextToIDMapping.cbegin()}; it != c_DeviceTypeTextToIDMapping.cend(); ++it)
-    {
-        if (deviceTypeID == it->second)
-        {
-            deviceType = it->first;
-            break;
-        }
-    }
-
-    return deviceType;
 }
 
 /* converts a string "in place" to upper- or lowercase

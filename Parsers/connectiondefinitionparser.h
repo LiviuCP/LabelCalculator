@@ -3,7 +3,7 @@
 
 #include <map>
 
-#include "labelutils.h"
+#include "applicationdata.h"
 #include "parser.h"
 
 class ConnectionDefinitionParser final : public Parser

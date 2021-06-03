@@ -1,6 +1,7 @@
 #include <cassert>
 
 #include "errortypes.h"
+#include "applicationutils.h"
 #include "deviceport.h"
 
 const size_t DevicePort::scMaxInputParametersCount{3u};

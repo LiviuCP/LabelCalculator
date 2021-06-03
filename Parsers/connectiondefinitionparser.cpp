@@ -2,6 +2,8 @@
 #include <cassert>
 
 #include "errortypes.h"
+#include "applicationutils.h"
+#include "parserutils.h"
 #include "connectiondefinitionparser.h"
 
 ConnectionDefinitionParser::ConnectionDefinitionParser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream)

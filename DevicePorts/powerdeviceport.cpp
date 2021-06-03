@@ -1,9 +1,12 @@
 #include <map>
 
+#include "applicationdata.h"
+#include "applicationutils.h"
+#include "deviceportutils.h"
 #include "powerdeviceport.h"
 
 PDUPort::PDUPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::PDU), c_MaxAllowedCharsCount.at(DeviceTypeID::PDU), isSourceDevice}
+    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::PDU), c_MaxAllowedInputCharsCount.at(DeviceTypeID::PDU), isSourceDevice}
 {
     _registerRequiredParameter(&mDevicePlacementType);
     _registerRequiredParameter(&mLoadSegmentNumber);
@@ -71,7 +74,7 @@ void PDUPort::computeDescriptionAndLabel()
 }
 
 ExtensionBarPort::ExtensionBarPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::EXTENSION_BAR), c_MaxAllowedCharsCount.at(DeviceTypeID::EXTENSION_BAR), isSourceDevice}
+    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::EXTENSION_BAR), c_MaxAllowedInputCharsCount.at(DeviceTypeID::EXTENSION_BAR), isSourceDevice}
 {
     _registerRequiredParameter(&mDevicePlacementType);
     _registerRequiredParameter(&mPortNumber);
@@ -113,7 +116,7 @@ void ExtensionBarPort::computeDescriptionAndLabel()
 }
 
 UPSPort::UPSPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::UPS), c_MaxAllowedCharsCount.at(DeviceTypeID::UPS), isSourceDevice}
+    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::UPS), c_MaxAllowedInputCharsCount.at(DeviceTypeID::UPS), isSourceDevice}
 {
     _registerRequiredParameter(&mLoadSegmentNumber);
     _registerRequiredParameter(&mPortNumber);

@@ -4,19 +4,21 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 INCLUDEPATH += \
+    Application \
     Parsers \
     DevicePorts \
     ErrorHandling \
-    Settings \
-    Utils
+    Settings
 
 SOURCES += \
     Application/main.cpp \
     Application/application.cpp \
+    Application/applicationutils.cpp \
     Parsers/parsercreator.cpp \
     Parsers/parser.cpp \
     Parsers/connectiondefinitionparser.cpp \
     Parsers/connectioninputparser.cpp \
+    Parsers/parserutils.cpp \
     DevicePorts/deviceportsfactory.cpp \
     DevicePorts/deviceport.cpp \
     DevicePorts/datadeviceport.cpp \
@@ -24,21 +26,23 @@ SOURCES += \
     ErrorHandling/error.cpp \
     ErrorHandling/errortypes.cpp \
     ErrorHandling/errorutils.cpp \
-    Settings/appsettings.cpp \
-    Utils/labelutils.cpp
+    Settings/appsettings.cpp
 
 HEADERS += \
     Application/application.h \
+    Application/applicationdata.h \
+    Application/applicationutils.h \
     Parsers/parsercreator.h \
     Parsers/parser.h \
     Parsers/connectiondefinitionparser.h \
     Parsers/connectioninputparser.h \
+    Parsers/parserutils.h \
     DevicePorts/deviceportsfactory.h \
     DevicePorts/deviceport.h \
     DevicePorts/datadeviceport.h \
     DevicePorts/powerdeviceport.h \
+    DevicePorts/deviceportutils.h \
     ErrorHandling/error.h \
     ErrorHandling/errortypes.h \
     ErrorHandling/errorutils.h \
-    Settings/appsettings.h \
-    Utils/labelutils.h
+    Settings/appsettings.h

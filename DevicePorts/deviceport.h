@@ -5,7 +5,6 @@
 #include <vector>
 #include <memory>
 
-#include "labelutils.h"
 #include "error.h"
 
 class DevicePort
