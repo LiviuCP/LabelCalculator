@@ -4,7 +4,12 @@
 #include "datadeviceport.h"
 
 LANSwitchPort::LANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::LAN_SWITCH), c_MaxAllowedInputCharsCount.at(DeviceTypeID::LAN_SWITCH), isSourceDevice}
+    : DevicePort{deviceUPosition,
+                 fileRowNumber,
+                 fileColumnNumber,
+                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::LAN_SWITCH),
+                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::LAN_SWITCH),
+                 isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
@@ -15,9 +20,9 @@ void LANSwitchPort::computeDescriptionAndLabel()
     mDescription = "LAN switch placed at U" + mDeviceUPosition;
     mLabel = "U" + mDeviceUPosition;
 
-    convertStringCase(mPortType, true);
+    Utilities::convertStringCase(mPortType, true);
 
-    if (isDigitString(mPortNumber)) // no management port
+    if (Utilities::isDigitString(mPortNumber)) // no management port
     {
         if ("N" == mPortType)
         {
@@ -43,7 +48,12 @@ void LANSwitchPort::computeDescriptionAndLabel()
 }
 
 SANSwitchPort::SANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::SAN_SWITCH), c_MaxAllowedInputCharsCount.at(DeviceTypeID::SAN_SWITCH), isSourceDevice}
+    : DevicePort{deviceUPosition,
+                 fileRowNumber,
+                 fileColumnNumber,
+                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::SAN_SWITCH),
+                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::SAN_SWITCH),
+                 isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
@@ -54,14 +64,14 @@ void SANSwitchPort::computeDescriptionAndLabel()
     mDescription = "SAN switch placed at U" + mDeviceUPosition;
     mLabel = "U" + mDeviceUPosition;
 
-    convertStringCase(mPortType, true);
+    Utilities::convertStringCase(mPortType, true);
 
     if ("m" == mPortNumber || "M" == mPortNumber) // management port
     {
         mDescription += " - management port";
         mLabel = mLabel + "_MGMT";
     }
-    else if (isDigitString(mPortNumber)) // power or data port
+    else if (Utilities::isDigitString(mPortNumber)) // power or data port
     {
         if ("F" == mPortType)
         {
@@ -87,7 +97,12 @@ void SANSwitchPort::computeDescriptionAndLabel()
 }
 
 InfinibandSwitchPort::InfinibandSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::INFINIBAND_SWITCH), c_MaxAllowedInputCharsCount.at(DeviceTypeID::INFINIBAND_SWITCH), isSourceDevice}
+    : DevicePort{deviceUPosition,
+                 fileRowNumber,
+                 fileColumnNumber,
+                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::INFINIBAND_SWITCH),
+                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::INFINIBAND_SWITCH),
+                 isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
@@ -98,14 +113,14 @@ void InfinibandSwitchPort::computeDescriptionAndLabel()
     mDescription = "Infiniband switch placed at U" + mDeviceUPosition;
     mLabel = "U" + mDeviceUPosition;
 
-    convertStringCase(mPortType, true);
+    Utilities::convertStringCase(mPortType, true);
 
     if ("m" == mPortNumber || "M" == mPortNumber ) // management port
     {
         mDescription += " - management port";
         mLabel += "_MGMT";
     }
-    else if (isDigitString(mPortNumber)) // power or data port
+    else if (Utilities::isDigitString(mPortNumber)) // power or data port
     {
         if ("I" == mPortType)
         {
@@ -131,7 +146,12 @@ void InfinibandSwitchPort::computeDescriptionAndLabel()
 }
 
 KVMSwitchPort::KVMSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::KVM_SWITCH), c_MaxAllowedInputCharsCount.at(DeviceTypeID::KVM_SWITCH), isSourceDevice}
+    : DevicePort{deviceUPosition,
+                 fileRowNumber,
+                 fileColumnNumber,
+                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::KVM_SWITCH),
+                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::KVM_SWITCH),
+                 isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
@@ -142,9 +162,9 @@ void KVMSwitchPort::computeDescriptionAndLabel()
     mDescription = "KVM switch placed at U" + mDeviceUPosition;
     mLabel = "U" + mDeviceUPosition;
 
-    convertStringCase(mPortType, true);
+    Utilities::convertStringCase(mPortType, true);
 
-    if (isDigitString(mPortNumber))
+    if (Utilities::isDigitString(mPortNumber))
     {
         if ("K" == mPortType)
         {
@@ -170,7 +190,12 @@ void KVMSwitchPort::computeDescriptionAndLabel()
 }
 
 ServerPort::ServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::RACK_SERVER), c_MaxAllowedInputCharsCount.at(DeviceTypeID::RACK_SERVER), isSourceDevice}
+    : DevicePort{deviceUPosition,
+                 fileRowNumber,
+                 fileColumnNumber,
+                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::RACK_SERVER),
+                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::RACK_SERVER),
+                 isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
@@ -181,7 +206,7 @@ void ServerPort::computeDescriptionAndLabel()
     mDescription = "Server placed at U" + mDeviceUPosition;
     mLabel = "U" + mDeviceUPosition;
 
-    convertStringCase(mPortType, true);
+    Utilities::convertStringCase(mPortType, true);
 
     if("m" == mPortNumber || "M" == mPortNumber) // management port
     {
@@ -193,7 +218,7 @@ void ServerPort::computeDescriptionAndLabel()
         mDescription += " - KVM port";
         mLabel += "_KVM";
     }
-    else if (isDigitString(mPortNumber))
+    else if (Utilities::isDigitString(mPortNumber))
     {
         if("F" == mPortType) // FC port
         {
@@ -239,7 +264,12 @@ void ServerPort::computeDescriptionAndLabel()
 }
 
 StoragePort::StoragePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::STORAGE), c_MaxAllowedInputCharsCount.at(DeviceTypeID::STORAGE), isSourceDevice}
+    : DevicePort{deviceUPosition,
+                 fileRowNumber,
+                 fileColumnNumber,
+                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::STORAGE),
+                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::STORAGE),
+                 isSourceDevice}
 {
     _registerRequiredParameter(&mControllerNr);
     _registerRequiredParameter(&mPortType);
@@ -251,7 +281,7 @@ void StoragePort::computeDescriptionAndLabel()
     mDescription = "Storage device placed at U" + mDeviceUPosition;
     mLabel = "U" + mDeviceUPosition;
 
-    convertStringCase(mPortType, true);
+    Utilities::convertStringCase(mPortType, true);
 
     if ("m" == mPortNumber || "M" == mPortNumber)
     {
@@ -266,11 +296,11 @@ void StoragePort::computeDescriptionAndLabel()
             mLabel += "_C" + mControllerNr + "_MGMT";
         }
     }
-    else if (isDigitString(mPortNumber))
+    else if (Utilities::isDigitString(mPortNumber))
     {
         if ("D" == mPortType) // data port (FC, SAS, etc)
         {
-            if (isDigitString(mControllerNr))
+            if (Utilities::isDigitString(mControllerNr))
             {
                 mDescription = "Storage device placed at U" + mDeviceUPosition + " - controller " + mControllerNr + " - port " + mPortNumber;
                 mLabel = "U" + mDeviceUPosition + "_C" + mControllerNr + "_P" + mPortNumber;
@@ -305,7 +335,12 @@ void StoragePort::computeDescriptionAndLabel()
     - instead of mPortNumber: mModuleNumber is used for power supply number
 */
 BladeServerPort::BladeServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::BLADE_SERVER), c_MaxAllowedInputCharsCount.at(DeviceTypeID::BLADE_SERVER), isSourceDevice}
+    : DevicePort{deviceUPosition,
+                 fileRowNumber,
+                 fileColumnNumber,
+                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::BLADE_SERVER),
+                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::BLADE_SERVER),
+                 isSourceDevice}
 {
     _registerRequiredParameter(&mModuleType);
     _registerRequiredParameter(&mModuleNumber);
@@ -317,7 +352,7 @@ void BladeServerPort::computeDescriptionAndLabel()
     mDescription = "Blade system placed at U" + mDeviceUPosition;
     mLabel = "U" + mDeviceUPosition;
 
-    convertStringCase(mModuleType, true);
+    Utilities::convertStringCase(mModuleType, true);
 
     if ("UP" == mModuleType) // management uplink port (for daisy chaining multiple blade systems)
     {
@@ -329,11 +364,11 @@ void BladeServerPort::computeDescriptionAndLabel()
         mDescription += " - management downlink port";
         mLabel += "_MG_DO";
     }
-    else if (isDigitString(mModuleNumber))
+    else if (Utilities::isDigitString(mModuleNumber))
     {
         if ("DM" == mModuleType) // data module
         {
-            if (isDigitString(mPortNumber))
+            if (Utilities::isDigitString(mPortNumber))
             {
                 mDescription += " - data module " + mModuleNumber + " - port " + mPortNumber;
                 mLabel += "_DMO" + mModuleNumber + "_P" + mPortNumber;

@@ -48,7 +48,7 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
 
         if (-1 != currentPosition) // check if characters are available for current (required) field
         {
-            currentPosition = readDataField(input, *mInputData[currentParameter], currentPosition);
+            currentPosition = Utilities::readDataField(input, *mInputData[currentParameter], currentPosition);
             fieldSizes[currentParameter] = mInputData[currentParameter]->size();
 
             bool noErrorsDetectedInCell{false};
@@ -57,7 +57,7 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
             {
                 lastError = std::make_shared<EmptyCellError>(mFileRowNumber, mFileColumnNumber, errorStream);
             }
-            else if (areInvalidCharactersContained(*mInputData[currentParameter]))
+            else if (Utilities::areInvalidCharactersContained(*mInputData[currentParameter]))
             {
                 lastError = std::make_shared<InvalidCharactersError>(mFileRowNumber, mFileColumnNumber, errorStream);
             }
@@ -91,7 +91,7 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
             if (-1 != currentPosition)
             {
                 std::string unusedField;
-                currentPosition = readDataField(input, unusedField, currentPosition);
+                currentPosition = Utilities::readDataField(input, unusedField, currentPosition);
             }
             else
             {

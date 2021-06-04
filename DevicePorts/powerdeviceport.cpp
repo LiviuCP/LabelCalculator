@@ -6,7 +6,12 @@
 #include "powerdeviceport.h"
 
 PDUPort::PDUPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::PDU), c_MaxAllowedInputCharsCount.at(DeviceTypeID::PDU), isSourceDevice}
+    : DevicePort{deviceUPosition,
+                 fileRowNumber,
+                 fileColumnNumber,
+                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::PDU),
+                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::PDU),
+                 isSourceDevice}
 {
     _registerRequiredParameter(&mDevicePlacementType);
     _registerRequiredParameter(&mLoadSegmentNumber);
@@ -15,17 +20,15 @@ PDUPort::PDUPort(const std::string& deviceUPosition, const size_t fileRowNumber,
 
 void PDUPort::computeDescriptionAndLabel()
 {
-    using namespace std;
-
-    const map<string, string> c_PlacementTypesDescriptions
+    const std::map<std::string, std::string> c_PlacementTypesDescriptions
     {
         {"H", "Horizontal"},    // horizontal PDU
         {"L", "Vertical left"}, // vertically left placed PDU
         {"R", "Vertical right"} // vertically right placed PDU
     };
 
-    convertStringCase(mDevicePlacementType, true);
-    convertStringCase(mPortNumber, true);
+    Utilities::convertStringCase(mDevicePlacementType, true);
+    Utilities::convertStringCase(mPortNumber, true);
 
     if (c_PlacementTypesDescriptions.find(mDevicePlacementType) != c_PlacementTypesDescriptions.cend())
     {
@@ -42,14 +45,14 @@ void PDUPort::computeDescriptionAndLabel()
             mDescription += " - port number " + mPortNumber;
             mLabel += "_" + mPortNumber;
         }
-        else if (isDigitString(mPortNumber))
+        else if (Utilities::isDigitString(mPortNumber))
         {
             if ("-" == mLoadSegmentNumber)
             {
                 mDescription += " - port number" + mPortNumber;
                 mLabel += "_P" + mPortNumber;
             }
-            else if (isDigitString(mLoadSegmentNumber))
+            else if (Utilities::isDigitString(mLoadSegmentNumber))
             {
                 mDescription += " - load segment number " + mLoadSegmentNumber + " - port number " + mPortNumber;
                 mLabel += "_P" + mLoadSegmentNumber + "." + mPortNumber;
@@ -74,7 +77,12 @@ void PDUPort::computeDescriptionAndLabel()
 }
 
 ExtensionBarPort::ExtensionBarPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::EXTENSION_BAR), c_MaxAllowedInputCharsCount.at(DeviceTypeID::EXTENSION_BAR), isSourceDevice}
+    : DevicePort{deviceUPosition,
+                 fileRowNumber,
+                 fileColumnNumber,
+                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::EXTENSION_BAR),
+                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::EXTENSION_BAR),
+                 isSourceDevice}
 {
     _registerRequiredParameter(&mDevicePlacementType);
     _registerRequiredParameter(&mPortNumber);
@@ -82,8 +90,8 @@ ExtensionBarPort::ExtensionBarPort(const std::string& deviceUPosition, const siz
 
 void ExtensionBarPort::computeDescriptionAndLabel()
 {
-    convertStringCase(mDevicePlacementType, true);
-    convertStringCase(mPortNumber, true);
+    Utilities::convertStringCase(mDevicePlacementType, true);
+    Utilities::convertStringCase(mPortNumber, true);
 
     if ("L" == mDevicePlacementType || "R" == mDevicePlacementType)
     {
@@ -97,7 +105,7 @@ void ExtensionBarPort::computeDescriptionAndLabel()
             mDescription += " - port number IN";
             mLabel += "_IN";
         }
-        else if (isDigitString(mPortNumber))
+        else if (Utilities::isDigitString(mPortNumber))
         {
             mDescription += " - port number " + mPortNumber;
             mLabel += "_P" + mPortNumber;
@@ -116,7 +124,12 @@ void ExtensionBarPort::computeDescriptionAndLabel()
 }
 
 UPSPort::UPSPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition, fileRowNumber, fileColumnNumber, c_RequiredNrOfInputParams.at(DeviceTypeID::UPS), c_MaxAllowedInputCharsCount.at(DeviceTypeID::UPS), isSourceDevice}
+    : DevicePort{deviceUPosition,
+                 fileRowNumber,
+                 fileColumnNumber,
+                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::UPS),
+                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::UPS),
+                 isSourceDevice}
 {
     _registerRequiredParameter(&mLoadSegmentNumber);
     _registerRequiredParameter(&mPortNumber);
@@ -132,9 +145,9 @@ void UPSPort::computeDescriptionAndLabel()
         mDescription += " - management port";
         mLabel += "_MGMT";
     }
-    else if (isDigitString(mPortNumber))
+    else if (Utilities::isDigitString(mPortNumber))
     {
-        if (isDigitString(mLoadSegmentNumber))
+        if (Utilities::isDigitString(mLoadSegmentNumber))
         {
             mDescription += " - load segment " + mLoadSegmentNumber + " - port " + mPortNumber;
             mLabel += "_P" + mLoadSegmentNumber + "." + mPortNumber;

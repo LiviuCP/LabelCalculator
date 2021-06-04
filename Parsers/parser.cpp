@@ -53,11 +53,11 @@ void Parser::_writeOutput()
 {
     assert(mpOutputStream->is_open());
 
-    *mpOutputStream << mOutputHeader << std::endl;
+    *mpOutputStream << mOutputHeader << "\n";
 
     for (const auto& payloadRow : mOutputData)
     {
-        *mpOutputStream << payloadRow << std::endl;
+        *mpOutputStream << payloadRow << "\n";
     }
 }
 

@@ -10,8 +10,8 @@ EmptyCellError::EmptyCellError(const size_t fileRowNumber, const size_t fileColu
 
 void EmptyCellError::execute()
 {
-    mErrorStream << "Error: A cell is empty" << std::endl;
-    mErrorStream << "Row number: " << mFileRowNumber << "    "<< "Column number: " << mFileColumnNumber << std::endl;
+    mErrorStream << "Error: A cell is empty\n";
+    mErrorStream << "Row number: " << mFileRowNumber << "    "<< "Column number: " << mFileColumnNumber << "\n";
 
     Error::execute();
 }
@@ -38,9 +38,9 @@ void ExceedingCharsCountError::execute()
         mErrorStream << "second ";
     }
 
-    mErrorStream << "device exceeds the maximum allowed (" << mMaxAllowedCharsCount << " characters)" << std::endl;
-    mErrorStream << "Row number: " << mFileRowNumber << std::endl;
-    mErrorStream << "Maximum total number of characters exceeded by " << mDeltaCharsCount << std::endl;
+    mErrorStream << "device exceeds the maximum allowed (" << mMaxAllowedCharsCount << " characters)\n";
+    mErrorStream << "Row number: " << mFileRowNumber << "\n";
+    mErrorStream << "Maximum total number of characters exceeded by " << mDeltaCharsCount << "\n";
 
     Error::execute();
 }
@@ -52,8 +52,8 @@ UnknownDeviceError::UnknownDeviceError(const size_t fileRowNumber, const size_t 
 
 void UnknownDeviceError::execute()
 {
-    mErrorStream << "Error: an unknown or currently not supported device type has been entered" << std::endl;
-    mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << std::endl;
+    mErrorStream << "Error: an unknown or currently not supported device type has been entered\n";
+    mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << "\n";
 
     Error::execute();
 }
@@ -65,9 +65,9 @@ FewerCellsError::FewerCellsError(const size_t fileRowNumber, const size_t fileCo
 
 void FewerCellsError::execute()
 {
-    mErrorStream << "Error: less cells have been filled on the row than required in order to store the parameters of the 2 devices" << std::endl;
-    mErrorStream << "A total number of 11 contiguous cells are required to be filled (starting with the first cell on the row)" << std::endl;
-    mErrorStream << "Row number: " << mFileRowNumber << std::endl;
+    mErrorStream << "Error: less cells have been filled on the row than required in order to store the parameters of the 2 devices\n";
+    mErrorStream << "A total number of 11 contiguous cells are required to be filled (starting with the first cell on the row)\n";
+    mErrorStream << "Row number: " << mFileRowNumber << "\n";
 
     Error::execute();
 }
@@ -79,8 +79,8 @@ WrongFormatError::WrongFormatError(const size_t fileRowNumber, const size_t file
 
 void WrongFormatError::execute()
 {
-    mErrorStream << "Error: format of the connection is wrong" << std::endl;
-    mErrorStream << "Row number: " << mFileRowNumber << "    "<<"Column number: "<< mFileColumnNumber << std::endl;
+    mErrorStream << "Error: format of the connection is wrong\n";
+    mErrorStream << "Row number: " << mFileRowNumber << "    "<<"Column number: "<< mFileColumnNumber << "\n";
 
     Error::execute();
 }
@@ -92,8 +92,8 @@ WrongUNumberError::WrongUNumberError(const size_t fileRowNumber, const size_t fi
 
 void WrongUNumberError::execute()
 {
-    mErrorStream << "Error: U number of the device is out of range (should be between 1 and 50)" << std::endl;
-    mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << std::endl;
+    mErrorStream << "Error: U number of the device is out of range (should be between 1 and 50)\n";
+    mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << "\n";
 
     Error::execute();
 }
@@ -105,10 +105,10 @@ InvalidTargetDevicePositionError::InvalidTargetDevicePositionError(const size_t 
 
 void InvalidTargetDevicePositionError::execute()
 {
-    mErrorStream << "Error: the target device position is invalid." << std::endl;
-    mErrorStream << "Either no device is mounted within rack in the mentioned U position or the target position is lower than the one of the source device." << std::endl;
-    mErrorStream << "Please note that the connections should always be defined bottom-up." << std::endl;
-    mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << std::endl;
+    mErrorStream << "Error: the target device position is invalid.\n";
+    mErrorStream << "Either no device is mounted within rack in the mentioned U position or the target position is lower than the one of the source device.\n";
+    mErrorStream << "Please note that the connections should always be defined bottom-up.\n";
+    mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << "\n";
 
     Error::execute();
 }
@@ -120,8 +120,8 @@ DeviceConnectedToItselfError::DeviceConnectedToItselfError(const size_t fileRowN
 
 void DeviceConnectedToItselfError::execute()
 {
-    mErrorStream << "Error: device is connected to itself. This is not allowed." << std::endl;
-    mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << std::endl;
+    mErrorStream << "Error: device is connected to itself. This is not allowed.\n";
+    mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << "\n";
 
     Error::execute();
 }
@@ -133,8 +133,8 @@ NoConnectionsError::NoConnectionsError(const size_t fileRowNumber, const size_t 
 
 void NoConnectionsError::execute()
 {
-    mErrorStream << "Error: number of connections between the 2 devices is 0." << std::endl;
-    mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << std::endl;
+    mErrorStream << "Error: number of connections between the 2 devices is 0.\n";
+    mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << "\n";
 
     Error::execute();
 }
@@ -147,9 +147,9 @@ InvalidCharactersError::InvalidCharactersError(const size_t fileRowNumber, const
 
 void InvalidCharactersError::execute()
 {
-    mErrorStream << "Error: the cell contains invalid characters." << std::endl;
-    mErrorStream << "Only \'-\', alphabet and numeric characters are allowed." << std::endl;
-    mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << std::endl;
+    mErrorStream << "Error: the cell contains invalid characters.\n";
+    mErrorStream << "Only \'-\', alphabet and numeric characters are allowed.\n";
+    mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << "\n";
 
     Error::execute();
 }
@@ -161,10 +161,10 @@ InvalidDeviceUPositionError::InvalidDeviceUPositionError(const size_t fileRowNum
 
 void InvalidDeviceUPositionError::execute()
 {
-    mErrorStream << "Error: the device U position is invalid." << std::endl;
-    mErrorStream << "The cell is empty, contains non-numeric characters or the number is not within the required range." << std::endl;
-    mErrorStream << "A integer between 0 and 50 should be entered." << std::endl;
-    mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << std::endl;
+    mErrorStream << "Error: the device U position is invalid.\n";
+    mErrorStream << "The cell is empty, contains non-numeric characters or the number is not within the required range.\n";
+    mErrorStream << "A integer between 0 and 50 should be entered.\n";
+    mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << "\n";
 
     Error::execute();
 }
@@ -176,8 +176,8 @@ EmptyConnectionsInputFileError::EmptyConnectionsInputFileError(std::ofstream& er
 
 void EmptyConnectionsInputFileError::execute()
 {
-    mErrorStream << "Error: the connections input file contains no data." << std::endl;
-    mErrorStream << "File: " << getConnectionInputFile() << std::endl;
+    mErrorStream << "Error: the connections input file contains no data.\n";
+    mErrorStream << "File: " << Utilities::getConnectionInputFile() << "\n";
 
     Error::execute();
 }
@@ -189,8 +189,8 @@ NoConnectedDevicesDefinedError::NoConnectedDevicesDefinedError(std::ofstream& er
 
 void NoConnectedDevicesDefinedError::execute()
 {
-    mErrorStream << "Error: the connection definitions file contains no connected devices." << std::endl;
-    mErrorStream << "File: " << getConnectionDefinitionsFile() << std::endl;
+    mErrorStream << "Error: the connection definitions file contains no connected devices.\n";
+    mErrorStream << "File: " << Utilities::getConnectionDefinitionsFile() << "\n";
 
     Error::execute();
 }

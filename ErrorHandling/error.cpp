@@ -25,5 +25,5 @@ Error::~Error()
 
 void Error::execute()
 {
-    mErrorStream << "Error code: " << static_cast<int>(mErrorCode) << std::endl << std::endl;
+    mErrorStream << "Error code: " << static_cast<int>(mErrorCode) << "\n\n";
 }

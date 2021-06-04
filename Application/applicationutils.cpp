@@ -11,7 +11,7 @@
 /* The input/output index need to be signed integer as value -1 can also be returned if the CSV string has been consumed.
    However internally the processing of the string can be done with an unsigned int (size_t) when the index is "in bounds".
 */
-ssize_t readDataField(const std::string& src, std::string& dest, const ssize_t index)
+ssize_t Utilities::readDataField(const std::string& src, std::string& dest, const ssize_t index)
 {
     const size_t c_Length{src.size()};
 
@@ -26,7 +26,7 @@ ssize_t readDataField(const std::string& src, std::string& dest, const ssize_t i
 
         bool emptyStartingFieldParsed{false};
 
-        if (c_CSVSeparator == src[currentIndex])
+        if (Data::c_CSVSeparator == src[currentIndex])
         {
             // if the parsed cell is the first one AND empty it should be taken into consideration and an empty destination string should be returned
             if (0u == currentIndex)
@@ -41,7 +41,7 @@ ssize_t readDataField(const std::string& src, std::string& dest, const ssize_t i
         {
             while(currentIndex < c_Length)
             {
-                if(src[currentIndex] != c_CSVSeparator)
+                if(src[currentIndex] != Data::c_CSVSeparator)
                 {
                     dest += src[currentIndex];
                 }
@@ -66,13 +66,13 @@ ssize_t readDataField(const std::string& src, std::string& dest, const ssize_t i
 
 /* converts a string "in place" to upper- or lowercase
 */
-void convertStringCase(std::string& str, bool upperCase)
+void Utilities::convertStringCase(std::string& str, bool upperCase)
 {
     auto transformation = upperCase ? [](char c){return std::toupper(c);} : [](char c){return std::tolower(c);};
     std::transform(str.begin(), str.end(), str.begin(), transformation);
 }
 
-bool isDigitString(const std::string& str)
+bool Utilities::isDigitString(const std::string& str)
 {
     bool hasOnlyDigits{true};
 
@@ -88,7 +88,7 @@ bool isDigitString(const std::string& str)
     return hasOnlyDigits;
 }
 
-bool areInvalidCharactersContained(const std::string& str)
+bool Utilities::areInvalidCharactersContained(const std::string& str)
 {
     bool containsInvalidCharacters{false};
 
@@ -106,13 +106,13 @@ bool areInvalidCharactersContained(const std::string& str)
     return containsInvalidCharacters;
 }
 
-bool areParseableCharactersContained(const std::string& str)
+bool Utilities::areParseableCharactersContained(const std::string& str)
 {
     bool containsParseableCharacters{false};
 
     for (const auto& c : str)
     {
-        if (!std::isspace(c) && c_CSVSeparator != c)
+        if (!std::isspace(c) && Data::c_CSVSeparator != c)
         {
             containsParseableCharacters = true;
             break;

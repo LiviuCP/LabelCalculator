@@ -10,7 +10,12 @@
 class DevicePort
 {
 public:
-    DevicePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const size_t requiredNumberOfParameters, const size_t maxAllowedCharsCount, const bool isSourceDevice);
+    DevicePort(const std::string& deviceUPosition,
+               const size_t fileRowNumber,
+               const size_t fileColumnNumber,
+               const size_t requiredNumberOfParameters,
+               const size_t maxAllowedCharsCount,
+               const bool isSourceDevice);
 
     virtual ~DevicePort();
 
@@ -38,22 +43,39 @@ protected:
     */
     void _registerRequiredParameter(std::string* const pRequiredParameter);
 
-    std::string mDeviceUPosition;  // position of the device containing the port in rack
-    std::string mPortNumber;  // power or data port number that should be mentioned on the cable label
+    // position of the device containing the port in rack
+    std::string mDeviceUPosition;
 
-    std::string mDescription; // text to be written in the source (first device) / destination (second device) field of the labelling table (device port description)
-    std::string mLabel;       // text to be written in the source (first device) / destination (second device) field of the labelling table (device port label)
+    // power or data port number that should be mentioned on the cable label
+    std::string mPortNumber;
 
-    size_t mFileRowNumber;            // input CSV file row from which the device info is being parsed, used for error reporting
-    size_t mFileColumnNumber;         // current CSV file column from which device info is being parsed, used for error reporting
+    // text to be written in the source (first device) / destination (second device) field of the labelling table (device port description)
+    std::string mDescription;
 
-    static const size_t scMaxInputParametersCount; // number of fields that should be filled in connectioninput.csv for EACH device (not used fields can be filled in with '-')
+    // text to be written in the source (first device) / destination (second device) field of the labelling table (device port label)
+    std::string mLabel;
+
+    // input CSV file row from which the device info is being parsed, used for error reporting
+    size_t mFileRowNumber;
+
+    // current CSV file column from which device info is being parsed, used for error reporting
+    size_t mFileColumnNumber;
+
+    // number of fields that should be filled in connectioninput.csv for EACH device (not used fields can be filled in with '-')
+    static const size_t scMaxInputParametersCount;
 
 private:
-    std::vector<std::string*> mInputData; // reference to substrings storing the fields parsed by parseInputData()
+    // reference to substrings storing the fields parsed by parseInputData()
+    std::vector<std::string*> mInputData;
+
+    // total number of parameters that should be entered by user in the CSV file for the device port (including port number)
     size_t mInputParametersCount;
-    size_t mMaxAllowedCharsCount; // maximum number of characters that can be filled in the connectioninput.csv file for a specific device type (including any placeholders where character '-' could be filled in)
-    bool mIsSourceDevice; // true if first of the two devices in each connection entered in the input .csv file
+
+    // maximum number of characters that can be filled in the connectioninput.csv file for a specific device type (including any placeholders where character '-' could be filled in)
+    size_t mMaxAllowedCharsCount;
+
+    // true if first of the two devices in each connection entered in the input .csv file
+    bool mIsSourceDevice;
 };
 
 using DevicePortPtr = std::shared_ptr<DevicePort>;

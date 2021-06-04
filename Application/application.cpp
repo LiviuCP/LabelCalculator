@@ -25,8 +25,6 @@ std::shared_ptr<Application> Application::getInstance()
 
 int Application::run()
 {
-    using namespace std;
-
     if (mIsInitialized)
     {
         _displayGreetingAndVersion();
@@ -108,15 +106,13 @@ void Application::_init()
 
 void Application::_enableCSVParsing()
 {
-    using namespace std;
-
     assert(mIsInitialized);
     assert(ParserCreator::ParserTypes::UNKNOWN != mParserType);
 
     if (!mIsCSVParsingEnabled)
     {
-        const string c_InFile{_getInputFile()};
-        const string c_OutFile{_getOutputFile()};
+        const std::string c_InFile{_getInputFile()};
+        const std::string c_OutFile{_getOutputFile()};
 
         mInputStream.open(c_InFile);
 
@@ -215,49 +211,45 @@ int Application::_handleStatusCode() const
 void Application::_displayInvalidSettingsMessage()
 {
     system(scClearScreenCommand.c_str());
-    std::cout << "Invalid settings detected. Please check your system settings and try again" << std::endl << std::endl;
+    std::cout << "Invalid settings detected. Please check your system settings and try again\n\n";
 }
 
 void Application::_displayParserNotCreatedMessage()
 {
     system(scClearScreenCommand.c_str());
-    std::cout << "Error in initializing parsing functionality. Application aborted" << std::endl << std::endl;
+    std::cout << "Error in initializing parsing functionality. Application aborted\n\n";
 }
 
 void Application::_displayMenu()
 {
-    using namespace std;
-
-    cout << "Please choose between following options:" << endl << endl;
-    cout << "1 + ENTER: read the defined connections from file connectiondefinitions.csv and write the partial input data into file connectioninput.csv" << endl;
-    cout << "2 + ENTER: read the input data from file connectioninput.csv and write the labeling information into file labellingtable.csv" << endl << endl;
-    cout << "Press ENTER to exit the application" << endl << endl;
+    std::cout << "Please choose between following options:\n\n";
+    std::cout << "1 + ENTER: read the defined connections from file connectiondefinitions.csv and write the partial input data into file connectioninput.csv\n";
+    std::cout << "2 + ENTER: read the input data from file connectioninput.csv and write the labeling information into file labellingtable.csv\n\n";
+    std::cout << "Press ENTER to exit the application\n\n";
 }
 
 void Application::_displayGreetingAndVersion()
 {
     system(scClearScreenCommand.c_str());
-    std::cout << "LabelCalculator v1.0" << std::endl << std::endl;
-    std::cout << "Hello, " << AppSettings::getInstance()->getUsername() << "!" << std::endl << std::endl;
+    std::cout << "LabelCalculator v1.0\n\n";
+    std::cout << "Hello, " << AppSettings::getInstance()->getUsername() << "!\n\n";
 }
 
 void Application::_displayInvalidInputMessage()
 {
     system(scClearScreenCommand.c_str());
-    std::cout << "Invalid input. Please try again" << std::endl << std::endl;
+    std::cout << "Invalid input. Please try again\n\n";
 }
 
 void Application::_displayAbortMessage()
 {
     system(scClearScreenCommand.c_str());
-    std::cout << "Application terminated by user" << std::endl << std::endl;
+    std::cout << "Application terminated by user\n\n";
 }
 
 void Application::_displayFileOpeningErrorMessage() const
 {
-    using namespace std;
-
-    string file;
+    std::string file;
 
     switch(mStatusCode)
     {
@@ -276,46 +268,42 @@ void Application::_displayFileOpeningErrorMessage() const
         assert(false);
     }
 
-    const string c_Operation{StatusCode::INPUT_FILE_NOT_OPENED == mStatusCode ? "reading" : "writing"};
+    const std::string c_Operation{StatusCode::INPUT_FILE_NOT_OPENED == mStatusCode ? "reading" : "writing"};
 
     system(scClearScreenCommand.c_str());
-    cerr << "Error! File cannot be opened for " << c_Operation << "." << endl << endl;
-    cerr << "File path: "<< file << endl << endl;
-    cerr << "The file might not exist or the user might not have the required permissions to open it." << endl << endl;
+    std::cerr << "Error! File cannot be opened for " << c_Operation << ".\n\n";
+    std::cerr << "File path: "<< file << "\n\n";
+    std::cerr << "The file might not exist or the user might not have the required permissions to open it.\n\n";
 }
 
 void Application::_displayParsingErrorMessage() const
 {
-    using namespace std;
-
-    const string c_InputFile{_getInputFile()};
+    const std::string c_InputFile{_getInputFile()};
 
     system(scClearScreenCommand.c_str());
-    cerr << "One or more errors occured!" << endl << endl;
-    cerr << "Please check the error report in the error file: " << endl << endl;
-    cerr << mParsingErrorsFile << endl << endl;
-    cerr << "Please correct the input file and then try again" << endl << endl;
-    cerr << "Input file: " << endl << endl << c_InputFile << endl << endl;
-    cerr << "Thank you for using LabelCalculator!" << endl << endl;
+    std::cerr << "One or more errors occured!\n\n";
+    std::cerr << "Please check the error report in the error file: \n\n";
+    std::cerr << mParsingErrorsFile << "\n\n";
+    std::cerr << "Please correct the input file and then try again\n\n";
+    std::cerr << "Input file: \n\n" << c_InputFile << "\n\n";
+    std::cerr << "Thank you for using LabelCalculator!\n\n";
 }
 
 void Application::_displaySuccessMessage(bool additionalOutputRequired) const
 {
-    using namespace std;
-
-    const string c_OutputFile{_getOutputFile()};
+    const std::string c_OutputFile{_getOutputFile()};
 
     system(scClearScreenCommand.c_str());
-    cout << "The program ended succesfully. " << endl << endl;
-    cout << "Please view the output file: " << endl << endl;
-    cout << c_OutputFile << endl << endl;
+    std::cout << "The program ended succesfully. \n\n";
+    std::cout << "Please view the output file: \n\n";
+    std::cout << c_OutputFile << "\n\n";
 
     if (additionalOutputRequired)
     {
-        cout << "Please go on with the next step by filling in the connectioninput.csv file with the needed info" << endl << endl;
+        std::cout << "Please go on with the next step by filling in the connectioninput.csv file with the needed info\n\n";
     }
 
-    cout << "Thank you for using LabelCalculator!" << endl << endl;
+    std::cout << "Thank you for using LabelCalculator!\n\n";
 }
 
 std::string Application::_getInputFile() const

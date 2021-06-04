@@ -1,16 +1,16 @@
 #include "applicationutils.h"
 #include "parserutils.h"
 
-DeviceTypeID getDeviceTypeID(const std::string& deviceType)
+Data::DeviceTypeID Utilities::getDeviceTypeID(const std::string& deviceType)
 {
-    DeviceTypeID deviceTypeID{DeviceTypeID::UNKNOWN_DEVICE};
+    Data::DeviceTypeID deviceTypeID{Data::DeviceTypeID::UNKNOWN_DEVICE};
 
     std::string deviceTypeLowerCase{deviceType};
     convertStringCase(deviceTypeLowerCase, false);
 
-    std::map<std::string, DeviceTypeID>::const_iterator it{c_DeviceTypeTextToIDMapping.find(deviceTypeLowerCase)};
+    std::map<std::string, Data::DeviceTypeID>::const_iterator it{Data::c_DeviceTypeTextToIDMapping.find(deviceTypeLowerCase)};
 
-    if (it != c_DeviceTypeTextToIDMapping.cend())
+    if (it != Data::c_DeviceTypeTextToIDMapping.cend())
     {
         deviceTypeID = it->second;
     }
@@ -18,11 +18,11 @@ DeviceTypeID getDeviceTypeID(const std::string& deviceType)
     return deviceTypeID;
 }
 
-std::string getDeviceTypeAsString(DeviceTypeID deviceTypeID)
+std::string Utilities::getDeviceTypeAsString(Data::DeviceTypeID deviceTypeID)
 {
     std::string deviceType;
 
-    for (std::map<std::string, DeviceTypeID>::const_iterator it{c_DeviceTypeTextToIDMapping.cbegin()}; it != c_DeviceTypeTextToIDMapping.cend(); ++it)
+    for (std::map<std::string, Data::DeviceTypeID>::const_iterator it{Data::c_DeviceTypeTextToIDMapping.cbegin()}; it != Data::c_DeviceTypeTextToIDMapping.cend(); ++it)
     {
         if (deviceTypeID == it->second)
         {

@@ -44,7 +44,7 @@ private:
     /* This function checks the format of the connection of the first device from each row of the connectiondefinitions.csv file to another device from the row.
        If the format is correct (true returned) it will also fill in the two arguments with the U placement of the other device and the number of connections between the two.
     */
-    static bool _parseConnectionFormatting(const std::string& source, UNumber_t& secondDevice, size_t& connectionsCount);
+    static bool _parseConnectionFormatting(const std::string& source, Data::UNumber_t& secondDevice, size_t& connectionsCount);
 
     /* This function creates the template parameters (including device type and U position) for each device.
        These parameters are being filled in into output file (connection input file) for each entry where the device is connected to another one.
@@ -55,15 +55,15 @@ private:
        For each device the type will be memorized at the index representing the lowest U position occupied within rack.
        The vector will have 50 elements (maximum rack size).
     */
-    std::vector<DeviceTypeID> mMapping;
+    std::vector<Data::DeviceTypeID> mMapping;
 
     /* Stores the U positions (lowest in rack, e.g. U5 for a device occupying U5-10) of all discovered devices (in the order of their discovery).
        Storing occurs in decreasing order of their appearance (first device is the one from the highest U position).
     */
-    std::vector<UNumber_t> mUNumbers;
+    std::vector<Data::UNumber_t> mUNumbers;
 
     /* stores the devices to which each device from a csv line connects */
-    std::vector<std::vector<UNumber_t>> mConnectedTo;
+    std::vector<std::vector<Data::UNumber_t>> mConnectedTo;
 
     /* stores the number of connections to each device mentioned in previous vector */
     std::vector<std::vector<size_t>> mConnectionsCount;
