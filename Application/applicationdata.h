@@ -2,6 +2,7 @@
 #define APPLICATIONDATA_H
 
 #include <map>
+#include <string>
 
 using UNumber_t = size_t;
 
