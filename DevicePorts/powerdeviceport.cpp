@@ -59,20 +59,20 @@ void PDUPort::computeDescriptionAndLabel()
             }
             else
             {
-                mDescription = c_InvalidLoadSegmentNumberErrorText;
-                mLabel = c_LabelErrorText;
+                mDescription = Utilities::c_InvalidLoadSegmentNumberErrorText;
+                mLabel = Utilities::c_LabelErrorText;
             }
         }
         else
         {
-            mDescription = c_InvalidPortNumberErrorText;
-            mLabel = c_LabelErrorText;
+            mDescription = Utilities::c_InvalidPortNumberErrorText;
+            mLabel = Utilities::c_LabelErrorText;
         }
     }
     else
     {
-        mDescription = c_InvalidPlacementErrorText;
-        mLabel = c_LabelErrorText;
+        mDescription = Utilities::c_InvalidPlacementErrorText;
+        mLabel = Utilities::c_LabelErrorText;
     }
 }
 
@@ -112,14 +112,14 @@ void ExtensionBarPort::computeDescriptionAndLabel()
         }
         else
         {
-            mDescription = c_InvalidPortNumberErrorText;
-            mLabel = c_LabelErrorText;
+            mDescription = Utilities::c_InvalidPortNumberErrorText;
+            mLabel = Utilities::c_LabelErrorText;
         }
     }
     else
     {
-        mDescription = c_InvalidPlacementErrorText;
-        mLabel = c_LabelErrorText;
+        mDescription = Utilities::c_InvalidPlacementErrorText;
+        mLabel = Utilities::c_LabelErrorText;
     }
 }
 
@@ -154,13 +154,13 @@ void UPSPort::computeDescriptionAndLabel()
         }
         else
         {
-            mDescription = c_InvalidLoadSegmentNumberErrorText;
-            mLabel = c_LabelErrorText;
+            mDescription = Utilities::c_InvalidLoadSegmentNumberErrorText;
+            mLabel = Utilities::c_LabelErrorText;
         }
     }
     else // power port
     {
-        mDescription = c_InvalidPortNumberErrorText;
-        mLabel = c_LabelErrorText;
+        mDescription = Utilities::c_InvalidPortNumberErrorText;
+        mLabel = Utilities::c_LabelErrorText;
     }
 }

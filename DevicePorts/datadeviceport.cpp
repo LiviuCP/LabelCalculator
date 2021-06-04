@@ -36,14 +36,14 @@ void LANSwitchPort::computeDescriptionAndLabel()
         }
         else
         {
-            mDescription = c_UnknownPortTypeErrorText;
-            mLabel = c_LabelErrorText;
+            mDescription = Utilities::c_UnknownPortTypeErrorText;
+            mLabel = Utilities::c_LabelErrorText;
         }
     }
     else
     {
-        mDescription = c_InvalidPortNumberErrorText;
-        mLabel = c_LabelErrorText;
+        mDescription = Utilities::c_InvalidPortNumberErrorText;
+        mLabel = Utilities::c_LabelErrorText;
     }
 }
 
@@ -85,14 +85,14 @@ void SANSwitchPort::computeDescriptionAndLabel()
         }
         else
         {
-            mDescription = c_UnknownPortTypeErrorText;
-            mLabel = c_LabelErrorText;
+            mDescription = Utilities::c_UnknownPortTypeErrorText;
+            mLabel = Utilities::c_LabelErrorText;
         }
     }
     else
     {
-        mDescription = c_InvalidPortNumberErrorText;
-        mLabel = c_LabelErrorText;
+        mDescription = Utilities::c_InvalidPortNumberErrorText;
+        mLabel = Utilities::c_LabelErrorText;
     }
 }
 
@@ -134,14 +134,14 @@ void InfinibandSwitchPort::computeDescriptionAndLabel()
         }
         else
         {
-            mDescription = c_UnknownPortTypeErrorText;
-            mLabel = c_LabelErrorText;
+            mDescription = Utilities::c_UnknownPortTypeErrorText;
+            mLabel = Utilities::c_LabelErrorText;
         }
     }
     else
     {
-        mDescription = c_InvalidPortNumberErrorText;
-        mLabel = c_LabelErrorText;
+        mDescription = Utilities::c_InvalidPortNumberErrorText;
+        mLabel = Utilities::c_LabelErrorText;
     }
 }
 
@@ -178,14 +178,14 @@ void KVMSwitchPort::computeDescriptionAndLabel()
         }
         else
         {
-            mDescription = c_UnknownPortTypeErrorText;
-            mLabel = c_LabelErrorText;
+            mDescription = Utilities::c_UnknownPortTypeErrorText;
+            mLabel = Utilities::c_LabelErrorText;
         }
     }
     else
     {
-        mDescription = c_InvalidPortNumberErrorText;
-        mLabel = c_LabelErrorText;
+        mDescription = Utilities::c_InvalidPortNumberErrorText;
+        mLabel = Utilities::c_LabelErrorText;
     }
 }
 
@@ -252,14 +252,14 @@ void ServerPort::computeDescriptionAndLabel()
         }
         else
         {
-            mDescription = c_UnknownPortTypeErrorText;
-            mLabel = c_LabelErrorText;
+            mDescription = Utilities::c_UnknownPortTypeErrorText;
+            mLabel = Utilities::c_LabelErrorText;
         }
     }
     else
     {
-        mDescription = c_InvalidPortNumberErrorText;
-        mLabel = c_LabelErrorText;
+        mDescription = Utilities::c_InvalidPortNumberErrorText;
+        mLabel = Utilities::c_LabelErrorText;
     }
 }
 
@@ -307,8 +307,8 @@ void StoragePort::computeDescriptionAndLabel()
             }
             else
             {
-                mDescription = c_InvalidControllerNumberErrorText;
-                mLabel = c_LabelErrorText;
+                mDescription = Utilities::c_InvalidControllerNumberErrorText;
+                mLabel = Utilities::c_LabelErrorText;
             }
         }
         else if ("P" == mPortType) // power supply
@@ -318,14 +318,14 @@ void StoragePort::computeDescriptionAndLabel()
         }
         else
         {
-            mDescription = c_UnknownPortTypeErrorText;
-            mLabel = c_LabelErrorText;
+            mDescription = Utilities::c_UnknownPortTypeErrorText;
+            mLabel = Utilities::c_LabelErrorText;
         }
     }
     else
     {
-        mDescription = c_InvalidPortNumberErrorText;
-        mLabel = c_LabelErrorText;
+        mDescription = Utilities::c_InvalidPortNumberErrorText;
+        mLabel = Utilities::c_LabelErrorText;
     }
 }
 
@@ -375,8 +375,8 @@ void BladeServerPort::computeDescriptionAndLabel()
             }
             else
             {
-                mDescription = c_InvalidPortNumberErrorText;
-                mLabel = c_LabelErrorText;
+                mDescription = Utilities::c_InvalidPortNumberErrorText;
+                mLabel = Utilities::c_LabelErrorText;
             }
         }
         else if ("MG" == mModuleType) // management module
@@ -391,13 +391,13 @@ void BladeServerPort::computeDescriptionAndLabel()
         }
         else
         {
-            mDescription = c_UnknownModuleTypeErrorText;
-            mLabel = c_LabelErrorText;
+            mDescription = Utilities::c_UnknownModuleTypeErrorText;
+            mLabel = Utilities::c_LabelErrorText;
         }
     }
     else
     {
-        mDescription = c_InvalidModuleNumberErrorText;
-        mLabel = c_LabelErrorText;
+        mDescription = Utilities::c_InvalidModuleNumberErrorText;
+        mLabel = Utilities::c_LabelErrorText;
     }
 }
