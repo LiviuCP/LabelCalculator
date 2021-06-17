@@ -86,11 +86,13 @@ namespace Data
 
     static const std::string c_CablePartNumberPlaceholder{"CBL_PART_NR"};
 
-    static const std::string c_InputHeader{"__Cable part number__,__Source device type__,__Source U number__,__Parameter1__,__Parameter2__,"
-                                           "__Parameter3__,__Destination device type__,__Destination U number__,__Parameter1__,__Parameter2__,__Parameter3__"};
+    static const std::string c_ConnectionDefinitionsHeader {"U,Device,Connection1,Connection2,Connection3,Connection4,Connection5,Connection6,Connection7,Connection8"};
 
-    static const std::string c_OutputHeader{"__Item number__,__Cable part number__,__Source device description__,"
-                                            "__Source label__,__Destination device description__,__Destination label__"};
+    static const std::string c_ConnectionInputHeader{"__Cable part number__,__Source device type__,__Source U number__,__Parameter1__,__Parameter2__,"
+                                                     "__Parameter3__,__Destination device type__,__Destination U number__,__Parameter1__,__Parameter2__,__Parameter3__"};
+
+    static const std::string c_LabellingTableHeader{"__Item number__,__Cable part number__,__Source device description__,"
+                                                    "__Source label__,__Destination device description__,__Destination label__"};
 }
 
 #endif // APPLICATIONDATA_H

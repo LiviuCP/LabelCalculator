@@ -1,13 +1,15 @@
 #include <iostream>
 #include <cassert>
 
+#include "preparse.h"
 #include "appsettings.h"
 #include "application.h"
 
 Application::Application()
     : mParserType{ParserCreator::ParserTypes::UNKNOWN}
     , mIsInitialized{false}
-    , mIsCSVParsingEnabled{false}
+    , mIsFileIOEnabled{false}
+    , mIsCSVParsingRequired{true}
     , mStatusCode{StatusCode::UNINITIALIZED}
 {
     _init();
@@ -30,35 +32,43 @@ int Application::run()
         _displayGreetingAndVersion();
         _displayMenu();
 
-        const bool c_InputProvided{_handleUserInput()};
+        const bool c_UserInputProvided{_handleUserInput()};
 
-        if (c_InputProvided)
+        if (c_UserInputProvided)
         {
-            _enableCSVParsing();
+            _enableFileInputOutput();
 
-            if (mIsCSVParsingEnabled)
+            if (mIsFileIOEnabled)
             {
-                ParserCreator parserCreator;
-                assert(!parserCreator.isParserAlreadyCreated());
-
-                ParserPtr pParser{parserCreator.createParser(mParserType, &mInputStream, &mOutputStream, &mErrorStream)};
-
-                if (nullptr != pParser)
+                if (mIsCSVParsingRequired)
                 {
-                    const bool c_ParsingErrorsOccurred{pParser->parse()};
+                    ParserCreator parserCreator;
+                    assert(!parserCreator.isParserAlreadyCreated());
 
-                    if (!c_ParsingErrorsOccurred)
+                    ParserPtr pParser{parserCreator.createParser(mParserType, &mInputStream, &mOutputStream, &mErrorStream)};
+
+                    if (nullptr != pParser)
                     {
-                        mStatusCode = StatusCode::SUCCESS;
+                        const bool c_ParsingErrorsOccurred{pParser->parse()};
+
+                        if (!c_ParsingErrorsOccurred)
+                        {
+                            mStatusCode = StatusCode::SUCCESS;
+                        }
+                        else
+                        {
+                            mStatusCode = StatusCode::PARSING_ERROR;
+                        }
                     }
                     else
                     {
-                        mStatusCode = StatusCode::PARSING_ERROR;
+                        mStatusCode = StatusCode::PARSER_NOT_CREATED;
                     }
                 }
                 else
                 {
-                    mStatusCode = StatusCode::PARSER_NOT_CREATED;
+                    Utilities::createEmptyConnectionDefinitionsFile(mOutputStream);
+                    mStatusCode = StatusCode::SUCCESS;
                 }
             }
         }
@@ -75,7 +85,7 @@ int Application::run()
 
 void Application::_init()
 {
-    assert(!mIsCSVParsingEnabled);
+    assert(!mIsFileIOEnabled);
 
     if (!mIsInitialized)
     {
@@ -104,34 +114,39 @@ void Application::_init()
     }
 }
 
-void Application::_enableCSVParsing()
+void Application::_enableFileInputOutput()
 {
     assert(mIsInitialized);
-    assert(ParserCreator::ParserTypes::UNKNOWN != mParserType);
 
-    if (!mIsCSVParsingEnabled)
+    if (!mIsFileIOEnabled)
     {
-        const std::string c_InFile{_getInputFile()};
         const std::string c_OutFile{_getOutputFile()};
+        mOutputStream.open(c_OutFile);
 
-        mInputStream.open(c_InFile);
-
-        if (mInputStream.is_open())
+        if (mOutputStream.is_open())
         {
-            mOutputStream.open(c_OutFile);
-
-            if(mOutputStream.is_open())
+            if (mIsCSVParsingRequired)
             {
-                mIsCSVParsingEnabled = true;
+                const std::string c_InFile{_getInputFile()};
+                mInputStream.open(c_InFile);
+
+                if (mInputStream.is_open())
+                {
+                    mIsFileIOEnabled = true; // proceed to parsing (options 1 & 2)
+                }
+                else
+                {
+                    mStatusCode = StatusCode::INPUT_FILE_NOT_OPENED;
+                }
             }
             else
             {
-                mStatusCode = StatusCode::OUTPUT_FILE_NOT_OPENED;
+                mIsFileIOEnabled = true; // proceed to generating an empty connection definitions file (option 3)
             }
         }
         else
         {
-            mStatusCode = StatusCode::INPUT_FILE_NOT_OPENED;
+            mStatusCode = StatusCode::OUTPUT_FILE_NOT_OPENED;
         }
     }
 }
@@ -153,6 +168,11 @@ bool Application::_handleUserInput()
         else if ("2" == option)
         {
             mParserType = ParserCreator::ParserTypes::CONNECTION_INPUT;
+            validInputProvided = true;
+        }
+        else if ("3" == option)
+        {
+            mIsCSVParsingRequired = false;
             validInputProvided = true;
         }
         else if (0u == option.size())
@@ -178,7 +198,6 @@ int Application::_handleStatusCode() const
         break;
     case StatusCode::SUCCESS:
     {
-        assert(ParserCreator::ParserTypes::UNKNOWN != mParserType);
         const bool c_DisplayFurtherInstructions{ParserCreator::ParserTypes::CONNECTION_DEFINITION == mParserType ? true : false};
         _displaySuccessMessage(c_DisplayFurtherInstructions);
     }
@@ -224,7 +243,8 @@ void Application::_displayMenu()
 {
     std::cout << "Please choose between following options:\n\n";
     std::cout << "1 + ENTER: read the defined connections from file connectiondefinitions.csv and write the partial input data into file connectioninput.csv\n";
-    std::cout << "2 + ENTER: read the input data from file connectioninput.csv and write the labeling information into file labellingtable.csv\n\n";
+    std::cout << "2 + ENTER: read the input data from file connectioninput.csv and write the labeling information into file labellingtable.csv\n";
+    std::cout << "3 + ENTER: create an empty connection definitions file\n\n";
     std::cout << "Press ENTER to exit the application\n\n";
 }
 
@@ -337,6 +357,10 @@ std::string Application::_getOutputFile() const
     else if (ParserCreator::ParserTypes::CONNECTION_INPUT == mParserType)
     {
         outputFile = mLabellingOutputFile;
+    }
+    else if (!mIsCSVParsingRequired)
+    {
+        outputFile = mConnectionDefinitionsFile;
     }
     else
     {

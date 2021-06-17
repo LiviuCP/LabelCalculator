@@ -33,4 +33,3 @@ std::string Utilities::getDeviceTypeAsString(Data::DeviceTypeID deviceTypeID)
 
     return deviceType;
 }
-

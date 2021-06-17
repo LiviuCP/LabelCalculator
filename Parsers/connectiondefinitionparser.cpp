@@ -7,7 +7,7 @@
 #include "connectiondefinitionparser.h"
 
 ConnectionDefinitionParser::ConnectionDefinitionParser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream)
-    : Parser{pInputStream, pOutputStream, pErrorStream, Data::c_InputHeader}
+    : Parser{pInputStream, pOutputStream, pErrorStream, Data::c_ConnectionInputHeader}
 {
     mMapping.resize(Data::c_MaxNrOfRackUnits, Data::DeviceTypeID::NO_DEVICE); // initial value: no device
 }

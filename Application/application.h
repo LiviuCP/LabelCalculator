@@ -39,7 +39,7 @@ private:
 
     /* This function opens the input and output files for each of the options
     */
-    void _enableCSVParsing();
+    void _enableFileInputOutput();
 
     /* This function takes over the input from user and sets the parser type
     */
@@ -82,7 +82,8 @@ private:
     std::ofstream mErrorStream;
 
     bool mIsInitialized;
-    bool mIsCSVParsingEnabled;
+    bool mIsFileIOEnabled;
+    bool mIsCSVParsingRequired;
 
     StatusCode mStatusCode;
 };

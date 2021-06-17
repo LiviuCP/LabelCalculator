@@ -7,7 +7,7 @@
 #include "connectioninputparser.h"
 
 ConnectionInputParser::ConnectionInputParser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream)
-    : Parser(pInputStream, pOutputStream, pErrorStream, Data::c_OutputHeader)
+    : Parser(pInputStream, pOutputStream, pErrorStream, Data::c_LabellingTableHeader)
     , mRowPortsStillNotParsedCount{0}
     , mpDevicePortsFactory{nullptr}
 {

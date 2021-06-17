@@ -14,6 +14,7 @@ SOURCES += \
     Application/main.cpp \
     Application/application.cpp \
     Application/applicationutils.cpp \
+    Parsers/preparse.cpp \
     Parsers/parsercreator.cpp \
     Parsers/parser.cpp \
     Parsers/connectiondefinitionparser.cpp \
@@ -32,6 +33,7 @@ HEADERS += \
     Application/application.h \
     Application/applicationdata.h \
     Application/applicationutils.h \
+    Parsers/preparse.h \
     Parsers/parsercreator.h \
     Parsers/parser.h \
     Parsers/connectiondefinitionparser.h \
