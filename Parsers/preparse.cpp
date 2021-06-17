@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include "applicationdata.h"
 #include "preparse.h"
 
