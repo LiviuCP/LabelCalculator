@@ -290,10 +290,15 @@ void StoragePort::computeDescriptionAndLabel()
             mDescription += " - management port"; // single management port
             mLabel += "_MGMT";
         }
-        else
+        else if (Utilities::isDigitString(mControllerNr))
         {
             mDescription += " - controller " + mControllerNr + " - management port"; // one management port per controller
             mLabel += "_C" + mControllerNr + "_MGMT";
+        }
+        else
+        {
+            mDescription = Utilities::c_InvalidControllerNumberErrorText;
+            mLabel = Utilities::c_LabelErrorText;
         }
     }
     else if (Utilities::isDigitString(mPortNumber))
