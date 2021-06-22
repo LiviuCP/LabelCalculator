@@ -1,0 +1,19 @@
+Error code,Error description,Chosen option,User action
+1,A CSV cell is empty,1 or 2,Fill in the empty cell with the required data (for parameters not used fill in ‘-’)
+2,Maximum number of input characters exceeded.,2,The total number of characters entered for device port parameters is exceeded. Enter less characters for one or more parameters (e.g. don’t enter a large number for the port like 223456783).
+,,,The number of characters cannot be exceeded due to the 16 characters limit for a label. Based on this limit a maximum number of characters to be entered by user is determined (e.g. 6 characters for a PDU).
+3,The entered device type is not known by application.,1 or 2,"Check the device types in deviceportinput.csv. This error might be caused by a typo, e.g. when entering “sta” instead of “sto” for storage devices."
+4,Fewer cells than required have been filled in by user on the row.,2,This can occur when the user accidentally erased one or more columns from connectioninput.csv. Check the file and correct the input accordingly. The parameters required for each device port type can be found in deviceportinput.csv.
+5,The connection definition format is not correct.,1,"The format of the connection is invalid, e.g. 40/a (current device connected to device located U40, “a” connections (cables). The “a” should be replaced with the actual number of connections, e. g. 2: 40/2."
+6,The target device U number is out of range.,1,This occurs when the target device is not within the 1U – 50U range. This is the allowed interval within rack.
+7,The target device position does not exist in rack.,1,This occurs when the mentioned connection contains a device that hasn’t been entered within connectiondefinitions.csv file at that U position.
+,,,Example: device from U20 has a 39/2 connection. However at U39 no device has been entered.
+,,,"It might also be that a connection to a lower placed device has been entered, e.g. current device from U20 is connected to a device from U10, 10/2 for example. This is not allowed as connections are read bottom-up."
+8,The device is connected to itself.,1,A device can only be connected to a different device. For example if the device located at U20 has a 20/2 connection this means it is connected to itself. This should be corrected by user.
+9,The number of connections is null.,1,A device should be connected to another device by using at least one cable. This means a 20/0 connection is invalid. Increase the number of cables (connections) to at least 1 (so 20/1).
+10,Invalid characters contained in the current cell.,2,"For device port parameters only letters, numbers and the ‘-’ character are allowed. The user should not enter any other characters."
+11,Invalid device U position,2,The device U position is either not a positive integer or is not contained within the 1U-50U interval. This is somehow different from error 6 where only the out-of-range-ness is considered. Invalid characters are being handled in error 5.
+,,,However same corrective actions are required.
+12,The connection input file is empty.,2,"This occurs when no data is contained in this file. Please enter at least one data row. Header row is not counted to entered data, yet it is still read. This means data rows (payload) should start from row 2 in the input csv file."
+13,No connections are defined between devices.,1,This occurs when devices are defined within connection definitions file but no connection between them are defined starting with third column.
+,,,"The user should define at least one device-to-device connection, e.g. 20/4 for device placed at U10 otherwise there is nothing to process."
