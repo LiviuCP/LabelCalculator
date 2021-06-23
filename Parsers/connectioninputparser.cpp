@@ -260,8 +260,8 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
         }
         else
         {
-            ErrorPtr pInvalidDeviceUPositionError{std::make_shared<InvalidDeviceUPositionError>(rowIndex + Utilities::c_RowNumberOffset, mFileColumnNumber + 1, *mpErrorStream)};
-            _storeParsingErrorAndLocation(pInvalidDeviceUPositionError);
+            ErrorPtr pInvalidUPositionValueError{std::make_shared<InvalidUPositionValueError>(rowIndex + Utilities::c_RowNumberOffset, mFileColumnNumber + 1, *mpErrorStream)};
+            _storeParsingErrorAndLocation(pInvalidUPositionValueError);
             canContinueRowParsing = false;
         }
     }

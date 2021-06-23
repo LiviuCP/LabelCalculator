@@ -72,12 +72,12 @@ void FewerCellsError::execute()
     Error::execute();
 }
 
-WrongFormatError::WrongFormatError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
+WrongConnectionFormatError::WrongConnectionFormatError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
     : Error{ErrorCode::WRONG_CONNECTION_FORMAT, fileRowNumber, fileColumnNumber, errorStream}
 {
 }
 
-void WrongFormatError::execute()
+void WrongConnectionFormatError::execute()
 {
     mErrorStream << "Error: format of the connection is wrong\n";
     mErrorStream << "Row number: " << mFileRowNumber << "    "<<"Column number: "<< mFileColumnNumber << "\n";
@@ -85,28 +85,29 @@ void WrongFormatError::execute()
     Error::execute();
 }
 
-WrongUNumberError::WrongUNumberError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
-    : Error{ErrorCode::PLACEMENT_OUT_OF_RANGE, fileRowNumber, fileColumnNumber, errorStream}
+DeviceUPositionOutOfRangeError::DeviceUPositionOutOfRangeError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
+    : Error{ErrorCode::DEVICE_U_POSITION_OUT_OF_RANGE, fileRowNumber, fileColumnNumber, errorStream}
 {
 }
 
-void WrongUNumberError::execute()
+void DeviceUPositionOutOfRangeError::execute()
 {
-    mErrorStream << "Error: U number of the device is out of range (should be between 1 and 50)\n";
+    mErrorStream << "Error: U number of the device is out of range\n";
+    mErrorStream << "Each device should be placed between 1U and 50U";
     mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << "\n";
 
     Error::execute();
 }
 
-InvalidTargetDevicePositionError::InvalidTargetDevicePositionError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
-    : Error{ErrorCode::INVALID_TARGET_DEVICE_POSITION, fileRowNumber, fileColumnNumber, errorStream}
+TargetDeviceNotFoundError::TargetDeviceNotFoundError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
+    : Error{ErrorCode::TARGET_DEVICE_NOT_FOUND, fileRowNumber, fileColumnNumber, errorStream}
 {
 }
 
-void InvalidTargetDevicePositionError::execute()
+void TargetDeviceNotFoundError::execute()
 {
-    mErrorStream << "Error: the target device position is invalid.\n";
-    mErrorStream << "Either no device is mounted within rack in the mentioned U position or the target position is lower than the one of the source device.\n";
+    mErrorStream << "Error: the target device has not been found.\n";
+    mErrorStream << "Either no device is mounted within rack at the mentioned U position or the target position is lower than the one of the source device.\n";
     mErrorStream << "Please note that the connections should always be defined bottom-up.\n";
     mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << "\n";
 
@@ -154,12 +155,12 @@ void InvalidCharactersError::execute()
     Error::execute();
 }
 
-InvalidDeviceUPositionError::InvalidDeviceUPositionError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
-    : Error{ErrorCode::INVALID_DEVICE_U_POSITION, fileRowNumber, fileColumnNumber, errorStream}
+InvalidUPositionValueError::InvalidUPositionValueError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
+    : Error{ErrorCode::INVALID_U_POSITION_VALUE, fileRowNumber, fileColumnNumber, errorStream}
 {
 }
 
-void InvalidDeviceUPositionError::execute()
+void InvalidUPositionValueError::execute()
 {
     mErrorStream << "Error: the device U position is invalid.\n";
     mErrorStream << "The cell is empty, contains non-numeric characters or the number is not within the required range.\n";
@@ -182,14 +183,14 @@ void EmptyConnectionsInputFileError::execute()
     Error::execute();
 }
 
-NoConnectedDevicesDefinedError::NoConnectedDevicesDefinedError(std::ofstream& errorStream)
-    : Error{ErrorCode::NO_CONNECTED_DEVICES, 2u, 1u, errorStream}
+NoConnectionsDefinedError::NoConnectionsDefinedError(std::ofstream& errorStream)
+    : Error{ErrorCode::NO_CONNECTIONS_DEFINED, 2u, 1u, errorStream}
 {
 }
 
-void NoConnectedDevicesDefinedError::execute()
+void NoConnectionsDefinedError::execute()
 {
-    mErrorStream << "Error: the connection definitions file contains no connected devices.\n";
+    mErrorStream << "Error: the connection definitions file contains no devices or no connections between them.\n";
     mErrorStream << "File: " << Utilities::getConnectionDefinitionsFile() << "\n";
 
     Error::execute();

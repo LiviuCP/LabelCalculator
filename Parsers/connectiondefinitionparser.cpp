@@ -66,7 +66,7 @@ bool ConnectionDefinitionParser::_parseInput()
 
         if (!areDeviceConnectionsDefined)
         {
-            ErrorPtr pEmptyConnectionsInputFileError{std::make_shared<NoConnectedDevicesDefinedError>(*mpErrorStream)};
+            ErrorPtr pEmptyConnectionsInputFileError{std::make_shared<NoConnectionsDefinedError>(*mpErrorStream)};
             _storeParsingErrorAndLocation(pEmptyConnectionsInputFileError);
         }
     }
@@ -243,15 +243,15 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
 
         if(c_IsConnectionFormattingInvalid) // checking if the connection format is correct (e.g. 20/3: 3 connections to device located at U20)
         {
-            pError = std::make_shared<WrongFormatError>(rowIndex + Utilities::c_RowNumberOffset, mFileColumnNumber, *mpErrorStream);
+            pError = std::make_shared<WrongConnectionFormatError>(rowIndex + Utilities::c_RowNumberOffset, mFileColumnNumber, *mpErrorStream);
         }
         else if (secondDevice <= 0 || secondDevice > Data::c_MaxNrOfRackUnits) // checking if the device is in the accepted U interval within rack
         {
-            pError = std::make_shared<WrongUNumberError>(rowIndex + Utilities::c_RowNumberOffset, mFileColumnNumber, *mpErrorStream);
+            pError = std::make_shared<DeviceUPositionOutOfRangeError>(rowIndex + Utilities::c_RowNumberOffset, mFileColumnNumber, *mpErrorStream);
         }
         else if (Data::DeviceTypeID::NO_DEVICE == mMapping[secondDevice - 1]) // check if the second device is actually placed within rack (contained in mapping table)
         {
-            pError = std::make_shared<InvalidTargetDevicePositionError>(rowIndex + Utilities::c_RowNumberOffset, mFileColumnNumber, *mpErrorStream);
+            pError = std::make_shared<TargetDeviceNotFoundError>(rowIndex + Utilities::c_RowNumberOffset, mFileColumnNumber, *mpErrorStream);
         }
         else if (Data::c_MaxNrOfRackUnits - rowIndex == secondDevice) // connection of a device to itself (connection loop) is not allowed
         {

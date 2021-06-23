@@ -43,28 +43,28 @@ public:
 };
 
 // wrong connection format in connection definitions file
-class WrongFormatError final : public Error
+class WrongConnectionFormatError final : public Error
 {
 public:
-    WrongFormatError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
+    WrongConnectionFormatError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
 
     virtual void execute() override;
 };
 
 // invalid device placement U number in connection definitions file
-class WrongUNumberError final : public Error
+class DeviceUPositionOutOfRangeError final : public Error
 {
 public:
-    WrongUNumberError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
+    DeviceUPositionOutOfRangeError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
 
     virtual void execute() override;
 };
 
 // device mentioned in connection definitions file not contained in the mapping table (connection to nothing)
-class InvalidTargetDevicePositionError final : public Error
+class TargetDeviceNotFoundError final : public Error
 {
 public:
-    InvalidTargetDevicePositionError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
+    TargetDeviceNotFoundError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
 
     virtual void execute() override;
 };
@@ -96,11 +96,11 @@ public:
     virtual void execute() override;
 };
 
-// invalid characters contained in CSV cell
-class InvalidDeviceUPositionError final : public Error
+// invalid value of the device U position (either invalid characters or not in the required range)
+class InvalidUPositionValueError final : public Error
 {
 public:
-    InvalidDeviceUPositionError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
+    InvalidUPositionValueError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
 
     virtual void execute() override;
 };
@@ -113,10 +113,10 @@ public:
     virtual void execute() override;
 };
 
-class NoConnectedDevicesDefinedError final : public Error
+class NoConnectionsDefinedError final : public Error
 {
 public:
-    NoConnectedDevicesDefinedError(std::ofstream& errorStream);
+    NoConnectionsDefinedError(std::ofstream& errorStream);
 
     virtual void execute() override;
 };
