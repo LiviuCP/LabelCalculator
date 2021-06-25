@@ -112,7 +112,7 @@ bool ConnectionInputParser::_parseInput()
     }
     else
     {
-        ErrorPtr pEmptyConnectionsInputFileError{std::make_shared<EmptyConnectionsInputFileError>(*mpErrorStream)};
+        ErrorPtr pEmptyConnectionsInputFileError{std::make_shared<EmptyConnectionInputFileError>(*mpErrorStream)};
         _storeParsingErrorAndLocation(pEmptyConnectionsInputFileError);
     }
 

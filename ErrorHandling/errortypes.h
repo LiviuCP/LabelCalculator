@@ -92,10 +92,10 @@ public:
     virtual void execute() override;
 };
 
-class EmptyConnectionsInputFileError final : public Error
+class EmptyConnectionInputFileError final : public Error
 {
 public:
-    EmptyConnectionsInputFileError(std::ofstream& errorStream);
+    EmptyConnectionInputFileError(std::ofstream& errorStream);
 
     virtual void execute() override;
 };

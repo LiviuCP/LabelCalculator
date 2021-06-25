@@ -141,12 +141,12 @@ void InvalidUPositionValueError::execute()
     Error::execute();
 }
 
-EmptyConnectionsInputFileError::EmptyConnectionsInputFileError(std::ofstream& errorStream)
-    : Error{ErrorCode::EMPTY_CONNECTIONS_INPUT_FILE, 2u, 1u, errorStream}
+EmptyConnectionInputFileError::EmptyConnectionInputFileError(std::ofstream& errorStream)
+    : Error{ErrorCode::EMPTY_CONNECTION_INPUT_FILE, 2u, 1u, errorStream}
 {
 }
 
-void EmptyConnectionsInputFileError::execute()
+void EmptyConnectionInputFileError::execute()
 {
     mErrorStream << "Error: the connections input file contains no data.\n";
     mErrorStream << "File: " << Utilities::getConnectionInputFile() << "\n";
