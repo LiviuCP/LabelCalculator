@@ -10,7 +10,7 @@ public:
     PDUPort() = delete;
     PDUPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
-    void computeDescriptionAndLabel() override;
+    virtual void computeDescriptionAndLabel() override;
 
 protected:
     std::string mDevicePlacementType; // rack placement (vertical left/right, horizontal)
@@ -24,7 +24,7 @@ public:
     ExtensionBarPort() = delete;
     ExtensionBarPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
-    void computeDescriptionAndLabel() override;
+    virtual void computeDescriptionAndLabel() override;
 
 protected:
     std::string mDevicePlacementType; // rack placement (left/right)
@@ -37,7 +37,7 @@ public:
     UPSPort() = delete;
     UPSPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
-    void computeDescriptionAndLabel() override;
+    virtual void computeDescriptionAndLabel() override;
 
 protected:
     std::string mLoadSegmentNumber;

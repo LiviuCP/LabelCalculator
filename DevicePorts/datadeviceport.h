@@ -10,7 +10,7 @@ public:
     LANSwitchPort() = delete;
     LANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
-    void computeDescriptionAndLabel() override;
+    virtual void computeDescriptionAndLabel() override;
 
 protected:
     std::string mPortType;
@@ -23,7 +23,7 @@ public:
     SANSwitchPort() = delete;
     SANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
-    void computeDescriptionAndLabel() override;
+    virtual void computeDescriptionAndLabel() override;
 
 protected:
     std::string mPortType;
@@ -36,7 +36,7 @@ public:
     InfinibandSwitchPort() = delete;
     InfinibandSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
-    void computeDescriptionAndLabel() override;
+    virtual void computeDescriptionAndLabel() override;
 
 protected:
     std::string mPortType;
@@ -49,7 +49,7 @@ public:
     KVMSwitchPort() = delete;
     KVMSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
-    void computeDescriptionAndLabel() override;
+    virtual void computeDescriptionAndLabel() override;
 
 protected:
     std::string mPortType;
@@ -62,7 +62,7 @@ public:
     ServerPort() = delete;
     ServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
-    void computeDescriptionAndLabel() override;
+    virtual void computeDescriptionAndLabel() override;
 
 protected:
     std::string mPortType;
@@ -75,7 +75,7 @@ public:
     StoragePort() = delete;
     StoragePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
-    void computeDescriptionAndLabel() override;
+    virtual void computeDescriptionAndLabel() override;
 
 protected:
     std::string mControllerNr; // can be the controller number (for FC storage) or IO module number (for JBODs)
@@ -89,7 +89,7 @@ public:
     BladeServerPort() = delete;
     BladeServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
-    void computeDescriptionAndLabel() override;
+    virtual void computeDescriptionAndLabel() override;
 
 protected:
     std::string mModuleType; // blade system module type: interconnect, management module, power supply etc.
