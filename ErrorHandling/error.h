@@ -7,7 +7,6 @@
 enum class ErrorCode : unsigned short
 {
     EMPTY_CELL = 1u,
-    MAX_CHARS_EXCEEDED,
     UNKNOWN_DEVICE,
     FEWER_CELLS,
     WRONG_CONNECTION_FORMAT,

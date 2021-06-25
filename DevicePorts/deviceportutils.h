@@ -12,6 +12,8 @@ namespace Utilities
     static const std::string c_InvalidModuleNumberErrorText{"ERROR: THE MODULE NUMBER IS INVALID. PLEASE REVIEW INPUT FILE (connectioninput.csv)."};
     static const std::string c_InvalidLoadSegmentNumberErrorText{"ERROR. THE LOAD SEGMENT NUMBER IS INVALID. PLEASE REVIEW INPUT FILE (connectioninput.csv)."};
     static const std::string c_InvalidPortNumberErrorText{"ERROR: THE PORT NUMBER IS INVALID. PLEASE REVIEW INPUT FILE (connectioninput.csv)."};
+    static const std::string c_MaxLabelCharsCountExceededErrorText{"ERROR: THE MAXIMUM NUMBER OF LABEL CHARACTERS HAS BEEN EXCEEDED. PLEASE REVIEW INPUT FILE (connectioninput.csv)."};
+    static const std::string c_ExtraLabelCharactersText{"LABEL CHARACTERS COUNT EXCEEDED BY: "};
     static const std::string c_LabelErrorText{"ERROR!!!"};
 }
 

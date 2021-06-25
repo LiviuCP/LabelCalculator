@@ -14,7 +14,6 @@ public:
                const size_t fileRowNumber,
                const size_t fileColumnNumber,
                const size_t requiredNumberOfParameters,
-               const size_t maxAllowedCharsCount,
                const bool isSourceDevice);
 
     virtual ~DevicePort();
@@ -43,6 +42,10 @@ protected:
     */
     void _registerRequiredParameter(std::string* const pRequiredParameter);
 
+    /* This function checks if label size has been exceeded and replaces the description and label texts with error information in case this happened
+    */
+    void _checkLabelSize();
+
     // position of the device containing the port in rack
     std::string mDeviceUPosition;
 
@@ -70,9 +73,6 @@ private:
 
     // total number of parameters that should be entered by user in the CSV file for the device port (including port number)
     size_t mInputParametersCount;
-
-    // maximum number of characters that can be filled in the connectioninput.csv file for a specific device type (including any placeholders where character '-' could be filled in)
-    size_t mMaxAllowedCharsCount;
 
     // true if first of the two devices in each connection entered in the input .csv file
     bool mIsSourceDevice;

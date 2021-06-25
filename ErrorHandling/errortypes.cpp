@@ -16,35 +16,6 @@ void EmptyCellError::execute()
     Error::execute();
 }
 
-ExceedingCharsCountError::ExceedingCharsCountError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream, size_t maxAllowedCharsCount, ssize_t deltaCharsCount, bool isSourceDevice)
-    : Error{ErrorCode::MAX_CHARS_EXCEEDED, fileRowNumber, fileColumnNumber, errorStream}
-    , mMaxAllowedCharsCount{maxAllowedCharsCount}
-    , mDeltaCharsCount{deltaCharsCount}
-    , mIsSourceDevice{isSourceDevice}
-{
-    assert(mDeltaCharsCount > 0);
-}
-
-void ExceedingCharsCountError::execute()
-{
-    mErrorStream << "Error: The total number of characters entered for the ";
-
-    if (mIsSourceDevice)
-    {
-        mErrorStream << "first ";
-    }
-    else
-    {
-        mErrorStream << "second ";
-    }
-
-    mErrorStream << "device exceeds the maximum allowed (" << mMaxAllowedCharsCount << " characters)\n";
-    mErrorStream << "Row number: " << mFileRowNumber << "\n";
-    mErrorStream << "Maximum total number of characters exceeded by " << mDeltaCharsCount << "\n";
-
-    Error::execute();
-}
-
 UnknownDeviceError::UnknownDeviceError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
     : Error{ErrorCode::UNKNOWN_DEVICE, fileRowNumber, fileColumnNumber, errorStream}
 {

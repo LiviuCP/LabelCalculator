@@ -8,7 +8,6 @@ LANSwitchPort::LANSwitchPort(const std::string& deviceUPosition, const size_t fi
                  fileRowNumber,
                  fileColumnNumber,
                  Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::LAN_SWITCH),
-                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::LAN_SWITCH),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
@@ -45,6 +44,11 @@ void LANSwitchPort::computeDescriptionAndLabel()
         mDescription = Utilities::c_InvalidPortNumberErrorText;
         mLabel = Utilities::c_LabelErrorText;
     }
+
+    if (Utilities::c_LabelErrorText != mLabel)
+    {
+        _checkLabelSize();
+    }
 }
 
 SANSwitchPort::SANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -52,7 +56,6 @@ SANSwitchPort::SANSwitchPort(const std::string& deviceUPosition, const size_t fi
                  fileRowNumber,
                  fileColumnNumber,
                  Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::SAN_SWITCH),
-                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::SAN_SWITCH),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
@@ -94,6 +97,11 @@ void SANSwitchPort::computeDescriptionAndLabel()
         mDescription = Utilities::c_InvalidPortNumberErrorText;
         mLabel = Utilities::c_LabelErrorText;
     }
+
+    if (Utilities::c_LabelErrorText != mLabel)
+    {
+        _checkLabelSize();
+    }
 }
 
 InfinibandSwitchPort::InfinibandSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -101,7 +109,6 @@ InfinibandSwitchPort::InfinibandSwitchPort(const std::string& deviceUPosition, c
                  fileRowNumber,
                  fileColumnNumber,
                  Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::INFINIBAND_SWITCH),
-                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::INFINIBAND_SWITCH),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
@@ -143,6 +150,11 @@ void InfinibandSwitchPort::computeDescriptionAndLabel()
         mDescription = Utilities::c_InvalidPortNumberErrorText;
         mLabel = Utilities::c_LabelErrorText;
     }
+
+    if (Utilities::c_LabelErrorText != mLabel)
+    {
+        _checkLabelSize();
+    }
 }
 
 KVMSwitchPort::KVMSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -150,7 +162,6 @@ KVMSwitchPort::KVMSwitchPort(const std::string& deviceUPosition, const size_t fi
                  fileRowNumber,
                  fileColumnNumber,
                  Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::KVM_SWITCH),
-                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::KVM_SWITCH),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
@@ -187,6 +198,11 @@ void KVMSwitchPort::computeDescriptionAndLabel()
         mDescription = Utilities::c_InvalidPortNumberErrorText;
         mLabel = Utilities::c_LabelErrorText;
     }
+
+    if (Utilities::c_LabelErrorText != mLabel)
+    {
+        _checkLabelSize();
+    }
 }
 
 ServerPort::ServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -194,7 +210,6 @@ ServerPort::ServerPort(const std::string& deviceUPosition, const size_t fileRowN
                  fileRowNumber,
                  fileColumnNumber,
                  Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::RACK_SERVER),
-                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::RACK_SERVER),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
@@ -261,6 +276,11 @@ void ServerPort::computeDescriptionAndLabel()
         mDescription = Utilities::c_InvalidPortNumberErrorText;
         mLabel = Utilities::c_LabelErrorText;
     }
+
+    if (Utilities::c_LabelErrorText != mLabel)
+    {
+        _checkLabelSize();
+    }
 }
 
 StoragePort::StoragePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -268,7 +288,6 @@ StoragePort::StoragePort(const std::string& deviceUPosition, const size_t fileRo
                  fileRowNumber,
                  fileColumnNumber,
                  Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::STORAGE),
-                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::STORAGE),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mControllerNr);
@@ -332,6 +351,11 @@ void StoragePort::computeDescriptionAndLabel()
         mDescription = Utilities::c_InvalidPortNumberErrorText;
         mLabel = Utilities::c_LabelErrorText;
     }
+
+    if (Utilities::c_LabelErrorText != mLabel)
+    {
+        _checkLabelSize();
+    }
 }
 
 /* In order to avoid registering an additional parameter that might cause some confusion (and potential issues),
@@ -344,7 +368,6 @@ BladeServerPort::BladeServerPort(const std::string& deviceUPosition, const size_
                  fileRowNumber,
                  fileColumnNumber,
                  Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::BLADE_SERVER),
-                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::BLADE_SERVER),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mModuleType);
@@ -404,5 +427,10 @@ void BladeServerPort::computeDescriptionAndLabel()
     {
         mDescription = Utilities::c_InvalidModuleNumberErrorText;
         mLabel = Utilities::c_LabelErrorText;
+    }
+
+    if (Utilities::c_LabelErrorText != mLabel)
+    {
+        _checkLabelSize();
     }
 }

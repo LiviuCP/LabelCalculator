@@ -10,7 +10,6 @@ PDUPort::PDUPort(const std::string& deviceUPosition, const size_t fileRowNumber,
                  fileRowNumber,
                  fileColumnNumber,
                  Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::PDU),
-                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::PDU),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mDevicePlacementType);
@@ -74,6 +73,11 @@ void PDUPort::computeDescriptionAndLabel()
         mDescription = Utilities::c_InvalidPlacementErrorText;
         mLabel = Utilities::c_LabelErrorText;
     }
+
+    if (Utilities::c_LabelErrorText != mLabel)
+    {
+        _checkLabelSize();
+    }
 }
 
 ExtensionBarPort::ExtensionBarPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -81,7 +85,6 @@ ExtensionBarPort::ExtensionBarPort(const std::string& deviceUPosition, const siz
                  fileRowNumber,
                  fileColumnNumber,
                  Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::EXTENSION_BAR),
-                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::EXTENSION_BAR),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mDevicePlacementType);
@@ -121,6 +124,11 @@ void ExtensionBarPort::computeDescriptionAndLabel()
         mDescription = Utilities::c_InvalidPlacementErrorText;
         mLabel = Utilities::c_LabelErrorText;
     }
+
+    if (Utilities::c_LabelErrorText != mLabel)
+    {
+        _checkLabelSize();
+    }
 }
 
 UPSPort::UPSPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -128,7 +136,6 @@ UPSPort::UPSPort(const std::string& deviceUPosition, const size_t fileRowNumber,
                  fileRowNumber,
                  fileColumnNumber,
                  Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::UPS),
-                 Data::c_MaxAllowedInputCharsCount.at(Data::DeviceTypeID::UPS),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mLoadSegmentNumber);
@@ -162,5 +169,10 @@ void UPSPort::computeDescriptionAndLabel()
     {
         mDescription = Utilities::c_InvalidPortNumberErrorText;
         mLabel = Utilities::c_LabelErrorText;
+    }
+
+    if (Utilities::c_LabelErrorText != mLabel)
+    {
+        _checkLabelSize();
     }
 }

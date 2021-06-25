@@ -1,22 +1,23 @@
+#include <sstream>
 #include <cassert>
 
 #include "errortypes.h"
+#include "applicationdata.h"
 #include "applicationutils.h"
 #include "deviceport.h"
+#include "deviceportutils.h"
 
 const size_t DevicePort::scMaxInputParametersCount{3u};
 
-DevicePort::DevicePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const size_t requiredNumberOfParameters, const size_t maxAllowedCharsCount, const bool isSourceDevice)
+DevicePort::DevicePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const size_t requiredNumberOfParameters, const bool isSourceDevice)
     : mDeviceUPosition{deviceUPosition}
     , mFileRowNumber{fileRowNumber}
     , mFileColumnNumber{fileColumnNumber}
     , mInputParametersCount{requiredNumberOfParameters}
-    , mMaxAllowedCharsCount{maxAllowedCharsCount}
     , mIsSourceDevice{isSourceDevice}
 {
     assert(mFileRowNumber > 0u &&
            mFileColumnNumber > 0u);
-    assert(mMaxAllowedCharsCount > 0u);
     assert(mInputParametersCount > 1u &&
            mInputParametersCount <= scMaxInputParametersCount); // there should be at least two parameters (device name and port number)
 
@@ -114,16 +115,6 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
         parsingErrors.push_back(lastError);
 
     }
-    else if (totalParsedCharsCount > mMaxAllowedCharsCount)
-    {
-        const ssize_t c_DeltaNrOfChars{static_cast<ssize_t>(totalParsedCharsCount - mMaxAllowedCharsCount)};
-        lastError = std::make_shared<ExceedingCharsCountError>(mFileRowNumber, mFileColumnNumber, errorStream, mMaxAllowedCharsCount, c_DeltaNrOfChars, mIsSourceDevice);
-        parsingErrors.push_back(lastError);
-    }
-    else
-    {
-        // no parameter-independent errors, defensive programming
-    }
 
     return currentPosition;
 }
@@ -157,5 +148,21 @@ void DevicePort::_registerRequiredParameter(std::string* const pRequiredParamete
     else
     {
         assert(false);
+    }
+}
+
+void DevicePort::_checkLabelSize()
+{
+    const size_t c_LabelCharsCount{mLabel.size()};
+
+    if (c_LabelCharsCount > Data::c_MaxLabelCharsCount)
+    {
+        std::stringstream stream;
+        const ssize_t c_DeltaCharsCount{static_cast<ssize_t>(c_LabelCharsCount - Data::c_MaxLabelCharsCount)};
+        stream << Utilities::c_ExtraLabelCharactersText;
+        stream << c_DeltaCharsCount;
+
+        mDescription = Utilities::c_MaxLabelCharsCountExceededErrorText;
+        mLabel = stream.str();
     }
 }

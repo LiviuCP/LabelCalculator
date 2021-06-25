@@ -10,6 +10,7 @@ namespace Data
 
     static constexpr char c_CSVSeparator{','};
     static constexpr unsigned short c_MaxNrOfRackUnits{50u};
+    static constexpr unsigned short c_MaxLabelCharsCount{16u};
 
     enum class DeviceTypeID : int
     {
@@ -53,20 +54,6 @@ namespace Data
         {    DeviceTypeID::RACK_SERVER,         2    },
         {    DeviceTypeID::STORAGE,             3    },
         {    DeviceTypeID::BLADE_SERVER,        3    }
-    };
-
-    static const std::map<DeviceTypeID, size_t> c_MaxAllowedInputCharsCount
-    {
-        {    DeviceTypeID::PDU,                 6    },
-        {    DeviceTypeID::EXTENSION_BAR,       8    },
-        {    DeviceTypeID::UPS,                11    },
-        {    DeviceTypeID::LAN_SWITCH,         13    },
-        {    DeviceTypeID::SAN_SWITCH,         10    },
-        {    DeviceTypeID::INFINIBAND_SWITCH,  10    },
-        {    DeviceTypeID::KVM_SWITCH,         13    },
-        {    DeviceTypeID::RACK_SERVER,         8    },
-        {    DeviceTypeID::STORAGE,             7    },
-        {    DeviceTypeID::BLADE_SERVER,        7    }
     };
 
     // placeholders used for creating the connection input template file (should be filled in by user in next step)

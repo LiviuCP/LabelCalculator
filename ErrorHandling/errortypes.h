@@ -11,19 +11,6 @@ public:
     virtual void execute() override;
 };
 
-class ExceedingCharsCountError final : public Error
-{
-public:
-    ExceedingCharsCountError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream, size_t maxAllowedCharsCount, ssize_t deltaCharsCount, bool isSourceDevice);
-
-    virtual void execute() override;
-
-private:
-    size_t mMaxAllowedCharsCount;
-    ssize_t mDeltaCharsCount;
-    bool mIsSourceDevice;
-};
-
 // unknown device entered in connection definitions/input file
 class UnknownDeviceError final : public Error
 {
