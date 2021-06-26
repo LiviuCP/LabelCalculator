@@ -14,6 +14,7 @@ ConnectionDefinitionParser::ConnectionDefinitionParser(std::ifstream* const pInp
 // Maximum 50 lines to be read from connection definition file (the rack can have maximum 50U)
 void ConnectionDefinitionParser::_readInput()
 {
+    mpInputStream->seekg(0);
     std::string header;
     getline(*mpInputStream, header); // the header is not used further
 

@@ -15,11 +15,11 @@ ConnectionInputParser::ConnectionInputParser(std::ifstream* const pInputStream, 
 // It is assumed that the user has already filled in the placeholders with useful connection data.
 void ConnectionInputParser::_readInput()
 {
-    size_t connectionInputRowsCount{0u};
-
     mpInputStream->seekg(0);
     std::string header;
     getline(*mpInputStream, header);
+
+    size_t connectionInputRowsCount{0u};
 
     while (!mpInputStream->eof())
     {
