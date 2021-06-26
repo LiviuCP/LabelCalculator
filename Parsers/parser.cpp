@@ -10,6 +10,7 @@ Parser::Parser(std::ifstream* const pInputStream, std::ofstream* const pOutputSt
     , mIsResetRequired{false}
     , mCurrentPosition{-1}
     , mFileColumnNumber{1}
+    , mpErrorHandler{nullptr}
 {
     assert(nullptr != mpInputStream   &&
            mpInputStream->is_open());
@@ -67,6 +68,18 @@ void Parser::_reset()
     mOutputData.clear();
 }
 
+void Parser::_initializeErrorHandler()
+{
+    if (nullptr == mpErrorHandler.get())
+    {
+        mpErrorHandler = std::make_unique<ErrorHandler>();
+    }
+    else
+    {
+        mpErrorHandler->reset();
+    }
+}
+
 void Parser::_storeParsingErrorAndLocation(ErrorPtr pError)
 {
     if (nullptr != pError)
@@ -77,15 +90,15 @@ void Parser::_storeParsingErrorAndLocation(ErrorPtr pError)
 
 bool Parser::_logParsingErrorsToFile()
 {
-    const bool c_ParsingErrorsOccurred{mParsingErrors.size() > 0};
-
-    if (c_ParsingErrorsOccurred)
+    for(auto& pError : mParsingErrors)
     {
-        for(auto& pError : mParsingErrors)
+        if (nullptr != pError.get())
         {
             pError->execute();
         }
     }
+
+    const bool c_ParsingErrorsOccurred{mParsingErrors.size() > 0};
 
     return c_ParsingErrorsOccurred;
 }

@@ -35,7 +35,7 @@ private:
     /* Used for storing externally generated errors (from Device class and its subclasses)
        It is assumed that the error location (row and column) has been correctly setup at error creation
     */
-    bool _storeExternalParsingErrors(const std::vector<ErrorPtr>& deviceParsingErrors);
+    void _storeExternalParsingErrors(const std::vector<ErrorPtr>& deviceParsingErrors);
 
     /* This function creates an entry for a connection between two devices.
        String is written to the labelling table in a subsequent operation.

@@ -8,10 +8,11 @@ Error code,Error description,Chosen option,User action
 ,,,Example: device from U20 has a 39/2 connection. However no device has been entered on the U39 row. The device type should be entered on the row corresponding to this U position to solve the error.
 ,,,"It might also be that a connection to a lower placed device has been entered, e.g. on the U20 row a connection to U10 has been defined, 10/2 for example. This is not allowed as connections are read bottom-up."
 ,,,In this case the connection should be defined on the U10 row (instead of U20) and should have the format 20/2.
+,,,Last but not least this error could be triggered if an invalid device type has been defined on the row corresponding to the target device U position. In this case error 2 is triggered as well.
 7,The device is connected to itself.,1,A device can only be connected to a different device. For example if the device located at U20 has a 20/2 connection this means it is connected to itself. This should be corrected by user.
 8,The number of connections is null.,1,A device should be connected to another device by using at least one cable. This means a 20/0 connection is invalid. Increase the number of cables (connections) to at least 1 (so 20/1).
 9,Invalid characters contained in the current cell.,2,"For device port parameters only letters, numbers and the ‘-’ character are allowed. The user should not enter any other characters."
-10,Invalid value of the device U position has been identfied.,2,The device U position is either not a positive integer or is not contained within the 1U-50U interval. This is somehow different from error 6 where only the out-of-range-ness is considered. Invalid characters are being handled in error 5.
+10,Invalid value of the device U position has been identfied.,2,The device U position is either not a positive integer or is not contained within the 1U-50U interval. This is somehow different from error 5 where only the out-of-range-ness is considered. Invalid characters are being handled in error 4.
 ,,,However same corrective actions are required.
 11,The connection input file is empty.,2,"This occurs when no data is contained in this file. Please enter at least one data row. Header row is not counted to entered data, yet it is still read. This means data rows (payload) should start from row 2 in the input csv file."
 12,No connections are defined between devices.,1,This occurs when either no devices are contained within connection definitions file or devices are defined but no connection exists between them.

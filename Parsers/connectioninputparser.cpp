@@ -1,7 +1,6 @@
 #include <sstream>
 #include <cassert>
 
-#include "errortypes.h"
 #include "applicationutils.h"
 #include "parserutils.h"
 #include "connectioninputparser.h"
@@ -57,6 +56,9 @@ void ConnectionInputParser::_readInput()
 
 bool ConnectionInputParser::_parseInput()
 {
+    // lazy initialization of error handler
+    _initializeErrorHandler();
+
     const size_t c_ConnectionInputRowsCount{mInputData.size()};
 
     if (c_ConnectionInputRowsCount > 0u)
@@ -88,7 +90,7 @@ bool ConnectionInputParser::_parseInput()
                 if (mCurrentPosition == c_CurrentInputRowLength  ||
                         -1 == mCurrentPosition  )
                 {
-                    ErrorPtr pFewerCellsError{std::make_shared<FewerCellsError>(rowIndex + Utilities::c_RowNumberOffset, mFileColumnNumber, *mpErrorStream)};
+                    ErrorPtr pFewerCellsError{mpErrorHandler->logError(ErrorCode::FEWER_CELLS, rowIndex + Utilities::c_RowNumberOffset, mFileColumnNumber, *mpErrorStream)};
                     _storeParsingErrorAndLocation(pFewerCellsError);
                     break;
                 }
@@ -107,13 +109,15 @@ bool ConnectionInputParser::_parseInput()
                 {
                     break;
                 }
+
+                --mRowPortsStillNotParsedCount;
             }
         }
     }
     else
     {
-        ErrorPtr pEmptyConnectionsInputFileError{std::make_shared<EmptyConnectionInputFileError>(*mpErrorStream)};
-        _storeParsingErrorAndLocation(pEmptyConnectionsInputFileError);
+        ErrorPtr pEmptyConnectionInputFileError{mpErrorHandler->logError(ErrorCode::EMPTY_CONNECTION_INPUT_FILE, 1, 1, *mpErrorStream)};
+        _storeParsingErrorAndLocation(pEmptyConnectionInputFileError);
     }
 
     const bool c_ErrorsOccurred{_logParsingErrorsToFile()};
@@ -200,6 +204,9 @@ ssize_t ConnectionInputParser::_parseCablePartNumber(const size_t rowIndex, cons
 
 bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
 {
+    assert(nullptr != mpErrorHandler.get());
+
+    const size_t c_FileRowNumber{rowIndex + Utilities::c_RowNumberOffset};
     bool canContinueRowParsing{true};
 
     std::string deviceType;
@@ -234,7 +241,7 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
             // new CSV column number: pass through the device type and device U position columns and move to the first device parameter column
             const size_t c_NewColumnNumber{mFileColumnNumber + Utilities::c_DevicePortParamsColumnOffset};
 
-            DevicePortPtr pDevicePort{mpDevicePortsFactory->createDevicePort(deviceTypeID, deviceUPosition, rowIndex + Utilities::c_RowNumberOffset, c_NewColumnNumber, c_IsSourceDevice)};
+            DevicePortPtr pDevicePort{mpDevicePortsFactory->createDevicePort(deviceTypeID, deviceUPosition, c_FileRowNumber, c_NewColumnNumber, c_IsSourceDevice)};
 
             if(nullptr != pDevicePort)
             {
@@ -242,25 +249,29 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
                 mDevicePorts.push_back(pDevicePort);
 
                 std::vector<ErrorPtr> parsingErrors;
-                mCurrentPosition = pDevicePort->parseInputData(mInputData[rowIndex], mCurrentPosition, parsingErrors, *mpErrorStream);
+                mCurrentPosition = pDevicePort->parseInputData(mInputData[rowIndex], mCurrentPosition, *mpErrorHandler, *mpErrorStream, parsingErrors);
 
-                const bool c_FewerCellsErrorOccurred{_storeExternalParsingErrors(parsingErrors)};
+                _storeExternalParsingErrors(parsingErrors);
 
-                if (!c_FewerCellsErrorOccurred)
+
+
+                // the remaining row part (second device) should no longer be parsed if there are fewer cells (in total) than necessary
+                if (c_FileRowNumber == mpErrorHandler->getLastLoggingRowNumber() &&
+                    mpErrorHandler->fewerCellsErrorLogged() &&
+                    Utilities::c_DevicesPerConnectionInputRowCount == mRowPortsStillNotParsedCount)
                 {
-                    mFileColumnNumber = pDevicePort->getFileColumnNumber();
-                    --mRowPortsStillNotParsedCount;
-                    isDeviceKnown = true;
+                    canContinueRowParsing = false;
                 }
                 else
                 {
-                    canContinueRowParsing = false;
+                    mFileColumnNumber = pDevicePort->getFileColumnNumber();
+                    isDeviceKnown = true;
                 }
             }
         }
         else
         {
-            ErrorPtr pInvalidUPositionValueError{std::make_shared<InvalidUPositionValueError>(rowIndex + Utilities::c_RowNumberOffset, mFileColumnNumber + 1, *mpErrorStream)};
+            ErrorPtr pInvalidUPositionValueError{mpErrorHandler->logError(ErrorCode::INVALID_U_POSITION_VALUE, c_FileRowNumber, mFileColumnNumber + 1, *mpErrorStream)};
             _storeParsingErrorAndLocation(pInvalidUPositionValueError);
             canContinueRowParsing = false;
         }
@@ -270,7 +281,7 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
     {
         if (!isDeviceKnown)
         {
-            ErrorPtr pUnknownDeviceError{std::make_shared<UnknownDeviceError>(rowIndex + Utilities::c_RowNumberOffset, mFileColumnNumber, *mpErrorStream)};
+            ErrorPtr pUnknownDeviceError{mpErrorHandler->logError(ErrorCode::UNKNOWN_DEVICE, c_FileRowNumber, mFileColumnNumber, *mpErrorStream)};
             _storeParsingErrorAndLocation(pUnknownDeviceError);
             canContinueRowParsing = false;
         }
@@ -279,26 +290,15 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
     return canContinueRowParsing;
 }
 
-bool ConnectionInputParser::_storeExternalParsingErrors(const std::vector<ErrorPtr>& deviceParsingErrors)
+void ConnectionInputParser::_storeExternalParsingErrors(const std::vector<ErrorPtr>& deviceParsingErrors)
 {
-    bool areFewerCellsOnCurrentRow{false};
-
     for(const auto& pError : deviceParsingErrors)
     {
         if (nullptr != pError.get())
         {
-            // the remaining row part (second device) should no longer be parsed if there are fewer cells (in total) than necessary
-            if (nullptr != dynamic_cast<FewerCellsError*>(pError.get()) &&
-                Utilities::c_DevicesPerConnectionInputRowCount == mRowPortsStillNotParsedCount)
-            {
-                areFewerCellsOnCurrentRow = true;
-            }
-
             mParsingErrors.push_back(pError);
         }
     }
-
-    return areFewerCellsOnCurrentRow;
 }
 
 size_t ConnectionInputParser::_buildConnectionEntry(const size_t currentEntryNumber,

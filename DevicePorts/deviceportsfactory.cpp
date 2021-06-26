@@ -53,13 +53,10 @@ DevicePortPtr DevicePortsFactory::createDevicePort(const Data::DeviceTypeID devi
         pDevicePort = std::make_shared<BladeServerPort>(deviceUPosition, fileRowNumber, fileColumnNumber, isSourceDevice);
         break;
     default:
-        break;
+        assert(false);
     }
 
-    if (nullptr != pDevicePort)
-    {
-        ++mCreatedDevicePortsCount;
-    }
+    ++mCreatedDevicePortsCount;
 
     return pDevicePort;
 }

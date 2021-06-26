@@ -64,7 +64,7 @@ DeviceUPositionOutOfRangeError::DeviceUPositionOutOfRangeError(const size_t file
 void DeviceUPositionOutOfRangeError::execute()
 {
     mErrorStream << "Error: U number of the device is out of range\n";
-    mErrorStream << "Each device should be placed between 1U and 50U";
+    mErrorStream << "Each device should be placed between 1U and 50U\n";
     mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << "\n";
 
     Error::execute();

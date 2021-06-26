@@ -6,7 +6,7 @@
 #include <vector>
 #include <memory>
 
-#include "error.h"
+#include "errorhandler.h"
 
 /* This is a generic parser class for .csv files.
    The content of an input .csv file is read, parsed and the resulting output written to an output .csv file.
@@ -40,6 +40,11 @@ protected:
     /* This function resets the internal parser state after each parsing session.
     */
     virtual void _reset();
+
+    /* This function is used for setting the error handler for any derived parser
+       The handler is not set in constructor but when the actual parsing begins (lazy initialization)
+    */
+    virtual void _initializeErrorHandler() final;
 
     /* Used for storing locally generated errors
        Error location is setup at error storing point
@@ -76,6 +81,9 @@ protected:
     /* current CSV column being parsed (the numbering starts from 1 as when opening the CSV with a spreadsheet tool)
     */
     size_t mFileColumnNumber;
+
+    /* error handler used for creating the objects that are responsible for logging the parsing errors to file */
+    std::unique_ptr<ErrorHandler> mpErrorHandler;
 };
 
 using ParserPtr = std::unique_ptr<Parser>;

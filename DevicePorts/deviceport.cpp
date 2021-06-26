@@ -1,7 +1,6 @@
 #include <sstream>
 #include <cassert>
 
-#include "errortypes.h"
 #include "applicationdata.h"
 #include "applicationutils.h"
 #include "deviceport.h"
@@ -28,7 +27,7 @@ DevicePort::~DevicePort()
 {
 }
 
-ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initialPosition, std::vector<ErrorPtr>& parsingErrors, std::ofstream& errorStream)
+ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initialPosition, ErrorHandler& errorHandler, std::ofstream& errorStream, std::vector<ErrorPtr>& parsingErrors)
 {
     assert(mInputData.size() == mInputParametersCount); // check if all required parameters have been registered by derived class
 
@@ -56,11 +55,11 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
 
             if (0u == fieldSizes[currentParameter])
             {
-                lastError = std::make_shared<EmptyCellError>(mFileRowNumber, mFileColumnNumber, errorStream);
+                lastError = errorHandler.logError(ErrorCode::EMPTY_CELL, mFileRowNumber, mFileColumnNumber, errorStream);
             }
             else if (Utilities::areInvalidCharactersContained(*mInputData[currentParameter]))
             {
-                lastError = std::make_shared<InvalidCharactersError>(mFileRowNumber, mFileColumnNumber, errorStream);
+                lastError = errorHandler.logError(ErrorCode::INVALID_CHARS, mFileRowNumber, mFileColumnNumber, errorStream);
             }
             else
             {
@@ -111,9 +110,8 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
     // handle parameter-independent errors
     if (fewerCellsProvided)
     {
-        lastError = std::make_shared<FewerCellsError>(mFileRowNumber, mFileColumnNumber, errorStream);
+        lastError = errorHandler.logError(ErrorCode::FEWER_CELLS, mFileRowNumber, mFileColumnNumber, errorStream);
         parsingErrors.push_back(lastError);
-
     }
 
     return currentPosition;
