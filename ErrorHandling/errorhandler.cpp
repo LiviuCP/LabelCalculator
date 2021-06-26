@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include "errortypes.h"
 #include "errorhandler.h"
 

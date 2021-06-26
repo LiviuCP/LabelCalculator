@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include "datadeviceport.h"
 #include "powerdeviceport.h"
 #include "deviceportsfactory.h"
