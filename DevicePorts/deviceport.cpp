@@ -59,7 +59,7 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
             }
             else if (Utilities::areInvalidCharactersContained(*mInputData[currentParameter]))
             {
-                lastError = errorHandler.logError(ErrorCode::INVALID_CHARS, mFileRowNumber, mFileColumnNumber, errorStream);
+                lastError = errorHandler.logError(ErrorCode::INVALID_CHARACTERS, mFileRowNumber, mFileColumnNumber, errorStream);
             }
             else
             {

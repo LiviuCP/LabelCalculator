@@ -66,10 +66,10 @@ public:
 };
 
 // device marked as connected, number of connections mentioned in connection definitions file is 0
-class NoConnectionsError final : public Error
+class NullNrOfConnectionsError final : public Error
 {
 public:
-    NoConnectionsError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
+    NullNrOfConnectionsError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
 
     virtual void execute() override;
 };

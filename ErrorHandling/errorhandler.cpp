@@ -49,9 +49,9 @@ ErrorPtr ErrorHandler::logError(ErrorCode errorCode,
         pError = std::make_shared<DeviceConnectedToItselfError>(fileRowNumber, fileColumnNumber, errorStream);
         break;
     case ErrorCode::NULL_NR_OF_CONNECTIONS:
-        pError = std::make_shared<NoConnectionsError>(fileRowNumber, fileColumnNumber, errorStream);
+        pError = std::make_shared<NullNrOfConnectionsError>(fileRowNumber, fileColumnNumber, errorStream);
         break;
-    case ErrorCode::INVALID_CHARS:
+    case ErrorCode::INVALID_CHARACTERS:
         pError = std::make_shared<InvalidCharactersError>(fileRowNumber, fileColumnNumber, errorStream);
         break;
     case ErrorCode::INVALID_U_POSITION_VALUE:

@@ -98,12 +98,12 @@ void DeviceConnectedToItselfError::execute()
     Error::execute();
 }
 
-NoConnectionsError::NoConnectionsError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
+NullNrOfConnectionsError::NullNrOfConnectionsError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
     : Error{ErrorCode::NULL_NR_OF_CONNECTIONS, fileRowNumber, fileColumnNumber, errorStream}
 {
 }
 
-void NoConnectionsError::execute()
+void NullNrOfConnectionsError::execute()
 {
     mErrorStream << "Error: number of connections between the 2 devices is 0.\n";
     mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << "\n";
@@ -113,7 +113,7 @@ void NoConnectionsError::execute()
 
 
 InvalidCharactersError::InvalidCharactersError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
-    : Error{ErrorCode::INVALID_CHARS, fileRowNumber, fileColumnNumber, errorStream}
+    : Error{ErrorCode::INVALID_CHARACTERS, fileRowNumber, fileColumnNumber, errorStream}
 {
 }
 
