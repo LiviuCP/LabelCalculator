@@ -21,9 +21,17 @@ public:
     virtual bool parse();
 
 protected:
-    /* This function reads all rows from input file and caches them for further processing.
+    /* This function reads all rows (header and payload) from input file.
     */
-    virtual void _readInput() = 0;
+    virtual void _readInput();
+
+    /* This function reads the first (header) row from input file and discards it.
+    */
+    virtual void _readHeader();
+
+    /* This function reads all rows from input file starting with the second one (a.k.a. payload) and prepares them for parsing
+    */
+    virtual void _readPayload() = 0;
 
     /* This function parses all rows read by previous function and generates intermediary data to be used for generating the output file.
     */

@@ -16,7 +16,7 @@ public:
     ConnectionDefinitionParser& operator=(const ConnectionDefinitionParser&) = delete;
 
 protected:
-    void _readInput() override;
+    void _readPayload() override;
     bool _parseInput() override;
     void _buildOutput() override;
 

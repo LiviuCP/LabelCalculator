@@ -50,6 +50,19 @@ bool Parser::parse()
     return c_ParsingErrorsOccurred;
 }
 
+void Parser::_readInput()
+{
+    _readHeader();
+    _readPayload();
+}
+
+void Parser::_readHeader()
+{
+    mpInputStream->seekg(0);
+    std::string header;
+    getline(*mpInputStream, header);
+}
+
 void Parser::_writeOutput()
 {
     assert(mpOutputStream->is_open());

@@ -17,7 +17,7 @@ public:
     ConnectionInputParser& operator=(const ConnectionInputParser&) = delete;
 
 protected:
-    virtual void _readInput() override;
+    virtual void _readPayload() override;
     virtual bool _parseInput() override;
     virtual void _buildOutput() override;
 
