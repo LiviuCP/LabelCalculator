@@ -93,7 +93,7 @@ void Parser::_initializeErrorHandler()
     }
 }
 
-void Parser::_storeParsingErrorAndLocation(ErrorPtr pError)
+void Parser::_storeParsingError(ErrorPtr pError)
 {
     if (nullptr != pError)
     {

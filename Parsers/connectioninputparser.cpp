@@ -87,7 +87,7 @@ bool ConnectionInputParser::_parseInput()
                         -1 == mCurrentPosition  )
                 {
                     ErrorPtr pFewerCellsError{mpErrorHandler->logError(ErrorCode::FEWER_CELLS, rowIndex + Utilities::c_RowNumberOffset, mFileColumnNumber, *mpErrorStream)};
-                    _storeParsingErrorAndLocation(pFewerCellsError);
+                    _storeParsingError(pFewerCellsError);
                     break;
                 }
 
@@ -113,7 +113,7 @@ bool ConnectionInputParser::_parseInput()
     else
     {
         ErrorPtr pEmptyConnectionInputFileError{mpErrorHandler->logError(ErrorCode::EMPTY_CONNECTION_INPUT_FILE, 1, 1, *mpErrorStream)};
-        _storeParsingErrorAndLocation(pEmptyConnectionInputFileError);
+        _storeParsingError(pEmptyConnectionInputFileError);
     }
 
     const bool c_ErrorsOccurred{_logParsingErrorsToFile()};
@@ -247,7 +247,7 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
                 std::vector<ErrorPtr> parsingErrors;
                 mCurrentPosition = pDevicePort->parseInputData(mInputData[rowIndex], mCurrentPosition, *mpErrorHandler, *mpErrorStream, parsingErrors);
 
-                _storeExternalParsingErrors(parsingErrors);
+                _storeMultipleParsingErrors(parsingErrors);
 
 
 
@@ -268,7 +268,7 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
         else
         {
             ErrorPtr pInvalidUPositionValueError{mpErrorHandler->logError(ErrorCode::INVALID_U_POSITION_VALUE, c_FileRowNumber, mFileColumnNumber + 1, *mpErrorStream)};
-            _storeParsingErrorAndLocation(pInvalidUPositionValueError);
+            _storeParsingError(pInvalidUPositionValueError);
             canContinueRowParsing = false;
         }
     }
@@ -278,7 +278,7 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
         if (!isDeviceKnown)
         {
             ErrorPtr pUnknownDeviceError{mpErrorHandler->logError(ErrorCode::UNKNOWN_DEVICE, c_FileRowNumber, mFileColumnNumber, *mpErrorStream)};
-            _storeParsingErrorAndLocation(pUnknownDeviceError);
+            _storeParsingError(pUnknownDeviceError);
             canContinueRowParsing = false;
         }
     }
@@ -286,9 +286,9 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
     return canContinueRowParsing;
 }
 
-void ConnectionInputParser::_storeExternalParsingErrors(const std::vector<ErrorPtr>& deviceParsingErrors)
+void ConnectionInputParser::_storeMultipleParsingErrors(const std::vector<ErrorPtr>& parsingErrors)
 {
-    for(const auto& pError : deviceParsingErrors)
+    for(const auto& pError : parsingErrors)
     {
         if (nullptr != pError.get())
         {

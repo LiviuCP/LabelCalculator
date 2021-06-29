@@ -66,7 +66,7 @@ bool ConnectionDefinitionParser::_parseInput()
         if (!areDeviceConnectionsDefined)
         {
             ErrorPtr pEmptyConnectionsInputFileError{mpErrorHandler->logError(ErrorCode::NO_CONNECTIONS_DEFINED, 1, 1, *mpErrorStream)};
-            _storeParsingErrorAndLocation(pEmptyConnectionsInputFileError);
+            _storeParsingError(pEmptyConnectionsInputFileError);
         }
     }
 
@@ -188,7 +188,7 @@ bool ConnectionDefinitionParser::_parseDeviceType(const size_t rowIndex)
         else
         {
             ErrorPtr pError{mpErrorHandler->logError(ErrorCode::UNKNOWN_DEVICE, rowIndex + Utilities::c_RowNumberOffset, mFileColumnNumber, *mpErrorStream)};
-            _storeParsingErrorAndLocation(pError);
+            _storeParsingError(pError);
         }
 
         ++mFileColumnNumber;
@@ -229,7 +229,7 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
                 {
                     // trigger error but continue parsing the next cells from the row
                     ErrorPtr pEmptyCellError{mpErrorHandler->logError(ErrorCode::EMPTY_CELL, c_FileRowNumber, mFileColumnNumber, *mpErrorStream)};
-                    _storeParsingErrorAndLocation(pEmptyCellError);
+                    _storeParsingError(pEmptyCellError);
                     ++mFileColumnNumber;
                     continue;
                 }
@@ -273,7 +273,7 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
 
         if (nullptr != pError)
         {
-            _storeParsingErrorAndLocation(pError);
+            _storeParsingError(pError);
         }
 
         ++mFileColumnNumber;

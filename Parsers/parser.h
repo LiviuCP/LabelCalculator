@@ -57,7 +57,7 @@ protected:
     /* Used for storing locally generated errors
        Error location is setup at error storing point
     */
-    virtual void _storeParsingErrorAndLocation(ErrorPtr pError);
+    virtual void _storeParsingError(ErrorPtr pError);
 
     /* Used for logging all parsing errors to file
     */
