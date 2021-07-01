@@ -8,7 +8,7 @@
 ConnectionDefinitionParser::ConnectionDefinitionParser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream)
     : Parser{pInputStream, pOutputStream, pErrorStream, Data::c_ConnectionInputHeader}
 {
-    mMapping.resize(Data::c_MaxNrOfRackUnits, Data::DeviceTypeID::NO_DEVICE); // initial value: no device
+    mMapping.resize(Data::c_MaxRackUnitsCount, Data::DeviceTypeID::NO_DEVICE); // initial value: no device
 }
 
 // Maximum 50 lines to be read from connection definition file (the rack can have maximum 50U)
@@ -16,7 +16,7 @@ void ConnectionDefinitionParser::_readPayload()
 {
     size_t connectionDefinitionRowsCount{0u};
 
-    while (!mpInputStream->eof() && connectionDefinitionRowsCount < Data::c_MaxNrOfRackUnits)
+    while (!mpInputStream->eof() && connectionDefinitionRowsCount < Data::c_MaxRackUnitsCount)
     {
         ++connectionDefinitionRowsCount;
         mInputData.resize(connectionDefinitionRowsCount);
@@ -140,14 +140,14 @@ void ConnectionDefinitionParser::_reset()
     mConnectedTo.clear();
     mConnectionsCount.clear();
 
-    mMapping.resize(Data::c_MaxNrOfRackUnits, Data::DeviceTypeID::NO_DEVICE); // initial value: no device
+    mMapping.resize(Data::c_MaxRackUnitsCount, Data::DeviceTypeID::NO_DEVICE); // initial value: no device
 
     Parser::_reset();
 }
 
 void ConnectionDefinitionParser::_parseUPosition(const size_t rowIndex)
 {
-    assert(rowIndex < Data::c_MaxNrOfRackUnits);
+    assert(rowIndex < Data::c_MaxRackUnitsCount);
 
     std::string currentCell;
 
@@ -159,7 +159,7 @@ void ConnectionDefinitionParser::_parseUPosition(const size_t rowIndex)
 bool ConnectionDefinitionParser::_parseDeviceType(const size_t rowIndex)
 {
     assert(nullptr != mpErrorHandler.get());
-    assert(rowIndex < Data::c_MaxNrOfRackUnits);
+    assert(rowIndex < Data::c_MaxRackUnitsCount);
 
     bool isValidDeviceType{false};
     std::string currentCell;
@@ -176,10 +176,10 @@ bool ConnectionDefinitionParser::_parseDeviceType(const size_t rowIndex)
             isValidDeviceType = true;
 
             // add discovered device to list of device U numbers
-            mUNumbers.push_back(Data::c_MaxNrOfRackUnits - rowIndex);
+            mUNumbers.push_back(Data::c_MaxRackUnitsCount - rowIndex);
 
             // add device type to mapping table
-            mMapping[Data::c_MaxNrOfRackUnits - 1 - rowIndex] = deviceTypeID;
+            mMapping[Data::c_MaxRackUnitsCount - 1 - rowIndex] = deviceTypeID;
 
             // adjust vectors of connected devices and number of connections between each two devices
             mConnectedTo.push_back({});
@@ -207,7 +207,7 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
            c_DevicesCount == mConnectedTo.size() &&
            c_DevicesCount == mConnectionsCount.size());
 
-    assert(rowIndex < Data::c_MaxNrOfRackUnits);
+    assert(rowIndex < Data::c_MaxRackUnitsCount);
 
     const size_t c_FileRowNumber{rowIndex + Utilities::c_RowNumberOffset};
 
@@ -248,7 +248,7 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
         {
             pError = mpErrorHandler->logError(ErrorCode::WRONG_CONNECTION_FORMAT, c_FileRowNumber, mFileColumnNumber, *mpErrorStream);
         }
-        else if (secondDevice <= 0 || secondDevice > Data::c_MaxNrOfRackUnits) // checking if the device is in the accepted U interval within rack
+        else if (secondDevice <= 0 || secondDevice > Data::c_MaxRackUnitsCount) // checking if the device is in the accepted U interval within rack
         {
 
             pError = mpErrorHandler->logError(ErrorCode::DEVICE_U_POSITION_OUT_OF_RANGE, c_FileRowNumber, mFileColumnNumber, *mpErrorStream);
@@ -257,7 +257,7 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
         {
             pError = mpErrorHandler->logError(ErrorCode::TARGET_DEVICE_NOT_FOUND, c_FileRowNumber, mFileColumnNumber, *mpErrorStream);
         }
-        else if (Data::c_MaxNrOfRackUnits - rowIndex == secondDevice) // connection of a device to itself (connection loop) is not allowed
+        else if (Data::c_MaxRackUnitsCount - rowIndex == secondDevice) // connection of a device to itself (connection loop) is not allowed
         {
             pError = mpErrorHandler->logError(ErrorCode::DEVICE_CONNECTED_TO_ITSELF, c_FileRowNumber, mFileColumnNumber, *mpErrorStream);
         }
@@ -334,7 +334,7 @@ bool ConnectionDefinitionParser::_parseConnectionFormatting(const std::string& s
 
 void ConnectionDefinitionParser::_buildTemplateDeviceParameters()
 {
-    mTemplateDeviceParameters.resize(Data::c_MaxNrOfRackUnits); // resize so it has same size as the mapping vector
+    mTemplateDeviceParameters.resize(Data::c_MaxRackUnitsCount); // resize so it has same size as the mapping vector
 
     // uNumbers is traversed starting with the device placed at highest U position within rack
     for(auto deviceIter{mUNumbers.crbegin()}; deviceIter != mUNumbers.crend(); ++deviceIter)

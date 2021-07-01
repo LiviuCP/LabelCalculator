@@ -9,7 +9,7 @@ void Utilities::createEmptyConnectionDefinitionsFile(std::ofstream& outputStream
 
     outputStream << Data::c_ConnectionDefinitionsHeader << "\n";
 
-    for (Data::UNumber_t uNumber{Data::c_MaxNrOfRackUnits}; uNumber > 0u; --uNumber)
+    for (Data::UNumber_t uNumber{Data::c_MaxRackUnitsCount}; uNumber > 0u; --uNumber)
     {
         outputStream << uNumber << "\n";
     }

@@ -37,6 +37,7 @@ HEADERS += \
     Parsers/preparse.h \
     Parsers/parsercreator.h \
     Parsers/parser.h \
+    Parsers/parserdata.h \
     Parsers/connectiondefinitionparser.h \
     Parsers/connectioninputparser.h \
     Parsers/parserutils.h \
@@ -44,6 +45,7 @@ HEADERS += \
     DevicePorts/deviceport.h \
     DevicePorts/datadeviceport.h \
     DevicePorts/powerdeviceport.h \
+    DevicePorts/deviceportdata.h \
     DevicePorts/deviceportutils.h \
     ErrorHandling/errorhandler.h \
     ErrorHandling/error.h \

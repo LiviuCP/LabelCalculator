@@ -2,6 +2,9 @@
 
 #include "errorutils.h"
 #include "errortypes.h"
+#include "applicationdata.h"
+#include "parserdata.h"
+#include "deviceportdata.h"
 
 EmptyCellError::EmptyCellError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
     : Error{ErrorCode::EMPTY_CELL, fileRowNumber, fileColumnNumber, errorStream}
@@ -36,8 +39,13 @@ FewerCellsError::FewerCellsError(const size_t fileRowNumber, const size_t fileCo
 
 void FewerCellsError::execute()
 {
-    mErrorStream << "Error: less cells have been filled on the row than required in order to store the parameters of the 2 devices\n";
-    mErrorStream << "A total number of 11 contiguous cells are required to be filled (starting with the first cell on the row)\n";
+    const size_t c_RequiredCellsCountPerRow{Data::c_NrOfCablesPerConnectionInputRow +
+                                            Data::c_NrOfPortsPerConnectionInputRow *
+                                           (Data::c_NrOfDeviceTypeAndUPositionCellsPerPort +
+                                            Data::c_MaxPortInputParametersCount)};
+
+    mErrorStream << "Error: less cells have been filled on the row than required in order to store the parameters of the two device ports\n";
+    mErrorStream << "A total number of " << c_RequiredCellsCountPerRow << " contiguous cells are required to be filled (starting with the first cell on the row)\n";
     mErrorStream << "Row number: " << mFileRowNumber << "\n";
 
     Error::execute();
@@ -64,7 +72,7 @@ DeviceUPositionOutOfRangeError::DeviceUPositionOutOfRangeError(const size_t file
 void DeviceUPositionOutOfRangeError::execute()
 {
     mErrorStream << "Error: U number of the device is out of range\n";
-    mErrorStream << "Each device should be placed between 1U and 50U\n";
+    mErrorStream << "Each device should be placed between " << Data::c_FirstRackUPositionNumber << "U and " << Data::c_MaxRackUnitsCount << "U\n";
     mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << "\n";
 
     Error::execute();
@@ -105,7 +113,7 @@ NullNrOfConnectionsError::NullNrOfConnectionsError(const size_t fileRowNumber, c
 
 void NullNrOfConnectionsError::execute()
 {
-    mErrorStream << "Error: number of connections between the 2 devices is 0.\n";
+    mErrorStream << "Error: number of connections between the two devices is 0.\n";
     mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << "\n";
 
     Error::execute();
@@ -135,7 +143,7 @@ void InvalidUPositionValueError::execute()
 {
     mErrorStream << "Error: the device U position is invalid.\n";
     mErrorStream << "The cell is empty, contains non-numeric characters or the number is not within the required range.\n";
-    mErrorStream << "A integer between 0 and 50 should be entered.\n";
+    mErrorStream << "A integer between " << Data::c_FirstRackUPositionNumber << " and " << Data::c_MaxRackUnitsCount << " should be entered.\n";
     mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << "\n";
 
     Error::execute();

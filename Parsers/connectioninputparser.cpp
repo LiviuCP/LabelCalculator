@@ -224,7 +224,7 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
             Utilities::isDigitString(deviceUPosition))
         {
             const Data::UNumber_t c_DeviceUPositionNum{static_cast<Data::UNumber_t>(std::stoi(deviceUPosition))};
-            if (c_DeviceUPositionNum > 0u && c_DeviceUPositionNum <= Data::c_MaxNrOfRackUnits)
+            if (c_DeviceUPositionNum > 0u && c_DeviceUPositionNum <= Data::c_MaxRackUnitsCount)
             {
                 isDeviceUPositionValid = true;
             }

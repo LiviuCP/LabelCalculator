@@ -9,7 +9,8 @@ namespace Data
     using UNumber_t = size_t;
 
     static constexpr char c_CSVSeparator{','};
-    static constexpr unsigned short c_MaxNrOfRackUnits{50u};
+    static constexpr unsigned short c_FirstRackUPositionNumber{1u};
+    static constexpr unsigned short c_MaxRackUnitsCount{50u};
     static constexpr unsigned short c_MaxLabelCharsCount{16u};
 
     enum class DeviceTypeID : int

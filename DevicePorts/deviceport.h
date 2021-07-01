@@ -64,9 +64,6 @@ protected:
     // current CSV file column from which device info is being parsed, used for error reporting
     size_t mFileColumnNumber;
 
-    // number of fields that should be filled in connectioninput.csv for EACH device (not used fields can be filled in with '-')
-    static const size_t scMaxInputParametersCount;
-
 private:
     // reference to substrings storing the fields parsed by parseInputData()
     std::vector<std::string*> mInputData;

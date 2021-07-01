@@ -3,10 +3,9 @@
 
 #include "applicationdata.h"
 #include "applicationutils.h"
-#include "deviceport.h"
+#include "deviceportdata.h"
 #include "deviceportutils.h"
-
-const size_t DevicePort::scMaxInputParametersCount{3u};
+#include "deviceport.h"
 
 DevicePort::DevicePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const size_t requiredNumberOfParameters, const bool isSourceDevice)
     : mDeviceUPosition{deviceUPosition}
@@ -18,7 +17,7 @@ DevicePort::DevicePort(const std::string& deviceUPosition, const size_t fileRowN
     assert(mFileRowNumber > 0u &&
            mFileColumnNumber > 0u);
     assert(mInputParametersCount > 1u &&
-           mInputParametersCount <= scMaxInputParametersCount); // there should be at least two parameters (device name and port number)
+           mInputParametersCount <= Data::c_MaxPortInputParametersCount); // there should be at least two parameters (device name and port number)
 
     mInputData.reserve(mInputParametersCount);
 }
@@ -86,7 +85,7 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
     // check the padding fields (if any)
     if (!fewerCellsProvided)
     {
-        while(currentParameter < scMaxInputParametersCount)
+        while(currentParameter < Data::c_MaxPortInputParametersCount)
         {
             if (-1 != currentPosition)
             {
