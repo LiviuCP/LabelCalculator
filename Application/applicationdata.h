@@ -43,7 +43,7 @@ namespace Data
         {    "bld",     DeviceTypeID::BLADE_SERVER          }
     };
 
-    static const std::map<DeviceTypeID, size_t> c_RequiredNrOfInputParams
+    static const std::map<DeviceTypeID, size_t> c_RequiredInputParamsCount
     {
         {    DeviceTypeID::PDU,                 3    },
         {    DeviceTypeID::EXTENSION_BAR,       2    },

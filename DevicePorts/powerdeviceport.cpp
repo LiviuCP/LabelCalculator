@@ -9,7 +9,7 @@ PDUPort::PDUPort(const std::string& deviceUPosition, const size_t fileRowNumber,
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::PDU),
+                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::PDU),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mDevicePlacementType);
@@ -84,7 +84,7 @@ ExtensionBarPort::ExtensionBarPort(const std::string& deviceUPosition, const siz
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::EXTENSION_BAR),
+                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::EXTENSION_BAR),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mDevicePlacementType);
@@ -135,7 +135,7 @@ UPSPort::UPSPort(const std::string& deviceUPosition, const size_t fileRowNumber,
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::UPS),
+                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::UPS),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mLoadSegmentNumber);

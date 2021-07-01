@@ -7,7 +7,7 @@ LANSwitchPort::LANSwitchPort(const std::string& deviceUPosition, const size_t fi
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::LAN_SWITCH),
+                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::LAN_SWITCH),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
@@ -55,7 +55,7 @@ SANSwitchPort::SANSwitchPort(const std::string& deviceUPosition, const size_t fi
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::SAN_SWITCH),
+                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::SAN_SWITCH),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
@@ -108,7 +108,7 @@ InfinibandSwitchPort::InfinibandSwitchPort(const std::string& deviceUPosition, c
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::INFINIBAND_SWITCH),
+                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::INFINIBAND_SWITCH),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
@@ -161,7 +161,7 @@ KVMSwitchPort::KVMSwitchPort(const std::string& deviceUPosition, const size_t fi
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::KVM_SWITCH),
+                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::KVM_SWITCH),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
@@ -209,7 +209,7 @@ ServerPort::ServerPort(const std::string& deviceUPosition, const size_t fileRowN
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::RACK_SERVER),
+                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::RACK_SERVER),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mPortType);
@@ -287,7 +287,7 @@ StoragePort::StoragePort(const std::string& deviceUPosition, const size_t fileRo
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::STORAGE),
+                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::STORAGE),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mControllerNr);
@@ -367,7 +367,7 @@ BladeServerPort::BladeServerPort(const std::string& deviceUPosition, const size_
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredNrOfInputParams.at(Data::DeviceTypeID::BLADE_SERVER),
+                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::BLADE_SERVER),
                  isSourceDevice}
 {
     _registerRequiredParameter(&mModuleType);
