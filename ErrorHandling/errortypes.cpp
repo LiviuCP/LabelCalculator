@@ -13,7 +13,7 @@ EmptyCellError::EmptyCellError(const size_t fileRowNumber, const size_t fileColu
 
 void EmptyCellError::execute()
 {
-    mErrorStream << "Error: A cell is empty\n";
+    mErrorStream << "Error: A CSV cell is empty.\n";
     mErrorStream << "Row number: " << mFileRowNumber << "    "<< "Column number: " << mFileColumnNumber << "\n";
 
     Error::execute();
@@ -26,7 +26,7 @@ UnknownDeviceError::UnknownDeviceError(const size_t fileRowNumber, const size_t 
 
 void UnknownDeviceError::execute()
 {
-    mErrorStream << "Error: an unknown or currently not supported device type has been entered\n";
+    mErrorStream << "Error: an unknown or currently not supported device type has been entered.\n";
     mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << "\n";
 
     Error::execute();
@@ -44,7 +44,7 @@ void FewerCellsError::execute()
                                            (Data::c_NrOfDeviceTypeAndUPositionCellsPerPort +
                                             Data::c_MaxPortInputParametersCount)};
 
-    mErrorStream << "Error: less cells have been filled on the row than required in order to store the parameters of the two device ports\n";
+    mErrorStream << "Error: less cells have been filled on the row than required in order to store the parameters of the two device ports.\n";
     mErrorStream << "A total number of " << c_RequiredCellsCountPerRow << " contiguous cells are required to be filled (starting with the first cell on the row)\n";
     mErrorStream << "Row number: " << mFileRowNumber << "\n";
 
@@ -58,7 +58,9 @@ WrongConnectionFormatError::WrongConnectionFormatError(const size_t fileRowNumbe
 
 void WrongConnectionFormatError::execute()
 {
-    mErrorStream << "Error: format of the connection is wrong\n";
+    mErrorStream << "Error: format of the connection is invalid.\n";
+    mErrorStream << "Two positive integers should be entered, separated by slash.\n";
+    mErrorStream << "No other character types are allowed.\n";
     mErrorStream << "Row number: " << mFileRowNumber << "    "<<"Column number: "<< mFileColumnNumber << "\n";
 
     Error::execute();
@@ -71,8 +73,8 @@ DeviceUPositionOutOfRangeError::DeviceUPositionOutOfRangeError(const size_t file
 
 void DeviceUPositionOutOfRangeError::execute()
 {
-    mErrorStream << "Error: U number of the device is out of range\n";
-    mErrorStream << "Each device should be placed between " << Data::c_FirstRackUPositionNumber << "U and " << Data::c_MaxRackUnitsCount << "U\n";
+    mErrorStream << "Error: U number of the device is out of range.\n";
+    mErrorStream << "Each device should be placed between " << Data::c_FirstRackUPositionNumber << "U and " << Data::c_MaxRackUnitsCount << "U.\n";
     mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << "\n";
 
     Error::execute();
