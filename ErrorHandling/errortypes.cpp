@@ -51,12 +51,12 @@ void FewerCellsError::execute()
     Error::execute();
 }
 
-WrongConnectionFormatError::WrongConnectionFormatError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
-    : Error{ErrorCode::WRONG_CONNECTION_FORMAT, fileRowNumber, fileColumnNumber, errorStream}
+InvalidConnectionFormatError::InvalidConnectionFormatError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
+    : Error{ErrorCode::INVALID_CONNECTION_FORMAT, fileRowNumber, fileColumnNumber, errorStream}
 {
 }
 
-void WrongConnectionFormatError::execute()
+void InvalidConnectionFormatError::execute()
 {
     mErrorStream << "Error: format of the connection is invalid.\n";
     mErrorStream << "Two positive integers should be entered, separated by slash.\n";

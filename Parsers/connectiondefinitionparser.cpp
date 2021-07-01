@@ -246,7 +246,7 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
 
         if(c_IsConnectionFormattingInvalid) // checking if the connection format is correct (e.g. 20/3: 3 connections to device located at U20)
         {
-            pError = mpErrorHandler->logError(ErrorCode::WRONG_CONNECTION_FORMAT, c_FileRowNumber, mFileColumnNumber, *mpErrorStream);
+            pError = mpErrorHandler->logError(ErrorCode::INVALID_CONNECTION_FORMAT, c_FileRowNumber, mFileColumnNumber, *mpErrorStream);
         }
         else if (secondDevice <= 0 || secondDevice > Data::c_MaxRackUnitsCount) // checking if the device is in the accepted U interval within rack
         {

@@ -36,8 +36,8 @@ ErrorPtr ErrorHandler::logError(ErrorCode errorCode,
         pError = std::make_shared<FewerCellsError>(fileRowNumber, fileColumnNumber, errorStream);
         mFewerCellsErrorOccurred = true;
         break;
-    case ErrorCode::WRONG_CONNECTION_FORMAT:
-        pError = std::make_shared<WrongConnectionFormatError>(fileRowNumber, fileColumnNumber, errorStream);
+    case ErrorCode::INVALID_CONNECTION_FORMAT:
+        pError = std::make_shared<InvalidConnectionFormatError>(fileRowNumber, fileColumnNumber, errorStream);
         break;
     case ErrorCode::DEVICE_U_POSITION_OUT_OF_RANGE:
         pError = std::make_shared<DeviceUPositionOutOfRangeError>(fileRowNumber, fileColumnNumber, errorStream);

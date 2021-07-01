@@ -30,10 +30,10 @@ public:
 };
 
 // wrong connection format in connection definitions file
-class WrongConnectionFormatError final : public Error
+class InvalidConnectionFormatError final : public Error
 {
 public:
-    WrongConnectionFormatError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
+    InvalidConnectionFormatError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
 
     virtual void execute() override;
 };
