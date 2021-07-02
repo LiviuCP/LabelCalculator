@@ -35,7 +35,7 @@ void LANSwitchPort::computeDescriptionAndLabel()
         }
         else
         {
-            mDescription = Utilities::c_UnknownPortTypeErrorText;
+            mDescription = Utilities::c_InvalidPortTypeErrorText;
             mLabel = Utilities::c_LabelErrorText;
         }
     }
@@ -85,7 +85,7 @@ void SANSwitchPort::computeDescriptionAndLabel()
         }
         else
         {
-            mDescription = Utilities::c_UnknownPortTypeErrorText;
+            mDescription = Utilities::c_InvalidPortTypeErrorText;
             mLabel = Utilities::c_LabelErrorText;
         }
     }
@@ -135,7 +135,7 @@ void InfinibandSwitchPort::computeDescriptionAndLabel()
         }
         else
         {
-            mDescription = Utilities::c_UnknownPortTypeErrorText;
+            mDescription = Utilities::c_InvalidPortTypeErrorText;
             mLabel = Utilities::c_LabelErrorText;
         }
     }
@@ -180,7 +180,7 @@ void KVMSwitchPort::computeDescriptionAndLabel()
         }
         else
         {
-            mDescription = Utilities::c_UnknownPortTypeErrorText;
+            mDescription = Utilities::c_InvalidPortTypeErrorText;
             mLabel = Utilities::c_LabelErrorText;
         }
     }
@@ -255,7 +255,7 @@ void ServerPort::computeDescriptionAndLabel()
         }
         else
         {
-            mDescription = Utilities::c_UnknownPortTypeErrorText;
+            mDescription = Utilities::c_InvalidPortTypeErrorText;
             mLabel = Utilities::c_LabelErrorText;
         }
     }
@@ -327,7 +327,7 @@ void StoragePort::computeDescriptionAndLabel()
         }
         else
         {
-            mDescription = Utilities::c_UnknownPortTypeErrorText;
+            mDescription = Utilities::c_InvalidPortTypeErrorText;
             mLabel = Utilities::c_LabelErrorText;
         }
     }
@@ -401,7 +401,7 @@ void BladeServerPort::computeDescriptionAndLabel()
         }
         else
         {
-            mDescription = Utilities::c_UnknownModuleTypeErrorText;
+            mDescription = Utilities::c_InvalidModuleTypeErrorText;
             mLabel = Utilities::c_LabelErrorText;
         }
     }

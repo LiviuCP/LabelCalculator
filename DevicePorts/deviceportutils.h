@@ -5,8 +5,8 @@
 
 namespace Utilities
 {
-    static const std::string c_UnknownPortTypeErrorText{"LABELLING ERROR: INVALID PORT TYPE"};
-    static const std::string c_UnknownModuleTypeErrorText{"LABELLING ERROR: INVALID MODULE TYPE"};
+    static const std::string c_InvalidPortTypeErrorText{"LABELLING ERROR: INVALID PORT TYPE"};
+    static const std::string c_InvalidModuleTypeErrorText{"LABELLING ERROR: INVALID MODULE TYPE"};
     static const std::string c_InvalidPlacementErrorText{"LABELLING ERROR: INVALID PLACEMENT TYPE"};
     static const std::string c_InvalidControllerNumberErrorText{"LABELLING ERROR: INVALID CONTROLLER NUMBER"};
     static const std::string c_InvalidModuleNumberErrorText{"LABELLING ERROR: INVALID MODULE NUMBER"};
