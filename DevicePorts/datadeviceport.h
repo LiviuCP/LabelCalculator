@@ -91,6 +91,9 @@ public:
 
     virtual void computeDescriptionAndLabel() override;
 
+private:
+    void _handleMultipleInstanceModule();
+
 protected:
     std::string mModuleType; // blade system module type: interconnect, management module, power supply etc.
     std::string mModuleNumber; // data module number

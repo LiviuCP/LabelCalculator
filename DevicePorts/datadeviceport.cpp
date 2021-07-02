@@ -1,3 +1,5 @@
+#include <cassert>
+
 #include "applicationdata.h"
 #include "applicationutils.h"
 #include "deviceportutils.h"
@@ -359,23 +361,38 @@ BladeServerPort::BladeServerPort(const std::string& deviceUPosition, const size_
 
 void BladeServerPort::computeDescriptionAndLabel()
 {
-    mDescription = "Blade system placed at U" + mDeviceUPosition;
-    mLabel = "U" + mDeviceUPosition;
-
     Utilities::convertStringCase(mModuleType, true);
 
-    if ("UP" == mModuleType) // management uplink port (for daisy chaining multiple blade systems)
+    if ("DM" == mModuleType || "MG" == mModuleType || "P" == mModuleType)
     {
-        mDescription += " - management uplink port";
-        mLabel += "_MG_UP";
+        _handleMultipleInstanceModule();
+    }
+    else if ("UP" == mModuleType) // management uplink port (for daisy chaining multiple blade systems)
+    {
+        mDescription = "Blade system placed at U" + mDeviceUPosition + " - management uplink port";
+        mLabel = "U" + mDeviceUPosition + "_MG_UP";
     }
     else if ("DO" == mModuleType) // management downlink port (for daisy chaining multiple blade systems)
     {
-        mDescription += " - management downlink port";
-        mLabel += "_MG_DO";
+        mDescription = "Blade system placed at U" + mDeviceUPosition + " - management downlink port";
+        mLabel += "U" + mDeviceUPosition + "_MG_DO";
     }
-    else if (Utilities::isDigitString(mModuleNumber))
+    else
     {
+        mDescription = Utilities::c_InvalidModuleTypeErrorText;
+        mLabel = Utilities::c_LabelErrorText;
+    }
+
+    _checkLabel();
+}
+
+void BladeServerPort::_handleMultipleInstanceModule()
+{
+    if (Utilities::isDigitString(mModuleNumber))
+    {
+        mDescription = "Blade system placed at U" + mDeviceUPosition;
+        mLabel = "U" + mDeviceUPosition;
+
         if ("DM" == mModuleType) // data module
         {
             if (Utilities::isDigitString(mPortNumber))
@@ -394,15 +411,14 @@ void BladeServerPort::computeDescriptionAndLabel()
             mDescription += " - management module " + mModuleNumber;
             mLabel += "_MGMT" + mModuleNumber;
         }
-        else if ("P" == mModuleType)
+        else if ("P" == mModuleType) // power supply
         {
             mDescription += " - power supply " + mModuleNumber;
             mLabel += "_PS" + mModuleNumber;
         }
         else
         {
-            mDescription = Utilities::c_InvalidModuleTypeErrorText;
-            mLabel = Utilities::c_LabelErrorText;
+            assert(false);
         }
     }
     else
@@ -410,6 +426,4 @@ void BladeServerPort::computeDescriptionAndLabel()
         mDescription = Utilities::c_InvalidModuleNumberErrorText;
         mLabel = Utilities::c_LabelErrorText;
     }
-
-    _checkLabel();
 }
