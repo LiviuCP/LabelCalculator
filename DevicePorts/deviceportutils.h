@@ -5,16 +5,17 @@
 
 namespace Utilities
 {
-    static const std::string c_UnknownPortTypeErrorText{"ERROR: UNKNOWN PORT TYPE (PLEASE CHECK INPUT FILE connectioninput.csv)"};
-    static const std::string c_UnknownModuleTypeErrorText{"ERROR: UNKNOWN MODULE TYPE (PLEASE CHECK INPUT FILE connectioninput.csv)"};
-    static const std::string c_InvalidPlacementErrorText{"ERROR: THE PLACEMENT TYPE YOU HAVE CHOSEN DOES NOT EXIST. PLEASE REVIEW INPUT FILE (connectioninput.csv)."};
-    static const std::string c_InvalidControllerNumberErrorText{"ERROR: THE CONTROLLER NUMBER IS INVALID. PLEASE REVIEW INPUT FILE (connectioninput.csv)."};
-    static const std::string c_InvalidModuleNumberErrorText{"ERROR: THE MODULE NUMBER IS INVALID. PLEASE REVIEW INPUT FILE (connectioninput.csv)."};
-    static const std::string c_InvalidLoadSegmentNumberErrorText{"ERROR. THE LOAD SEGMENT NUMBER IS INVALID. PLEASE REVIEW INPUT FILE (connectioninput.csv)."};
-    static const std::string c_InvalidPortNumberErrorText{"ERROR: THE PORT NUMBER IS INVALID. PLEASE REVIEW INPUT FILE (connectioninput.csv)."};
-    static const std::string c_MaxLabelCharsCountExceededErrorText{"ERROR: THE MAXIMUM NUMBER OF LABEL CHARACTERS HAS BEEN EXCEEDED. PLEASE REVIEW INPUT FILE (connectioninput.csv)."};
-    static const std::string c_ExtraLabelCharactersText{"LABEL CHARACTERS COUNT EXCEEDED BY: "};
-    static const std::string c_LabelErrorText{"ERROR!!!"};
+    static const std::string c_UnknownPortTypeErrorText{"LABELLING ERROR: INVALID PORT TYPE"};
+    static const std::string c_UnknownModuleTypeErrorText{"LABELLING ERROR: INVALID MODULE TYPE"};
+    static const std::string c_InvalidPlacementErrorText{"LABELLING ERROR: INVALID PLACEMENT TYPE"};
+    static const std::string c_InvalidControllerNumberErrorText{"LABELLING ERROR: INVALID CONTROLLER NUMBER"};
+    static const std::string c_InvalidModuleNumberErrorText{"LABELLING ERROR: INVALID MODULE NUMBER"};
+    static const std::string c_InvalidLoadSegmentNumberErrorText{"LABELLING ERROR: INVALID LOAD SEGMENT NUMBER"};
+    static const std::string c_InvalidPortNumberErrorText{"LABELLING ERROR: INVALID PORT NUMBER"};
+    static const std::string c_MaxLabelCharsCountExceededErrorText{"LABELLING ERROR: MAXIMUM CHARACTERS COUNT EXCEEDED BY: "};
+    static const std::string c_LabelErrorText{"INVALID LABEL! "};
+
+    std::string getCheckConnectionInputFileText();
 }
 
 #endif // DEVICEPORTUTILS_H

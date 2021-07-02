@@ -148,18 +148,26 @@ void DevicePort::_registerRequiredParameter(std::string* const pRequiredParamete
     }
 }
 
-void DevicePort::_checkLabelSize()
+void DevicePort::_checkLabel()
 {
     const size_t c_LabelCharsCount{mLabel.size()};
 
-    if (c_LabelCharsCount > Data::c_MaxLabelCharsCount)
-    {
-        std::stringstream stream;
-        const ssize_t c_DeltaCharsCount{static_cast<ssize_t>(c_LabelCharsCount - Data::c_MaxLabelCharsCount)};
-        stream << Utilities::c_ExtraLabelCharactersText;
-        stream << c_DeltaCharsCount;
+    assert(c_LabelCharsCount > 0u);
 
-        mDescription = Utilities::c_MaxLabelCharsCountExceededErrorText;
-        mLabel = stream.str();
+    if (Utilities::c_LabelErrorText != mLabel)
+    {
+        if (c_LabelCharsCount > Data::c_MaxLabelCharsCount)
+        {
+            std::stringstream stream;
+            const ssize_t c_DeltaCharsCount{static_cast<ssize_t>(c_LabelCharsCount - Data::c_MaxLabelCharsCount)};
+            stream << Utilities::c_MaxLabelCharsCountExceededErrorText << c_DeltaCharsCount;
+
+            mDescription = stream.str();
+            mLabel = Utilities::c_LabelErrorText + Utilities::getCheckConnectionInputFileText();
+        }
+    }
+    else
+    {
+        mLabel += Utilities::getCheckConnectionInputFileText();
     }
 }

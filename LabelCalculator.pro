@@ -24,6 +24,7 @@ SOURCES += \
     DevicePorts/deviceport.cpp \
     DevicePorts/datadeviceport.cpp \
     DevicePorts/powerdeviceport.cpp \
+    DevicePorts/deviceportutils.cpp \
     ErrorHandling/errorhandler.cpp \
     ErrorHandling/error.cpp \
     ErrorHandling/errortypes.cpp \

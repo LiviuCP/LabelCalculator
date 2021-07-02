@@ -42,9 +42,9 @@ protected:
     */
     void _registerRequiredParameter(std::string* const pRequiredParameter);
 
-    /* This function checks if label size has been exceeded and replaces the description and label texts with error information in case this happened
+    /* This function performs a final check on the calculated label and initiates a size check if no "soft" parsing errors occurred
     */
-    void _checkLabelSize();
+    void _checkLabel();
 
     // position of the device containing the port in rack
     std::string mDeviceUPosition;

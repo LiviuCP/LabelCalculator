@@ -45,10 +45,7 @@ void LANSwitchPort::computeDescriptionAndLabel()
         mLabel = Utilities::c_LabelErrorText;
     }
 
-    if (Utilities::c_LabelErrorText != mLabel)
-    {
-        _checkLabelSize();
-    }
+    _checkLabel();
 }
 
 SANSwitchPort::SANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -98,10 +95,7 @@ void SANSwitchPort::computeDescriptionAndLabel()
         mLabel = Utilities::c_LabelErrorText;
     }
 
-    if (Utilities::c_LabelErrorText != mLabel)
-    {
-        _checkLabelSize();
-    }
+    _checkLabel();
 }
 
 InfinibandSwitchPort::InfinibandSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -151,10 +145,7 @@ void InfinibandSwitchPort::computeDescriptionAndLabel()
         mLabel = Utilities::c_LabelErrorText;
     }
 
-    if (Utilities::c_LabelErrorText != mLabel)
-    {
-        _checkLabelSize();
-    }
+    _checkLabel();
 }
 
 KVMSwitchPort::KVMSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -199,10 +190,7 @@ void KVMSwitchPort::computeDescriptionAndLabel()
         mLabel = Utilities::c_LabelErrorText;
     }
 
-    if (Utilities::c_LabelErrorText != mLabel)
-    {
-        _checkLabelSize();
-    }
+    _checkLabel();
 }
 
 ServerPort::ServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -277,10 +265,7 @@ void ServerPort::computeDescriptionAndLabel()
         mLabel = Utilities::c_LabelErrorText;
     }
 
-    if (Utilities::c_LabelErrorText != mLabel)
-    {
-        _checkLabelSize();
-    }
+    _checkLabel();
 }
 
 StoragePort::StoragePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -352,10 +337,7 @@ void StoragePort::computeDescriptionAndLabel()
         mLabel = Utilities::c_LabelErrorText;
     }
 
-    if (Utilities::c_LabelErrorText != mLabel)
-    {
-        _checkLabelSize();
-    }
+    _checkLabel();
 }
 
 /* In order to avoid registering an additional parameter that might cause some confusion (and potential issues),
@@ -429,8 +411,5 @@ void BladeServerPort::computeDescriptionAndLabel()
         mLabel = Utilities::c_LabelErrorText;
     }
 
-    if (Utilities::c_LabelErrorText != mLabel)
-    {
-        _checkLabelSize();
-    }
+    _checkLabel();
 }

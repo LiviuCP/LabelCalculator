@@ -74,10 +74,7 @@ void PDUPort::computeDescriptionAndLabel()
         mLabel = Utilities::c_LabelErrorText;
     }
 
-    if (Utilities::c_LabelErrorText != mLabel)
-    {
-        _checkLabelSize();
-    }
+    _checkLabel();
 }
 
 ExtensionBarPort::ExtensionBarPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -125,10 +122,7 @@ void ExtensionBarPort::computeDescriptionAndLabel()
         mLabel = Utilities::c_LabelErrorText;
     }
 
-    if (Utilities::c_LabelErrorText != mLabel)
-    {
-        _checkLabelSize();
-    }
+    _checkLabel();
 }
 
 UPSPort::UPSPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -171,8 +165,5 @@ void UPSPort::computeDescriptionAndLabel()
         mLabel = Utilities::c_LabelErrorText;
     }
 
-    if (Utilities::c_LabelErrorText != mLabel)
-    {
-        _checkLabelSize();
-    }
+    _checkLabel();
 }
