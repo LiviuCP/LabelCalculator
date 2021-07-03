@@ -1,7 +1,8 @@
-#include <map>
+#include <cassert>
 
 #include "applicationdata.h"
 #include "applicationutils.h"
+#include "deviceportdata.h"
 #include "deviceportutils.h"
 #include "powerdeviceport.h"
 
@@ -19,19 +20,12 @@ PDUPort::PDUPort(const std::string& deviceUPosition, const size_t fileRowNumber,
 
 void PDUPort::computeDescriptionAndLabel()
 {
-    const std::map<std::string, std::string> c_PlacementTypesDescriptions
-    {
-        {"H", "Horizontal"},    // horizontal PDU
-        {"L", "Vertical left"}, // vertically left placed PDU
-        {"R", "Vertical right"} // vertically right placed PDU
-    };
-
     Utilities::convertStringCase(mDevicePlacementType, true);
     Utilities::convertStringCase(mPortNumber, true);
 
-    if (c_PlacementTypesDescriptions.find(mDevicePlacementType) != c_PlacementTypesDescriptions.cend())
+    if (Data::c_DevicePlacementIdentifiers.find(mDevicePlacementType) != Data::c_DevicePlacementIdentifiers.cend())
     {
-        mDescription = c_PlacementTypesDescriptions.at(mDevicePlacementType) + " PDU placed at U" + mDeviceUPosition;
+        mDescription = Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " PDU placed at U" + mDeviceUPosition;
         mLabel = "U" + mDeviceUPosition + "_" + mDevicePlacementType + "PDU";
 
         if ("M" == mPortNumber) // management port
@@ -95,9 +89,9 @@ void ExtensionBarPort::computeDescriptionAndLabel()
 
     if ("L" == mDevicePlacementType || "R" == mDevicePlacementType)
     {
-        const std::string c_PlacementSide{"L" == mDevicePlacementType ? "Left" : "Right"};
+        assert(Data::c_DevicePlacementIdentifiers.find(mDevicePlacementType) != Data::c_DevicePlacementIdentifiers.cend());
 
-        mDescription = c_PlacementSide + " extension bar placed at U" + mDeviceUPosition;
+        mDescription = Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " extension bar placed at U" + mDeviceUPosition;
         mLabel = "U" + mDeviceUPosition + "_" + mDevicePlacementType + "EXT";
 
         if ("IN" == mPortNumber)
