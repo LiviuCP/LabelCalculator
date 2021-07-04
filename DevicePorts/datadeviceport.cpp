@@ -350,48 +350,56 @@ StoragePort::StoragePort(const std::string& deviceUPosition, const size_t fileRo
 
 void StoragePort::computeDescriptionAndLabel()
 {
-    mDescription = "Storage device placed at U" + mDeviceUPosition;
-    mLabel = "U" + mDeviceUPosition;
+    bool shouldCheckNumberedPortType{false};
+    bool shouldCheckManagementPort{false};
 
     Utilities::convertStringCase(mPortType, true);
 
-    if ("m" == mPortNumber || "M" == mPortNumber)
+    if (Utilities::isDigitString(mControllerNr))
     {
-        if ("m" == mControllerNr || "M" == mControllerNr)
+        if ("D" == mPortType) // data port (e.g. FC)
         {
-            mDescription += " - management port"; // single management port
-            mLabel += "_MGMT";
+            mDescription = "Storage device placed at U" + mDeviceUPosition + " - controller " + mControllerNr + " - port ";
+            mLabel = "U" + mDeviceUPosition + "_C" + mControllerNr + "_P";
+
+            shouldCheckNumberedPortType = true;
         }
-        else if (Utilities::isDigitString(mControllerNr))
+        else if ("-" == mPortType)
         {
-            mDescription += " - controller " + mControllerNr + " - management port"; // one management port per controller
-            mLabel += "_C" + mControllerNr + "_MGMT";
+            mDescription = "Storage device placed at U" + mDeviceUPosition + " - controller " + mControllerNr;
+            mLabel = "U" + mDeviceUPosition + "_C" + mControllerNr;
+
+            shouldCheckManagementPort = true; // one management port per controller
         }
         else
         {
-            mDescription = Utilities::c_InvalidControllerNumberErrorText;
+            mDescription = Utilities::c_InvalidPortTypeErrorText;
             mLabel = Utilities::c_LabelErrorText;
         }
     }
-    else if (Utilities::isDigitString(mPortNumber))
+    else if ("m" == mControllerNr || "M" == mControllerNr)
     {
-        if ("D" == mPortType) // data port (FC, SAS, etc)
+        if ("-" == mPortType)
         {
-            if (Utilities::isDigitString(mControllerNr))
-            {
-                mDescription = "Storage device placed at U" + mDeviceUPosition + " - controller " + mControllerNr + " - port " + mPortNumber;
-                mLabel = "U" + mDeviceUPosition + "_C" + mControllerNr + "_P" + mPortNumber;
-            }
-            else
-            {
-                mDescription = Utilities::c_InvalidControllerNumberErrorText;
-                mLabel = Utilities::c_LabelErrorText;
-            }
+            mDescription = "Storage device placed at U" + mDeviceUPosition;
+            mLabel = "U" + mDeviceUPosition;
+
+            shouldCheckManagementPort = true; // unified management port
         }
-        else if ("P" == mPortType) // power supply
+        else
         {
-            mDescription += " - power supply " + mPortNumber;
-            mLabel += "_PS" + mPortNumber;
+            mDescription = Utilities::c_InvalidPortTypeErrorText;
+            mLabel = Utilities::c_LabelErrorText;
+        }
+    }
+    else if ("-" == mControllerNr)
+    {
+        if ("P" == mPortType) // power supply
+        {
+            mDescription = "Storage device placed at U" + mDeviceUPosition + " - power supply ";
+            mLabel = "U" + mDeviceUPosition + "_PS";
+
+            shouldCheckNumberedPortType = true;
         }
         else
         {
@@ -401,8 +409,35 @@ void StoragePort::computeDescriptionAndLabel()
     }
     else
     {
-        mDescription = Utilities::c_InvalidPortNumberErrorText;
+        mDescription = Utilities::c_InvalidControllerNumberErrorText;
         mLabel = Utilities::c_LabelErrorText;
+    }
+
+    if (shouldCheckNumberedPortType)
+    {
+        if (Utilities::isDigitString(mPortNumber))
+        {
+            mDescription += mPortNumber;
+            mLabel += mPortNumber;
+        }
+        else
+        {
+            mDescription = Utilities::c_InvalidPortNumberErrorText;
+            mLabel = Utilities::c_LabelErrorText;
+        }
+    }
+    else if (shouldCheckManagementPort)
+    {
+        if ("m" == mPortNumber || "M" == mPortNumber)
+        {
+            mDescription += " - management port";
+            mLabel += "_MGMT";
+        }
+        else
+        {
+            mDescription = Utilities::c_InvalidPortNumberErrorText;
+            mLabel = Utilities::c_LabelErrorText;
+        }
     }
 
     _checkLabel();
