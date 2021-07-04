@@ -31,7 +31,7 @@ fc-cable,svr,34,F,1,-,san,46,F,5,-
 ,svr,34,F,3,-,san,46,F,6,-
 ,svr,34,F,2,-,san,47,F,5,-
 ,svr,34,F,4,-,san,47,F,6,-
-RJ45,svr,34,E,m,-,lan,48,N,5,-
+RJ45,svr,34,-,m,-,lan,48,N,5,-
 ,svr,34,E,1,-,lan,49,N,3,-
 ,svr,34,N,1,-,lan,49,N,4,-
 ,svr,34,E,2,-,lan,50,N,3,-
@@ -45,7 +45,7 @@ fc-cable,svr,38,F,1,-,san,46,F,7,-
 ,svr,38,F,3,-,san,46,F,8,-
 ,svr,38,F,2,-,san,47,F,7,-
 ,svr,38,F,4,-,san,47,F,8,-
-RJ45,svr,38,E,m,-,lan,48,N,6,-
+RJ45,svr,38,-,m,-,lan,48,N,6,-
 ,svr,38,E,1,-,lan,49,N,5,-
 ,svr,38,N,1,-,lan,49,N,6,-
 ,svr,38,E,2,-,lan,50,N,5,-

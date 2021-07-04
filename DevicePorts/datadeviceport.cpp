@@ -1,4 +1,5 @@
 #include <cassert>
+#include <set>
 
 #include "applicationdata.h"
 #include "applicationutils.h"
@@ -18,33 +19,39 @@ LANSwitchPort::LANSwitchPort(const std::string& deviceUPosition, const size_t fi
 
 void LANSwitchPort::computeDescriptionAndLabel()
 {
-    mDescription = "LAN switch placed at U" + mDeviceUPosition;
-    mLabel = "U" + mDeviceUPosition;
-
     Utilities::convertStringCase(mPortType, true);
 
-    if (Utilities::isDigitString(mPortNumber)) // no management port
+    bool isValidPortType{true};
+
+    if ("N" == mPortType)
     {
-        if ("N" == mPortType)
-        {
-            mDescription += " - Ethernet port " + mPortNumber;
-            mLabel += "_P" + mPortNumber;
-        }
-        else if ("P" == mPortType)
-        {
-            mDescription += " - power supply " + mPortNumber;
-            mLabel += "_PS" + mPortNumber;
-        }
-        else
-        {
-            mDescription = Utilities::c_InvalidPortTypeErrorText;
-            mLabel = Utilities::c_LabelErrorText;
-        }
+        mDescription = "LAN switch placed at U" + mDeviceUPosition + " - Ethernet port ";
+        mLabel = "U" + mDeviceUPosition + "_P";
+    }
+    else if ("P" == mPortType)
+    {
+        mDescription = "LAN switch placed at U" + mDeviceUPosition + " - power supply ";
+        mLabel = "U" + mDeviceUPosition + "_PS";
     }
     else
     {
-        mDescription = Utilities::c_InvalidPortNumberErrorText;
+        mDescription = Utilities::c_InvalidPortTypeErrorText;
         mLabel = Utilities::c_LabelErrorText;
+        isValidPortType = false;
+    }
+
+    if (isValidPortType)
+    {
+        if (Utilities::isDigitString(mPortNumber))
+        {
+            mDescription += mPortNumber;
+            mLabel += mPortNumber;
+        }
+        else
+        {
+            mDescription = Utilities::c_InvalidPortNumberErrorText;
+            mLabel = Utilities::c_LabelErrorText;
+        }
     }
 
     _checkLabel();
@@ -63,32 +70,51 @@ SANSwitchPort::SANSwitchPort(const std::string& deviceUPosition, const size_t fi
 
 void SANSwitchPort::computeDescriptionAndLabel()
 {
-    mDescription = "SAN switch placed at U" + mDeviceUPosition;
-    mLabel = "U" + mDeviceUPosition;
-
     Utilities::convertStringCase(mPortType, true);
 
-    if ("m" == mPortNumber || "M" == mPortNumber) // management port
+    if ("F" == mPortType || "P" == mPortType)
     {
-        mDescription += " - management port";
-        mLabel = mLabel + "_MGMT";
+        _handleNumericPortType();
     }
-    else if (Utilities::isDigitString(mPortNumber)) // power or data port
+    else if ("-" == mPortType)
     {
-        if ("F" == mPortType)
+        if ("m" == mPortNumber || "M" == mPortNumber) // management port
         {
-            mDescription += " - FC port " + mPortNumber;
-            mLabel = mLabel + "_P" + mPortNumber;
-        }
-        else if ("P" == mPortType)
-        {
-            mDescription += " - power supply " + mPortNumber;
-            mLabel += "_PS" + mPortNumber;
+            mDescription += "SAN switch placed at U" + mDeviceUPosition + " - management port";
+            mLabel = "U" + mDeviceUPosition + "_MGMT";
         }
         else
         {
-            mDescription = Utilities::c_InvalidPortTypeErrorText;
+            mDescription = Utilities::c_InvalidPortNumberErrorText;
             mLabel = Utilities::c_LabelErrorText;
+        }
+    }
+    else
+    {
+        mDescription = Utilities::c_InvalidPortTypeErrorText;
+        mLabel = Utilities::c_LabelErrorText;
+    }
+
+    _checkLabel();
+}
+
+void SANSwitchPort::_handleNumericPortType()
+{
+    if (Utilities::isDigitString(mPortNumber)) // power or data port
+    {
+        if ("F" == mPortType)
+        {
+            mDescription = "SAN switch placed at U" + mDeviceUPosition + " - FC port " + mPortNumber;
+            mLabel = "U" + mDeviceUPosition + "_P" + mPortNumber;
+        }
+        else if ("P" == mPortType)
+        {
+            mDescription = "SAN switch placed at U" + mDeviceUPosition + " - power supply " + mPortNumber;
+            mLabel = "U" + mDeviceUPosition + "_PS" + mPortNumber;
+        }
+        else
+        {
+            assert(false);
         }
     }
     else
@@ -96,8 +122,6 @@ void SANSwitchPort::computeDescriptionAndLabel()
         mDescription = Utilities::c_InvalidPortNumberErrorText;
         mLabel = Utilities::c_LabelErrorText;
     }
-
-    _checkLabel();
 }
 
 InfinibandSwitchPort::InfinibandSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -113,32 +137,51 @@ InfinibandSwitchPort::InfinibandSwitchPort(const std::string& deviceUPosition, c
 
 void InfinibandSwitchPort::computeDescriptionAndLabel()
 {
-    mDescription = "Infiniband switch placed at U" + mDeviceUPosition;
-    mLabel = "U" + mDeviceUPosition;
-
     Utilities::convertStringCase(mPortType, true);
 
-    if ("m" == mPortNumber || "M" == mPortNumber ) // management port
+    if ("I" == mPortType || "P" == mPortType)
     {
-        mDescription += " - management port";
-        mLabel += "_MGMT";
+        _handleNumberedPortType();
     }
-    else if (Utilities::isDigitString(mPortNumber)) // power or data port
+    else if ("-" == mPortType)
     {
-        if ("I" == mPortType)
+        if ("m" == mPortNumber || "M" == mPortNumber) // management port
         {
-            mDescription += + " - port " + mPortNumber;
-            mLabel += "_P" + mPortNumber;
-        }
-        else if ("P" == mPortType)
-        {
-            mDescription += " - power supply " + mPortNumber;
-            mLabel += "_PS" + mPortNumber;
+            mDescription += "Infiniband switch placed at U" + mDeviceUPosition + " - management port";
+            mLabel = "U" + mDeviceUPosition + "_MGMT";
         }
         else
         {
-            mDescription = Utilities::c_InvalidPortTypeErrorText;
+            mDescription = Utilities::c_InvalidPortNumberErrorText;
             mLabel = Utilities::c_LabelErrorText;
+        }
+    }
+    else
+    {
+        mDescription = Utilities::c_InvalidPortTypeErrorText;
+        mLabel = Utilities::c_LabelErrorText;
+    }
+
+    _checkLabel();
+}
+
+void InfinibandSwitchPort::_handleNumberedPortType()
+{
+    if (Utilities::isDigitString(mPortNumber)) // power or data port
+    {
+        if ("I" == mPortType)
+        {
+            mDescription = "Infiniband switch placed at U" + mDeviceUPosition + " - port " + mPortNumber;
+            mLabel = "U" + mDeviceUPosition + "_P" + mPortNumber;
+        }
+        else if ("P" == mPortType)
+        {
+            mDescription = "Infiniband switch placed at U" + mDeviceUPosition + " - power supply " + mPortNumber;
+            mLabel = "U" + mDeviceUPosition + "_PS" + mPortNumber;
+        }
+        else
+        {
+            assert(false);
         }
     }
     else
@@ -146,8 +189,6 @@ void InfinibandSwitchPort::computeDescriptionAndLabel()
         mDescription = Utilities::c_InvalidPortNumberErrorText;
         mLabel = Utilities::c_LabelErrorText;
     }
-
-    _checkLabel();
 }
 
 KVMSwitchPort::KVMSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -163,33 +204,39 @@ KVMSwitchPort::KVMSwitchPort(const std::string& deviceUPosition, const size_t fi
 
 void KVMSwitchPort::computeDescriptionAndLabel()
 {
-    mDescription = "KVM switch placed at U" + mDeviceUPosition;
-    mLabel = "U" + mDeviceUPosition;
-
     Utilities::convertStringCase(mPortType, true);
 
-    if (Utilities::isDigitString(mPortNumber))
+    bool isValidPortType{true};
+
+    if ("K" == mPortType)
     {
-        if ("K" == mPortType)
-        {
-            mDescription += " - port " + mPortNumber;
-            mLabel += "_P" + mPortNumber;
-        }
-        else if ("P" == mPortType)
-        {
-            mDescription += " - power supply " + mPortNumber;
-            mLabel += "_PS" + mPortNumber;
-        }
-        else
-        {
-            mDescription = Utilities::c_InvalidPortTypeErrorText;
-            mLabel = Utilities::c_LabelErrorText;
-        }
+        mDescription = "KVM switch placed at U" + mDeviceUPosition + " - port ";
+        mLabel = "U" + mDeviceUPosition + "_P";
+    }
+    else if ("P" == mPortType)
+    {
+        mDescription = "KVM switch placed at U" + mDeviceUPosition + " - power supply ";
+        mLabel = "U" + mDeviceUPosition + "_PS";
     }
     else
     {
-        mDescription = Utilities::c_InvalidPortNumberErrorText;
+        mDescription = Utilities::c_InvalidPortTypeErrorText;
         mLabel = Utilities::c_LabelErrorText;
+        isValidPortType = false;
+    }
+
+    if (isValidPortType)
+    {
+        if (Utilities::isDigitString(mPortNumber))
+        {
+            mDescription += mPortNumber;
+            mLabel += mPortNumber;
+        }
+        else
+        {
+            mDescription = Utilities::c_InvalidPortNumberErrorText;
+            mLabel = Utilities::c_LabelErrorText;
+        }
     }
 
     _checkLabel();
@@ -208,57 +255,78 @@ ServerPort::ServerPort(const std::string& deviceUPosition, const size_t fileRowN
 
 void ServerPort::computeDescriptionAndLabel()
 {
-    mDescription = "Server placed at U" + mDeviceUPosition;
-    mLabel = "U" + mDeviceUPosition;
-
     Utilities::convertStringCase(mPortType, true);
 
-    if("m" == mPortNumber || "M" == mPortNumber) // management port
+    std::set<std::string> c_NumberedPortTypes{"F", "N", "E", "I", "S", "P"};
+
+    if (c_NumberedPortTypes.find(mPortType) != c_NumberedPortTypes.cend())
     {
-        mDescription += " - management port";
-        mLabel += "_MGMT";
+        _handleNumberedPortType();
     }
     else if ("K" == mPortType) // KVM port
     {
-        mDescription += " - KVM port";
-        mLabel += "_KVM";
+        mDescription = "Server placed at U" + mDeviceUPosition + " - KVM port";
+        mLabel = "U" + mDeviceUPosition + "_KVM";
     }
-    else if (Utilities::isDigitString(mPortNumber))
+    else if ("-" == mPortType)
     {
-        if("F" == mPortType) // FC port
+        if("m" == mPortNumber || "M" == mPortNumber) // management port
         {
-            mDescription += " - FC port " + mPortNumber;
-            mLabel += "_FC_P" + mPortNumber;
-        }
-        else if("N" == mPortType) // Ethernet port (but not embedded but on PCIe public slot)
-        {
-            mDescription += " - Ethernet port " + mPortNumber;
-            mLabel += "_ETH_P" + mPortNumber;
-        }
-        else if ("E" == mPortType) // embedded port (Ethernet/Infiniband)
-        {
-            mDescription += " - embedded port " + mPortNumber;
-            mLabel += "_EMB_P" + mPortNumber;
-        }
-        else if ("I" == mPortType) // Infiniband port (but not embedded but on PCIe public slot)
-        {
-            mDescription+=" - Infiniband port " + mPortNumber;
-            mLabel += "_IB_P" + mPortNumber;
-        }
-        else if ("S" == mPortType) // SAS port
-        {
-            mDescription += " - SAS port " + mPortNumber;
-            mLabel += "_SAS_P" + mPortNumber;
-        }
-        else if ("P" == mPortType) // power supply
-        {
-            mDescription += " - power supply " + mPortNumber;
-            mLabel += "_PS" + mPortNumber;
+            mDescription = "Server placed at U" + mDeviceUPosition + " - management port";
+            mLabel = "U" + mDeviceUPosition + "_MGMT";
         }
         else
         {
-            mDescription = Utilities::c_InvalidPortTypeErrorText;
+            mDescription = Utilities::c_InvalidPortNumberErrorText;
             mLabel = Utilities::c_LabelErrorText;
+        }
+    }
+    else
+    {
+        mDescription = Utilities::c_InvalidPortTypeErrorText;
+        mLabel = Utilities::c_LabelErrorText;
+    }
+
+    _checkLabel();
+}
+
+void ServerPort::_handleNumberedPortType()
+{
+    if (Utilities::isDigitString(mPortNumber))
+    {
+        if("F" == mPortType) // FC port
+        {
+            mDescription = "Server placed at U" + mDeviceUPosition + " - FC port " + mPortNumber;
+            mLabel = "U" + mDeviceUPosition + "_FC_P" + mPortNumber;
+        }
+        else if("N" == mPortType) // Ethernet port (but not embedded but on PCIe public slot)
+        {
+            mDescription = "Server placed at U" + mDeviceUPosition + " - Ethernet port " + mPortNumber;
+            mLabel = "U" + mDeviceUPosition + "_ETH_P" + mPortNumber;
+        }
+        else if ("E" == mPortType) // embedded port (Ethernet/Infiniband)
+        {
+            mDescription = "Server placed at U" + mDeviceUPosition + " - embedded port " + mPortNumber;
+            mLabel = "U" + mDeviceUPosition + "_EMB_P" + mPortNumber;
+        }
+        else if ("I" == mPortType) // Infiniband port (but not embedded but on PCIe public slot)
+        {
+            mDescription = "Server placed at U" + mDeviceUPosition + " - Infiniband port " + mPortNumber;
+            mLabel = "U" + mDeviceUPosition + "_IB_P" + mPortNumber;
+        }
+        else if ("S" == mPortType) // SAS port
+        {
+            mDescription = "Server placed at U" + mDeviceUPosition + " - SAS port " + mPortNumber;
+            mLabel = "U" + mDeviceUPosition + "_SAS_P" + mPortNumber;
+        }
+        else if ("P" == mPortType) // power supply
+        {
+            mDescription = "Server placed at U" + mDeviceUPosition + " - power supply " + mPortNumber;
+            mLabel = "U" + mDeviceUPosition + "_PS" + mPortNumber;
+        }
+        else
+        {
+            assert(false);
         }
     }
     else
@@ -266,8 +334,6 @@ void ServerPort::computeDescriptionAndLabel()
         mDescription = Utilities::c_InvalidPortNumberErrorText;
         mLabel = Utilities::c_LabelErrorText;
     }
-
-    _checkLabel();
 }
 
 StoragePort::StoragePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -365,7 +431,7 @@ void BladeServerPort::computeDescriptionAndLabel()
 
     if ("DM" == mModuleType || "MG" == mModuleType || "P" == mModuleType)
     {
-        _handleMultipleInstanceModule();
+        _handleNumberedModuleType();
     }
     else if ("UP" == mModuleType) // management uplink port (for daisy chaining multiple blade systems)
     {
@@ -386,7 +452,7 @@ void BladeServerPort::computeDescriptionAndLabel()
     _checkLabel();
 }
 
-void BladeServerPort::_handleMultipleInstanceModule()
+void BladeServerPort::_handleNumberedModuleType()
 {
     if (Utilities::isDigitString(mModuleNumber))
     {

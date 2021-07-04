@@ -26,6 +26,8 @@ public:
     virtual void computeDescriptionAndLabel() override;
 
 protected:
+    void _handleNumericPortType();
+
     std::string mPortType;
 };
 
@@ -39,6 +41,8 @@ public:
     virtual void computeDescriptionAndLabel() override;
 
 protected:
+    void _handleNumberedPortType();
+
     std::string mPortType;
 };
 
@@ -65,6 +69,8 @@ public:
     virtual void computeDescriptionAndLabel() override;
 
 protected:
+    void _handleNumberedPortType();
+
     std::string mPortType;
 };
 
@@ -91,10 +97,9 @@ public:
 
     virtual void computeDescriptionAndLabel() override;
 
-private:
-    void _handleMultipleInstanceModule();
-
 protected:
+    void _handleNumberedModuleType();
+
     std::string mModuleType; // blade system module type: interconnect, management module, power supply etc.
     std::string mModuleNumber; // data module number
 };
