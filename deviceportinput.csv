@@ -1,7 +1,7 @@
 *DEVICE TYPE*,TYPE DESCRIPTION,DEVICE PORT PARAMETER 1,*INPUT VALUES 1*,DESCRIPTIONS 1,DEVICE PORT PARAMETER 2,*INPUT VALUES 2*,DESCRIPTIONS 2,DEVICE PORT PARAMETER 3,*INPUT VALUES 3*,DESCRIPTIONS 3,NOTES
 ,,,,,,,,,,,
 pdu,power distribution unit,rack placement,H,horizontal,load segment number,positive integer,PDU load segment number,port number,positive integer,power port number,The input port is the one connecting the PDU to the wall or UPS. Cable labelling for wall connections is not supported by this application.
-,,,L ,vertical left,,-,"single load segment, no number required",,M,management port,When entering input or management port fill in ‘-’ for load segment number.
+,,,L ,vertical left,,-,"single load segment, no number required",,M,management port,When entering input or management port fill in ‘-’ for load segment number. Same when a single PDU load segment exists and no number should be mentioned for it.
 ,,,R ,vertical right,,,,,IN,input power port,
 ,,,,,,,,,,,
 ext,extension bar,rack placement,L ,vertical left,port number,positive integer,power port number,none,-,,The extensions bar can only be placed vertically (left or right).

@@ -25,40 +25,46 @@ void PDUPort::computeDescriptionAndLabel()
 
     if (Data::c_DevicePlacementIdentifiers.find(mDevicePlacementType) != Data::c_DevicePlacementIdentifiers.cend())
     {
-        mDescription = Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " PDU placed at U" + mDeviceUPosition;
-        mLabel = "U" + mDeviceUPosition + "_" + mDevicePlacementType + "PDU";
-
-        if ("M" == mPortNumber) // management port
+        if (Utilities::isDigitString(mLoadSegmentNumber))
         {
-            mDescription += " - management port";
-            mLabel += "_MGMT";
-        }
-        else if ("IN" == mPortNumber)
-        {
-            mDescription += " - port number " + mPortNumber;
-            mLabel += "_" + mPortNumber;
-        }
-        else if (Utilities::isDigitString(mPortNumber))
-        {
-            if ("-" == mLoadSegmentNumber)
+            if (Utilities::isDigitString(mPortNumber))
             {
-                mDescription += " - port number" + mPortNumber;
-                mLabel += "_P" + mPortNumber;
-            }
-            else if (Utilities::isDigitString(mLoadSegmentNumber))
-            {
-                mDescription += " - load segment number " + mLoadSegmentNumber + " - port number " + mPortNumber;
-                mLabel += "_P" + mLoadSegmentNumber + "." + mPortNumber;
+                mDescription = Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " PDU placed at U" + mDeviceUPosition +
+                               " - load segment number " + mLoadSegmentNumber + " - port number " + mPortNumber;
+                mLabel = "U" + mDeviceUPosition + "_" + mDevicePlacementType + "PDU_P" + mLoadSegmentNumber + "." + mPortNumber;
             }
             else
             {
-                mDescription = Utilities::c_InvalidLoadSegmentNumberErrorText;
+                mDescription = Utilities::c_InvalidPortNumberErrorText;
+                mLabel = Utilities::c_LabelErrorText;
+            }
+        }
+        else if ("-" == mLoadSegmentNumber)
+        {
+            if (Utilities::isDigitString(mPortNumber))
+            {
+                mDescription = Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " PDU placed at U" + mDeviceUPosition + " - port number r" + mPortNumber;
+                mLabel = "U" + mDeviceUPosition + "_" + mDevicePlacementType + "PDU_P" + mPortNumber;
+            }
+            else if ("M" == mPortNumber) // management port
+            {
+                mDescription = Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " PDU placed at U" + mDeviceUPosition + " - management port";
+                mLabel = "U" + mDeviceUPosition + "_" + mDevicePlacementType + "PDU_MGMT";
+            }
+            else if ("IN" == mPortNumber)
+            {
+                mDescription = Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " PDU placed at U" + mDeviceUPosition + " - port number " + mPortNumber;
+                mLabel = "U" + mDeviceUPosition + "_" + mDevicePlacementType + "PDU_" + mPortNumber;
+            }
+            else
+            {
+                mDescription = Utilities::c_InvalidPortNumberErrorText;
                 mLabel = Utilities::c_LabelErrorText;
             }
         }
         else
         {
-            mDescription = Utilities::c_InvalidPortNumberErrorText;
+            mDescription = Utilities::c_InvalidLoadSegmentNumberErrorText;
             mLabel = Utilities::c_LabelErrorText;
         }
     }
