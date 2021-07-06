@@ -154,20 +154,29 @@ void DevicePort::_checkLabel()
 
     assert(c_LabelCharsCount > 0u);
 
-    if (Utilities::c_LabelErrorText != mLabel)
+    if (std::string::npos == mLabel.find(Utilities::c_LabelErrorText) &&
+        c_LabelCharsCount > Data::c_MaxLabelCharsCount)
     {
-        if (c_LabelCharsCount > Data::c_MaxLabelCharsCount)
-        {
-            std::stringstream stream;
-            const ssize_t c_DeltaCharsCount{static_cast<ssize_t>(c_LabelCharsCount - Data::c_MaxLabelCharsCount)};
-            stream << Utilities::c_MaxLabelCharsCountExceededErrorText << c_DeltaCharsCount;
+        std::stringstream stream;
+        const ssize_t c_DeltaCharsCount{static_cast<ssize_t>(c_LabelCharsCount - Data::c_MaxLabelCharsCount)};
+        stream << Utilities::c_MaxLabelCharsCountExceededErrorText << c_DeltaCharsCount;
 
-            mDescription = stream.str();
-            mLabel = Utilities::c_LabelErrorText + Utilities::getCheckConnectionInputFileText();
-        }
+        _setInvalidDescriptionAndLabel(stream.str());
+    }
+}
+
+void DevicePort::_setInvalidDescriptionAndLabel(const std::string& description, const std::string& label)
+{
+    assert(description.size() > 0u);
+
+    mDescription = description;
+
+    if (label.size() > 0u)
+    {
+        mLabel = label;
     }
     else
     {
-        mLabel += Utilities::getCheckConnectionInputFileText();
+        mLabel = Utilities::c_LabelErrorText + Utilities::getCheckConnectionInputFileText();
     }
 }

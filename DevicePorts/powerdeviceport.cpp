@@ -35,8 +35,7 @@ void PDUPort::computeDescriptionAndLabel()
             }
             else
             {
-                mDescription = Utilities::c_InvalidPortNumberErrorText;
-                mLabel = Utilities::c_LabelErrorText;
+                _setInvalidDescriptionAndLabel(Utilities::c_InvalidPortNumberErrorText);
             }
         }
         else if ("-" == mLoadSegmentNumber)
@@ -58,20 +57,17 @@ void PDUPort::computeDescriptionAndLabel()
             }
             else
             {
-                mDescription = Utilities::c_InvalidPortNumberErrorText;
-                mLabel = Utilities::c_LabelErrorText;
+                _setInvalidDescriptionAndLabel(Utilities::c_InvalidPortNumberErrorText);
             }
         }
         else
         {
-            mDescription = Utilities::c_InvalidLoadSegmentNumberErrorText;
-            mLabel = Utilities::c_LabelErrorText;
+            _setInvalidDescriptionAndLabel(Utilities::c_InvalidLoadSegmentNumberErrorText);
         }
     }
     else
     {
-        mDescription = Utilities::c_InvalidPlacementErrorText;
-        mLabel = Utilities::c_LabelErrorText;
+        _setInvalidDescriptionAndLabel(Utilities::c_InvalidPlacementErrorText);
     }
 
     _checkLabel();
@@ -109,14 +105,12 @@ void ExtensionBarPort::computeDescriptionAndLabel()
         }
         else
         {
-            mDescription = Utilities::c_InvalidPortNumberErrorText;
-            mLabel = Utilities::c_LabelErrorText;
+            _setInvalidDescriptionAndLabel(Utilities::c_InvalidPortNumberErrorText);
         }
     }
     else
     {
-        mDescription = Utilities::c_InvalidPlacementErrorText;
-        mLabel = Utilities::c_LabelErrorText;
+        _setInvalidDescriptionAndLabel(Utilities::c_InvalidPlacementErrorText);
     }
 
     _checkLabel();
@@ -144,8 +138,7 @@ void UPSPort::computeDescriptionAndLabel()
         }
         else
         {
-            mDescription = Utilities::c_InvalidPortNumberErrorText;
-            mLabel = Utilities::c_LabelErrorText;
+            _setInvalidDescriptionAndLabel(Utilities::c_InvalidPortNumberErrorText);
         }
     }
     else if ("-" == mLoadSegmentNumber)
@@ -157,14 +150,12 @@ void UPSPort::computeDescriptionAndLabel()
         }
         else
         {
-            mDescription = Utilities::c_InvalidPortNumberErrorText;
-            mLabel = Utilities::c_LabelErrorText;
+            _setInvalidDescriptionAndLabel(Utilities::c_InvalidPortNumberErrorText);
         }
     }
     else
     {
-        mDescription = Utilities::c_InvalidLoadSegmentNumberErrorText;
-        mLabel = Utilities::c_LabelErrorText;
+        _setInvalidDescriptionAndLabel(Utilities::c_InvalidLoadSegmentNumberErrorText);
     }
 
     _checkLabel();

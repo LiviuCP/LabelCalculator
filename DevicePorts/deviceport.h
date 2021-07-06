@@ -46,6 +46,12 @@ protected:
     */
     void _checkLabel();
 
+    /* This function is used for replacing port description and label with a "soft" parsing error message
+       "Hard" parsing errors are being logged within error file by using the error handling functionality (see ErrorHandling directory)
+       If no label argument is entered the default invalid label message is filled-in
+    */
+    void _setInvalidDescriptionAndLabel(const std::string& description, const std::string& label = "");
+
     // position of the device containing the port in rack
     std::string mDeviceUPosition;
 
