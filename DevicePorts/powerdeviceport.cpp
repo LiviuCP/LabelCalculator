@@ -135,30 +135,35 @@ UPSPort::UPSPort(const std::string& deviceUPosition, const size_t fileRowNumber,
 
 void UPSPort::computeDescriptionAndLabel()
 {
-    mDescription = "UPS placed at U" + mDeviceUPosition;
-    mLabel = mLabel = "U" + mDeviceUPosition;
-
-    if ("m" == mPortNumber || "M" == mPortNumber) // management port
+    if (Utilities::isDigitString(mLoadSegmentNumber))
     {
-        mDescription += " - management port";
-        mLabel += "_MGMT";
-    }
-    else if (Utilities::isDigitString(mPortNumber))
-    {
-        if (Utilities::isDigitString(mLoadSegmentNumber))
+        if (Utilities::isDigitString(mPortNumber)) // power port
         {
-            mDescription += " - load segment " + mLoadSegmentNumber + " - port " + mPortNumber;
-            mLabel += "_P" + mLoadSegmentNumber + "." + mPortNumber;
+            mDescription = "UPS placed at U" + mDeviceUPosition + " - load segment " + mLoadSegmentNumber + " - port " + mPortNumber;
+            mLabel += "U" + mDeviceUPosition + "_P" + mLoadSegmentNumber + "." + mPortNumber;
         }
         else
         {
-            mDescription = Utilities::c_InvalidLoadSegmentNumberErrorText;
+            mDescription = Utilities::c_InvalidPortNumberErrorText;
             mLabel = Utilities::c_LabelErrorText;
         }
     }
-    else // power port
+    else if ("-" == mLoadSegmentNumber)
     {
-        mDescription = Utilities::c_InvalidPortNumberErrorText;
+        if ("m" == mPortNumber || "M" == mPortNumber) // management port
+        {
+            mDescription = "UPS placed at U" + mDeviceUPosition + " - management port";
+            mLabel = "U" + mDeviceUPosition + "_MGMT";
+        }
+        else
+        {
+            mDescription = Utilities::c_InvalidPortNumberErrorText;
+            mLabel = Utilities::c_LabelErrorText;
+        }
+    }
+    else
+    {
+        mDescription = Utilities::c_InvalidLoadSegmentNumberErrorText;
         mLabel = Utilities::c_LabelErrorText;
     }
 
