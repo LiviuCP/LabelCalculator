@@ -97,18 +97,15 @@ void ExtensionBarPort::computeDescriptionAndLabel()
     {
         assert(Data::c_DevicePlacementIdentifiers.find(mDevicePlacementType) != Data::c_DevicePlacementIdentifiers.cend());
 
-        mDescription = Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " extension bar placed at U" + mDeviceUPosition;
-        mLabel = "U" + mDeviceUPosition + "_" + mDevicePlacementType + "EXT";
-
-        if ("IN" == mPortNumber)
+        if (Utilities::isDigitString(mPortNumber))
         {
-            mDescription += " - port number IN";
-            mLabel += "_IN";
+            mDescription = Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " extension bar placed at U" + mDeviceUPosition + " - port number " + mPortNumber;
+            mLabel = "U" + mDeviceUPosition + "_" + mDevicePlacementType + "EXT_P" + mPortNumber;
         }
-        else if (Utilities::isDigitString(mPortNumber))
+        else if ("IN" == mPortNumber)
         {
-            mDescription += " - port number " + mPortNumber;
-            mLabel += "_P" + mPortNumber;
+            mDescription = Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " extension bar placed at U" + mDeviceUPosition + " - port number IN";
+            mLabel = "U" + mDeviceUPosition + "_" + mDevicePlacementType + "EXT_IN";
         }
         else
         {
