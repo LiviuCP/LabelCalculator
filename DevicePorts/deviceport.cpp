@@ -169,7 +169,7 @@ void DevicePort::_setInvalidDescriptionAndLabel(const std::string& description, 
 {
     assert(description.size() > 0u);
 
-    mDescription = description;
+    mDescription = "U" + mDeviceUPosition + ": " + description;
 
     if (label.size() > 0u)
     {
