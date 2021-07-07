@@ -42,7 +42,7 @@ void PDUPort::computeDescriptionAndLabel()
         {
             if (Utilities::isDigitString(mPortNumber))
             {
-                mDescription = Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " PDU placed at U" + mDeviceUPosition + " - port number r" + mPortNumber;
+                mDescription = Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " PDU placed at U" + mDeviceUPosition + " - port number " + mPortNumber;
                 mLabel = "U" + mDeviceUPosition + "_" + mDevicePlacementType + "PDU_P" + mPortNumber;
             }
             else if ("M" == mPortNumber) // management port
