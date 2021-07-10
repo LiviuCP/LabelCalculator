@@ -1,18 +1,18 @@
-*DEVICE TYPE*,TYPE DESCRIPTION,DEVICE PORT PARAMETER 1,*INPUT VALUES 1*,DESCRIPTIONS 1,DEVICE PORT PARAMETER 2,*INPUT VALUES 2*,DESCRIPTIONS 2,DEVICE PORT PARAMETER 3,*INPUT VALUES 3*,DESCRIPTIONS 3,NOTES
+*DEVICE TYPE*,TYPE DESCRIPTION,DEVICE PORT PARAMETER 1,*POSSIBLE INPUT VALUES 1*,DESCRIPTIONS 1,DEVICE PORT PARAMETER 2,*POSSIBLE INPUT VALUES 2*,DESCRIPTIONS 2,DEVICE PORT PARAMETER 3,*POSSIBLE INPUT VALUES 3*,DESCRIPTIONS 3,NOTES
 ,,,,,,,,,,,
 pdu,power distribution unit,rack placement,H,horizontal,load segment number,positive integer,PDU load segment number,port number,positive integer,power port number,The input port is the one connecting the PDU to the wall or UPS. Cable labelling for wall connections is not supported by this application.
-,,,L ,vertical left,,-,"single load segment, no number required",,M,management port,When entering input or management port fill in ‘-’ for load segment number. Same when a single PDU load segment exists and no number should be mentioned for it.
+,,,L ,vertical left,,-,"single load segment, no number required",,M,management port,When entering input or management port it is mandatory to fill in ‘-’ for load segment number. Same when a single PDU load segment exists and no number should be mentioned for it.
 ,,,R ,vertical right,,,,,IN,input power port,
 ,,,,,,,,,,,
 ext,extension bar,rack placement,L ,vertical left,port number,positive integer,power port number,none,-,,The extensions bar can only be placed vertically (left or right).
 ,,,R ,vertical right,,IN,input power port,,,,The input port is the one connecting to a PDU or UPS. Labelling this connection is supported by application.
 ,,,,,,,,,,,
-ups,UPS,load segment number,positive integer,UPS load segment number,port number,positive integer,power port number belonging to given segment,none,-,,When filling in the management port enter ‘-’ as input for load segment number.
+ups,UPS,load segment number,positive integer,UPS load segment number,port number,positive integer,power port number belonging to given segment,none,-,,When filling in the management port it is mandatory to enter ‘-’ as input for load segment number.
 ,,,,,,M,management port,,,,
 ,,,,,,,,,,,
 ,,,,,,,,,,,
-svr,rackmount server,port type,E,"embedded port (Ethernet, IB, etc)",port number,positive integer,data or power port number,none,-,,When filling in management or KVM port enter ‘-’ as input for port type.
-,,,N,networking card port,,M,management port,,,,
+svr,rackmount server,port type,E,"embedded port (Ethernet, IB, etc)",port number,positive integer,data or power port number,none,-,,When filling in the management port it is mandatory to enter ‘-’ as input for port type.
+,,,N,networking card port,,M,management port,,,,When filling in the KVM port the user can enter ‘-’ as input for port number (not mandatory but easiest choice).
 ,,,F,FC card port,,,,,,,
 ,,,I,Infiniband card port,,,,,,,
 ,,,S,SAS card port,,,,,,,
@@ -20,21 +20,22 @@ svr,rackmount server,port type,E,"embedded port (Ethernet, IB, etc)",port number
 ,,,P,power supply port,,,,,,,
 ,,,,,,,,,,,
 bld,blade server,module type,DM,data module (e.g. FC switch),module number,positive integer,"data module, management module or power supply (port) number",port number,positive integer,data module port number,"data module can be an Ethernet switch, SAN switch etc"
-,,,MG,management module,,,,,,,uplink port connects management modules to the ones of next enclosure
-,,,UP,management module uplink port,,,,,,,downlink port connects to uplink port of previous enclosure
+,,,MG,management module,,,,,,,uplink port connects management modules to the ones of next enclosure; for this module type the user can enter ‘-’ for module number (not mandatory but easiest choice)
+,,,UP,management module uplink port,,,,,,,downlink port connects to uplink port of previous enclosure; for this module type the user can enter ‘-’ for module number (not mandatory but easiest choice)
 ,,,DO,management module downlink port,,,,,,,"the power port number is given in the module number, not in the port number (latter one used only for data ports)"
-,,,P,power supply port,,,,,,,
+,,,P,power supply port,,,,,,,port number parameter is ignored for any module except data module; the user could enter ‘-’ (not mandatory but easiest choice)
 ,,,,,,,,,,,
 sto,storage device,controller number,positive integer,storage controller number,port type,D,"data port, specific type  (FC, SAS) not explicitly provided",port number,positive integer,data or power port number,When a single (unified) management port is used please fill in ‘M’ both for controller number and port number.
 ,,,M,unified storage management port,,P,power supply,,M,management port,"When dedicated management ports are used (one per controller), please fill in a positive integer for controller number and ‘M’ for port number."
+,,,,,,,,,,,In either of the management port scenarios it is mandatory to enter ‘-’ for port type.
 ,,,,,,,,,,,
 lan,networking switch,port type,N,networking port,port number,positive integer,networking or power port number,none,-,,
 ,,,P,power supply port,,,,,,,
 ,,,,,,,,,,,
-san,SAN switch,port type,F,FC port,port number,positive integer,FC or power port number,none,-,,When filling in management port enter ‘-’ as input for port type.
+san,SAN switch,port type,F,FC port,port number,positive integer,FC or power port number,none,-,,When filling in management port it is mandatory to enter ‘-’ as input for port type.
 ,,,P,power supply port,,M,management port,,,,
 ,,,,,,,,,,,
-ib,Infiniband switch,port type,I,infiniband port,port number,positive integer,Infiniband or power port number,none,-,,When filling in management port enter ‘-’ as input for port type.
+ib,Infiniband switch,port type,I,infiniband port,port number,positive integer,Infiniband or power port number,none,-,,When filling in management port it is mandatory to enter ‘-’ as input for port type.
 ,,,P,power supply port,,M,management port,,,,
 ,,,,,,,,,,,
 kvm,KVM switch,port type,K,KVM port,port number,positive integer,KVM or power port number,none,-,,
@@ -57,6 +58,7 @@ kvm,port type,port number,n/a,,,,,,,,
 ,,,,,,,,,,,
 General notes:,,,,,,,,,,,
 - any entered text values are case insensitive,,,,,,,,,,,
-- if an input parameter does not exist or is not used please enter '-' (avoid empty fields),,,,,,,,,,,
+- if an input parameter does not exist or is not used please enter '-' (avoid empty fields). See next point for the case when this character is mandatory as input parameter value.,,,,,,,,,,,
+- in specific cases it is mandatory to enter '-' for some parameters. For example for servers or switches when the management port should be connected the user should enter '-' for port type and 'm' for port number.,,,,,,,,,,,
 - columns with headers enclosed by '*' contain values that can be entered by user in the connection input file,,,,,,,,,,,
 - each device type can also be entered in the connection definitions file at the required U position(s),,,,,,,,,,,

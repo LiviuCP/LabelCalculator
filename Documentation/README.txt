@@ -19,7 +19,7 @@ Notes:
 
 3. SUPPORTED OPERATING SYSTEMS
 
-The application has been compiled and tested on Linux (Fedora 28) and Mac OS (Catalina). It might also be compiled on Windows however this hasn't been done yet so some compilation errors might be expected.
+The application has been compiled and tested on Linux (Fedora 28) and Mac OS (Catalina). It might also be compiled on Windows however I haven't done this so far (I only have Linux and OS X machines) so some compilation errors might be expected. Let me know if this happens.
 
 4. RUNNING THE APPLICATION
 
@@ -202,6 +202,6 @@ When these errors occur, please make sure:
 
 8. MISCELLANEOUS
 
-Currently the application does not support inter-rack connections. These might be added in a future version.
+Currently the application does not support inter-rack connectivity. Also it doesn't check duplicate connections or port-to-port connections validity (e.g. invalid connection between a FC port and a PDU power port). All these might be added in a future version.
 
-For a better understanding of the application options and files, please check the Examples folder (see source code), which contains both data and power connections. All required user data files are provided.
+For a better understanding of the application options and files, please check the Documentation/Examples folder (see source code), which contains both data and power connections. All required user input or output files except error.txt are provided there. Please note that for both data/power connections the connectioninput_template.csv file has been manually renamed to reflect the fact that it is generated when executing option 1 and that it is only a template that needs to be filled-in prior to executing the second option. However when running the application it is (and should always be) named connectioninput.csv.
