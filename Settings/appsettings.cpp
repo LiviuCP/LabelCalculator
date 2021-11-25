@@ -68,10 +68,26 @@ void AppSettings::_init()
 
 void AppSettings::_retrieveUsername()
 {
+    mUsername.clear();
 #if defined (__APPLE__) && defined (__MACH__)
-    mUsername = getenv("USER");
+    char* pUsername{getenv("USER")};
+
+    if (pUsername != nullptr)
+    {
+        mUsername = pUsername;
+    }
 #elif defined (__unix__)
-    mUsername = getenv("USERNAME");
+    char* pUsername{getenv("USERNAME")};
+
+    if (pUsername == nullptr)
+    {
+        pUsername = getenv("USER");
+    }
+
+    if (pUsername != nullptr)
+    {
+        mUsername = pUsername;
+    }
 #else
     char buffer[100];
     DWORD length{sizeof(buffer)};
