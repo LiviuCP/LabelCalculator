@@ -12,26 +12,27 @@ include_directories(
     ErrorHandling
     Parsers
     Settings
+    Utilities
 )
 
 add_executable(LabelCalculator
     Application/main.cpp
     Application/application.cpp
-    Application/applicationutils.cpp
     Parsers/preparse.cpp
     Parsers/parsercreator.cpp
     Parsers/parser.cpp
     Parsers/connectiondefinitionparser.cpp
     Parsers/connectioninputparser.cpp
-    Parsers/parserutils.cpp
     DevicePorts/deviceportsfactory.cpp
     DevicePorts/deviceport.cpp
     DevicePorts/datadeviceport.cpp
     DevicePorts/powerdeviceport.cpp
-    DevicePorts/deviceportutils.cpp
     ErrorHandling/errorhandler.cpp
     ErrorHandling/error.cpp
     ErrorHandling/errortypes.cpp
-    ErrorHandling/errorutils.cpp
     Settings/appsettings.cpp
+    Utilities/applicationutils.cpp
+    Utilities/parserutils.cpp
+    Utilities/deviceportutils.cpp
+    Utilities/errorutils.cpp
 )
