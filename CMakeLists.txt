@@ -12,6 +12,7 @@ include_directories(
     ErrorHandling
     Parsers
     Settings
+    Data
     Utilities
 )
 
