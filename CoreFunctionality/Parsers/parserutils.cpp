@@ -1,4 +1,4 @@
-#include "applicationutils.h"
+#include "coreutils.h"
 #include "parserutils.h"
 
 Data::DeviceTypeID Utilities::getDeviceTypeID(const std::string& deviceType)

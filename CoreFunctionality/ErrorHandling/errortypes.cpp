@@ -1,6 +1,6 @@
 #include <cassert>
 
-#include "errorutils.h"
+#include "errorsettingsproxy.h"
 #include "errortypes.h"
 #include "applicationdata.h"
 #include "parserdata.h"
@@ -159,7 +159,7 @@ EmptyConnectionInputFileError::EmptyConnectionInputFileError(std::ofstream& erro
 void EmptyConnectionInputFileError::execute()
 {
     mErrorStream << "Error: the connections input file contains no data.\n";
-    mErrorStream << "File: " << Utilities::getConnectionInputFile() << "\n";
+    mErrorStream << "File: " << Settings::getConnectionInputFile() << "\n";
 
     Error::execute();
 }
@@ -172,7 +172,7 @@ NoConnectionsDefinedError::NoConnectionsDefinedError(std::ofstream& errorStream)
 void NoConnectionsDefinedError::execute()
 {
     mErrorStream << "Error: the connection definitions file contains no devices or no connections between them.\n";
-    mErrorStream << "File: " << Utilities::getConnectionDefinitionsFile() << "\n";
+    mErrorStream << "File: " << Settings::getConnectionDefinitionsFile() << "\n";
 
     Error::execute();
 }

@@ -1,7 +1,7 @@
 #include <cassert>
 
 #include "applicationdata.h"
-#include "applicationutils.h"
+#include "coreutils.h"
 #include "deviceportdata.h"
 #include "deviceportutils.h"
 #include "powerdeviceport.h"

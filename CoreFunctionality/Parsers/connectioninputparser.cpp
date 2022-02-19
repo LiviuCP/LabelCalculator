@@ -1,7 +1,7 @@
 #include <sstream>
 #include <cassert>
 
-#include "applicationutils.h"
+#include "coreutils.h"
 #include "parserutils.h"
 #include "connectioninputparser.h"
 

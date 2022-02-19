@@ -1,5 +1,5 @@
-#ifndef APPLICATIONUTILS_H
-#define APPLICATIONUTILS_H
+#ifndef COREUTILS_H
+#define COREUTILS_H
 
 #include <string>
 
@@ -30,6 +30,4 @@ namespace Utilities
     bool areParseableCharactersContained(const std::string& str);
 }
 
-
-
-#endif // APPLICATIONUTILS_H
+#endif // COREUTILS_H

@@ -8,32 +8,20 @@ set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
 include_directories(
     Application
-    DevicePorts
-    ErrorHandling
-    Parsers
+    CoreFunctionality/Parsers
+    CoreFunctionality/DevicePorts
+    CoreFunctionality/ErrorHandling
     Settings
-    Data
-    Utilities
 )
 
+add_subdirectory(Application)
+add_subdirectory(CoreFunctionality)
+add_subdirectory(Settings)
+
 add_executable(LabelCalculator
-    Application/main.cpp
-    Application/application.cpp
-    Parsers/preparse.cpp
-    Parsers/parsercreator.cpp
-    Parsers/parser.cpp
-    Parsers/connectiondefinitionparser.cpp
-    Parsers/connectioninputparser.cpp
-    DevicePorts/deviceportsfactory.cpp
-    DevicePorts/deviceport.cpp
-    DevicePorts/datadeviceport.cpp
-    DevicePorts/powerdeviceport.cpp
-    ErrorHandling/errorhandler.cpp
-    ErrorHandling/error.cpp
-    ErrorHandling/errortypes.cpp
-    Settings/appsettings.cpp
-    Utilities/applicationutils.cpp
-    Utilities/parserutils.cpp
-    Utilities/deviceportutils.cpp
-    Utilities/errorutils.cpp
+    main.cpp
 )
+
+target_link_libraries(LabelCalculator PRIVATE Application)
+target_link_libraries(LabelCalculator PRIVATE Parsers)
+target_link_libraries(LabelCalculator PRIVATE Settings)

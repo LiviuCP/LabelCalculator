@@ -2,7 +2,7 @@
 #include <algorithm>
 
 #include "applicationdata.h"
-#include "applicationutils.h"
+#include "coreutils.h"
 
 #if not defined (__APPLE__) && not defined (__MACH__) && not defined(__unix__)
 #include <windows.h>

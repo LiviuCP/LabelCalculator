@@ -2,7 +2,7 @@
 #include <set>
 
 #include "applicationdata.h"
-#include "applicationutils.h"
+#include "coreutils.h"
 #include "deviceportutils.h"
 #include "datadeviceport.h"
 
