@@ -1,8 +1,6 @@
 #ifndef CONNECTIONDEFINITIONPARSER_H
 #define CONNECTIONDEFINITIONPARSER_H
 
-#include <map>
-
 #include "applicationdata.h"
 #include "parser.h"
 

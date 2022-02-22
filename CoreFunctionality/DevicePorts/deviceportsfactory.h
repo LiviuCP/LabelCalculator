@@ -2,8 +2,6 @@
 #define DEVICEPORTSFACTORY_H
 
 #include <string>
-#include <set>
-#include <map>
 
 #include "applicationdata.h"
 #include "deviceport.h"

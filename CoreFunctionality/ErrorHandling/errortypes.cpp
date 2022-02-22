@@ -1,5 +1,3 @@
-#include <cassert>
-
 #include "errorsettingsproxy.h"
 #include "errortypes.h"
 #include "applicationdata.h"
