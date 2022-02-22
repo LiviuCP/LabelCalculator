@@ -6,12 +6,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-include_directories(
-    ../CoreData
-    ../CoreUtilities
-)
-
-add_library(Parsers SHARED
+add_library(${PROJECT_NAME} ${LIB_TYPE}
     parsers.cpp
     preparse.cpp
     parsercreator.cpp
@@ -21,8 +16,8 @@ add_library(Parsers SHARED
     parserutils.cpp
 )
 
-target_link_libraries(Parsers PRIVATE DevicePorts)
-target_link_libraries(Parsers PRIVATE ErrorHandling)
-target_link_libraries(Parsers PRIVATE CoreUtilities)
+target_link_libraries(${PROJECT_NAME} PRIVATE DevicePorts)
+target_link_libraries(${PROJECT_NAME} PRIVATE ErrorHandling)
+target_link_libraries(${PROJECT_NAME} PRIVATE CoreUtilities)
 
-target_compile_definitions(Parsers PRIVATE PARSERS_LIBRARY)
+target_compile_definitions(${PROJECT_NAME} PRIVATE PARSERS_LIBRARY)

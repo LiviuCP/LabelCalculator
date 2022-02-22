@@ -6,11 +6,7 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-include_directories(
-    ../CoreData
-)
-
-add_library(ErrorHandling SHARED
+add_library(${PROJECT_NAME} ${LIB_TYPE}
     errorhandling.cpp
     errorhandler.cpp
     error.cpp
@@ -18,6 +14,6 @@ add_library(ErrorHandling SHARED
     errorsettingsproxy.cpp
 )
 
-target_link_libraries(ErrorHandling PRIVATE Settings)
+target_link_libraries(${PROJECT_NAME} PRIVATE Settings)
 
-target_compile_definitions(ErrorHandling PRIVATE ERRORHANDLING_LIBRARY)
+target_compile_definitions(${PROJECT_NAME} PRIVATE ERRORHANDLING_LIBRARY)

@@ -6,6 +6,7 @@
 #include <memory>
 
 #include "errorhandler.h"
+#include "auxdata.h"
 
 class DevicePort
 {

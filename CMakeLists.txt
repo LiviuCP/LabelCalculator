@@ -11,17 +11,27 @@ include_directories(
     CoreFunctionality/Parsers
     CoreFunctionality/DevicePorts
     CoreFunctionality/ErrorHandling
+    CoreFunctionality/CoreData
+    CoreFunctionality/CoreUtilities
     Settings
 )
+
+# this variable is propagated to all nested libraries
+set(LIB_TYPE SHARED)
+
+# errors were encountered when building some libraries as shared on Windows so it has been decided to keep it static on this OS for the moment
+if(WIN32)
+    set(LIB_TYPE STATIC)
+endif()
 
 add_subdirectory(Application)
 add_subdirectory(CoreFunctionality)
 add_subdirectory(Settings)
 
-add_executable(LabelCalculator
+add_executable(${PROJECT_NAME}
     main.cpp
 )
 
-target_link_libraries(LabelCalculator PRIVATE Application)
-target_link_libraries(LabelCalculator PRIVATE Parsers)
-target_link_libraries(LabelCalculator PRIVATE Settings)
+target_link_libraries(${PROJECT_NAME} PRIVATE Application)
+target_link_libraries(${PROJECT_NAME} PRIVATE Parsers)
+target_link_libraries(${PROJECT_NAME} PRIVATE Settings)

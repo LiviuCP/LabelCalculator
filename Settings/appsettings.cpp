@@ -1,5 +1,9 @@
 #include "appsettings.h"
 
+#ifdef _WIN32
+#include <windows.h>
+#endif
+
 AppSettings::AppSettings()
     : mIsInitialized{false}
 {
@@ -88,10 +92,10 @@ void AppSettings::_retrieveUsername()
     {
         mUsername = pUsername;
     }
-#else
+#elif defined(_WIN32)
     char buffer[100];
     DWORD length{sizeof(buffer)};
-    const bool c_IsValid{GetUserNameA(buffer, &length)};
+    const BOOL c_IsValid{GetUserNameA(buffer, &length)};
 
     if (c_IsValid)
     {

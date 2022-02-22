@@ -6,11 +6,9 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-include_directories(../CoreData)
-
-add_library(CoreUtilities SHARED
+add_library(${PROJECT_NAME} ${LIB_TYPE}
     coreutilities.cpp
     coreutils.cpp
 )
 
-target_compile_definitions(CoreUtilities PRIVATE COREUTILITIES_LIBRARY)
+target_compile_definitions(${PROJECT_NAME} PRIVATE COREUTILITIES_LIBRARY)

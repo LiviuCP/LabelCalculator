@@ -3,6 +3,8 @@
 
 #include <string>
 
+#include "auxdata.h"
+
 namespace Utilities
 {
     /* This function reads a substring starting with index until reaching a comma character (end of .csv cell) or the string has no more characters

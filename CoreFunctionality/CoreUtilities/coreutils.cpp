@@ -4,10 +4,6 @@
 #include "applicationdata.h"
 #include "coreutils.h"
 
-#if not defined (__APPLE__) && not defined (__MACH__) && not defined(__unix__)
-#include <windows.h>
-#endif
-
 /* The input/output index need to be signed integer as value -1 can also be returned if the CSV string has been consumed.
    However internally the processing of the string can be done with an unsigned int (size_t) when the index is "in bounds".
 */
@@ -68,8 +64,17 @@ ssize_t Utilities::readDataField(const std::string& src, std::string& dest, cons
 */
 void Utilities::convertStringCase(std::string& str, bool upperCase)
 {
-    auto transformation = upperCase ? [](char c){return std::toupper(c);} : [](char c){return std::tolower(c);};
-    std::transform(str.begin(), str.end(), str.begin(), transformation);
+    auto toUpperTransformation{[](char c){return std::toupper(c);}};
+    auto toLowerTransformation{[](char c){return std::tolower(c);}};
+
+    if (upperCase)
+    {
+        std::transform(str.begin(), str.end(), str.begin(), toUpperTransformation);
+    }
+    else
+    {
+        std::transform(str.begin(), str.end(), str.begin(), toUpperTransformation);
+    }
 }
 
 bool Utilities::isDigitString(const std::string& str)

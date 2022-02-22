@@ -6,9 +6,9 @@ set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
-add_library(Settings SHARED
+add_library(${PROJECT_NAME} ${LIB_TYPE}
     settings.cpp
     appsettings.cpp
 )
 
-target_compile_definitions(Settings PRIVATE SETTINGS_LIBRARY)
+target_compile_definitions(${PROJECT_NAME} PRIVATE SETTINGS_LIBRARY)
