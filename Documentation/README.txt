@@ -19,7 +19,7 @@ Notes:
 
 3. SUPPORTED OPERATING SYSTEMS
 
-The application has been compiled and tested on Linux (Fedora 28) and Mac OS (Catalina). It might also be compiled on Windows however I haven't done this so far (I only have Linux and OS X machines) so some compilation errors might be expected. Let me know if this happens.
+The application has been compiled and tested on Linux (OpenSUSE 15.3), Mac OS (Monterey) and Windows 10.
 
 4. RUNNING THE APPLICATION
 
