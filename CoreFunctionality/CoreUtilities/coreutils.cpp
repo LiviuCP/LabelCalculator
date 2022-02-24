@@ -73,7 +73,7 @@ void Utilities::convertStringCase(std::string& str, bool upperCase)
     }
     else
     {
-        std::transform(str.begin(), str.end(), str.begin(), toUpperTransformation);
+        std::transform(str.begin(), str.end(), str.begin(), toLowerTransformation);
     }
 }
 
