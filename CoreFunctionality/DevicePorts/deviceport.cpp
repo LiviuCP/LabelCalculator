@@ -32,13 +32,10 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
 
     ssize_t currentPosition{initialPosition}; // position in input string (.csv row) where the input parameters of the device begin
     size_t currentParameter{0u};              // current field (cell) containining a device input parameter (e.g. device name)
-    size_t totalParsedCharsCount{0u};         // current total number of parsed input characters for the device (excluding comma)
     bool fewerCellsProvided{false};       // for checking if the "fewer cells" error occurred
-    std::vector<size_t> fieldSizes;          // stores the size of each input field read for the device
     ErrorPtr lastError{nullptr};          // last found error
 
     parsingErrors.clear();
-    fieldSizes.resize(mInputParametersCount);
 
     // check the "useful" fields (required input parameters for the device)
     while(currentParameter < mInputParametersCount)
@@ -48,11 +45,10 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
         if (-1 != currentPosition) // check if characters are available for current (required) field
         {
             currentPosition = Utilities::readDataField(input, *mInputData[currentParameter], currentPosition);
-            fieldSizes[currentParameter] = mInputData[currentParameter]->size();
 
             bool noErrorsDetectedInCell{false};
 
-            if (0u == fieldSizes[currentParameter])
+            if (0u == mInputData[currentParameter]->size())
             {
                 lastError = errorHandler.logError(ErrorCode::EMPTY_CELL, mFileRowNumber, mFileColumnNumber, errorStream);
             }
@@ -71,7 +67,6 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
             }
 
             ++mFileColumnNumber;
-            totalParsedCharsCount += fieldSizes[currentParameter]; // comma (,) is not taken into consideration when updating the number of parsed characters
         }
         else
         {
