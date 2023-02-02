@@ -8,7 +8,7 @@ Data::DeviceTypeID Utilities::getDeviceTypeID(const std::string& deviceType)
     std::string deviceTypeLowerCase{deviceType};
     convertStringCase(deviceTypeLowerCase, false);
 
-    std::map<std::string, Data::DeviceTypeID>::const_iterator it{Data::c_DeviceTypeTextToIDMapping.find(deviceTypeLowerCase)};
+    const auto it{Data::c_DeviceTypeTextToIDMapping.find(deviceTypeLowerCase)};
 
     if (it != Data::c_DeviceTypeTextToIDMapping.cend())
     {
@@ -22,13 +22,13 @@ std::string Utilities::getDeviceTypeAsString(Data::DeviceTypeID deviceTypeID)
 {
     std::string deviceType;
 
-    for (std::map<std::string, Data::DeviceTypeID>::const_iterator it{Data::c_DeviceTypeTextToIDMapping.cbegin()}; it != Data::c_DeviceTypeTextToIDMapping.cend(); ++it)
+    const auto it{std::find_if(Data::c_DeviceTypeTextToIDMapping.cbegin(),
+                               Data::c_DeviceTypeTextToIDMapping.cend(),
+                               [deviceTypeID](const std::pair<std::string, Data::DeviceTypeID>& element) {return deviceTypeID == element.second;})};
+
+    if (Data::c_DeviceTypeTextToIDMapping.cend() != it)
     {
-        if (deviceTypeID == it->second)
-        {
-            deviceType = it->first;
-            break;
-        }
+        deviceType = it->first;
     }
 
     return deviceType;
