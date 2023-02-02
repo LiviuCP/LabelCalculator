@@ -63,13 +63,12 @@ void AppSettings::_init()
             std::string appFilesDir;
 
             appFilesDir.reserve(scCentralHomeDir.size() + c_UserNameCharsCount + scDocumentsDirName.size() + 3 * sizeof(scPathSeparator));
-
-            appFilesDir += scCentralHomeDir;
-            appFilesDir += scPathSeparator;
-            appFilesDir += mUsername;
-            appFilesDir += scPathSeparator;
-            appFilesDir += scDocumentsDirName;
-            appFilesDir += scPathSeparator;
+            appFilesDir.append(scCentralHomeDir);
+            appFilesDir.push_back(scPathSeparator);
+            appFilesDir.append(mUsername);
+            appFilesDir.push_back(scPathSeparator);
+            appFilesDir.append(scDocumentsDirName);
+            appFilesDir.push_back(scPathSeparator);
 
             mConnectionDefinitionsFile = appFilesDir + scConnectionDefinitionsFilename.data();
             mConnectionInputFile = appFilesDir + scConnectionInputFilename.data();
