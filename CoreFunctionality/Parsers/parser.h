@@ -7,7 +7,10 @@
 #include <memory>
 
 #include "errorhandler.h"
+
+#ifdef _WIN32
 #include "auxdata.h"
+#endif
 
 /* This is a generic parser class for .csv files.
    The content of an input .csv file is read, parsed and the resulting output written to an output .csv file.

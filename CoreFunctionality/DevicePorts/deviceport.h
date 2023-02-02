@@ -6,7 +6,10 @@
 #include <memory>
 
 #include "errorhandler.h"
+
+#ifdef _WIN32
 #include "auxdata.h"
+#endif
 
 class DevicePort
 {

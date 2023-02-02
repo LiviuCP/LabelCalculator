@@ -3,7 +3,9 @@
 
 #include <string>
 
+#ifdef _WIN32
 #include "auxdata.h"
+#endif
 
 namespace Utilities
 {
