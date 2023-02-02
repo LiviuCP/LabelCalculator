@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include <string_view>
 
 class AppSettings
 {
@@ -33,14 +34,24 @@ private:
 
     static std::shared_ptr<AppSettings> s_pAppSettings;
 
-    static const std::string scCentralHomeDir;
-    static const std::string scDocumentsDirName;
-    static const std::string scConnectionDefinitionsFilename;
-    static const std::string scConnectionInputFilename;
-    static const std::string scLabellingTableFilename;
-    static const std::string scParsingErrorsFilename;
+#if defined (__APPLE__) && defined (__MACH__)
+    static constexpr std::string_view scCentralHomeDir{"/Users"};
+#elif defined (__unix__)
+    static constexpr std::string_view scCentralHomeDir{"/home"};
+#else
+    static constexpr std::string_view scCentralHomeDir{"C:\\Users"};
+#endif
+    static constexpr std::string_view scDocumentsDirName{"Documents"};
+    static constexpr std::string_view scConnectionDefinitionsFilename{"connectiondefinitions.csv"};
+    static constexpr std::string_view scConnectionInputFilename{"connectioninput.csv"};
+    static constexpr std::string_view scLabellingTableFilename{"labellingtable.csv"};
+    static constexpr std::string_view scParsingErrorsFilename{"error.txt"};
 
-    static const char scPathSeparator;
+#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
+    static constexpr char scPathSeparator{'/'};
+#else
+    static constexpr char scPathSeparator{'\\'};
+#endif
 
     bool mIsInitialized;
 

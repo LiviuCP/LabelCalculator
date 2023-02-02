@@ -229,13 +229,13 @@ int Application::_handleStatusCode() const
 
 void Application::_displayInvalidSettingsMessage()
 {
-    system(scClearScreenCommand.c_str());
+    system(scClearScreenCommand.data());
     std::cout << "Invalid settings detected. Please check your system settings and try again\n\n";
 }
 
 void Application::_displayParserNotCreatedMessage()
 {
-    system(scClearScreenCommand.c_str());
+    system(scClearScreenCommand.data());
     std::cout << "Error in initializing parsing functionality. Application aborted\n\n";
 }
 
@@ -250,20 +250,20 @@ void Application::_displayMenu()
 
 void Application::_displayGreetingAndVersion()
 {
-    system(scClearScreenCommand.c_str());
+    system(scClearScreenCommand.data());
     std::cout << "LabelCalculator v1.0\n\n";
     std::cout << "Hello, " << AppSettings::getInstance()->getUsername() << "!\n\n";
 }
 
 void Application::_displayInvalidInputMessage()
 {
-    system(scClearScreenCommand.c_str());
+    system(scClearScreenCommand.data());
     std::cout << "Invalid input. Please try again\n\n";
 }
 
 void Application::_displayAbortMessage()
 {
-    system(scClearScreenCommand.c_str());
+    system(scClearScreenCommand.data());
     std::cout << "Application terminated by user\n\n";
 }
 
@@ -290,7 +290,7 @@ void Application::_displayFileOpeningErrorMessage() const
 
     const std::string c_Operation{StatusCode::INPUT_FILE_NOT_OPENED == mStatusCode ? "reading" : "writing"};
 
-    system(scClearScreenCommand.c_str());
+    system(scClearScreenCommand.data());
     std::cerr << "Error! File cannot be opened for " << c_Operation << ".\n\n";
     std::cerr << "File path: "<< file << "\n\n";
     std::cerr << "The file might not exist or the user might not have the required permissions to open it.\n\n";
@@ -300,7 +300,7 @@ void Application::_displayParsingErrorMessage() const
 {
     const std::string c_InputFile{_getInputFile()};
 
-    system(scClearScreenCommand.c_str());
+    system(scClearScreenCommand.data());
     std::cerr << "One or more errors occured!\n\n";
     std::cerr << "Please check the error report in the error file: \n\n";
     std::cerr << mParsingErrorsFile << "\n\n";
@@ -313,7 +313,7 @@ void Application::_displaySuccessMessage(bool additionalOutputRequired) const
 {
     const std::string c_OutputFile{_getOutputFile()};
 
-    system(scClearScreenCommand.c_str());
+    system(scClearScreenCommand.data());
     std::cout << "The program ended succesfully. \n\n";
     std::cout << "Please view the output file: \n\n";
     std::cout << c_OutputFile << "\n\n";
@@ -371,9 +371,3 @@ std::string Application::_getOutputFile() const
 }
 
 std::shared_ptr<Application> Application::s_pApplication = nullptr;
-
-#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
-const std::string Application::scClearScreenCommand{"clear"};
-#else
-const std::string Application::scClearScreenCommand{"cls"};
-#endif

@@ -56,14 +56,25 @@ void AppSettings::_init()
     {
         _retrieveUsername();
 
-        if (mUsername.size() > 0u)
-        {
-            const std::string c_AppFilesDir{scCentralHomeDir + scPathSeparator + mUsername + scPathSeparator + scDocumentsDirName + scPathSeparator};
+        const size_t c_UserNameCharsCount{mUsername.size()};
 
-            mConnectionDefinitionsFile = c_AppFilesDir + scConnectionDefinitionsFilename;
-            mConnectionInputFile = c_AppFilesDir + scConnectionInputFilename;
-            mLabellingOutputFile = c_AppFilesDir + scLabellingTableFilename;
-            mParsingErrorsFile = c_AppFilesDir + scParsingErrorsFilename;
+        if (c_UserNameCharsCount > 0u)
+        {
+            std::string appFilesDir;
+
+            appFilesDir.reserve(scCentralHomeDir.size() + c_UserNameCharsCount + scDocumentsDirName.size() + 3 * sizeof(scPathSeparator));
+
+            appFilesDir += scCentralHomeDir;
+            appFilesDir += scPathSeparator;
+            appFilesDir += mUsername;
+            appFilesDir += scPathSeparator;
+            appFilesDir += scDocumentsDirName;
+            appFilesDir += scPathSeparator;
+
+            mConnectionDefinitionsFile = appFilesDir + scConnectionDefinitionsFilename.data();
+            mConnectionInputFile = appFilesDir + scConnectionInputFilename.data();
+            mLabellingOutputFile = appFilesDir + scLabellingTableFilename.data();
+            mParsingErrorsFile = appFilesDir + scParsingErrorsFilename.data();
 
             mIsInitialized = true;
         }
@@ -105,23 +116,3 @@ void AppSettings::_retrieveUsername()
 }
 
 std::shared_ptr<AppSettings> AppSettings::s_pAppSettings{nullptr};
-
-#if defined (__APPLE__) && defined (__MACH__)
-const std::string AppSettings::scCentralHomeDir{"/Users"};
-#elif defined (__unix__)
-const std::string AppSettings::scCentralHomeDir{"/home"};
-#else
-const std::string AppSettings::scCentralHomeDir{"C:\\Users"};
-#endif
-
-const std::string AppSettings::scDocumentsDirName{"Documents"};
-const std::string AppSettings::scConnectionDefinitionsFilename{"connectiondefinitions.csv"};
-const std::string AppSettings::scConnectionInputFilename{"connectioninput.csv"};
-const std::string AppSettings::scLabellingTableFilename{"labellingtable.csv"};
-const std::string AppSettings::scParsingErrorsFilename{"error.txt"};
-
-#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
-const char AppSettings::scPathSeparator{'/'};
-#else
-const char AppSettings::scPathSeparator{'\\'};
-#endif

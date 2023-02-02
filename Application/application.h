@@ -3,6 +3,7 @@
 
 #include <memory>
 #include <string>
+#include <string_view>
 #include <fstream>
 
 #include "parsercreator.h"
@@ -68,7 +69,12 @@ private:
 
     /* Attributes */
     static std::shared_ptr<Application> s_pApplication;
-    static const std::string scClearScreenCommand;
+
+#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
+static constexpr std::string_view scClearScreenCommand{"clear"};
+#else
+static constexpr std::string_view scClearScreenCommand{"cls"};
+#endif
 
     ParserCreator::ParserTypes mParserType;
 
