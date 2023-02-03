@@ -2,8 +2,10 @@
 #define DEVICEPORT_H
 
 #include <fstream>
-#include <vector>
 #include <memory>
+#include <vector>
+#include <string>
+#include <string_view>
 
 #include "errorhandler.h"
 
@@ -54,7 +56,7 @@ protected:
        "Hard" parsing errors are being logged within error file by using the error handling functionality (see ErrorHandling directory)
        If no label argument is entered the default invalid label message is filled-in
     */
-    void _setInvalidDescriptionAndLabel(const std::string& description, const std::string& label = "");
+    void _setInvalidDescriptionAndLabel(std::string_view description, std::string_view label = "");
 
     // position of the device containing the port in rack
     std::string mDeviceUPosition;
