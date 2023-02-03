@@ -1,4 +1,6 @@
 #include <sstream>
+#include <charconv>
+#include <optional>
 #include <cassert>
 
 #include "coreutils.h"
@@ -283,31 +285,31 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
     }
 }
 
-bool ConnectionDefinitionParser::_parseConnectionFormatting(const std::string& source, Data::UNumber_t& secondDevice, size_t& connectionsCount)
+bool ConnectionDefinitionParser::_parseConnectionFormatting(std::string_view source, Data::UNumber_t& secondDevice, size_t& connectionsCount)
 {
     bool isFormattingValid{true};
 
-    const int sourceLength{static_cast<int>(source.size())};
-    int slashIndex{-1}; // index of '/'
+    const size_t c_SourceLength{source.size()};
+    std::optional<size_t> slashCharInfo; // index of '/'
 
-    if (sourceLength > 0)
+    if (c_SourceLength > 0)
     {
-        for (int index{0}; index < sourceLength; ++index)
+        for (size_t index{0}; index < c_SourceLength; ++index)
         {
-            if (isdigit(source[static_cast<size_t>(index)]))
+            if (isdigit(source[index]))
             {
                 continue;
             }
-            else if ('/' == source[static_cast<size_t>(index)])
+            else if ('/' == source[index])
             {
-                if (-1 != slashIndex) // more than one slash
+                if (slashCharInfo.has_value()) // more than one slash
                 {
                     isFormattingValid = false;
                     break;
                 }
                 else
                 {
-                    slashIndex = index;
+                    slashCharInfo = index;
                     continue;
                 }
             }
@@ -318,13 +320,21 @@ bool ConnectionDefinitionParser::_parseConnectionFormatting(const std::string& s
             }
         }
 
-        // there should be exactly one slash character and it should not be located in the first/last string character position
-        isFormattingValid = isFormattingValid && (slashIndex > 0 && slashIndex < sourceLength - 1);
+        // there should be exactly one slash character and it should NOT be located in the first/last string character position
+        isFormattingValid = isFormattingValid && slashCharInfo.has_value();
 
         if (isFormattingValid)
         {
-            secondDevice = static_cast<size_t>(stoi(source.substr(0, static_cast<size_t>(slashIndex))));
-            connectionsCount = static_cast<size_t>(stoi(source.substr(static_cast<size_t>(slashIndex + 1))));
+            const size_t c_SlashCharIndex{slashCharInfo.value()};
+            isFormattingValid = isFormattingValid && (c_SlashCharIndex > 0 && c_SlashCharIndex < c_SourceLength - 1);
+
+            if (isFormattingValid)
+            {
+                const char* const pSource{source.data()};
+
+                std::from_chars(pSource, pSource + c_SlashCharIndex, secondDevice);
+                std::from_chars(pSource + c_SlashCharIndex + 1, pSource + c_SourceLength, connectionsCount);
+            }
         }
     }
     else

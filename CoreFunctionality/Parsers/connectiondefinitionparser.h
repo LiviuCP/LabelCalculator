@@ -1,6 +1,8 @@
 #ifndef CONNECTIONDEFINITIONPARSER_H
 #define CONNECTIONDEFINITIONPARSER_H
 
+#include <string_view>
+
 #include "applicationdata.h"
 #include "parser.h"
 
@@ -42,7 +44,7 @@ private:
     /* This function checks the format of the connection of the first device from each row of the connectiondefinitions.csv file to another device from the row.
        If the format is correct (true returned) it will also fill in the two arguments with the U placement of the other device and the number of connections between the two.
     */
-    static bool _parseConnectionFormatting(const std::string& source, Data::UNumber_t& secondDevice, size_t& connectionsCount);
+    static bool _parseConnectionFormatting(std::string_view source, Data::UNumber_t& secondDevice, size_t& connectionsCount);
 
     /* This function creates the template parameters (including device type and U position) for each device.
        These parameters are being filled in into output file (connection input file) for each entry where the device is connected to another one.
