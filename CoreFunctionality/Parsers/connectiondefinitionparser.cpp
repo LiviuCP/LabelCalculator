@@ -5,6 +5,9 @@
 #include "parserutils.h"
 #include "connectiondefinitionparser.h"
 
+namespace Core = Utilities::Core;
+namespace Parsers = Utilities::Parsers;
+
 ConnectionDefinitionParser::ConnectionDefinitionParser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream)
     : Parser{pInputStream, pOutputStream, pErrorStream, Data::c_ConnectionInputHeader}
 {
@@ -152,7 +155,7 @@ void ConnectionDefinitionParser::_parseUPosition(const size_t rowIndex)
     std::string currentCell;
 
     // first cell on the row is ignored (contains the U number and is only used for informing the user about rack position; the row index is instead used in calculations in relationship with U number)
-    mCurrentPosition = Utilities::readDataField(mInputData[rowIndex], currentCell, 0);
+    mCurrentPosition = Core::readDataField(mInputData[rowIndex], currentCell, 0);
     ++mFileColumnNumber;
 }
 
@@ -165,11 +168,11 @@ bool ConnectionDefinitionParser::_parseDeviceType(const size_t rowIndex)
     std::string currentCell;
 
     // second cell on the row: device type
-    mCurrentPosition = Utilities::readDataField(mInputData[rowIndex], currentCell, mCurrentPosition);
+    mCurrentPosition = Core::readDataField(mInputData[rowIndex], currentCell, mCurrentPosition);
 
     if (currentCell.size() > 0u)
     {
-        Data::DeviceTypeID deviceTypeID{Utilities::getDeviceTypeID(currentCell)};
+        Data::DeviceTypeID deviceTypeID{Parsers::getDeviceTypeID(currentCell)};
 
         if (Data::DeviceTypeID::UNKNOWN_DEVICE != deviceTypeID)
         {
@@ -187,7 +190,7 @@ bool ConnectionDefinitionParser::_parseDeviceType(const size_t rowIndex)
         }
         else
         {
-            ErrorPtr pError{mpErrorHandler->logError(ErrorCode::UNKNOWN_DEVICE, rowIndex + Utilities::c_RowNumberOffset, mFileColumnNumber, *mpErrorStream)};
+            ErrorPtr pError{mpErrorHandler->logError(ErrorCode::UNKNOWN_DEVICE, rowIndex + Parsers::c_RowNumberOffset, mFileColumnNumber, *mpErrorStream)};
             _storeParsingError(pError);
         }
 
@@ -209,13 +212,13 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
 
     assert(rowIndex < Data::c_MaxRackUnitsCount);
 
-    const size_t c_FileRowNumber{rowIndex + Utilities::c_RowNumberOffset};
+    const size_t c_FileRowNumber{rowIndex + Parsers::c_RowNumberOffset};
 
     while(mCurrentPosition > -1)
     {
         // read next cell (new current cell)
         std::string currentCell;
-        mCurrentPosition = Utilities::readDataField(mInputData[rowIndex], currentCell, mCurrentPosition);
+        mCurrentPosition = Core::readDataField(mInputData[rowIndex], currentCell, mCurrentPosition);
 
         if (0u == currentCell.size())
         {
@@ -225,7 +228,7 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
                 // unparsed cells on the row
                 const std::string c_RemainingCells{mInputData[rowIndex].substr(static_cast<size_t>(mCurrentPosition))};
 
-                if (Utilities::areParseableCharactersContained(c_RemainingCells))
+                if (Core::areParseableCharactersContained(c_RemainingCells))
                 {
                     // trigger error but continue parsing the next cells from the row
                     ErrorPtr pEmptyCellError{mpErrorHandler->logError(ErrorCode::EMPTY_CELL, c_FileRowNumber, mFileColumnNumber, *mpErrorStream)};
@@ -345,7 +348,7 @@ void ConnectionDefinitionParser::_buildTemplateDeviceParameters()
         std::string currentDeviceUPosition;
 
         const size_t c_CurrentDeviceUPositionAsIndex{static_cast<size_t>(*deviceIter - 1)}; // in mapping vector numbering starts at 0 so it is necessary to decrease the U number by 1
-        const std::string c_DeviceType = Utilities::getDeviceTypeAsString(mMapping[c_CurrentDeviceUPositionAsIndex]);
+        const std::string c_DeviceType = Parsers::getDeviceTypeAsString(mMapping[c_CurrentDeviceUPositionAsIndex]);
 
         assert(c_DeviceType.size() > 0u); // there should always be a non-empty string describing the device type
 

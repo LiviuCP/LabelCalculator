@@ -7,7 +7,7 @@
 #include "auxdata.h"
 #endif
 
-namespace Utilities
+namespace Utilities::Core
 {
     /* This function reads a substring starting with index until reaching a comma character (end of .csv cell) or the string has no more characters
        If the index points to CSV separator (',') then reading starts with next character

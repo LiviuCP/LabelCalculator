@@ -3,7 +3,7 @@
 
 #include "applicationdata.h"
 
-namespace Utilities
+namespace Utilities::Parsers
 {
     static const std::string c_InvalidCablePNErrorText{"Error! The cable part number is missing or contains invalid characters."};
 

@@ -1,12 +1,14 @@
 #include "coreutils.h"
 #include "parserutils.h"
 
-Data::DeviceTypeID Utilities::getDeviceTypeID(const std::string& deviceType)
+namespace Core = Utilities::Core;
+
+Data::DeviceTypeID Utilities::Parsers::getDeviceTypeID(const std::string& deviceType)
 {
     Data::DeviceTypeID deviceTypeID{Data::DeviceTypeID::UNKNOWN_DEVICE};
 
     std::string deviceTypeLowerCase{deviceType};
-    convertStringCase(deviceTypeLowerCase, false);
+    Core::convertStringCase(deviceTypeLowerCase, false);
 
     const auto it{Data::c_DeviceTypeTextToIDMapping.find(deviceTypeLowerCase)};
 
@@ -18,7 +20,7 @@ Data::DeviceTypeID Utilities::getDeviceTypeID(const std::string& deviceType)
     return deviceTypeID;
 }
 
-std::string Utilities::getDeviceTypeAsString(Data::DeviceTypeID deviceTypeID)
+std::string Utilities::Parsers::getDeviceTypeAsString(Data::DeviceTypeID deviceTypeID)
 {
     std::string deviceType;
 

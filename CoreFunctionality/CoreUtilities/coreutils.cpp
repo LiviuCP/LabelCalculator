@@ -7,7 +7,7 @@
 /* The input/output index need to be signed integer as value -1 can also be returned if the CSV string has been consumed.
    However internally the processing of the string can be done with an unsigned int (size_t) when the index is "in bounds".
 */
-ssize_t Utilities::readDataField(const std::string& src, std::string& dest, const ssize_t index)
+ssize_t Utilities::Core::readDataField(const std::string& src, std::string& dest, const ssize_t index)
 {
     const size_t c_Length{src.size()};
 
@@ -62,7 +62,7 @@ ssize_t Utilities::readDataField(const std::string& src, std::string& dest, cons
 
 /* converts a string "in place" to upper- or lowercase
 */
-void Utilities::convertStringCase(std::string& str, bool upperCase)
+void Utilities::Core::convertStringCase(std::string& str, bool upperCase)
 {
     auto toUpperTransformation{[](char c){return std::toupper(c);}};
     auto toLowerTransformation{[](char c){return std::tolower(c);}};
@@ -77,7 +77,7 @@ void Utilities::convertStringCase(std::string& str, bool upperCase)
     }
 }
 
-bool Utilities::isDigitString(const std::string& str)
+bool Utilities::Core::isDigitString(const std::string& str)
 {
     bool hasOnlyDigits{true};
 
@@ -93,7 +93,7 @@ bool Utilities::isDigitString(const std::string& str)
     return hasOnlyDigits;
 }
 
-bool Utilities::areInvalidCharactersContained(const std::string& str)
+bool Utilities::Core::areInvalidCharactersContained(const std::string& str)
 {
     bool containsInvalidCharacters{false};
 
@@ -111,7 +111,7 @@ bool Utilities::areInvalidCharactersContained(const std::string& str)
     return containsInvalidCharacters;
 }
 
-bool Utilities::areParseableCharactersContained(const std::string& str)
+bool Utilities::Core::areParseableCharactersContained(const std::string& str)
 {
     bool containsParseableCharacters{false};
 

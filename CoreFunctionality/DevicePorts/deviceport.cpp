@@ -7,6 +7,9 @@
 #include "deviceportutils.h"
 #include "deviceport.h"
 
+namespace Core = Utilities::Core;
+namespace Ports = Utilities::DevicePorts;
+
 DevicePort::DevicePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const size_t requiredNumberOfParameters, const bool isSourceDevice)
     : mDeviceUPosition{deviceUPosition}
     , mFileRowNumber{fileRowNumber}
@@ -44,7 +47,7 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
 
         if (-1 != currentPosition) // check if characters are available for current (required) field
         {
-            currentPosition = Utilities::readDataField(input, *mInputData[currentParameter], currentPosition);
+            currentPosition = Core::readDataField(input, *mInputData[currentParameter], currentPosition);
 
             bool noErrorsDetectedInCell{false};
 
@@ -52,7 +55,7 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
             {
                 lastError = errorHandler.logError(ErrorCode::EMPTY_CELL, mFileRowNumber, mFileColumnNumber, errorStream);
             }
-            else if (Utilities::areInvalidCharactersContained(*mInputData[currentParameter]))
+            else if (Core::areInvalidCharactersContained(*mInputData[currentParameter]))
             {
                 lastError = errorHandler.logError(ErrorCode::INVALID_CHARACTERS, mFileRowNumber, mFileColumnNumber, errorStream);
             }
@@ -85,7 +88,7 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
             if (-1 != currentPosition)
             {
                 std::string unusedField;
-                currentPosition = Utilities::readDataField(input, unusedField, currentPosition);
+                currentPosition = Core::readDataField(input, unusedField, currentPosition);
             }
             else
             {
@@ -149,12 +152,12 @@ void DevicePort::_checkLabel()
 
     assert(c_LabelCharsCount > 0u);
 
-    if (std::string::npos == mLabel.find(Utilities::c_LabelErrorText) &&
+    if (std::string::npos == mLabel.find(Ports::c_LabelErrorText) &&
         c_LabelCharsCount > Data::c_MaxLabelCharsCount)
     {
         std::stringstream stream;
         const ssize_t c_DeltaCharsCount{static_cast<ssize_t>(c_LabelCharsCount - Data::c_MaxLabelCharsCount)};
-        stream << Utilities::c_MaxLabelCharsCountExceededErrorText << c_DeltaCharsCount;
+        stream << Ports::c_MaxLabelCharsCountExceededErrorText << c_DeltaCharsCount;
 
         _setInvalidDescriptionAndLabel(stream.str());
     }
@@ -173,7 +176,7 @@ void DevicePort::_setInvalidDescriptionAndLabel(std::string_view description, st
     }
     else
     {
-        mLabel = Utilities::c_LabelErrorText;
-        mLabel.append(Utilities::getCheckConnectionInputFileText());
+        mLabel = Ports::c_LabelErrorText;
+        mLabel.append(Ports::getCheckConnectionInputFileText());
     }
 }

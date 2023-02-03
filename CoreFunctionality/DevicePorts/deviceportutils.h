@@ -4,7 +4,7 @@
 #include <string_view>
 #include <string>
 
-namespace Utilities
+namespace Utilities::DevicePorts
 {
     inline constexpr std::string_view c_InvalidPortTypeErrorText{"LABELLING ERROR: INVALID OR INCOMPATIBLE PORT TYPE"};
     inline constexpr std::string_view c_InvalidModuleTypeErrorText{"LABELLING ERROR: INVALID OR INCOMPATIBLE MODULE TYPE"};
