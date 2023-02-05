@@ -163,20 +163,29 @@ void DevicePort::_checkLabel()
     }
 }
 
-void DevicePort::_setInvalidDescriptionAndLabel(std::string_view description, std::string_view label)
+void DevicePort::_setInvalidDescriptionAndLabel(std::string_view descriptionInput, std::string_view labelInput)
 {
-    assert(description.size() > 0u);
+    const size_t c_DescriptionInputLength{descriptionInput.size()};
+    assert(c_DescriptionInputLength > 0u);
 
-    mDescription = "U" + mDeviceUPosition + ": ";
-    mDescription.append(description);
+    mDescription.clear();
+    mDescription.reserve(1/*"U"*/ + mDeviceUPosition.size()  + 2/*": "*/ + c_DescriptionInputLength);
+    mDescription.push_back('U');
+    mDescription.append(mDeviceUPosition);
+    mDescription.append(": ");
+    mDescription.append(descriptionInput);
 
-    if (label.size() > 0u)
+    if (labelInput.size() > 0u)
     {
-        mLabel = label;
+        mLabel = labelInput;
     }
     else
     {
-        mLabel = Ports::c_LabelErrorText;
-        mLabel.append(Ports::getCheckConnectionInputFileText());
+        const std::string c_CheckConnectionInputFileText{Ports::getCheckConnectionInputFileText()};
+
+        mLabel.clear();
+        mLabel.reserve(Ports::c_LabelErrorText.size() + c_CheckConnectionInputFileText.size());
+        mLabel.append(Ports::c_LabelErrorText);
+        mLabel.append(c_CheckConnectionInputFileText);
     }
 }
