@@ -76,7 +76,6 @@ bool ConnectionInputParser::_parseInput()
 
         for (size_t rowIndex{0u}; rowIndex < c_ConnectionInputRowsCount; ++rowIndex)
         {
-            const int c_CurrentInputRowLength{static_cast<int>(mInputData[rowIndex].size())};
             mCurrentPosition = 0; // current position in the current input row
             mFileColumnNumber = 1u; // column number from connectioninput.csv
             bool isFirstCellParsed{false}; // flag: has the cable part number been parsed on current row?
@@ -86,8 +85,7 @@ bool ConnectionInputParser::_parseInput()
             while (mRowPortsStillNotParsedCount > 0)
             {
                 // total number of csv cells from the connection row (cable + 2 devices) is less than required (parsing of the row should stop at once)
-                if (mCurrentPosition == c_CurrentInputRowLength  ||
-                        -1 == mCurrentPosition  )
+                if (!mCurrentPosition.has_value() || (mInputData[rowIndex].size() == mCurrentPosition))
                 {
                     ErrorPtr pFewerCellsError{mpErrorHandler->logError(ErrorCode::FEWER_CELLS, rowIndex + Parsers::c_RowNumberOffset, mFileColumnNumber, *mpErrorStream)};
                     _storeParsingError(pFewerCellsError);
@@ -174,11 +172,11 @@ void ConnectionInputParser::_reset()
     Parser::_reset();
 }
 
-ssize_t ConnectionInputParser::_parseCablePartNumber(const size_t rowIndex, const ssize_t currentPosition)
+Index_t ConnectionInputParser::_parseCablePartNumber(const size_t rowIndex, const Index_t currentPosition)
 {
     assert(rowIndex < mInputData.size());
 
-    const ssize_t resultingPosition{Core::readDataField(mInputData[rowIndex], mCablePartNumbersEntries[rowIndex], currentPosition)};
+    const Index_t resultingPosition{Core::readDataField(mInputData[rowIndex], mCablePartNumbersEntries[rowIndex], currentPosition)};
 
     // if no cable PN entered on current row take the PN for previous row
     if (0u == mCablePartNumbersEntries[rowIndex].size())
@@ -210,6 +208,7 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
 
     std::string deviceType;
     mCurrentPosition = Core::readDataField(mInputData[rowIndex], deviceType, mCurrentPosition);
+
     const Data::DeviceTypeID deviceTypeID{Parsers::getDeviceTypeID(deviceType)};
 
     // the device should both be known (correct device type string entered by user) and supported (instantiatable) by device factory (code should be in place for factory instantiating it)

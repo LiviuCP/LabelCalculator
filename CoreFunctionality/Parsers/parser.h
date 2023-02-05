@@ -7,6 +7,8 @@
 #include <memory>
 
 #include "errorhandler.h"
+#include "coreutils.h"
+
 
 #ifdef _WIN32
 #include "auxdata.h"
@@ -88,7 +90,7 @@ protected:
     std::vector<ErrorPtr> mParsingErrors;
 
     /* current character index in the currently parsed CSV row string */
-    ssize_t mCurrentPosition;
+    Index_t mCurrentPosition;
 
     /* current CSV column being parsed (the numbering starts from 1 as when opening the CSV with a spreadsheet tool)
     */

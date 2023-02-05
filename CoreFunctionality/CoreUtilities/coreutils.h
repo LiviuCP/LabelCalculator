@@ -2,17 +2,20 @@
 #define COREUTILS_H
 
 #include <string>
+#include <optional>
 
 #ifdef _WIN32
 #include "auxdata.h"
 #endif
+
+using Index_t = std::optional<size_t>;
 
 namespace Utilities::Core
 {
     /* This function reads a substring starting with index until reaching a comma character (end of .csv cell) or the string has no more characters
        If the index points to CSV separator (',') then reading starts with next character
     */
-    ssize_t readDataField(const std::string& src, std::string& dest, const ssize_t index);
+    Index_t readDataField(const std::string& src, std::string& dest, const Index_t index);
 
     /* This function converts the string case to upper or lower
     */

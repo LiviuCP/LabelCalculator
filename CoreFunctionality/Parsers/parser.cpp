@@ -8,7 +8,6 @@ Parser::Parser(std::ifstream* const pInputStream, std::ofstream* const pOutputSt
     , mpErrorStream{pErrorStream}
     , mOutputHeader{header}
     , mIsResetRequired{false}
-    , mCurrentPosition{-1}
     , mFileColumnNumber{1}
     , mpErrorHandler{nullptr}
 {

@@ -8,6 +8,7 @@
 #include <string_view>
 
 #include "errorhandler.h"
+#include "coreutils.h"
 
 #ifdef _WIN32
 #include "auxdata.h"
@@ -32,7 +33,7 @@ public:
     /* reads and parses the input fields for the device port from string starting position pos (which is subsequently updated)
        uses the ofstream for logging any errors in the corresponding file and the boolean to report the occurence of these errors
     */
-    ssize_t parseInputData(const std::string& input, const ssize_t initialPosition, ErrorHandler& errorHandler, std::ofstream& errorStream, std::vector<ErrorPtr>& parsingErrors);
+    Index_t parseInputData(const std::string& input, const Index_t initialPosition, ErrorHandler& errorHandler, std::ofstream& errorStream, std::vector<ErrorPtr>& parsingErrors);
 
     // getters
     size_t getFileRowNumber() const;

@@ -29,11 +29,11 @@ DevicePort::~DevicePort()
 {
 }
 
-ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initialPosition, ErrorHandler& errorHandler, std::ofstream& errorStream, std::vector<ErrorPtr>& parsingErrors)
+Index_t DevicePort::parseInputData(const std::string& input, const Index_t initialPosition, ErrorHandler& errorHandler, std::ofstream& errorStream, std::vector<ErrorPtr>& parsingErrors)
 {
     assert(mInputData.size() == mInputParametersCount); // check if all required parameters have been registered by derived class
 
-    ssize_t currentPosition{initialPosition}; // position in input string (.csv row) where the input parameters of the device begin
+    Index_t currentPosition{initialPosition}; // position in input string (.csv row) where the input parameters of the device begin
     size_t currentParameter{0u};              // current field (cell) containining a device input parameter (e.g. device name)
     bool fewerCellsProvided{false};       // for checking if the "fewer cells" error occurred
     ErrorPtr lastError{nullptr};          // last found error
@@ -45,7 +45,7 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
     {
         assert(nullptr != mInputData[currentParameter]); // defensive programming, this code should not evaluate to true (the registering function should prevent this)
 
-        if (-1 != currentPosition) // check if characters are available for current (required) field
+        if (currentPosition.has_value()) // check if characters are available for current (required) field
         {
             currentPosition = Core::readDataField(input, *mInputData[currentParameter], currentPosition);
 
@@ -85,7 +85,7 @@ ssize_t DevicePort::parseInputData(const std::string& input, const ssize_t initi
     {
         while(currentParameter < Data::c_MaxPortInputParametersCount)
         {
-            if (-1 != currentPosition)
+            if (currentPosition.has_value())
             {
                 std::string unusedField;
                 currentPosition = Core::readDataField(input, unusedField, currentPosition);

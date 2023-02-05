@@ -6,6 +6,7 @@
 #include "deviceportsfactory.h"
 #include "deviceport.h"
 #include "parser.h"
+#include "coreutils.h"
 
 class ConnectionInputParser final : public Parser
 {
@@ -26,7 +27,7 @@ protected:
 private:
     /* Used for processing the cable PN cell for each CSV row
     */
-    ssize_t _parseCablePartNumber(const size_t rowIndex, const ssize_t currentPosition);
+    Index_t _parseCablePartNumber(const size_t rowIndex, const Index_t currentPosition);
 
     /* Used for parsing the data for one of the device ports contained in each CSV connection input row
     */

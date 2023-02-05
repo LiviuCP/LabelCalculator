@@ -1,6 +1,5 @@
 #include <sstream>
 #include <charconv>
-#include <optional>
 #include <cassert>
 
 #include "coreutils.h"
@@ -97,8 +96,10 @@ void ConnectionDefinitionParser::_buildOutput()
         // traverse the rack from top to bottom and check if each discovered device is connected to devices placed at upper U positions
         for(auto deviceIter{mUNumbers.crbegin()}; deviceIter != mUNumbers.crend(); ++deviceIter)
         {
-            const size_t c_CurrentDeviceIndex{static_cast<size_t>(mUNumbers.crend() - 1 - deviceIter)};
-            const size_t c_CurrentDeviceUPositionAsIndex{static_cast<size_t>(*deviceIter - 1)};
+            assert(*deviceIter > 0u); // U positions start from 1
+
+            const size_t c_CurrentDeviceIndex{static_cast<size_t>(std::distance(deviceIter, mUNumbers.crend() - 1))};
+            const size_t c_CurrentDeviceUPositionAsIndex{*deviceIter - 1};
             const size_t c_CurrentDeviceConnectedToLength{mConnectedTo[c_CurrentDeviceIndex].size()};
 
             if(c_CurrentDeviceConnectedToLength != mConnectionsCount[c_CurrentDeviceIndex].size())
@@ -113,7 +114,7 @@ void ConnectionDefinitionParser::_buildOutput()
                 {
                     assert(*connectedDevIter > 0u); // U positions start from 1
 
-                    const size_t c_ConnectedDeviceIndex{static_cast<size_t>(connectedDevIter - mConnectedTo[c_CurrentDeviceIndex].cbegin())};
+                    const size_t c_ConnectedDeviceIndex{static_cast<size_t>(std::distance(mConnectedTo[c_CurrentDeviceIndex].cbegin(), connectedDevIter))};
 
                     /* The output string per connection row is calculated by adding following substrings: cable part number placeholder and the template parameters for each connected device
                        The decrease by 1 is necessary due to vector indexing (which starts at 0)
@@ -216,7 +217,7 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
 
     const size_t c_FileRowNumber{rowIndex + Parsers::c_RowNumberOffset};
 
-    while(mCurrentPosition > -1)
+    while(mCurrentPosition.has_value())
     {
         // read next cell (new current cell)
         std::string currentCell;
@@ -225,10 +226,10 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
         if (0u == currentCell.size())
         {
             // If the device type contained on the row (second column) is valid then all the connections of the device should be entered contiguously starting with the third column
-            if (mCurrentPosition > -1)
+            if (mCurrentPosition.has_value())
             {
                 // unparsed cells on the row
-                const std::string c_RemainingCells{mInputData[rowIndex].substr(static_cast<size_t>(mCurrentPosition))};
+                const std::string c_RemainingCells{mInputData[rowIndex].substr(mCurrentPosition.value())};
 
                 if (Core::areParseableCharactersContained(c_RemainingCells))
                 {
@@ -290,7 +291,7 @@ bool ConnectionDefinitionParser::_parseConnectionFormatting(std::string_view sou
     bool isFormattingValid{true};
 
     const size_t c_SourceLength{source.size()};
-    std::optional<size_t> slashCharInfo; // index of '/'
+    Index_t slashCharIndex; // index of '/'
 
     if (c_SourceLength > 0)
     {
@@ -302,14 +303,14 @@ bool ConnectionDefinitionParser::_parseConnectionFormatting(std::string_view sou
             }
             else if ('/' == source[index])
             {
-                if (slashCharInfo.has_value()) // more than one slash
+                if (slashCharIndex.has_value()) // more than one slash
                 {
                     isFormattingValid = false;
                     break;
                 }
                 else
                 {
-                    slashCharInfo = index;
+                    slashCharIndex = index;
                     continue;
                 }
             }
@@ -321,16 +322,16 @@ bool ConnectionDefinitionParser::_parseConnectionFormatting(std::string_view sou
         }
 
         // there should be exactly one slash character and it should NOT be located in the first/last string character position
-        isFormattingValid = isFormattingValid && slashCharInfo.has_value();
+        isFormattingValid = isFormattingValid && slashCharIndex.has_value();
 
         if (isFormattingValid)
         {
-            const size_t c_SlashCharIndex{slashCharInfo.value()};
-            isFormattingValid = isFormattingValid && (c_SlashCharIndex > 0 && c_SlashCharIndex < c_SourceLength - 1);
+            isFormattingValid = isFormattingValid && (slashCharIndex > 0 && slashCharIndex < c_SourceLength - 1);
 
             if (isFormattingValid)
             {
                 const char* const pSource{source.data()};
+                const size_t c_SlashCharIndex{slashCharIndex.value()};
 
                 std::from_chars(pSource, pSource + c_SlashCharIndex, secondDevice);
                 std::from_chars(pSource + c_SlashCharIndex + 1, pSource + c_SourceLength, connectionsCount);
@@ -357,7 +358,7 @@ void ConnectionDefinitionParser::_buildTemplateDeviceParameters()
         std::stringstream stream;
         std::string currentDeviceUPosition;
 
-        const size_t c_CurrentDeviceUPositionAsIndex{static_cast<size_t>(*deviceIter - 1)}; // in mapping vector numbering starts at 0 so it is necessary to decrease the U number by 1
+        const size_t c_CurrentDeviceUPositionAsIndex{*deviceIter - 1}; // in mapping vector numbering starts at 0 so it is necessary to decrease the U number by 1
         const std::string c_DeviceType = Parsers::getDeviceTypeAsString(mMapping[c_CurrentDeviceUPositionAsIndex]);
 
         assert(c_DeviceType.size() > 0u); // there should always be a non-empty string describing the device type

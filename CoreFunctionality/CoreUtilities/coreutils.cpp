@@ -4,22 +4,17 @@
 #include "applicationdata.h"
 #include "coreutils.h"
 
-/* The input/output index need to be signed integer as value -1 can also be returned if the CSV string has been consumed.
-   However internally the processing of the string can be done with an unsigned int (size_t) when the index is "in bounds".
-*/
-ssize_t Utilities::Core::readDataField(const std::string& src, std::string& dest, const ssize_t index)
+/* An empty optional is returned if the CSV row string has been consumed */
+Index_t Utilities::Core::readDataField(const std::string& src, std::string& dest, const Index_t index)
 {
     const size_t c_Length{src.size()};
+    Index_t nextIndex;
 
-    ssize_t nextIndex{-1};
-
-    if(c_Length > 0u && index >= 0)
+    if(c_Length > 0u && index.has_value() && index < c_Length)
     {
-        size_t currentIndex{static_cast<size_t>(index)};
-        assert(currentIndex < c_Length);
-
         dest.clear();
 
+        size_t currentIndex{index.value()};
         bool emptyStartingFieldParsed{false};
 
         if (Data::c_CSVSeparator == src[currentIndex])
@@ -40,20 +35,18 @@ ssize_t Utilities::Core::readDataField(const std::string& src, std::string& dest
                 if(src[currentIndex] != Data::c_CSVSeparator)
                 {
                     dest += src[currentIndex];
+                    ++currentIndex;
                 }
                 else
                 {
                     break;
                 }
-
-                ++currentIndex;
             }
         }
 
         if(currentIndex != c_Length)
         {
-            // no issue in converting to int as the size is reasonable (same for other similar situations in this project)
-            nextIndex = static_cast<ssize_t>(currentIndex);
+            nextIndex = currentIndex;
         }
     }
 
