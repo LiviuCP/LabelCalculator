@@ -3,7 +3,7 @@
 #include "applicationdata.h"
 #include "preparse.h"
 
-void Utilities::createEmptyConnectionDefinitionsFile(std::ofstream& outputStream)
+void Utilities::Other::createEmptyConnectionDefinitionsFile(std::ofstream& outputStream)
 {
     assert(outputStream.is_open());
 

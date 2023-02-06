@@ -3,7 +3,7 @@
 
 #include <fstream>
 
-namespace Utilities
+namespace Utilities::Other
 {
     /* This function is used for creating an empty connection definitions file
        that should be filled-in by user before executing option 1

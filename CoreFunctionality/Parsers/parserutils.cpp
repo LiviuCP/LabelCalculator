@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "coreutils.h"
 #include "parserutils.h"
 

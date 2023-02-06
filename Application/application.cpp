@@ -5,6 +5,8 @@
 #include "appsettings.h"
 #include "application.h"
 
+namespace Aux = Utilities::Other;
+
 Application::Application()
     : mParserType{ParserCreator::ParserTypes::UNKNOWN}
     , mIsInitialized{false}
@@ -67,7 +69,7 @@ int Application::run()
                 }
                 else
                 {
-                    Utilities::createEmptyConnectionDefinitionsFile(mOutputStream);
+                    Aux::createEmptyConnectionDefinitionsFile(mOutputStream);
                     mStatusCode = StatusCode::SUCCESS;
                 }
             }
