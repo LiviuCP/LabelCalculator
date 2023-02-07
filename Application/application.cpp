@@ -122,15 +122,13 @@ void Application::_enableFileInputOutput()
 
     if (!mIsFileIOEnabled)
     {
-        const std::string c_OutFile{_getOutputFile()};
-        mOutputStream.open(c_OutFile);
+        mOutputStream.open(_getOutputFile());
 
         if (mOutputStream.is_open())
         {
             if (mIsCSVParsingRequired)
             {
-                const std::string c_InFile{_getInputFile()};
-                mInputStream.open(c_InFile);
+                mInputStream.open(_getInputFile());
 
                 if (mInputStream.is_open())
                 {
@@ -271,7 +269,7 @@ void Application::_displayAbortMessage()
 
 void Application::_displayFileOpeningErrorMessage() const
 {
-    std::string file;
+    Path_t file;
 
     switch(mStatusCode)
     {
@@ -300,25 +298,23 @@ void Application::_displayFileOpeningErrorMessage() const
 
 void Application::_displayParsingErrorMessage() const
 {
-    const std::string c_InputFile{_getInputFile()};
-
     system(scClearScreenCommand.data());
+
     std::cerr << "One or more errors occured!\n\n";
     std::cerr << "Please check the error report in the error file: \n\n";
-    std::cerr << mParsingErrorsFile << "\n\n";
+    std::cerr << mParsingErrorsFile.string() << "\n\n";
     std::cerr << "Please correct the input file and then try again\n\n";
-    std::cerr << "Input file: \n\n" << c_InputFile << "\n\n";
+    std::cerr << "Input file: \n\n" << _getInputFile().string() << "\n\n";
     std::cerr << "Thank you for using LabelCalculator!\n\n";
 }
 
 void Application::_displaySuccessMessage(bool additionalOutputRequired) const
 {
-    const std::string c_OutputFile{_getOutputFile()};
-
     system(scClearScreenCommand.data());
+
     std::cout << "The program ended succesfully. \n\n";
     std::cout << "Please view the output file: \n\n";
-    std::cout << c_OutputFile << "\n\n";
+    std::cout << _getOutputFile().string() << "\n\n";
 
     if (additionalOutputRequired)
     {
@@ -328,9 +324,9 @@ void Application::_displaySuccessMessage(bool additionalOutputRequired) const
     std::cout << "Thank you for using LabelCalculator!\n\n";
 }
 
-std::string Application::_getInputFile() const
+Path_t Application::_getInputFile() const
 {
-    std::string inputFile;
+    Path_t inputFile;
 
     if (ParserCreator::ParserTypes::CONNECTION_DEFINITION == mParserType)
     {
@@ -348,9 +344,9 @@ std::string Application::_getInputFile() const
     return inputFile;
 }
 
-std::string Application::_getOutputFile() const
+Path_t Application::_getOutputFile() const
 {
-    std::string outputFile;
+    Path_t outputFile;
 
     if (ParserCreator::ParserTypes::CONNECTION_DEFINITION == mParserType)
     {

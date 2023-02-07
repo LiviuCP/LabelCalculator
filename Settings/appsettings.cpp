@@ -30,22 +30,22 @@ std::string AppSettings::getUsername() const
     return mUsername;
 }
 
-std::string AppSettings::getConnectionDefinitionsFile() const
+Path_t AppSettings::getConnectionDefinitionsFile() const
 {
     return mConnectionDefinitionsFile;
 }
 
-std::string AppSettings::getConnectionInputFile() const
+Path_t AppSettings::getConnectionInputFile() const
 {
     return mConnectionInputFile;
 }
 
-std::string AppSettings::getLabellingOutputFile() const
+Path_t AppSettings::getLabellingOutputFile() const
 {
     return mLabellingOutputFile;
 }
 
-std::string AppSettings::getParsingErrorsFile() const
+Path_t AppSettings::getParsingErrorsFile() const
 {
     return mParsingErrorsFile;
 }
@@ -56,24 +56,20 @@ void AppSettings::_init()
     {
         _retrieveUsername();
 
-        const size_t c_UserNameCharsCount{mUsername.size()};
-
-        if (c_UserNameCharsCount > 0u)
+        if (mUsername.size() > 0u)
         {
-            std::string appFilesDir;
+            Path_t appFilesDir{scCentralHomeDir};
+            appFilesDir /= mUsername;
+            appFilesDir /= scDocumentsDirName;
 
-            appFilesDir.reserve(scCentralHomeDir.size() + c_UserNameCharsCount + scDocumentsDirName.size() + 3 * sizeof(scPathSeparator));
-            appFilesDir.append(scCentralHomeDir);
-            appFilesDir.push_back(scPathSeparator);
-            appFilesDir.append(mUsername);
-            appFilesDir.push_back(scPathSeparator);
-            appFilesDir.append(scDocumentsDirName);
-            appFilesDir.push_back(scPathSeparator);
-
-            mConnectionDefinitionsFile = appFilesDir + scConnectionDefinitionsFilename.data();
-            mConnectionInputFile = appFilesDir + scConnectionInputFilename.data();
-            mLabellingOutputFile = appFilesDir + scLabellingTableFilename.data();
-            mParsingErrorsFile = appFilesDir + scParsingErrorsFilename.data();
+            mConnectionDefinitionsFile = appFilesDir;
+            mConnectionDefinitionsFile /= scConnectionDefinitionsFilename;
+            mConnectionInputFile = appFilesDir;
+            mConnectionInputFile /= scConnectionInputFilename;
+            mLabellingOutputFile = appFilesDir;
+            mLabellingOutputFile /= scLabellingTableFilename;
+            mParsingErrorsFile = appFilesDir;
+            mParsingErrorsFile /= scParsingErrorsFilename;
 
             mIsInitialized = true;
         }

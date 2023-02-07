@@ -7,6 +7,7 @@
 #include <fstream>
 
 #include "parsercreator.h"
+#include "coreutils.h"
 
 class Application
 {
@@ -64,8 +65,8 @@ private:
     void _displaySuccessMessage(bool additionalOutputRequired) const;
 
     /* Getters */
-    std::string _getInputFile() const;
-    std::string _getOutputFile() const;
+    Path_t _getInputFile() const;
+    Path_t _getOutputFile() const;
 
     /* Attributes */
     static std::shared_ptr<Application> s_pApplication;
@@ -78,10 +79,10 @@ static constexpr std::string_view scClearScreenCommand{"cls"};
 
     ParserCreator::ParserTypes mParserType;
 
-    std::string mConnectionDefinitionsFile;
-    std::string mConnectionInputFile;
-    std::string mLabellingOutputFile;
-    std::string mParsingErrorsFile;
+    Path_t mConnectionDefinitionsFile;
+    Path_t mConnectionInputFile;
+    Path_t mLabellingOutputFile;
+    Path_t mParsingErrorsFile;
 
     std::ifstream mInputStream;
     std::ofstream mOutputStream;

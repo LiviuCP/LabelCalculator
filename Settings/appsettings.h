@@ -5,6 +5,8 @@
 #include <string>
 #include <string_view>
 
+#include "coreutils.h"
+
 class AppSettings
 {
 public:
@@ -13,10 +15,11 @@ public:
     bool areSettingsValid() const;
 
     std::string getUsername() const;
-    std::string getConnectionDefinitionsFile() const;
-    std::string getConnectionInputFile() const;
-    std::string getLabellingOutputFile() const;
-    std::string getParsingErrorsFile() const;
+
+    Path_t getConnectionDefinitionsFile() const;
+    Path_t getConnectionInputFile() const;
+    Path_t getLabellingOutputFile() const;
+    Path_t getParsingErrorsFile() const;
 
 private:
     /* Private constructor (singleton)
@@ -47,18 +50,13 @@ private:
     static constexpr std::string_view scLabellingTableFilename{"labellingtable.csv"};
     static constexpr std::string_view scParsingErrorsFilename{"error.txt"};
 
-#if defined (__unix__) || (defined (__APPLE__) && defined (__MACH__))
-    static constexpr char scPathSeparator{'/'};
-#else
-    static constexpr char scPathSeparator{'\\'};
-#endif
-
     bool mIsInitialized;
 
-    std::string mConnectionDefinitionsFile;
-    std::string mConnectionInputFile;
-    std::string mLabellingOutputFile;
-    std::string mParsingErrorsFile;
+    Path_t mConnectionDefinitionsFile;
+    Path_t mConnectionInputFile;
+    Path_t mLabellingOutputFile;
+    Path_t mParsingErrorsFile;
+
     std::string mUsername;
 };
 

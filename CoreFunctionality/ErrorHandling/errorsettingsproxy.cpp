@@ -1,14 +1,14 @@
 #include "appsettings.h"
 #include "errorsettingsproxy.h"
 
-std::string Settings::getConnectionDefinitionsFile()
+Path_t Settings::getConnectionDefinitionsFile()
 {
-    const std::string c_ConnectionsDefinitionsFile{AppSettings::getInstance()->getConnectionDefinitionsFile()};
+    const Path_t c_ConnectionsDefinitionsFile{AppSettings::getInstance()->getConnectionDefinitionsFile()};
     return c_ConnectionsDefinitionsFile;
 }
 
-std::string Settings::getConnectionInputFile()
+Path_t Settings::getConnectionInputFile()
 {
-    const std::string c_ConnectionsInputFile{AppSettings::getInstance()->getConnectionInputFile()};
+    const Path_t c_ConnectionsInputFile{AppSettings::getInstance()->getConnectionInputFile()};
     return c_ConnectionsInputFile;
 }

@@ -3,12 +3,14 @@
 
 #include <string>
 #include <optional>
+#include <filesystem>
 
 #ifdef _WIN32
 #include "auxdata.h"
 #endif
 
 using Index_t = std::optional<size_t>;
+using Path_t = std::filesystem::path;
 
 namespace Utilities::Core
 {
