@@ -4,7 +4,7 @@
 std::string Utilities::DevicePorts::getCheckConnectionInputFileText()
 {
     std::string promptCheckingFileText{"PLEASE REVIEW INPUT FILE: "};
-    promptCheckingFileText += AppSettings::getInstance()->getConnectionInputFile();
+    promptCheckingFileText += AppSettings::getInstance()->getConnectionInputFile().string();
 
     return  promptCheckingFileText;
 }
