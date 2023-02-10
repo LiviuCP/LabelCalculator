@@ -261,7 +261,7 @@ bool Application::_handleUserInput()
     return validInputProvided;
 }
 
-int Application::_handleStatusCode() const
+int Application::_handleStatusCode()
 {
     switch(mStatusCode)
     {
@@ -269,10 +269,7 @@ int Application::_handleStatusCode() const
         assert(false);
         break;
     case StatusCode::SUCCESS:
-    {
-        const bool c_DisplayFurtherInstructions{ParserCreator::ParserTypes::CONNECTION_DEFINITION == mParserType ? true : false};
-        _displaySuccessMessage(c_DisplayFurtherInstructions);
-    }
+        _displaySuccessMessage(ParserCreator::ParserTypes::CONNECTION_DEFINITION == mParserType);
         break;
     case StatusCode::INVALID_SETTINGS:
         _displayInvalidSettingsMessage();
@@ -298,10 +295,30 @@ int Application::_handleStatusCode() const
         break;
     }
 
+    _removeUnnecessaryFiles();
+
     // user abort is not considered an error so the success code is returned
     const int returnCode{StatusCode::ABORTED_BY_USER == mStatusCode ? 0 : static_cast<int>(mStatusCode)};
 
     return returnCode;
+}
+
+void Application::_removeUnnecessaryFiles()
+{
+    if (StatusCode::PARSING_ERROR != mStatusCode)
+    {
+        // for some statuses the errors file path might be empty
+        if (!mParsingErrorsFile.empty())
+        {
+            mErrorStream.close();
+            std::filesystem::remove(mParsingErrorsFile);
+        }
+    }
+    else
+    {
+        mOutputStream.close();
+        std::filesystem::remove(_getOutputFile());
+    }
 }
 
 void Application::_displayInvalidSettingsMessage()

@@ -62,7 +62,11 @@ private:
        It also determines the return code of the application.
        The goal of this method is to avoid spreading output messages among functions and to consolidate them instead.
     */
-    int _handleStatusCode() const;
+    int _handleStatusCode();
+
+    /* This function deletes files that are no longer needed due to the application flow (e.g. error.txt file should be erased if no errors occurred)
+    */
+    void _removeUnnecessaryFiles();
 
     /* Output methods */
     static void _displayInvalidSettingsMessage();
