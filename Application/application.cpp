@@ -93,20 +93,29 @@ void Application::_init()
     {
         if (AppSettings::getInstance()->areSettingsValid())
         {
-            mConnectionDefinitionsFile = AppSettings::getInstance()->getConnectionDefinitionsFile();
-            mConnectionInputFile = AppSettings::getInstance()->getConnectionInputFile();
-            mLabellingOutputFile = AppSettings::getInstance()->getLabellingOutputFile();
-            mParsingErrorsFile = AppSettings::getInstance()->getParsingErrorsFile();
+            mAppDataDir = AppSettings::getInstance()->getAppDataDir();
+            mInputBackupDir = AppSettings::getInstance()->getInputBackupDir();
+            mOutputBackupDir = AppSettings::getInstance()->getOutputBackupDir();
 
-            mErrorStream.open(mParsingErrorsFile);
+            const bool c_DirsSuccessfullySetup{_setDirectories()};
 
-            if (mErrorStream.is_open())
+            if (c_DirsSuccessfullySetup)
             {
-                mIsInitialized = true;
-            }
-            else
-            {
-                mStatusCode = StatusCode::ERROR_FILE_NOT_OPENED;
+                mConnectionDefinitionsFile = AppSettings::getInstance()->getConnectionDefinitionsFile();
+                mConnectionInputFile = AppSettings::getInstance()->getConnectionInputFile();
+                mLabellingOutputFile = AppSettings::getInstance()->getLabellingOutputFile();
+                mParsingErrorsFile = AppSettings::getInstance()->getParsingErrorsFile();
+
+                mErrorStream.open(mParsingErrorsFile);
+
+                if (mErrorStream.is_open())
+                {
+                    mIsInitialized = true;
+                }
+                else
+                {
+                    mStatusCode = StatusCode::ERROR_FILE_NOT_OPENED;
+                }
             }
         }
         else
@@ -114,6 +123,69 @@ void Application::_init()
             mStatusCode = StatusCode::INVALID_SETTINGS;
         }
     }
+}
+
+bool Application::_setDirectories()
+{
+    bool success{_setDirectory(mAppDataDir)};
+
+    if (!success)
+    {
+        mStatusCode = StatusCode::APP_DATA_DIR_NOT_SETUP;
+    }
+
+    if (success)
+    {
+        success = _setDirectory(mInputBackupDir);
+
+        if (!success)
+        {
+            mStatusCode = StatusCode::INPUT_BACKUP_DIR_NOT_SETUP;
+        }
+    }
+
+    if (success)
+    {
+        success = _setDirectory(mOutputBackupDir);
+
+        if (!success)
+        {
+            mStatusCode = StatusCode::OUTPUT_BACKUP_DIR_NOT_SETUP;
+        }
+    }
+
+    return success;
+}
+
+bool Application::_setDirectory(const Path_t& dirPath)
+{
+    bool success{false};
+
+    if (!dirPath.empty())
+    {
+        if (std::filesystem::exists(dirPath) && std::filesystem::is_directory(dirPath))
+        {
+            success = true;
+        }
+        else
+        {
+            try
+            {
+                success = std::filesystem::create_directories(dirPath);
+            }
+            catch(std::filesystem::filesystem_error&)
+            {
+                success = false;
+            }
+        }
+    }
+    else
+    {
+        std::cerr << "Empty path, cannot create directory\n\n";
+        assert(false);
+    }
+
+    return success;
 }
 
 void Application::_enableFileInputOutput()
@@ -205,6 +277,11 @@ int Application::_handleStatusCode() const
     case StatusCode::INVALID_SETTINGS:
         _displayInvalidSettingsMessage();
         break;
+    case StatusCode::APP_DATA_DIR_NOT_SETUP:
+    case StatusCode::INPUT_BACKUP_DIR_NOT_SETUP:
+    case StatusCode::OUTPUT_BACKUP_DIR_NOT_SETUP:
+        _displayDirectoryNotSetupMessage();
+        break;
     case StatusCode::INPUT_FILE_NOT_OPENED:
     case StatusCode::OUTPUT_FILE_NOT_OPENED:
     case StatusCode::ERROR_FILE_NOT_OPENED:
@@ -251,7 +328,7 @@ void Application::_displayMenu()
 void Application::_displayGreetingAndVersion()
 {
     system(scClearScreenCommand.data());
-    std::cout << "LabelCalculator v1.0\n\n";
+    std::cout << "LabelCalculator v1.1\n\n";
     std::cout << "Hello, " << AppSettings::getInstance()->getUsername() << "!\n\n";
 }
 
@@ -265,6 +342,34 @@ void Application::_displayAbortMessage()
 {
     system(scClearScreenCommand.data());
     std::cout << "Application terminated by user\n\n";
+}
+
+void Application::_displayDirectoryNotSetupMessage() const
+{
+    Path_t dirPath;
+    std::string dirType;
+
+    switch(mStatusCode)
+    {
+    case StatusCode::APP_DATA_DIR_NOT_SETUP:
+        dirPath = mAppDataDir;
+        dirType = "application data";
+        break;
+    case StatusCode::INPUT_BACKUP_DIR_NOT_SETUP:
+        dirPath = mInputBackupDir;
+        dirType = "input backup";
+        break;
+    case StatusCode::OUTPUT_BACKUP_DIR_NOT_SETUP:
+        dirPath = mOutputBackupDir;
+        dirType = "output backup";
+        break;
+    default:
+        assert(false);
+    }
+
+    system(scClearScreenCommand.data());
+    std::cerr << "Error! The " << dirType << " directory cannot be setup.\n";
+    std::cerr << "Path: " << dirPath.string() << "\n\n";
 }
 
 void Application::_displayFileOpeningErrorMessage() const

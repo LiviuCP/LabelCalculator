@@ -30,6 +30,21 @@ std::string AppSettings::getUsername() const
     return mUsername;
 }
 
+Path_t AppSettings::getAppDataDir() const
+{
+    return mAppDataDir;
+}
+
+Path_t AppSettings::getInputBackupDir() const
+{
+    return mInputBackupDir;
+}
+
+Path_t AppSettings::getOutputBackupDir() const
+{
+    return mOutputBackupDir;
+}
+
 Path_t AppSettings::getConnectionDefinitionsFile() const
 {
     return mConnectionDefinitionsFile;
@@ -58,17 +73,23 @@ void AppSettings::_init()
 
         if (mUsername.size() > 0u)
         {
-            Path_t appFilesDir{scCentralHomeDir};
-            appFilesDir /= mUsername;
-            appFilesDir /= scDocumentsDirName;
+            mAppDataDir = scCentralHomeDir;
+            mAppDataDir /= mUsername;
+            mAppDataDir /= scDocumentsDirName;
+            mAppDataDir /= scAppDataDirName;
 
-            mConnectionDefinitionsFile = appFilesDir;
+            mInputBackupDir = mAppDataDir;
+            mInputBackupDir /= scInputBackupDirName;
+            mOutputBackupDir = mAppDataDir;
+            mOutputBackupDir /= scOutputBackupDirName;
+
+            mConnectionDefinitionsFile = mAppDataDir;
             mConnectionDefinitionsFile /= scConnectionDefinitionsFilename;
-            mConnectionInputFile = appFilesDir;
+            mConnectionInputFile = mAppDataDir;
             mConnectionInputFile /= scConnectionInputFilename;
-            mLabellingOutputFile = appFilesDir;
+            mLabellingOutputFile = mAppDataDir;
             mLabellingOutputFile /= scLabellingTableFilename;
-            mParsingErrorsFile = appFilesDir;
+            mParsingErrorsFile /= mAppDataDir;
             mParsingErrorsFile /= scParsingErrorsFilename;
 
             mIsInitialized = true;

@@ -23,6 +23,9 @@ private:
         UNINITIALIZED = -1,
         SUCCESS,
         INVALID_SETTINGS,
+        APP_DATA_DIR_NOT_SETUP,
+        INPUT_BACKUP_DIR_NOT_SETUP,
+        OUTPUT_BACKUP_DIR_NOT_SETUP,
         INPUT_FILE_NOT_OPENED,
         OUTPUT_FILE_NOT_OPENED,
         ERROR_FILE_NOT_OPENED,
@@ -38,6 +41,14 @@ private:
     /* This function initializes the application no matter which option is chosen (define connections, process connection input from user)
     */
     void _init();
+
+    /* This function creates the required directories or confirms their existence if they are already available
+    */
+    bool _setDirectories();
+
+    /* This function creates a directory or confirms its existence
+    */
+    static bool _setDirectory(const Path_t& dirPath);
 
     /* This function opens the input and output files for each of the options
     */
@@ -60,6 +71,7 @@ private:
     static void _displayGreetingAndVersion();
     static void _displayInvalidInputMessage();
     static void _displayAbortMessage();
+    void _displayDirectoryNotSetupMessage() const;
     void _displayFileOpeningErrorMessage() const;
     void _displayParsingErrorMessage() const;
     void _displaySuccessMessage(bool additionalOutputRequired) const;
@@ -78,6 +90,10 @@ static constexpr std::string_view scClearScreenCommand{"cls"};
 #endif
 
     ParserCreator::ParserTypes mParserType;
+
+    Path_t mAppDataDir;
+    Path_t mInputBackupDir;
+    Path_t mOutputBackupDir;
 
     Path_t mConnectionDefinitionsFile;
     Path_t mConnectionInputFile;

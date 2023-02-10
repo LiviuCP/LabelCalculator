@@ -16,6 +16,9 @@ public:
 
     std::string getUsername() const;
 
+    Path_t getAppDataDir() const;
+    Path_t getInputBackupDir() const;
+    Path_t getOutputBackupDir() const;
     Path_t getConnectionDefinitionsFile() const;
     Path_t getConnectionInputFile() const;
     Path_t getLabellingOutputFile() const;
@@ -45,12 +48,19 @@ private:
     static constexpr std::string_view scCentralHomeDir{"C:\\Users"};
 #endif
     static constexpr std::string_view scDocumentsDirName{"Documents"};
+    static constexpr std::string_view scAppDataDirName{"LabelCalculatorData"};
+    static constexpr std::string_view scInputBackupDirName{"LabellingInputBackup"};
+    static constexpr std::string_view scOutputBackupDirName{"LabellingOutputBackup"};
     static constexpr std::string_view scConnectionDefinitionsFilename{"connectiondefinitions.csv"};
     static constexpr std::string_view scConnectionInputFilename{"connectioninput.csv"};
     static constexpr std::string_view scLabellingTableFilename{"labellingtable.csv"};
     static constexpr std::string_view scParsingErrorsFilename{"error.txt"};
 
     bool mIsInitialized;
+
+    Path_t mAppDataDir;
+    Path_t mInputBackupDir;
+    Path_t mOutputBackupDir;
 
     Path_t mConnectionDefinitionsFile;
     Path_t mConnectionInputFile;
