@@ -35,3 +35,15 @@ add_executable(${PROJECT_NAME}
 target_link_libraries(${PROJECT_NAME} PRIVATE Application)
 target_link_libraries(${PROJECT_NAME} PRIVATE Parsers)
 target_link_libraries(${PROJECT_NAME} PRIVATE Settings)
+
+# copy application file examples into build dir
+set(EXAMPLES AppIOFilesExamples)
+set(SRC_EXAMPLES_DIR ${CMAKE_SOURCE_DIR}/Documentation/Examples)
+set(DEST_EXAMPLES_DIR ${CMAKE_BINARY_DIR}/Examples)
+
+add_custom_target(${EXAMPLES} ALL
+    COMMAND ${CMAKE_COMMAND} -E make_directory ${DEST_EXAMPLES_DIR})
+
+add_custom_command(TARGET ${EXAMPLES} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${SRC_EXAMPLES_DIR} ${DEST_EXAMPLES_DIR})
