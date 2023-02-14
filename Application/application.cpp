@@ -101,6 +101,8 @@ void Application::_init()
 
             if (c_DirsSuccessfullySetup)
             {
+                _copyExamplesDir();
+
                 mConnectionDefinitionsFile = AppSettings::getInstance()->getConnectionDefinitionsFile();
                 mConnectionInputFile = AppSettings::getInstance()->getConnectionInputFile();
                 mLabellingOutputFile = AppSettings::getInstance()->getLabellingOutputFile();
@@ -186,6 +188,17 @@ bool Application::_setDirectory(const Path_t& dirPath)
     }
 
     return success;
+}
+
+void Application::_copyExamplesDir()
+{
+    const Path_t c_AppExamplesDir{AppSettings::getInstance()->getAppExamplesDir()};
+    const Path_t c_AppDataExamplesDir{AppSettings::getInstance()->getAppDataExamplesDir()};
+
+    if (std::filesystem::exists(c_AppExamplesDir) && std::filesystem::is_directory(c_AppExamplesDir) && !std::filesystem::exists(c_AppDataExamplesDir))
+    {
+        std::filesystem::copy(c_AppExamplesDir, c_AppDataExamplesDir, std::filesystem::copy_options::recursive);
+    }
 }
 
 void Application::_enableFileInputOutput()

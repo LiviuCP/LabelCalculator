@@ -11,4 +11,6 @@ add_library(${PROJECT_NAME} ${LIB_TYPE}
     appsettings.cpp
 )
 
+target_link_libraries(${PROJECT_NAME} PRIVATE CoreUtilities)
+
 target_compile_definitions(${PROJECT_NAME} PRIVATE SETTINGS_LIBRARY)

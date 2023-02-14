@@ -50,6 +50,10 @@ private:
     */
     static bool _setDirectory(const Path_t& dirPath);
 
+    /* This function copies the example files directory from application folder into application data directory
+    */
+    static void _copyExamplesDir();
+
     /* This function opens the input and output files for each of the options
     */
     void _enableFileInputOutput();

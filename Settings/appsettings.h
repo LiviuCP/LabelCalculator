@@ -19,6 +19,8 @@ public:
     Path_t getAppDataDir() const;
     Path_t getInputBackupDir() const;
     Path_t getOutputBackupDir() const;
+    Path_t getAppExamplesDir() const;
+    Path_t getAppDataExamplesDir() const;
     Path_t getConnectionDefinitionsFile() const;
     Path_t getConnectionInputFile() const;
     Path_t getLabellingOutputFile() const;
@@ -38,6 +40,14 @@ private:
     */
     void _retrieveUsername();
 
+    /* Cross-platform function that retrieves the application directory from OS system settings and converts it into a canonical path
+    */
+    void _retrieveAppDir();
+
+    /* This function retrieves the examples directory located within build folder (source examples directory) - if any
+    */
+    void _retrieveAppExamplesDir();
+
     static std::shared_ptr<AppSettings> s_pAppSettings;
 
 #if defined (__APPLE__) && defined (__MACH__)
@@ -51,16 +61,24 @@ private:
     static constexpr std::string_view scAppDataDirName{"LabelCalculatorData"};
     static constexpr std::string_view scInputBackupDirName{"LabellingInputBackup"};
     static constexpr std::string_view scOutputBackupDirName{"LabellingOutputBackup"};
+    static constexpr std::string_view scAppDataExamplesDirName{"ExampleFiles"};
+
     static constexpr std::string_view scConnectionDefinitionsFilename{"connectiondefinitions.csv"};
     static constexpr std::string_view scConnectionInputFilename{"connectioninput.csv"};
     static constexpr std::string_view scLabellingTableFilename{"labellingtable.csv"};
     static constexpr std::string_view scParsingErrorsFilename{"error.txt"};
 
+    static constexpr std::string_view scExamplesDirSearchKeyword{"example"};
+    static constexpr size_t scCharBufferLength{1024}; // used for reading various strings of previously unknown size (e.g. application dir path)
+
     bool mIsInitialized;
 
-    Path_t mAppDataDir;
-    Path_t mInputBackupDir;
-    Path_t mOutputBackupDir;
+    Path_t mAppDir;             // build folder, directory where the application executable resides
+    Path_t mAppDataDir;         // data folder, directory where the input/output files processed by application reside
+    Path_t mInputBackupDir;     // backup for input files
+    Path_t mOutputBackupDir;    // backup for output files
+    Path_t mAppExamplesDir;     // examples dir from build folder
+    Path_t mAppDataExamplesDir; // examples dir copied from build folder to app data directory
 
     Path_t mConnectionDefinitionsFile;
     Path_t mConnectionInputFile;

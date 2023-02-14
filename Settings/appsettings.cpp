@@ -1,8 +1,14 @@
+#include <cstdio>
+
 #include "appsettings.h"
 
 #ifdef _WIN32
 #include <windows.h>
+#elif defined (__APPLE__) && defined (__MACH__)
+#include "mach-o/dyld.h"
 #endif
+
+namespace Core = Utilities::Core;
 
 AppSettings::AppSettings()
     : mIsInitialized{false}
@@ -45,6 +51,16 @@ Path_t AppSettings::getOutputBackupDir() const
     return mOutputBackupDir;
 }
 
+Path_t AppSettings::getAppExamplesDir() const
+{
+    return mAppExamplesDir;
+}
+
+Path_t AppSettings::getAppDataExamplesDir() const
+{
+    return mAppDataExamplesDir;
+}
+
 Path_t AppSettings::getConnectionDefinitionsFile() const
 {
     return mConnectionDefinitionsFile;
@@ -73,6 +89,9 @@ void AppSettings::_init()
 
         if (mUsername.size() > 0u)
         {
+            _retrieveAppDir();
+            _retrieveAppExamplesDir();
+
             mAppDataDir = scCentralHomeDir;
             mAppDataDir /= mUsername;
             mAppDataDir /= scDocumentsDirName;
@@ -82,6 +101,8 @@ void AppSettings::_init()
             mInputBackupDir /= scInputBackupDirName;
             mOutputBackupDir = mAppDataDir;
             mOutputBackupDir /= scOutputBackupDirName;
+            mAppDataExamplesDir = mAppDataDir;
+            mAppDataExamplesDir /= scAppDataExamplesDirName;
 
             mConnectionDefinitionsFile = mAppDataDir;
             mConnectionDefinitionsFile /= scConnectionDefinitionsFilename;
@@ -119,8 +140,8 @@ void AppSettings::_retrieveUsername()
     {
         mUsername = pUsername;
     }
-#elif defined(_WIN32)
-    char buffer[100];
+#elif defined (_WIN32)
+    char buffer[scCharBufferLength / 8]; // for the username a smaller buffer can be used
     DWORD length{sizeof(buffer)};
     const BOOL c_IsValid{GetUserNameA(buffer, &length)};
 
@@ -129,6 +150,63 @@ void AppSettings::_retrieveUsername()
         mUsername = std::string{buffer};
     }
 #endif
+}
+
+void AppSettings::_retrieveAppDir()
+{
+    mAppDir.clear();
+#if defined (__APPLE__) && defined (__MACH__)
+    char path[scCharBufferLength];
+    uint32_t pathSize = scCharBufferLength;
+    if (0 == _NSGetExecutablePath(path, &pathSize))
+    {
+        mAppDir = Path_t{path}.parent_path();
+    }
+#elif defined (__unix__)
+    const Path_t c_AppExecFilePath{std::filesystem::canonical("/proc/self/exe")};
+    if (!c_AppExecFilePath.empty())
+    {
+        mAppDir = c_AppExecFilePath.parent_path();
+    }
+#elif defined (_WIN32)
+    char path[scCharBufferLength];
+    DWORD pathSize{scCharBufferLength};
+    const DWORD c_Result{GetModuleFileNameA(NULL, path, pathSize)};
+
+    if (c_Result > 0 && c_Result < scCharBufferLength)
+    {
+        mAppDir = Path_t{path}.parent_path();
+    }
+#endif
+    if (mAppDir.empty())
+    {
+        fprintf(stderr, "Warning! Application directory could not be retrieved. The buffer might be too small or another error occurred.");
+    }
+}
+
+void AppSettings::_retrieveAppExamplesDir()
+{
+    mAppExamplesDir.clear();
+
+    if (!mAppDir.empty())
+    {
+        for (const auto& dirEntry : std::filesystem::directory_iterator{mAppDir})
+        {
+            const Path_t c_CurrentPath{dirEntry.path()};
+
+            if (std::filesystem::is_directory(c_CurrentPath))
+            {
+                std::string dirName{c_CurrentPath.filename().string()};
+                Core::convertStringCase(dirName, false);
+
+                if (std::string::npos != dirName.find(scExamplesDirSearchKeyword, 0))
+                {
+                    mAppExamplesDir = c_CurrentPath;
+                    break;
+                }
+            }
+        }
+    }
 }
 
 std::shared_ptr<AppSettings> AppSettings::s_pAppSettings{nullptr};
