@@ -112,6 +112,21 @@ void Application::_init()
 
                 if (mErrorStream.is_open())
                 {
+                    // it is always a good idea to provide the user with a good starting point, namely a connection definitions file ready to be filled-in
+                    if (!std::filesystem::exists(mConnectionDefinitionsFile))
+                    {
+                        if(!mOutputStream.is_open())
+                        {
+                            mOutputStream.open(mConnectionDefinitionsFile);
+                            Aux::createEmptyConnectionDefinitionsFile(mOutputStream);
+                            mOutputStream.close();
+                        }
+                        else
+                        {
+                            assert(false);
+                        }
+                    }
+
                     mIsInitialized = true;
                 }
                 else
@@ -351,7 +366,7 @@ void Application::_displayMenu()
     std::cout << "Please choose between following options:\n\n";
     std::cout << "1 + ENTER: read the defined connections from file connectiondefinitions.csv and write the partial input data into file connectioninput.csv\n";
     std::cout << "2 + ENTER: read the input data from file connectioninput.csv and write the labeling information into file labellingtable.csv\n";
-    std::cout << "3 + ENTER: create an empty connection definitions file\n\n";
+    std::cout << "3 + ENTER: create an empty connection definitions file or clear the existing one\n\n";
     std::cout << "Press ENTER to exit the application\n\n";
 }
 
