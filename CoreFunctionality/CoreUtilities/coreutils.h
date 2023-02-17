@@ -37,6 +37,10 @@ namespace Utilities::Core
        Parseable chars are not necessarily valid ones
     */
     bool areParseableCharactersContained(const std::string& str);
+
+    /* This function returns a string that represents a customized date/time value related to a file (e.g. last modified date)
+    */
+    std::string getFileTimeString(const std::filesystem::file_time_type& fileTime);
 }
 
 #endif // COREUTILS_H

@@ -5,6 +5,7 @@
 #include "appsettings.h"
 #include "application.h"
 
+namespace Core = Utilities::Core;
 namespace Aux = Utilities::Other;
 
 Application::Application()
@@ -218,10 +219,11 @@ void Application::_copyExamplesDir()
 
 void Application::_enableFileInputOutput()
 {
-    assert(mIsInitialized);
-
-    if (!mIsFileIOEnabled)
+    if (mIsInitialized && !mIsFileIOEnabled)
     {
+        // move existing output file to the appropriate backup folder to ensure it doesn't get overwritten
+        _moveOutputFileToBackupDir();
+
         mOutputStream.open(_getOutputFile());
 
         if (mOutputStream.is_open())
@@ -247,6 +249,36 @@ void Application::_enableFileInputOutput()
         else
         {
             mStatusCode = StatusCode::OUTPUT_FILE_NOT_OPENED;
+        }
+    }
+    else
+    {
+        assert(false);
+    }
+}
+
+void Application::_moveOutputFileToBackupDir()
+{
+    const Path_t c_OutputFile{_getOutputFile()};
+
+    if (!c_OutputFile.empty() && std::filesystem::exists(c_OutputFile))
+    {
+        const Path_t c_BackupDir{c_OutputFile == mLabellingOutputFile ? mOutputBackupDir : mInputBackupDir};
+
+        if (!c_BackupDir.empty() && std::filesystem::exists(c_BackupDir) && std::filesystem::is_directory(c_BackupDir))
+        {
+            Path_t movedOutputFile{c_BackupDir};
+
+            // prepend timestamp (last modified date/time) to output file name in order to differentiate it from other files stored in the backup dir
+            movedOutputFile /= Core::getFileTimeString(std::filesystem::last_write_time(c_OutputFile));
+            movedOutputFile += "_";
+            movedOutputFile += c_OutputFile.filename();
+
+            std::filesystem::rename(c_OutputFile, movedOutputFile);
+        }
+        else
+        {
+            assert(false);
         }
     }
 }

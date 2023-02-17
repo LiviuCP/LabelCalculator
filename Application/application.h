@@ -58,6 +58,11 @@ private:
     */
     void _enableFileInputOutput();
 
+    /* This function moves the output file to corresponding backup dir
+       Any data csv file can be an output file depending on operation chosen by user
+    */
+    void _moveOutputFileToBackupDir();
+
     /* This function takes over the input from user and sets the parser type
     */
     bool _handleUserInput();

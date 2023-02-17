@@ -10,4 +10,6 @@ add_library(${PROJECT_NAME} STATIC
     application.cpp
 )
 
+target_link_libraries(${PROJECT_NAME} PRIVATE CoreUtilities)
+
 target_compile_definitions(${PROJECT_NAME} PRIVATE APPLICATION_LIBRARY)
