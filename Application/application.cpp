@@ -270,7 +270,7 @@ void Application::_moveOutputFileToBackupDir()
             Path_t movedOutputFile{c_BackupDir};
 
             // prepend timestamp (last modified date/time) to output file name in order to differentiate it from other files stored in the backup dir
-            movedOutputFile /= Core::getFileTimeString(std::filesystem::last_write_time(c_OutputFile));
+            movedOutputFile /= Core::getDateTimeString(std::chrono::system_clock::now());
             movedOutputFile += "_";
             movedOutputFile += c_OutputFile.filename();
 

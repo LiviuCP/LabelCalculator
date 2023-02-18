@@ -1,7 +1,5 @@
 #include <algorithm>
-#include <chrono>
 #include <ctime>
-#include <sstream>
 #include <iomanip>
 #include <cassert>
 
@@ -122,16 +120,4 @@ bool Utilities::Core::areParseableCharactersContained(const std::string& str)
     }
 
     return containsParseableCharacters;
-}
-
-std::string Utilities::Core::getFileTimeString(const std::filesystem::file_time_type& fileTime)
-{
-    const std::time_t c_Time = std::filesystem::file_time_type::clock::to_time_t(fileTime);
-
-    std::stringstream stream;
-    stream << std::put_time(std::localtime(&c_Time), "%F_%H%M%S");
-
-    const std::string c_FileTimeString{stream.str()};
-
-    return c_FileTimeString;
 }

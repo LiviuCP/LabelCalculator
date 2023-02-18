@@ -4,6 +4,8 @@
 #include <string>
 #include <optional>
 #include <filesystem>
+#include <chrono>
+#include <sstream>
 
 #ifdef _WIN32
 #include "auxdata.h"
@@ -38,9 +40,19 @@ namespace Utilities::Core
     */
     bool areParseableCharactersContained(const std::string& str);
 
-    /* This function returns a string that represents a customized date/time value related to a file (e.g. last modified date)
+    /* This function returns a string that represents a customized date/time value (e.g. current date and time)
     */
-    std::string getFileTimeString(const std::filesystem::file_time_type& fileTime);
+    template<typename clockType> std::string getDateTimeString(const std::chrono::time_point<clockType>& timePoint)
+    {
+        const std::time_t c_Time = clockType::to_time_t(timePoint);
+
+        std::stringstream stream;
+        stream << std::put_time(std::localtime(&c_Time), "%F_%H%M%S");
+
+        const std::string c_DateTimeString{stream.str()};
+
+        return c_DateTimeString;
+    }
 }
 
 #endif // COREUTILS_H
