@@ -146,21 +146,31 @@ void DevicePort::_registerRequiredParameter(std::string* const pRequiredParamete
     }
 }
 
-void DevicePort::_checkLabel()
+void DevicePort::_initializeDescriptionAndLabel(std::string_view deviceTypeDescription, std::string_view deviceTypeLabel)
 {
-    const size_t c_LabelCharsCount{mLabel.size()};
+    const std::string c_DeviceTypeDescription{deviceTypeDescription.size() > 0 ? deviceTypeDescription : "Device"};
 
-    assert(c_LabelCharsCount > 0u);
+    mDescription = c_DeviceTypeDescription;
+    mDescription += " placed at U";
+    mDescription += mDeviceUPosition;
 
-    if (std::string::npos == mLabel.find(Ports::c_LabelErrorText) &&
-        c_LabelCharsCount > Data::c_MaxLabelCharsCount)
+    mLabel = "U" + mDeviceUPosition;
+
+    if (deviceTypeLabel.size() > 0)
     {
-        std::stringstream stream;
-        const ssize_t c_DeltaCharsCount{static_cast<ssize_t>(c_LabelCharsCount - Data::c_MaxLabelCharsCount)};
-        stream << Ports::c_MaxLabelCharsCountExceededErrorText << c_DeltaCharsCount;
-
-        _setInvalidDescriptionAndLabel(stream.str());
+        mLabel += "_";
+        mLabel += deviceTypeLabel;
     }
+}
+
+void DevicePort::_appendDataToDescription(std::string_view data)
+{
+    mDescription += data;
+}
+
+void DevicePort::_appendDataToLabel(std::string_view data)
+{
+    mLabel += data;
 }
 
 void DevicePort::_setInvalidDescriptionAndLabel(std::string_view descriptionInput, std::string_view labelInput)
@@ -187,5 +197,22 @@ void DevicePort::_setInvalidDescriptionAndLabel(std::string_view descriptionInpu
         mLabel.reserve(Ports::c_LabelErrorText.size() + c_CheckConnectionInputFileText.size());
         mLabel.append(Ports::c_LabelErrorText);
         mLabel.append(c_CheckConnectionInputFileText);
+    }
+}
+
+void DevicePort::_checkLabel()
+{
+    const size_t c_LabelCharsCount{mLabel.size()};
+
+    assert(c_LabelCharsCount > 0u);
+
+    if (std::string::npos == mLabel.find(Ports::c_LabelErrorText) &&
+        c_LabelCharsCount > Data::c_MaxLabelCharsCount)
+    {
+        std::stringstream stream;
+        const ssize_t c_DeltaCharsCount{static_cast<ssize_t>(c_LabelCharsCount - Data::c_MaxLabelCharsCount)};
+        stream << Ports::c_MaxLabelCharsCountExceededErrorText << c_DeltaCharsCount;
+
+        _setInvalidDescriptionAndLabel(stream.str());
     }
 }

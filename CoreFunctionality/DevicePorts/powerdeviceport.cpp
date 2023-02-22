@@ -28,13 +28,14 @@ void PDUPort::computeDescriptionAndLabel()
 
     if (Data::c_DevicePlacementIdentifiers.find(mDevicePlacementType) != Data::c_DevicePlacementIdentifiers.cend())
     {
+        _initializeDescriptionAndLabel(Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " PDU");
+
         if (Core::isDigitString(mLoadSegmentNumber))
         {
             if (Core::isDigitString(mPortNumber))
             {
-                mDescription = Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " PDU placed at U" + mDeviceUPosition +
-                               " - load segment number " + mLoadSegmentNumber + " - port number " + mPortNumber;
-                mLabel = "U" + mDeviceUPosition + "_" + mDevicePlacementType + "PDU_P" + mLoadSegmentNumber + "." + mPortNumber;
+                _appendDataToDescription(" - load segment number " + mLoadSegmentNumber + " - port number " + mPortNumber);
+                _appendDataToLabel("_" + mDevicePlacementType + "PDU_P" + mLoadSegmentNumber + "." + mPortNumber);
             }
             else
             {
@@ -45,18 +46,18 @@ void PDUPort::computeDescriptionAndLabel()
         {
             if (Core::isDigitString(mPortNumber))
             {
-                mDescription = Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " PDU placed at U" + mDeviceUPosition + " - port number " + mPortNumber;
-                mLabel = "U" + mDeviceUPosition + "_" + mDevicePlacementType + "PDU_P" + mPortNumber;
+                _appendDataToDescription(" - port number " + mPortNumber);
+                _appendDataToLabel("_" + mDevicePlacementType + "PDU_P" + mPortNumber);
             }
             else if ("M" == mPortNumber) // management port
             {
-                mDescription = Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " PDU placed at U" + mDeviceUPosition + " - management port";
-                mLabel = "U" + mDeviceUPosition + "_" + mDevicePlacementType + "PDU_MGMT";
+                _appendDataToDescription(" - management port");
+                _appendDataToLabel("_" + mDevicePlacementType + "PDU_MGMT");
             }
             else if ("IN" == mPortNumber)
             {
-                mDescription = Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " PDU placed at U" + mDeviceUPosition + " - port number " + mPortNumber;
-                mLabel = "U" + mDeviceUPosition + "_" + mDevicePlacementType + "PDU_" + mPortNumber;
+                _appendDataToDescription(" - port number " + mPortNumber);
+                _appendDataToLabel("_" + mDevicePlacementType + "PDU_" + mPortNumber);
             }
             else
             {
@@ -94,21 +95,28 @@ void ExtensionBarPort::computeDescriptionAndLabel()
 
     if ("L" == mDevicePlacementType || "R" == mDevicePlacementType)
     {
-        assert(Data::c_DevicePlacementIdentifiers.find(mDevicePlacementType) != Data::c_DevicePlacementIdentifiers.cend());
+        if (Data::c_DevicePlacementIdentifiers.find(mDevicePlacementType) != Data::c_DevicePlacementIdentifiers.cend())
+        {
+            _initializeDescriptionAndLabel(Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " extension bar");
 
-        if (Core::isDigitString(mPortNumber))
-        {
-            mDescription = Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " extension bar placed at U" + mDeviceUPosition + " - port number " + mPortNumber;
-            mLabel = "U" + mDeviceUPosition + "_" + mDevicePlacementType + "EXT_P" + mPortNumber;
-        }
-        else if ("IN" == mPortNumber)
-        {
-            mDescription = Data::c_DevicePlacementIdentifiers.at(mDevicePlacementType) + " extension bar placed at U" + mDeviceUPosition + " - port number IN";
-            mLabel = "U" + mDeviceUPosition + "_" + mDevicePlacementType + "EXT_IN";
+            if (Core::isDigitString(mPortNumber))
+            {
+                _appendDataToDescription(" - port number " + mPortNumber);
+                _appendDataToLabel("_" + mDevicePlacementType + "EXT_P" + mPortNumber);
+            }
+            else if ("IN" == mPortNumber)
+            {
+                _appendDataToDescription(" - port number IN");
+                _appendDataToLabel("_" + mDevicePlacementType + "EXT_IN");
+            }
+            else
+            {
+                _setInvalidDescriptionAndLabel(Ports::c_InvalidPortNumberErrorText);
+            }
         }
         else
         {
-            _setInvalidDescriptionAndLabel(Ports::c_InvalidPortNumberErrorText);
+            assert(false);
         }
     }
     else
@@ -128,6 +136,8 @@ UPSPort::UPSPort(const std::string& deviceUPosition, const size_t fileRowNumber,
 {
     _registerRequiredParameter(&mLoadSegmentNumber);
     _registerRequiredParameter(&mPortNumber);
+
+    _initializeDescriptionAndLabel("UPS");
 }
 
 void UPSPort::computeDescriptionAndLabel()
@@ -136,8 +146,8 @@ void UPSPort::computeDescriptionAndLabel()
     {
         if (Core::isDigitString(mPortNumber)) // power port
         {
-            mDescription = "UPS placed at U" + mDeviceUPosition + " - load segment " + mLoadSegmentNumber + " - port " + mPortNumber;
-            mLabel += "U" + mDeviceUPosition + "_P" + mLoadSegmentNumber + "." + mPortNumber;
+            _appendDataToDescription(" - load segment " + mLoadSegmentNumber + " - port " + mPortNumber);
+            _appendDataToLabel("_P" + mLoadSegmentNumber + "." + mPortNumber);
         }
         else
         {
@@ -148,8 +158,8 @@ void UPSPort::computeDescriptionAndLabel()
     {
         if ("m" == mPortNumber || "M" == mPortNumber) // management port
         {
-            mDescription = "UPS placed at U" + mDeviceUPosition + " - management port";
-            mLabel = "U" + mDeviceUPosition + "_MGMT";
+            _appendDataToDescription(" - management port");
+            _appendDataToLabel("_MGMT");
         }
         else
         {

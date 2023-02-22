@@ -26,7 +26,7 @@ public:
     virtual void computeDescriptionAndLabel() override;
 
 protected:
-    void _handleNumericPortType();
+    void _handleNumberedPortType();
 
     std::string mPortType;
 };

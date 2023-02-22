@@ -18,6 +18,8 @@ LANSwitchPort::LANSwitchPort(const std::string& deviceUPosition, const size_t fi
 {
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
+
+    _initializeDescriptionAndLabel("LAN switch");
 }
 
 void LANSwitchPort::computeDescriptionAndLabel()
@@ -28,13 +30,13 @@ void LANSwitchPort::computeDescriptionAndLabel()
 
     if ("N" == mPortType)
     {
-        mDescription = "LAN switch placed at U" + mDeviceUPosition + " - Ethernet port ";
-        mLabel = "U" + mDeviceUPosition + "_P";
+        _appendDataToDescription(" - Ethernet port ");
+        _appendDataToLabel("_P");
     }
     else if ("P" == mPortType)
     {
-        mDescription = "LAN switch placed at U" + mDeviceUPosition + " - power supply ";
-        mLabel = "U" + mDeviceUPosition + "_PS";
+        _appendDataToDescription(" - power supply ");
+        _appendDataToLabel("_PS");
     }
     else
     {
@@ -46,8 +48,8 @@ void LANSwitchPort::computeDescriptionAndLabel()
     {
         if (Core::isDigitString(mPortNumber))
         {
-            mDescription += mPortNumber;
-            mLabel += mPortNumber;
+            _appendDataToDescription(mPortNumber);
+            _appendDataToLabel(mPortNumber);
         }
         else
         {
@@ -67,6 +69,8 @@ SANSwitchPort::SANSwitchPort(const std::string& deviceUPosition, const size_t fi
 {
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
+
+    _initializeDescriptionAndLabel("SAN switch");
 }
 
 void SANSwitchPort::computeDescriptionAndLabel()
@@ -75,14 +79,14 @@ void SANSwitchPort::computeDescriptionAndLabel()
 
     if ("F" == mPortType || "P" == mPortType)
     {
-        _handleNumericPortType();
+        _handleNumberedPortType();
     }
     else if ("-" == mPortType)
     {
         if ("m" == mPortNumber || "M" == mPortNumber) // management port
         {
-            mDescription += "SAN switch placed at U" + mDeviceUPosition + " - management port";
-            mLabel = "U" + mDeviceUPosition + "_MGMT";
+            _appendDataToDescription(" - management port");
+            _appendDataToLabel("_MGMT");
         }
         else
         {
@@ -97,19 +101,19 @@ void SANSwitchPort::computeDescriptionAndLabel()
     _checkLabel();
 }
 
-void SANSwitchPort::_handleNumericPortType()
+void SANSwitchPort::_handleNumberedPortType()
 {
     if (Core::isDigitString(mPortNumber)) // power or data port
     {
         if ("F" == mPortType)
         {
-            mDescription = "SAN switch placed at U" + mDeviceUPosition + " - FC port " + mPortNumber;
-            mLabel = "U" + mDeviceUPosition + "_P" + mPortNumber;
+            _appendDataToDescription(" - FC port " + mPortNumber);
+            _appendDataToLabel("_P" + mPortNumber);
         }
         else if ("P" == mPortType)
         {
-            mDescription = "SAN switch placed at U" + mDeviceUPosition + " - power supply " + mPortNumber;
-            mLabel = "U" + mDeviceUPosition + "_PS" + mPortNumber;
+            _appendDataToDescription(" - power supply " + mPortNumber);
+            _appendDataToLabel("_PS" + mPortNumber);
         }
         else
         {
@@ -131,6 +135,8 @@ InfinibandSwitchPort::InfinibandSwitchPort(const std::string& deviceUPosition, c
 {
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
+
+    _initializeDescriptionAndLabel("Infiniband switch");
 }
 
 void InfinibandSwitchPort::computeDescriptionAndLabel()
@@ -145,8 +151,8 @@ void InfinibandSwitchPort::computeDescriptionAndLabel()
     {
         if ("m" == mPortNumber || "M" == mPortNumber) // management port
         {
-            mDescription += "Infiniband switch placed at U" + mDeviceUPosition + " - management port";
-            mLabel = "U" + mDeviceUPosition + "_MGMT";
+            _appendDataToDescription(" - management port");
+            _appendDataToLabel("_MGMT");
         }
         else
         {
@@ -167,13 +173,13 @@ void InfinibandSwitchPort::_handleNumberedPortType()
     {
         if ("I" == mPortType)
         {
-            mDescription = "Infiniband switch placed at U" + mDeviceUPosition + " - port " + mPortNumber;
-            mLabel = "U" + mDeviceUPosition + "_P" + mPortNumber;
+            _appendDataToDescription(" - port " + mPortNumber);
+            _appendDataToLabel("_P" + mPortNumber);
         }
         else if ("P" == mPortType)
         {
-            mDescription = "Infiniband switch placed at U" + mDeviceUPosition + " - power supply " + mPortNumber;
-            mLabel = "U" + mDeviceUPosition + "_PS" + mPortNumber;
+            _appendDataToDescription(" - power supply " + mPortNumber);
+            _appendDataToLabel("_PS" + mPortNumber);
         }
         else
         {
@@ -195,6 +201,8 @@ KVMSwitchPort::KVMSwitchPort(const std::string& deviceUPosition, const size_t fi
 {
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
+
+    _initializeDescriptionAndLabel("KVM switch");
 }
 
 void KVMSwitchPort::computeDescriptionAndLabel()
@@ -205,13 +213,13 @@ void KVMSwitchPort::computeDescriptionAndLabel()
 
     if ("K" == mPortType)
     {
-        mDescription = "KVM switch placed at U" + mDeviceUPosition + " - port ";
-        mLabel = "U" + mDeviceUPosition + "_P";
+        _appendDataToDescription(" - port ");
+        _appendDataToLabel("_P");
     }
     else if ("P" == mPortType)
     {
-        mDescription = "KVM switch placed at U" + mDeviceUPosition + " - power supply ";
-        mLabel = "U" + mDeviceUPosition + "_PS";
+        _appendDataToDescription(" - power supply ");
+        _appendDataToLabel("_PS");
     }
     else
     {
@@ -223,8 +231,8 @@ void KVMSwitchPort::computeDescriptionAndLabel()
     {
         if (Core::isDigitString(mPortNumber))
         {
-            mDescription += mPortNumber;
-            mLabel += mPortNumber;
+            _appendDataToDescription(mPortNumber);
+            _appendDataToLabel(mPortNumber);
         }
         else
         {
@@ -244,6 +252,8 @@ ServerPort::ServerPort(const std::string& deviceUPosition, const size_t fileRowN
 {
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
+
+    _initializeDescriptionAndLabel("Server");
 }
 
 void ServerPort::computeDescriptionAndLabel()
@@ -258,15 +268,15 @@ void ServerPort::computeDescriptionAndLabel()
     }
     else if ("K" == mPortType) // KVM port
     {
-        mDescription = "Server placed at U" + mDeviceUPosition + " - KVM port";
-        mLabel = "U" + mDeviceUPosition + "_KVM";
+        _appendDataToDescription(" - KVM port");
+        _appendDataToLabel("_KVM");
     }
     else if ("-" == mPortType)
     {
         if("m" == mPortNumber || "M" == mPortNumber) // management port
         {
-            mDescription = "Server placed at U" + mDeviceUPosition + " - management port";
-            mLabel = "U" + mDeviceUPosition + "_MGMT";
+            _appendDataToDescription(" - management port");
+            _appendDataToLabel("_MGMT");
         }
         else
         {
@@ -287,33 +297,33 @@ void ServerPort::_handleNumberedPortType()
     {
         if("F" == mPortType) // FC port
         {
-            mDescription = "Server placed at U" + mDeviceUPosition + " - FC port " + mPortNumber;
-            mLabel = "U" + mDeviceUPosition + "_FC_P" + mPortNumber;
+            _appendDataToDescription(" - FC port " + mPortNumber);
+            _appendDataToLabel("_FC_P" + mPortNumber);
         }
         else if("N" == mPortType) // Ethernet port (but not embedded but on PCIe public slot)
         {
-            mDescription = "Server placed at U" + mDeviceUPosition + " - Ethernet port " + mPortNumber;
-            mLabel = "U" + mDeviceUPosition + "_ETH_P" + mPortNumber;
+            _appendDataToDescription(" - Ethernet port " + mPortNumber);
+            _appendDataToLabel("_ETH_P" + mPortNumber);
         }
         else if ("E" == mPortType) // embedded port (Ethernet/Infiniband)
         {
-            mDescription = "Server placed at U" + mDeviceUPosition + " - embedded port " + mPortNumber;
-            mLabel = "U" + mDeviceUPosition + "_EMB_P" + mPortNumber;
+            _appendDataToDescription(" - embedded port " + mPortNumber);
+            _appendDataToLabel("_EMB_P" + mPortNumber);
         }
         else if ("I" == mPortType) // Infiniband port (but not embedded but on PCIe public slot)
         {
-            mDescription = "Server placed at U" + mDeviceUPosition + " - Infiniband port " + mPortNumber;
-            mLabel = "U" + mDeviceUPosition + "_IB_P" + mPortNumber;
+            _appendDataToDescription(" - Infiniband port " + mPortNumber);
+            _appendDataToLabel("_IB_P" + mPortNumber);
         }
         else if ("S" == mPortType) // SAS port
         {
-            mDescription = "Server placed at U" + mDeviceUPosition + " - SAS port " + mPortNumber;
-            mLabel = "U" + mDeviceUPosition + "_SAS_P" + mPortNumber;
+            _appendDataToDescription(" - SAS port " + mPortNumber);
+            _appendDataToLabel("_SAS_P" + mPortNumber);
         }
         else if ("P" == mPortType) // power supply
         {
-            mDescription = "Server placed at U" + mDeviceUPosition + " - power supply " + mPortNumber;
-            mLabel = "U" + mDeviceUPosition + "_PS" + mPortNumber;
+            _appendDataToDescription(" - power supply " + mPortNumber);
+            _appendDataToLabel("_PS" + mPortNumber);
         }
         else
         {
@@ -336,6 +346,8 @@ StoragePort::StoragePort(const std::string& deviceUPosition, const size_t fileRo
     _registerRequiredParameter(&mControllerNr);
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
+
+    _initializeDescriptionAndLabel("Storage device");
 }
 
 void StoragePort::computeDescriptionAndLabel()
@@ -349,15 +361,15 @@ void StoragePort::computeDescriptionAndLabel()
     {
         if ("D" == mPortType) // data port (e.g. FC)
         {
-            mDescription = "Storage device placed at U" + mDeviceUPosition + " - controller " + mControllerNr + " - port ";
-            mLabel = "U" + mDeviceUPosition + "_C" + mControllerNr + "_P";
+            _appendDataToDescription(" - controller " + mControllerNr + " - port ");
+            _appendDataToLabel("_C" + mControllerNr + "_P");
 
             shouldCheckNumberedPortType = true;
         }
         else if ("-" == mPortType)
         {
-            mDescription = "Storage device placed at U" + mDeviceUPosition + " - controller " + mControllerNr;
-            mLabel = "U" + mDeviceUPosition + "_C" + mControllerNr;
+            _appendDataToDescription(" - controller " + mControllerNr);
+            _appendDataToLabel("_C" + mControllerNr);
 
             shouldCheckManagementPort = true; // one management port per controller
         }
@@ -370,9 +382,6 @@ void StoragePort::computeDescriptionAndLabel()
     {
         if ("-" == mPortType)
         {
-            mDescription = "Storage device placed at U" + mDeviceUPosition;
-            mLabel = "U" + mDeviceUPosition;
-
             shouldCheckManagementPort = true; // unified management port
         }
         else
@@ -384,8 +393,8 @@ void StoragePort::computeDescriptionAndLabel()
     {
         if ("P" == mPortType) // power supply
         {
-            mDescription = "Storage device placed at U" + mDeviceUPosition + " - power supply ";
-            mLabel = "U" + mDeviceUPosition + "_PS";
+            _appendDataToDescription(" - power supply ");
+            _appendDataToLabel("_PS");
 
             shouldCheckNumberedPortType = true;
         }
@@ -403,8 +412,8 @@ void StoragePort::computeDescriptionAndLabel()
     {
         if (Core::isDigitString(mPortNumber))
         {
-            mDescription += mPortNumber;
-            mLabel += mPortNumber;
+            _appendDataToDescription(mPortNumber);
+            _appendDataToLabel(mPortNumber);
         }
         else
         {
@@ -415,8 +424,8 @@ void StoragePort::computeDescriptionAndLabel()
     {
         if ("m" == mPortNumber || "M" == mPortNumber)
         {
-            mDescription += " - management port";
-            mLabel += "_MGMT";
+            _appendDataToDescription(" - management port");
+            _appendDataToLabel("_MGMT");
         }
         else
         {
@@ -442,6 +451,8 @@ BladeServerPort::BladeServerPort(const std::string& deviceUPosition, const size_
     _registerRequiredParameter(&mModuleType);
     _registerRequiredParameter(&mModuleNumber);
     _registerRequiredParameter(&mPortNumber);
+
+    _initializeDescriptionAndLabel("Blade system");
 }
 
 void BladeServerPort::computeDescriptionAndLabel()
@@ -454,13 +465,13 @@ void BladeServerPort::computeDescriptionAndLabel()
     }
     else if ("UP" == mModuleType) // management uplink port (for daisy chaining multiple blade systems)
     {
-        mDescription = "Blade system placed at U" + mDeviceUPosition + " - management uplink port";
-        mLabel = "U" + mDeviceUPosition + "_MG_UP";
+        _appendDataToDescription(" - management uplink port");
+        _appendDataToLabel("_MG_UP");
     }
     else if ("DO" == mModuleType) // management downlink port (for daisy chaining multiple blade systems)
     {
-        mDescription = "Blade system placed at U" + mDeviceUPosition + " - management downlink port";
-        mLabel += "U" + mDeviceUPosition + "_MG_DO";
+        _appendDataToDescription(" - management downlink port");
+        _appendDataToLabel("_MG_DO");
     }
     else
     {
@@ -474,15 +485,12 @@ void BladeServerPort::_handleNumberedModuleType()
 {
     if (Core::isDigitString(mModuleNumber))
     {
-        mDescription = "Blade system placed at U" + mDeviceUPosition;
-        mLabel = "U" + mDeviceUPosition;
-
         if ("DM" == mModuleType) // data module
         {
             if (Core::isDigitString(mPortNumber))
             {
-                mDescription += " - data module " + mModuleNumber + " - port " + mPortNumber;
-                mLabel += "_DMO" + mModuleNumber + "_P" + mPortNumber;
+                _appendDataToDescription(" - data module " + mModuleNumber + " - port " + mPortNumber);
+                _appendDataToLabel("_DMO" + mModuleNumber + "_P" + mPortNumber);
             }
             else
             {
@@ -491,13 +499,13 @@ void BladeServerPort::_handleNumberedModuleType()
         }
         else if ("MG" == mModuleType) // management module
         {
-            mDescription += " - management module " + mModuleNumber;
-            mLabel += "_MGMT" + mModuleNumber;
+            _appendDataToDescription(" - management module " + mModuleNumber);
+            _appendDataToLabel("_MGMT" + mModuleNumber);
         }
         else if ("P" == mModuleType) // power supply
         {
-            mDescription += " - power supply " + mModuleNumber;
-            mLabel += "_PS" + mModuleNumber;
+            _appendDataToDescription(" - power supply " + mModuleNumber);
+            _appendDataToLabel("_PS" + mModuleNumber);
         }
         else
         {

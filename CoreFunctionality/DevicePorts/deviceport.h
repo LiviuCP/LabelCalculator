@@ -49,9 +49,16 @@ protected:
     */
     void _registerRequiredParameter(std::string* const pRequiredParameter);
 
-    /* This function performs a final check on the calculated label and initiates a size check if no "soft" parsing errors occurred
+    /* This function is used for setting initial (non-specific port) data into device port description */
+    void _initializeDescriptionAndLabel(std::string_view deviceTypeDescription, std::string_view deviceTypeLabel = "");
+
+    /* This function is used for appending port specific data to description (e.g. port number)
     */
-    void _checkLabel();
+    void _appendDataToDescription(std::string_view data);
+
+    /* This function is used for appending port specific data to label (e.g. port number)
+    */
+    void _appendDataToLabel(std::string_view data);
 
     /* This function is used for replacing port description and label with a "soft" parsing error message
        "Hard" parsing errors are being logged within error file by using the error handling functionality (see ErrorHandling directory)
@@ -59,11 +66,17 @@ protected:
     */
     void _setInvalidDescriptionAndLabel(std::string_view descriptionInput, std::string_view labelInput = "");
 
-    // position of the device containing the port in rack
-    std::string mDeviceUPosition;
+    /* This function performs a final check on the calculated label and initiates a size check if no "soft" parsing errors occurred
+    */
+    void _checkLabel();
 
+protected:
     // power or data port number that should be mentioned on the cable label
     std::string mPortNumber;
+
+private:
+    // position of the device containing the port in rack
+    std::string mDeviceUPosition;
 
     // text to be written in the source (first device) / destination (second device) field of the labelling table (device port description)
     std::string mDescription;
@@ -77,7 +90,6 @@ protected:
     // current CSV file column from which device info is being parsed, used for error reporting
     size_t mFileColumnNumber;
 
-private:
     // reference to substrings storing the fields parsed by parseInputData()
     std::vector<std::string*> mInputData;
 
