@@ -58,7 +58,7 @@ namespace Data
     };
 
     // placeholders used for creating the connection input template file (should be filled in by user in next step)
-    const std::map<DeviceTypeID, std::string> scConnectionInputPlaceholders
+    const std::map<DeviceTypeID, std::string> c_ConnectionInputPlaceholders
     {
         {   DeviceTypeID::PDU,                     "PLACEMENT,LOAD SEGMENT NUMBER,PORT NUMBER"     },
         {   DeviceTypeID::EXTENSION_BAR,           "PLACEMENT,PORT NUMBER,-"                       },

@@ -369,6 +369,6 @@ void ConnectionDefinitionParser::_buildTemplateDeviceParameters()
         mTemplateDeviceParameters[c_CurrentDeviceUPositionAsIndex] += currentDeviceUPosition + Data::c_CSVSeparator;
 
         // add the placeholders for the device parameters (to be filled in the next step (option 2) in connectioninput.csv so the final table can be calculated)
-        mTemplateDeviceParameters[c_CurrentDeviceUPositionAsIndex] += Data::scConnectionInputPlaceholders.at(mMapping[c_CurrentDeviceUPositionAsIndex]);
+        mTemplateDeviceParameters[c_CurrentDeviceUPositionAsIndex] += Data::c_ConnectionInputPlaceholders.at(mMapping[c_CurrentDeviceUPositionAsIndex]);
     }
 }
