@@ -2,6 +2,7 @@
 #include <set>
 
 #include "applicationdata.h"
+#include "deviceportdata.h"
 #include "coreutils.h"
 #include "deviceportutils.h"
 #include "datadeviceport.h"
@@ -9,8 +10,77 @@
 namespace Core = Utilities::Core;
 namespace Ports = Utilities::DevicePorts;
 
-LANSwitchPort::LANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+SwitchPort::SwitchPort(const std::string& deviceUPosition, const SwitchPortData_t& switchPortData, const size_t fileRowNumber, const size_t fileColumnNumber, const size_t requiredNumberOfParameters, const bool isSourceDevice)
     : DevicePort{deviceUPosition,
+                 fileRowNumber,
+                 fileColumnNumber,
+                 requiredNumberOfParameters,
+                 isSourceDevice}
+    , mDataPortType{switchPortData.mDataPortType}
+    , mDataPortTypeDescription{switchPortData.mDataPortTypeDescription}
+    , mHasManagementPort{switchPortData.mHasManagementPort}
+{
+    // required parameters to be registered in the derived classes to make their ordering in the input csv file more flexible
+}
+
+void SwitchPort::computeDescriptionAndLabel()
+{
+    Core::convertStringCase(mPortType, true);
+
+    if (mDataPortType == mPortType || "P" == mPortType)
+    {
+        _handleNumberedPortType();
+    }
+    else if ("-" == mPortType)
+    {
+        if (("m" == mPortNumber || "M" == mPortNumber) && mHasManagementPort) // management port
+        {
+            _appendDataToDescription(" - management port");
+            _appendDataToLabel("_MGMT");
+        }
+        else
+        {
+            _setInvalidDescriptionAndLabel(Ports::c_InvalidPortNumberErrorText);
+        }
+    }
+    else
+    {
+        _setInvalidDescriptionAndLabel(Ports::c_InvalidPortTypeErrorText);
+    }
+
+    _checkLabel();
+}
+
+void SwitchPort::_handleNumberedPortType()
+{
+    if (Core::isDigitString(mPortNumber)) // power or data port
+    {
+        if (mDataPortType == mPortType)
+        {
+            const std::string c_TrailingSpace{mDataPortTypeDescription.size() > 0 ? " " : ""};
+
+            _appendDataToDescription(" - " + mDataPortTypeDescription + c_TrailingSpace + "port " + mPortNumber);
+            _appendDataToLabel("_P" + mPortNumber);
+        }
+        else if ("P" == mPortType)
+        {
+            _appendDataToDescription(" - power supply " + mPortNumber);
+            _appendDataToLabel("_PS" + mPortNumber);
+        }
+        else
+        {
+            assert(false);
+        }
+    }
+    else
+    {
+        _setInvalidDescriptionAndLabel(Ports::c_InvalidPortNumberErrorText);
+    }
+}
+
+LANSwitchPort::LANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+    : SwitchPort{deviceUPosition,
+                 Data::c_SwitchPortData.at(Data::DeviceTypeID::LAN_SWITCH),
                  fileRowNumber,
                  fileColumnNumber,
                  Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::LAN_SWITCH),
@@ -22,46 +92,9 @@ LANSwitchPort::LANSwitchPort(const std::string& deviceUPosition, const size_t fi
     _initializeDescriptionAndLabel("LAN switch");
 }
 
-void LANSwitchPort::computeDescriptionAndLabel()
-{
-    Core::convertStringCase(mPortType, true);
-
-    bool isValidPortType{true};
-
-    if ("N" == mPortType)
-    {
-        _appendDataToDescription(" - Ethernet port ");
-        _appendDataToLabel("_P");
-    }
-    else if ("P" == mPortType)
-    {
-        _appendDataToDescription(" - power supply ");
-        _appendDataToLabel("_PS");
-    }
-    else
-    {
-        _setInvalidDescriptionAndLabel(Ports::c_InvalidPortTypeErrorText);
-        isValidPortType = false;
-    }
-
-    if (isValidPortType)
-    {
-        if (Core::isDigitString(mPortNumber))
-        {
-            _appendDataToDescription(mPortNumber);
-            _appendDataToLabel(mPortNumber);
-        }
-        else
-        {
-            _setInvalidDescriptionAndLabel(Ports::c_InvalidPortNumberErrorText);
-        }
-    }
-
-    _checkLabel();
-}
-
 SANSwitchPort::SANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition,
+    : SwitchPort{deviceUPosition,
+                 Data::c_SwitchPortData.at(Data::DeviceTypeID::SAN_SWITCH),
                  fileRowNumber,
                  fileColumnNumber,
                  Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::SAN_SWITCH),
@@ -73,61 +106,9 @@ SANSwitchPort::SANSwitchPort(const std::string& deviceUPosition, const size_t fi
     _initializeDescriptionAndLabel("SAN switch");
 }
 
-void SANSwitchPort::computeDescriptionAndLabel()
-{
-    Core::convertStringCase(mPortType, true);
-
-    if ("F" == mPortType || "P" == mPortType)
-    {
-        _handleNumberedPortType();
-    }
-    else if ("-" == mPortType)
-    {
-        if ("m" == mPortNumber || "M" == mPortNumber) // management port
-        {
-            _appendDataToDescription(" - management port");
-            _appendDataToLabel("_MGMT");
-        }
-        else
-        {
-            _setInvalidDescriptionAndLabel(Ports::c_InvalidPortNumberErrorText);
-        }
-    }
-    else
-    {
-        _setInvalidDescriptionAndLabel(Ports::c_InvalidPortTypeErrorText);
-    }
-
-    _checkLabel();
-}
-
-void SANSwitchPort::_handleNumberedPortType()
-{
-    if (Core::isDigitString(mPortNumber)) // power or data port
-    {
-        if ("F" == mPortType)
-        {
-            _appendDataToDescription(" - FC port " + mPortNumber);
-            _appendDataToLabel("_P" + mPortNumber);
-        }
-        else if ("P" == mPortType)
-        {
-            _appendDataToDescription(" - power supply " + mPortNumber);
-            _appendDataToLabel("_PS" + mPortNumber);
-        }
-        else
-        {
-            assert(false);
-        }
-    }
-    else
-    {
-        _setInvalidDescriptionAndLabel(Ports::c_InvalidPortNumberErrorText);
-    }
-}
-
 InfinibandSwitchPort::InfinibandSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition,
+    : SwitchPort{deviceUPosition,
+                 Data::c_SwitchPortData.at(Data::DeviceTypeID::INFINIBAND_SWITCH),
                  fileRowNumber,
                  fileColumnNumber,
                  Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::INFINIBAND_SWITCH),
@@ -139,61 +120,9 @@ InfinibandSwitchPort::InfinibandSwitchPort(const std::string& deviceUPosition, c
     _initializeDescriptionAndLabel("Infiniband switch");
 }
 
-void InfinibandSwitchPort::computeDescriptionAndLabel()
-{
-    Core::convertStringCase(mPortType, true);
-
-    if ("I" == mPortType || "P" == mPortType)
-    {
-        _handleNumberedPortType();
-    }
-    else if ("-" == mPortType)
-    {
-        if ("m" == mPortNumber || "M" == mPortNumber) // management port
-        {
-            _appendDataToDescription(" - management port");
-            _appendDataToLabel("_MGMT");
-        }
-        else
-        {
-            _setInvalidDescriptionAndLabel(Ports::c_InvalidPortNumberErrorText);
-        }
-    }
-    else
-    {
-        _setInvalidDescriptionAndLabel(Ports::c_InvalidPortTypeErrorText);
-    }
-
-    _checkLabel();
-}
-
-void InfinibandSwitchPort::_handleNumberedPortType()
-{
-    if (Core::isDigitString(mPortNumber)) // power or data port
-    {
-        if ("I" == mPortType)
-        {
-            _appendDataToDescription(" - port " + mPortNumber);
-            _appendDataToLabel("_P" + mPortNumber);
-        }
-        else if ("P" == mPortType)
-        {
-            _appendDataToDescription(" - power supply " + mPortNumber);
-            _appendDataToLabel("_PS" + mPortNumber);
-        }
-        else
-        {
-            assert(false);
-        }
-    }
-    else
-    {
-        _setInvalidDescriptionAndLabel(Ports::c_InvalidPortNumberErrorText);
-    }
-}
-
 KVMSwitchPort::KVMSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
-    : DevicePort{deviceUPosition,
+    : SwitchPort{deviceUPosition,
+                 Data::c_SwitchPortData.at(Data::DeviceTypeID::KVM_SWITCH),
                  fileRowNumber,
                  fileColumnNumber,
                  Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::KVM_SWITCH),
@@ -203,44 +132,6 @@ KVMSwitchPort::KVMSwitchPort(const std::string& deviceUPosition, const size_t fi
     _registerRequiredParameter(&mPortNumber);
 
     _initializeDescriptionAndLabel("KVM switch");
-}
-
-void KVMSwitchPort::computeDescriptionAndLabel()
-{
-    Core::convertStringCase(mPortType, true);
-
-    bool isValidPortType{true};
-
-    if ("K" == mPortType)
-    {
-        _appendDataToDescription(" - port ");
-        _appendDataToLabel("_P");
-    }
-    else if ("P" == mPortType)
-    {
-        _appendDataToDescription(" - power supply ");
-        _appendDataToLabel("_PS");
-    }
-    else
-    {
-        _setInvalidDescriptionAndLabel(Ports::c_InvalidPortTypeErrorText);
-        isValidPortType = false;
-    }
-
-    if (isValidPortType)
-    {
-        if (Core::isDigitString(mPortNumber))
-        {
-            _appendDataToDescription(mPortNumber);
-            _appendDataToLabel(mPortNumber);
-        }
-        else
-        {
-            _setInvalidDescriptionAndLabel(Ports::c_InvalidPortNumberErrorText);
-        }
-    }
-
-    _checkLabel();
 }
 
 ServerPort::ServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)

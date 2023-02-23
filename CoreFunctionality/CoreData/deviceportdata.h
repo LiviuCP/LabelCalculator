@@ -5,6 +5,9 @@
 #include <string>
 #include <cstdlib>
 
+#include "deviceportdatatypes.h"
+#include "applicationdata.h"
+
 namespace Data
 {
     // number of fields that should be filled in connectioninput.csv for EACH device (unused fields can be filled in with '-')
@@ -18,7 +21,13 @@ namespace Data
         {"R", "Right"}          // vertically right placed PDU or extension bar
     };
 
-
+    const std::map<DeviceTypeID, SwitchPortData_t> c_SwitchPortData
+    {
+        {   DeviceTypeID::LAN_SWITCH,          {"N", "Ethernet", false}     },
+        {   DeviceTypeID::SAN_SWITCH,          {"F", "FC",       true }     },
+        {   DeviceTypeID::INFINIBAND_SWITCH,   {"I", "",         true }     },
+        {   DeviceTypeID::KVM_SWITCH,          {"K", "",         false}     }
+    };
 }
 
 #endif // DEVICEPORTDATA_H

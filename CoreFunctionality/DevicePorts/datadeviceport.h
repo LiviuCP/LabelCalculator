@@ -2,61 +2,60 @@
 #define DATADEVICEPORT_H
 
 #include "deviceport.h"
+#include "deviceportdatatypes.h"
+
+// Generic switch ports
+class SwitchPort : public DevicePort
+{
+public:
+    SwitchPort() = delete;
+
+    void computeDescriptionAndLabel() override;
+
+protected:
+    // constructor needs to be protected as this class is a switch abstraction (derived classes are the concrete switches for which labels are being created)
+    SwitchPort(const std::string& deviceUPosition, const SwitchPortData_t& switchPortData, const size_t fileRowNumber, const size_t fileColumnNumber, const size_t requiredNumberOfParameters, const bool isSourceDevice);
+
+    std::string mPortType;
+
+private:
+    void _handleNumberedPortType();
+
+    const std::string mDataPortType;
+    const std::string mDataPortTypeDescription;
+    const bool mHasManagementPort;
+};
 
 // Ethernet switch ports
-class LANSwitchPort : public DevicePort
+class LANSwitchPort : public SwitchPort
 {
 public:
     LANSwitchPort() = delete;
     LANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
-
-    virtual void computeDescriptionAndLabel() override;
-
-protected:
-    std::string mPortType;
 };
 
 // FC (SAN) switch ports
-class SANSwitchPort : public DevicePort
+class SANSwitchPort : public SwitchPort
 {
 public:
     SANSwitchPort() = delete;
     SANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
-
-    virtual void computeDescriptionAndLabel() override;
-
-protected:
-    void _handleNumberedPortType();
-
-    std::string mPortType;
 };
 
 // Infiniband switch ports
-class InfinibandSwitchPort : public DevicePort
+class InfinibandSwitchPort : public SwitchPort
 {
 public:
     InfinibandSwitchPort() = delete;
     InfinibandSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
-
-    virtual void computeDescriptionAndLabel() override;
-
-protected:
-    void _handleNumberedPortType();
-
-    std::string mPortType;
 };
 
 // KVM switch ports
-class KVMSwitchPort : public DevicePort
+class KVMSwitchPort : public SwitchPort
 {
 public:
     KVMSwitchPort() = delete;
     KVMSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
-
-    virtual void computeDescriptionAndLabel() override;
-
-protected:
-    std::string mPortType;
 };
 
 // server ports (embedded (incl. management), Ethernet, FC, IB, etc)
