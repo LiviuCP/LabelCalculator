@@ -119,11 +119,11 @@ void ConnectionDefinitionParser::_buildOutput()
                     /* The output string per connection row is calculated by adding following substrings: cable part number placeholder and the template parameters for each connected device
                        The decrease by 1 is necessary due to vector indexing (which starts at 0)
                     */
-                    std::string output{Data::c_CablePartNumberPlaceholder +
-                                       Data::c_CSVSeparator +
-                                       mTemplateDeviceParameters[c_CurrentDeviceUPositionAsIndex] +
-                                       Data::c_CSVSeparator +
-                                       mTemplateDeviceParameters[*connectedDevIter - 1]};
+                    std::string output{Data::c_CablePartNumberPlaceholder};
+                    output.push_back(Data::c_CSVSeparator);
+                    output.append(mTemplateDeviceParameters[c_CurrentDeviceUPositionAsIndex]);
+                    output.push_back(Data::c_CSVSeparator);
+                    output.append(mTemplateDeviceParameters[*connectedDevIter - 1]);
 
                     outputRowsCount += mConnectionsCount[c_CurrentDeviceIndex][c_ConnectedDeviceIndex];
                     mOutputData.resize(outputRowsCount);

@@ -2,7 +2,7 @@
 
 #include "parser.h"
 
-Parser::Parser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream, const std::string& header)
+Parser::Parser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream, std::string_view header)
     : mpInputStream{pInputStream}
     , mpOutputStream{pOutputStream}
     , mpErrorStream{pErrorStream}
