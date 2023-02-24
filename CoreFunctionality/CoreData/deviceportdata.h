@@ -5,7 +5,7 @@
 #include <string>
 #include <cstdlib>
 
-#include "deviceportdatatypes.h"
+#include "deviceporttypes.h"
 #include "applicationdata.h"
 
 namespace Data
@@ -21,12 +21,12 @@ namespace Data
         {"R", "Right"}          // vertically right placed PDU or extension bar
     };
 
-    inline const std::map<DeviceTypeID, SwitchPortData_t> c_SwitchPortData
+    inline const std::map<DeviceTypeID, DevicePortTypesInfo_t> c_SwitchPortTypesInfoMap
     {
-        {   DeviceTypeID::LAN_SWITCH,          {"N", "Ethernet", false}     },
-        {   DeviceTypeID::SAN_SWITCH,          {"F", "FC",       true }     },
-        {   DeviceTypeID::INFINIBAND_SWITCH,   {"I", "",         true }     },
-        {   DeviceTypeID::KVM_SWITCH,          {"K", "",         false}     }
+        {   DeviceTypeID::LAN_SWITCH,          {  { {"N", {"Ethernet", ""}} }, false  }   },
+        {   DeviceTypeID::SAN_SWITCH,          {  { {"F", {"FC"      , ""}} }, true   }   },
+        {   DeviceTypeID::INFINIBAND_SWITCH,   {  { {"I", {""        , ""}} }, true   }   },
+        {   DeviceTypeID::KVM_SWITCH,          {  { {"K", {""        , ""}} }, false  }   }
     };
 }
 

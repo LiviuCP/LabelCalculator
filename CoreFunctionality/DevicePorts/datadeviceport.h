@@ -2,7 +2,7 @@
 #define DATADEVICEPORT_H
 
 #include "deviceport.h"
-#include "deviceportdatatypes.h"
+#include "deviceporttypes.h"
 
 // Generic switch ports
 class SwitchPort : public DevicePort
@@ -14,15 +14,14 @@ public:
 
 protected:
     // constructor needs to be protected as this class is a switch abstraction (derived classes are the concrete switches for which labels are being created)
-    SwitchPort(const std::string& deviceUPosition, const SwitchPortData_t& switchPortData, const size_t fileRowNumber, const size_t fileColumnNumber, const size_t requiredNumberOfParameters, const bool isSourceDevice);
+    SwitchPort(const std::string& deviceUPosition, const DevicePortTypesInfo_t& switchPortTypesInfo, const size_t fileRowNumber, const size_t fileColumnNumber, const size_t requiredNumberOfParameters, const bool isSourceDevice);
 
     std::string mPortType;
 
 private:
     void _handleNumberedPortType();
 
-    const std::string mDataPortType;
-    const std::string mDataPortTypeDescription;
+    const AllowedDataPortTypes_t mAllowedDataPortTypes;
     const bool mHasManagementPort;
 };
 

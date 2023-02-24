@@ -10,15 +10,14 @@
 namespace Core = Utilities::Core;
 namespace Ports = Utilities::DevicePorts;
 
-SwitchPort::SwitchPort(const std::string& deviceUPosition, const SwitchPortData_t& switchPortData, const size_t fileRowNumber, const size_t fileColumnNumber, const size_t requiredNumberOfParameters, const bool isSourceDevice)
+SwitchPort::SwitchPort(const std::string& deviceUPosition, const DevicePortTypesInfo_t& switchPortTypesInfo, const size_t fileRowNumber, const size_t fileColumnNumber, const size_t requiredNumberOfParameters, const bool isSourceDevice)
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
                  requiredNumberOfParameters,
                  isSourceDevice}
-    , mDataPortType{switchPortData.mDataPortType}
-    , mDataPortTypeDescription{switchPortData.mDataPortTypeDescription}
-    , mHasManagementPort{switchPortData.mHasManagementPort}
+    , mAllowedDataPortTypes{switchPortTypesInfo.mAllowedDataPortTypes}
+    , mHasManagementPort{switchPortTypesInfo.mHasManagementPort}
 {
     // required parameters to be registered in the derived classes to make their ordering in the input csv file more flexible
 }
@@ -27,7 +26,7 @@ void SwitchPort::computeDescriptionAndLabel()
 {
     Core::convertStringCase(mPortType, true);
 
-    if (mDataPortType == mPortType || "P" == mPortType)
+    if (mAllowedDataPortTypes.cend() != mAllowedDataPortTypes.find(mPortType) || "P" == mPortType)
     {
         _handleNumberedPortType();
     }
@@ -55,11 +54,19 @@ void SwitchPort::_handleNumberedPortType()
 {
     if (Core::isDigitString(mPortNumber)) // power or data port
     {
-        if (mDataPortType == mPortType)
+        if (auto dataPortTypeIt{mAllowedDataPortTypes.find(mPortType)}; mAllowedDataPortTypes.cend() != dataPortTypeIt)
         {
-            const std::string c_TrailingSpace{mDataPortTypeDescription.size() > 0 ? " " : ""};
+            const std::string c_DataPortTypeDescription{dataPortTypeIt->second.first};
+            const std::string c_DataPortTypeLabel{dataPortTypeIt->second.second};
+            const std::string c_TrailingSpace{c_DataPortTypeDescription.size() > 0 ? " " : ""};
 
-            _appendDataToDescription(" - " + mDataPortTypeDescription + c_TrailingSpace + "port " + mPortNumber);
+            _appendDataToDescription(" - " + c_DataPortTypeDescription + c_TrailingSpace + "port " + mPortNumber);
+
+            if (!c_DataPortTypeLabel.empty())
+            {
+                _appendDataToLabel("_" + c_DataPortTypeLabel);
+            }
+
             _appendDataToLabel("_P" + mPortNumber);
         }
         else if ("P" == mPortType)
@@ -80,7 +87,7 @@ void SwitchPort::_handleNumberedPortType()
 
 LANSwitchPort::LANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : SwitchPort{deviceUPosition,
-                 Data::c_SwitchPortData.at(Data::DeviceTypeID::LAN_SWITCH),
+                 Data::c_SwitchPortTypesInfoMap.at(Data::DeviceTypeID::LAN_SWITCH),
                  fileRowNumber,
                  fileColumnNumber,
                  Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::LAN_SWITCH),
@@ -94,7 +101,7 @@ LANSwitchPort::LANSwitchPort(const std::string& deviceUPosition, const size_t fi
 
 SANSwitchPort::SANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : SwitchPort{deviceUPosition,
-                 Data::c_SwitchPortData.at(Data::DeviceTypeID::SAN_SWITCH),
+                 Data::c_SwitchPortTypesInfoMap.at(Data::DeviceTypeID::SAN_SWITCH),
                  fileRowNumber,
                  fileColumnNumber,
                  Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::SAN_SWITCH),
@@ -108,7 +115,7 @@ SANSwitchPort::SANSwitchPort(const std::string& deviceUPosition, const size_t fi
 
 InfinibandSwitchPort::InfinibandSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : SwitchPort{deviceUPosition,
-                 Data::c_SwitchPortData.at(Data::DeviceTypeID::INFINIBAND_SWITCH),
+                 Data::c_SwitchPortTypesInfoMap.at(Data::DeviceTypeID::INFINIBAND_SWITCH),
                  fileRowNumber,
                  fileColumnNumber,
                  Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::INFINIBAND_SWITCH),
@@ -122,7 +129,7 @@ InfinibandSwitchPort::InfinibandSwitchPort(const std::string& deviceUPosition, c
 
 KVMSwitchPort::KVMSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : SwitchPort{deviceUPosition,
-                 Data::c_SwitchPortData.at(Data::DeviceTypeID::KVM_SWITCH),
+                 Data::c_SwitchPortTypesInfoMap.at(Data::DeviceTypeID::KVM_SWITCH),
                  fileRowNumber,
                  fileColumnNumber,
                  Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::KVM_SWITCH),
