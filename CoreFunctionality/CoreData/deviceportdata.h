@@ -16,9 +16,23 @@ namespace Data
     // placement types for specific power devices (PDUs, extension bars)
     inline const std::map<std::string, std::string> c_DevicePlacementIdentifiers
     {
-        {"H", "Horizontal"},    // horizontal PDU
-        {"L", "Left"},          // vertically left placed PDU or extension bar
-        {"R", "Right"}          // vertically right placed PDU or extension bar
+        {"H", "horizontal"},    // horizontal PDU
+        {"L", "left"},          // vertically left placed PDU or extension bar
+        {"R", "right"}          // vertically right placed PDU or extension bar
+    };
+
+    inline const std::map<DeviceTypeID, std::pair<std::string, std::string>> c_DeviceTypeDescriptionsAndLabels
+    {
+        {   DeviceTypeID::PDU,                     {"PDU"              , "PDU"}   },
+        {   DeviceTypeID::EXTENSION_BAR,           {"Extension bar"    , "EXT"}   },
+        {   DeviceTypeID::UPS,                     {"UPS"              , ""   }   },
+        {   DeviceTypeID::RACK_SERVER,             {"Server"           , ""   }   },
+        {   DeviceTypeID::BLADE_SERVER,            {"Blade system"     , ""   }   },
+        {   DeviceTypeID::STORAGE,                 {"Storage device"   , ""   }   },
+        {   DeviceTypeID::SAN_SWITCH,              {"SAN switch"       , ""   }   },
+        {   DeviceTypeID::LAN_SWITCH,              {"LAN switch"       , ""   }   },
+        {   DeviceTypeID::INFINIBAND_SWITCH,       {"Infiniband switch", ""   }   },
+        {   DeviceTypeID::KVM_SWITCH,              {"KVM switch"       , ""   }   }
     };
 
     inline const std::map<DeviceTypeID, DevicePortTypesInfo_t> c_SwitchPortTypesInfoMap

@@ -22,6 +22,12 @@ SwitchPort::SwitchPort(const std::string& deviceUPosition, const DevicePortTypes
     // required parameters to be registered in the derived classes to make their ordering in the input csv file more flexible
 }
 
+void SwitchPort::_registerRequiredParameters()
+{
+    _registerRequiredParameter(&mPortType);
+    _registerRequiredParameter(&mPortNumber);
+}
+
 void SwitchPort::computeDescriptionAndLabel()
 {
     Core::convertStringCase(mPortType, true);
@@ -93,10 +99,11 @@ LANSwitchPort::LANSwitchPort(const std::string& deviceUPosition, const size_t fi
                  Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::LAN_SWITCH),
                  isSourceDevice}
 {
-    _registerRequiredParameter(&mPortType);
-    _registerRequiredParameter(&mPortNumber);
+}
 
-    _initializeDescriptionAndLabel("LAN switch");
+std::pair<std::string, std::string> LANSwitchPort::_getDeviceTypeDescriptionAndLabel() const
+{
+    return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::LAN_SWITCH);
 }
 
 SANSwitchPort::SANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -107,10 +114,11 @@ SANSwitchPort::SANSwitchPort(const std::string& deviceUPosition, const size_t fi
                  Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::SAN_SWITCH),
                  isSourceDevice}
 {
-    _registerRequiredParameter(&mPortType);
-    _registerRequiredParameter(&mPortNumber);
+}
 
-    _initializeDescriptionAndLabel("SAN switch");
+std::pair<std::string, std::string> SANSwitchPort::_getDeviceTypeDescriptionAndLabel() const
+{
+    return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::SAN_SWITCH);
 }
 
 InfinibandSwitchPort::InfinibandSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -121,10 +129,11 @@ InfinibandSwitchPort::InfinibandSwitchPort(const std::string& deviceUPosition, c
                  Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::INFINIBAND_SWITCH),
                  isSourceDevice}
 {
-    _registerRequiredParameter(&mPortType);
-    _registerRequiredParameter(&mPortNumber);
+}
 
-    _initializeDescriptionAndLabel("Infiniband switch");
+std::pair<std::string, std::string> InfinibandSwitchPort::_getDeviceTypeDescriptionAndLabel() const
+{
+    return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::INFINIBAND_SWITCH);
 }
 
 KVMSwitchPort::KVMSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -135,10 +144,11 @@ KVMSwitchPort::KVMSwitchPort(const std::string& deviceUPosition, const size_t fi
                  Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::KVM_SWITCH),
                  isSourceDevice}
 {
-    _registerRequiredParameter(&mPortType);
-    _registerRequiredParameter(&mPortNumber);
+}
 
-    _initializeDescriptionAndLabel("KVM switch");
+std::pair<std::string, std::string> KVMSwitchPort::_getDeviceTypeDescriptionAndLabel() const
+{
+    return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::KVM_SWITCH);
 }
 
 ServerPort::ServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
@@ -148,10 +158,6 @@ ServerPort::ServerPort(const std::string& deviceUPosition, const size_t fileRowN
                  Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::RACK_SERVER),
                  isSourceDevice}
 {
-    _registerRequiredParameter(&mPortType);
-    _registerRequiredParameter(&mPortNumber);
-
-    _initializeDescriptionAndLabel("Server");
 }
 
 void ServerPort::computeDescriptionAndLabel()
@@ -187,6 +193,17 @@ void ServerPort::computeDescriptionAndLabel()
     }
 
     _checkLabel();
+}
+
+void ServerPort::_registerRequiredParameters()
+{
+    _registerRequiredParameter(&mPortType);
+    _registerRequiredParameter(&mPortNumber);
+}
+
+std::pair<std::string, std::string> ServerPort::_getDeviceTypeDescriptionAndLabel() const
+{
+    return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::RACK_SERVER);
 }
 
 void ServerPort::_handleNumberedPortType()
@@ -241,11 +258,6 @@ StoragePort::StoragePort(const std::string& deviceUPosition, const size_t fileRo
                  Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::STORAGE),
                  isSourceDevice}
 {
-    _registerRequiredParameter(&mControllerNr);
-    _registerRequiredParameter(&mPortType);
-    _registerRequiredParameter(&mPortNumber);
-
-    _initializeDescriptionAndLabel("Storage device");
 }
 
 void StoragePort::computeDescriptionAndLabel()
@@ -334,6 +346,18 @@ void StoragePort::computeDescriptionAndLabel()
     _checkLabel();
 }
 
+void StoragePort::_registerRequiredParameters()
+{
+    _registerRequiredParameter(&mControllerNr);
+    _registerRequiredParameter(&mPortType);
+    _registerRequiredParameter(&mPortNumber);
+}
+
+std::pair<std::string, std::string> StoragePort::_getDeviceTypeDescriptionAndLabel() const
+{
+    return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::STORAGE);
+}
+
 /* In order to avoid registering an additional parameter that might cause some confusion (and potential issues),
    for blades the power supply is considered a module, not a port:
     - instead of mPortType: mModuleType is used for power supply
@@ -346,11 +370,6 @@ BladeServerPort::BladeServerPort(const std::string& deviceUPosition, const size_
                  Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::BLADE_SERVER),
                  isSourceDevice}
 {
-    _registerRequiredParameter(&mModuleType);
-    _registerRequiredParameter(&mModuleNumber);
-    _registerRequiredParameter(&mPortNumber);
-
-    _initializeDescriptionAndLabel("Blade system");
 }
 
 void BladeServerPort::computeDescriptionAndLabel()
@@ -377,6 +396,18 @@ void BladeServerPort::computeDescriptionAndLabel()
     }
 
     _checkLabel();
+}
+
+void BladeServerPort::_registerRequiredParameters()
+{
+    _registerRequiredParameter(&mModuleType);
+    _registerRequiredParameter(&mModuleNumber);
+    _registerRequiredParameter(&mPortNumber);
+}
+
+std::pair<std::string, std::string> BladeServerPort::_getDeviceTypeDescriptionAndLabel() const
+{
+    return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::BLADE_SERVER);
 }
 
 void BladeServerPort::_handleNumberedModuleType()

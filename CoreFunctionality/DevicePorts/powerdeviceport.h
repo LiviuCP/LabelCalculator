@@ -13,6 +13,9 @@ public:
     virtual void computeDescriptionAndLabel() override;
 
 protected:
+    virtual void _registerRequiredParameters() override;
+    virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
+
     std::string mDevicePlacementType; // rack placement (vertical left/right, horizontal)
     std::string mLoadSegmentNumber;
 };
@@ -27,6 +30,9 @@ public:
     virtual void computeDescriptionAndLabel() override;
 
 protected:
+    virtual void _registerRequiredParameters() override;
+    virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
+
     std::string mDevicePlacementType; // rack placement (left/right)
 };
 
@@ -40,6 +46,9 @@ public:
     virtual void computeDescriptionAndLabel() override;
 
 protected:
+    virtual void _registerRequiredParameters() override;
+    virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
+
     std::string mLoadSegmentNumber;
 };
 

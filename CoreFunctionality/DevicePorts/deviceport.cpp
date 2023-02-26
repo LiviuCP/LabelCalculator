@@ -16,17 +16,33 @@ DevicePort::DevicePort(const std::string& deviceUPosition, const size_t fileRowN
     , mFileColumnNumber{fileColumnNumber}
     , mInputParametersCount{requiredNumberOfParameters}
     , mIsSourceDevice{isSourceDevice}
+    , mIsInitialized{false}
 {
-    assert(mFileRowNumber > 0u &&
-           mFileColumnNumber > 0u);
-    assert(mInputParametersCount > 1u &&
-           mInputParametersCount <= Data::c_MaxPortInputParametersCount); // there should be at least two parameters (device name and port number)
-
-    mInputData.reserve(mInputParametersCount);
+    if (mFileRowNumber > 0u &&
+        mFileColumnNumber > 0u &&
+        mInputParametersCount > 1u &&
+        mInputParametersCount <= Data::c_MaxPortInputParametersCount) // there should be at least two parameters (device name and port number)
+    {
+        mInputData.reserve(mInputParametersCount);
+    }
+    else
+    {
+        assert(false);
+    }
 }
 
 DevicePort::~DevicePort()
 {
+}
+
+void DevicePort::init()
+{
+    if (!mIsInitialized)
+    {
+        _initializeDescriptionAndLabel();
+        _registerRequiredParameters();
+        mIsInitialized = true;
+    }
 }
 
 Index_t DevicePort::parseInputData(const std::string& input, const Index_t initialPosition, ErrorHandler& errorHandler, std::ofstream& errorStream, std::vector<ErrorPtr>& parsingErrors)
@@ -146,31 +162,28 @@ void DevicePort::_registerRequiredParameter(std::string* const pRequiredParamete
     }
 }
 
-void DevicePort::_initializeDescriptionAndLabel(std::string_view deviceTypeDescription, std::string_view deviceTypeLabel)
-{
-    const std::string c_DeviceTypeDescription{deviceTypeDescription.size() > 0 ? deviceTypeDescription : "Device"};
-
-    mDescription = c_DeviceTypeDescription;
-    mDescription += " placed at U";
-    mDescription += mDeviceUPosition;
-
-    mLabel = "U" + mDeviceUPosition;
-
-    if (deviceTypeLabel.size() > 0)
-    {
-        mLabel += "_";
-        mLabel += deviceTypeLabel;
-    }
-}
-
 void DevicePort::_appendDataToDescription(std::string_view data)
 {
-    mDescription += data;
+    if (mIsInitialized)
+    {
+        mDescription += data;
+    }
+    else
+    {
+        assert(false);
+    }
 }
 
 void DevicePort::_appendDataToLabel(std::string_view data)
 {
-    mLabel += data;
+    if (mIsInitialized)
+    {
+        mLabel += data;
+    }
+    else
+    {
+        assert(false);
+    }
 }
 
 void DevicePort::_setInvalidDescriptionAndLabel(std::string_view descriptionInput, std::string_view labelInput)
@@ -214,5 +227,28 @@ void DevicePort::_checkLabel()
         stream << Ports::c_MaxLabelCharsCountExceededErrorText << c_DeltaCharsCount;
 
         _setInvalidDescriptionAndLabel(stream.str());
+    }
+}
+
+std::pair<std::string, std::string> DevicePort::_getDeviceTypeDescriptionAndLabel() const
+{
+    return {"Device", ""};
+}
+
+void DevicePort::_initializeDescriptionAndLabel()
+{
+    const auto[deviceTypeDescription, deviceTypeLabel]{_getDeviceTypeDescriptionAndLabel()};
+    const std::string c_DeviceTypeDescription{deviceTypeDescription.size() > 0 ? deviceTypeDescription : "Device"};
+
+    mDescription = c_DeviceTypeDescription;
+    mDescription += " placed at U";
+    mDescription += mDeviceUPosition;
+
+    mLabel = "U" + mDeviceUPosition;
+
+    if (deviceTypeLabel.size() > 0)
+    {
+        mLabel += "_";
+        mLabel += deviceTypeLabel;
     }
 }

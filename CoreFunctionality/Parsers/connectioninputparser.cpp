@@ -243,6 +243,8 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
 
             if(nullptr != pDevicePort)
             {
+                pDevicePort->init();
+
                 mFileColumnNumber = c_NewColumnNumber; // new CSV column number to be stored once device port is created
                 mDevicePorts.push_back(pDevicePort);
 

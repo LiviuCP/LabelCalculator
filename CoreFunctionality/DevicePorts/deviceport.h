@@ -25,6 +25,12 @@ public:
 
     virtual ~DevicePort();
 
+    /* Initialization function that fulfills two purposes:
+      - initialize description and label
+      - register required parameters
+    */
+    void init();
+
     /* Calculates the description and label field for each device port
        This data will be subsequently used for building the final table
     */
@@ -42,21 +48,24 @@ public:
     std::string getLabel() const;
 
 protected:
-    /* Registers the required parameter so it can be requested from the connection input file:
-       - the registration order should match the order in which parameters are given in the file
-       for the specific device port
+    /* Registers the required parameters; these are subsequently requested (parsed) from the connection input file:
+       - the registration order should match the order in which parameters are given within file for the specific device port
        - the number of registered parameters should match the mInputParametersCount
+       - needs to be implemented by derived classes, each class having its own specifics regarding required input parameters
+    */
+    virtual void _registerRequiredParameters() = 0;
+
+    /* Registers each required input parameter so it can be subsequently requested from the connection input file (used by the _registerRequiredParameters() method)
     */
     void _registerRequiredParameter(std::string* const pRequiredParameter);
 
-    /* This function is used for setting initial (non-specific port) data into device port description */
-    void _initializeDescriptionAndLabel(std::string_view deviceTypeDescription, std::string_view deviceTypeLabel = "");
-
-    /* This function is used for appending port specific data to description (e.g. port number)
+    /* This function is used for appending data calculated based on the parsed input parameters
+       (other than the ones used for initializing description and label) to device port description
     */
     void _appendDataToDescription(std::string_view data);
 
-    /* This function is used for appending port specific data to label (e.g. port number)
+    /* This function is used for appending data calculated based on the parsed input parameters
+       (other than the ones used for initializing description and label) to device port label
     */
     void _appendDataToLabel(std::string_view data);
 
@@ -70,11 +79,19 @@ protected:
     */
     void _checkLabel();
 
+    /* Required for initializing the device port description and label
+    */
+    virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const;
+
 protected:
     // power or data port number that should be mentioned on the cable label
     std::string mPortNumber;
 
 private:
+    /* This function is used for setting initial data (device U position, device type) into device port description and label
+    */
+    void _initializeDescriptionAndLabel();
+
     // position of the device containing the port in rack
     std::string mDeviceUPosition;
 
@@ -98,6 +115,9 @@ private:
 
     // true if first of the two devices in each connection entered in the input .csv file
     bool mIsSourceDevice;
+
+    // initialization flag, ensures label/description are initialized and required input parameters are registered
+    bool mIsInitialized;
 };
 
 using DevicePortPtr = std::shared_ptr<DevicePort>;

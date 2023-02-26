@@ -14,8 +14,8 @@ __Item number__,__Cable part number__,__Source device description__,__Source lab
 13,RJ45,Blade system placed at U1 - data module 1 - port 2,U1_DMO1_P2,LAN switch placed at U50 - Ethernet port 1,U50_P1
 14,RJ45,Blade system placed at U1 - data module 2 - port 2,U1_DMO2_P2,LAN switch placed at U50 - Ethernet port 2,U50_P2
 15,RJ45,UPS placed at U11 - management port,U11_MGMT,LAN switch placed at U48 - Ethernet port 9,U48_P9
-16,RJ45,Horizontal PDU placed at U15 - management port,U15_HPDU_MGMT,LAN switch placed at U48 - Ethernet port 10,U48_P10
-17,RJ45,Horizontal PDU placed at U16 - management port,U16_HPDU_MGMT,LAN switch placed at U48 - Ethernet port 11,U48_P11
+16,RJ45,PDU placed at U15 in horizontal position - management port,U15_PDU_H_MGMT,LAN switch placed at U48 - Ethernet port 10,U48_P10
+17,RJ45,PDU placed at U16 in horizontal position - management port,U16_PDU_H_MGMT,LAN switch placed at U48 - Ethernet port 11,U48_P11
 18,fc-cable,Storage device placed at U21 - controller 1 - port 1,U21_C1_P1,SAN switch placed at U46 - FC port 3,U46_P3
 19,fc-cable,Storage device placed at U21 - controller 2 - port 1,U21_C2_P1,SAN switch placed at U46 - FC port 4,U46_P4
 20,fc-cable,Storage device placed at U21 - controller 1 - port 2,U21_C1_P2,SAN switch placed at U47 - FC port 3,U47_P3

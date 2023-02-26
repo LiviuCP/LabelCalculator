@@ -10,11 +10,13 @@ class SwitchPort : public DevicePort
 public:
     SwitchPort() = delete;
 
-    void computeDescriptionAndLabel() override;
+    virtual void computeDescriptionAndLabel() override;
 
 protected:
     // constructor needs to be protected as this class is a switch abstraction (derived classes are the concrete switches for which labels are being created)
     SwitchPort(const std::string& deviceUPosition, const DevicePortTypesInfo_t& switchPortTypesInfo, const size_t fileRowNumber, const size_t fileColumnNumber, const size_t requiredNumberOfParameters, const bool isSourceDevice);
+
+    virtual void _registerRequiredParameters() override;
 
     std::string mPortType;
 
@@ -31,6 +33,9 @@ class LANSwitchPort : public SwitchPort
 public:
     LANSwitchPort() = delete;
     LANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+
+protected:
+    virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
 };
 
 // FC (SAN) switch ports
@@ -39,6 +44,9 @@ class SANSwitchPort : public SwitchPort
 public:
     SANSwitchPort() = delete;
     SANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+
+protected:
+    virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
 };
 
 // Infiniband switch ports
@@ -47,6 +55,9 @@ class InfinibandSwitchPort : public SwitchPort
 public:
     InfinibandSwitchPort() = delete;
     InfinibandSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+
+protected:
+    virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
 };
 
 // KVM switch ports
@@ -55,6 +66,9 @@ class KVMSwitchPort : public SwitchPort
 public:
     KVMSwitchPort() = delete;
     KVMSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+
+protected:
+    virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
 };
 
 // server ports (embedded (incl. management), Ethernet, FC, IB, etc)
@@ -67,6 +81,8 @@ public:
     virtual void computeDescriptionAndLabel() override;
 
 protected:
+    virtual void _registerRequiredParameters() override;
+    virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
     void _handleNumberedPortType();
 
     std::string mPortType;
@@ -82,6 +98,9 @@ public:
     virtual void computeDescriptionAndLabel() override;
 
 protected:
+    virtual void _registerRequiredParameters() override;
+    virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
+
     std::string mControllerNr; // can be the controller number (for FC storage) or IO module number (for JBODs)
     std::string mPortType;
 };
@@ -96,6 +115,8 @@ public:
     virtual void computeDescriptionAndLabel() override;
 
 protected:
+    virtual void _registerRequiredParameters() override;
+    virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
     void _handleNumberedModuleType();
 
     std::string mModuleType; // blade system module type: interconnect, management module, power supply etc.

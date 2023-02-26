@@ -1,34 +1,34 @@
 __Item number__,__Cable part number__,__Source device description__,__Source label__,__Destination device description__,__Destination label__
-1,C19-C20,Blade system placed at U1 - power supply 1,U1_PS1,Horizontal PDU placed at U15 - load segment number 3 - port number 1,U15_HPDU_P3.1
-2,C19-C20,Blade system placed at U1 - power supply 2,U1_PS2,Horizontal PDU placed at U15 - load segment number 3 - port number 2,U15_HPDU_P3.2
-3,C19-C20,Blade system placed at U1 - power supply 3,U1_PS3,Horizontal PDU placed at U15 - load segment number 4 - port number 1,U15_HPDU_P4.1
-4,C19-C20,Blade system placed at U1 - power supply 4,U1_PS4,Horizontal PDU placed at U16 - load segment number 3 - port number 1,U16_HPDU_P3.1
-5,C19-C20,Blade system placed at U1 - power supply 5,U1_PS5,Horizontal PDU placed at U16 - load segment number 3 - port number 2,U16_HPDU_P3.2
-6,C19-C20,Blade system placed at U1 - power supply 6,U1_PS6,Horizontal PDU placed at U16 - load segment number 4 - port number 2,U16_HPDU_P4.2
-7,UPS-PDU,UPS placed at U11 - load segment 1 - port 1,U11_P1.1,Horizontal PDU placed at U15 - port number IN,U15_HPDU_IN
-8,C19-C20,Horizontal PDU placed at U15 - load segment number 1 - port number 1,U15_HPDU_P1.1,Left extension bar placed at U39 - port number IN,U39_LEXT_IN
-9,C19-C20,Horizontal PDU placed at U15 - load segment number 2 - port number 1,U15_HPDU_P2.1,Right extension bar placed at U40 - port number IN,U40_REXT_IN
-10,C19-C20,Horizontal PDU placed at U16 - load segment number 1 - port number 1,U16_HPDU_P1.1,Left extension bar placed at U41 - port number IN,U41_LEXT_IN
-11,C19-C20,Horizontal PDU placed at U16 - load segment number 2 - port number 1,U16_HPDU_P2.1,Right extension bar placed at U42 - port number IN,U42_REXT_IN
-12,C13-C14,Storage device placed at U21 - power supply 1,U21_PS1,Left extension bar placed at U39 - port number 1,U39_LEXT_P1
-13,C13-C14,Storage device placed at U21 - power supply 2,U21_PS2,Right extension bar placed at U40 - port number 1,U40_REXT_P1
-14,C13-C14,Storage device placed at U21 - power supply 3,U21_PS3,Left extension bar placed at U41 - port number 1,U41_LEXT_P1
-15,C13-C14,Storage device placed at U21 - power supply 4,U21_PS4,Right extension bar placed at U42 - port number 1,U42_REXT_P1
-16,C13-C14,Server placed at U34 - power supply 1,U34_PS1,Left extension bar placed at U39 - port number 2,U39_LEXT_P2
-17,C13-C14,Server placed at U34 - power supply 2,U34_PS2,Left extension bar placed at U41 - port number 2,U41_LEXT_P2
-18,C13-C14,Server placed at U38 - power supply 1,U38_PS1,Right extension bar placed at U40 - port number 2,U40_REXT_P2
-19,C13-C14,Server placed at U38 - power supply 2,U38_PS2,Right extension bar placed at U42 - port number 2,U42_REXT_P2
-20,C14-C13,Left extension bar placed at U39 - port number 3,U39_LEXT_P3,KVM switch placed at U43 - power supply 1,U43_PS1
-21,C14-C13,Left extension bar placed at U39 - port number 4,U39_LEXT_P4,Infiniband switch placed at U45 - power supply 1,U45_PS1
-22,C14-C13,Left extension bar placed at U39 - port number 5,U39_LEXT_P5,SAN switch placed at U47 - power supply 1,U47_PS1
-23,C14-C13,Left extension bar placed at U39 - port number 6,U39_LEXT_P6,LAN switch placed at U49 - power supply 1,U49_PS1
-24,C14-C13,Right extension bar placed at U40 - port number 3,U40_REXT_P3,Infiniband switch placed at U44 - power supply 1,U44_PS1
-25,C14-C13,Right extension bar placed at U40 - port number 4,U40_REXT_P4,SAN switch placed at U46 - power supply 1,U46_PS1
-26,C14-C13,Right extension bar placed at U40 - port number 5,U40_REXT_P5,LAN switch placed at U50 - power supply 1,U50_PS1
-27,C14-C13,Left extension bar placed at U41 - port number 3,U41_LEXT_P3,Infiniband switch placed at U44 - power supply 2,U44_PS2
-28,C14-C13,Left extension bar placed at U41 - port number 4,U41_LEXT_P4,SAN switch placed at U46 - power supply 2,U46_PS2
-29,C14-C13,Left extension bar placed at U41 - port number 5,U41_LEXT_P5,LAN switch placed at U48 - power supply 1,U48_PS1
-30,C14-C13,Left extension bar placed at U41 - port number 6,U41_LEXT_P6,LAN switch placed at U49 - power supply 2,U49_PS2
-31,C14-C13,Right extension bar placed at U42 - port number 3,U42_REXT_P3,Infiniband switch placed at U45 - power supply 2,U45_PS2
-32,C14-C13,Right extension bar placed at U42 - port number 4,U42_REXT_P4,SAN switch placed at U47 - power supply 2,U47_PS2
-33,C14-C13,Right extension bar placed at U42 - port number 5,U42_REXT_P5,LAN switch placed at U50 - power supply 2,U50_PS2
+1,C19-C20,Blade system placed at U1 - power supply 1,U1_PS1,PDU placed at U15 in horizontal position - load segment number 3 - port number 1,U15_PDU_H_P3.1
+2,C19-C20,Blade system placed at U1 - power supply 2,U1_PS2,PDU placed at U15 in horizontal position - load segment number 3 - port number 2,U15_PDU_H_P3.2
+3,C19-C20,Blade system placed at U1 - power supply 3,U1_PS3,PDU placed at U15 in horizontal position - load segment number 4 - port number 1,U15_PDU_H_P4.1
+4,C19-C20,Blade system placed at U1 - power supply 4,U1_PS4,PDU placed at U16 in horizontal position - load segment number 3 - port number 1,U16_PDU_H_P3.1
+5,C19-C20,Blade system placed at U1 - power supply 5,U1_PS5,PDU placed at U16 in horizontal position - load segment number 3 - port number 2,U16_PDU_H_P3.2
+6,C19-C20,Blade system placed at U1 - power supply 6,U1_PS6,PDU placed at U16 in horizontal position - load segment number 4 - port number 2,U16_PDU_H_P4.2
+7,UPS-PDU,UPS placed at U11 - load segment 1 - port 1,U11_P1.1,PDU placed at U15 in horizontal position - port number IN,U15_PDU_H_IN
+8,C19-C20,PDU placed at U15 in horizontal position - load segment number 1 - port number 1,U15_PDU_H_P1.1,Extension bar placed at U39 on the left side - port number IN,U39_EXT_L_IN
+9,C19-C20,PDU placed at U15 in horizontal position - load segment number 2 - port number 1,U15_PDU_H_P2.1,Extension bar placed at U40 on the right side - port number IN,U40_EXT_R_IN
+10,C19-C20,PDU placed at U16 in horizontal position - load segment number 1 - port number 1,U16_PDU_H_P1.1,Extension bar placed at U41 on the left side - port number IN,U41_EXT_L_IN
+11,C19-C20,PDU placed at U16 in horizontal position - load segment number 2 - port number 1,U16_PDU_H_P2.1,Extension bar placed at U42 on the right side - port number IN,U42_EXT_R_IN
+12,C13-C14,Storage device placed at U21 - power supply 1,U21_PS1,Extension bar placed at U39 on the left side - port number 1,U39_EXT_L_P1
+13,C13-C14,Storage device placed at U21 - power supply 2,U21_PS2,Extension bar placed at U40 on the right side - port number 1,U40_EXT_R_P1
+14,C13-C14,Storage device placed at U21 - power supply 3,U21_PS3,Extension bar placed at U41 on the left side - port number 1,U41_EXT_L_P1
+15,C13-C14,Storage device placed at U21 - power supply 4,U21_PS4,Extension bar placed at U42 on the right side - port number 1,U42_EXT_R_P1
+16,C13-C14,Server placed at U34 - power supply 1,U34_PS1,Extension bar placed at U39 on the left side - port number 2,U39_EXT_L_P2
+17,C13-C14,Server placed at U34 - power supply 2,U34_PS2,Extension bar placed at U41 on the left side - port number 2,U41_EXT_L_P2
+18,C13-C14,Server placed at U38 - power supply 1,U38_PS1,Extension bar placed at U40 on the right side - port number 2,U40_EXT_R_P2
+19,C13-C14,Server placed at U38 - power supply 2,U38_PS2,Extension bar placed at U42 on the right side - port number 2,U42_EXT_R_P2
+20,C14-C13,Extension bar placed at U39 on the left side - port number 3,U39_EXT_L_P3,KVM switch placed at U43 - power supply 1,U43_PS1
+21,C14-C13,Extension bar placed at U39 on the left side - port number 4,U39_EXT_L_P4,Infiniband switch placed at U45 - power supply 1,U45_PS1
+22,C14-C13,Extension bar placed at U39 on the left side - port number 5,U39_EXT_L_P5,SAN switch placed at U47 - power supply 1,U47_PS1
+23,C14-C13,Extension bar placed at U39 on the left side - port number 6,U39_EXT_L_P6,LAN switch placed at U49 - power supply 1,U49_PS1
+24,C14-C13,Extension bar placed at U40 on the right side - port number 3,U40_EXT_R_P3,Infiniband switch placed at U44 - power supply 1,U44_PS1
+25,C14-C13,Extension bar placed at U40 on the right side - port number 4,U40_EXT_R_P4,SAN switch placed at U46 - power supply 1,U46_PS1
+26,C14-C13,Extension bar placed at U40 on the right side - port number 5,U40_EXT_R_P5,LAN switch placed at U50 - power supply 1,U50_PS1
+27,C14-C13,Extension bar placed at U41 on the left side - port number 3,U41_EXT_L_P3,Infiniband switch placed at U44 - power supply 2,U44_PS2
+28,C14-C13,Extension bar placed at U41 on the left side - port number 4,U41_EXT_L_P4,SAN switch placed at U46 - power supply 2,U46_PS2
+29,C14-C13,Extension bar placed at U41 on the left side - port number 5,U41_EXT_L_P5,LAN switch placed at U48 - power supply 1,U48_PS1
+30,C14-C13,Extension bar placed at U41 on the left side - port number 6,U41_EXT_L_P6,LAN switch placed at U49 - power supply 2,U49_PS2
+31,C14-C13,Extension bar placed at U42 on the right side - port number 3,U42_EXT_R_P3,Infiniband switch placed at U45 - power supply 2,U45_PS2
+32,C14-C13,Extension bar placed at U42 on the right side - port number 4,U42_EXT_R_P4,SAN switch placed at U47 - power supply 2,U47_PS2
+33,C14-C13,Extension bar placed at U42 on the right side - port number 5,U42_EXT_R_P5,LAN switch placed at U50 - power supply 2,U50_PS2
