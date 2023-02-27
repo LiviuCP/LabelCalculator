@@ -65,15 +65,10 @@ void SwitchPort::_handleNumberedPortType()
             const std::string c_DataPortTypeDescription{dataPortTypeIt->second.first};
             const std::string c_DataPortTypeLabel{dataPortTypeIt->second.second};
             const std::string c_TrailingSpace{c_DataPortTypeDescription.size() > 0 ? " " : ""};
+            const std::string c_PrecedingUnderscore{c_DataPortTypeLabel.size() > 0 ? "_" : ""};
 
             _appendDataToDescription(" - " + c_DataPortTypeDescription + c_TrailingSpace + "port " + mPortNumber);
-
-            if (!c_DataPortTypeLabel.empty())
-            {
-                _appendDataToLabel("_" + c_DataPortTypeLabel);
-            }
-
-            _appendDataToLabel("_P" + mPortNumber);
+            _appendDataToLabel(c_PrecedingUnderscore + c_DataPortTypeLabel + "_P" + mPortNumber);
         }
         else if ("P" == mPortType)
         {
@@ -82,6 +77,7 @@ void SwitchPort::_handleNumberedPortType()
         }
         else
         {
+            _setInvalidDescriptionAndLabel(Ports::c_InvalidPortTypeErrorText);
             assert(false);
         }
     }
