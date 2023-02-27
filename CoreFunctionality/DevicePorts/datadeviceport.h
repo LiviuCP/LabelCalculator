@@ -86,6 +86,9 @@ protected:
     void _handleNumberedPortType();
 
     std::string mPortType;
+
+private:
+    const AllowedDataPortTypes_t mAllowedDataPortTypes;
 };
 
 // storage FC ports

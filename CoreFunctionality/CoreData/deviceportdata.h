@@ -42,6 +42,15 @@ namespace Data
         {   DeviceTypeID::INFINIBAND_SWITCH,   {  { {"I", {""        , ""}} }, true   }   },
         {   DeviceTypeID::KVM_SWITCH,          {  { {"K", {""        , ""}} }, false  }   }
     };
+
+    inline const AllowedDataPortTypes_t c_ServerDataPortTypes
+    {
+        {"F", {"FC"        , "FC"   }},
+        {"N", {"Ethernet"  , "ETH"  }},
+        {"E", {"embedded"  , "EMB"  }},
+        {"I", {"Infiniband", "IB"   }},
+        {"S", {"SAS"       , "SAS"  }}
+    };
 }
 
 #endif // DEVICEPORTDATA_H

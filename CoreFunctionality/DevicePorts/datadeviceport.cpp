@@ -157,6 +157,7 @@ ServerPort::ServerPort(const std::string& deviceUPosition, const size_t fileRowN
                  fileColumnNumber,
                  Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::RACK_SERVER),
                  isSourceDevice}
+    , mAllowedDataPortTypes{Data::c_ServerDataPortTypes}
 {
 }
 
@@ -164,9 +165,7 @@ void ServerPort::computeDescriptionAndLabel()
 {
     Core::convertStringCase(mPortType, true);
 
-    std::set<std::string> c_NumberedPortTypes{"F", "N", "E", "I", "S", "P"};
-
-    if (c_NumberedPortTypes.find(mPortType) != c_NumberedPortTypes.cend())
+    if (mAllowedDataPortTypes.find(mPortType) != mAllowedDataPortTypes.cend() || "P" == mPortType)
     {
         _handleNumberedPortType();
     }
@@ -210,38 +209,30 @@ void ServerPort::_handleNumberedPortType()
 {
     if (Core::isDigitString(mPortNumber))
     {
-        if("F" == mPortType) // FC port
+        if (auto dataPortTypeIt{mAllowedDataPortTypes.find(mPortType)}; mAllowedDataPortTypes.cend() != dataPortTypeIt)
         {
-            _appendDataToDescription(" - FC port " + mPortNumber);
-            _appendDataToLabel("_FC_P" + mPortNumber);
+            const std::string c_DataPortTypeDescription{dataPortTypeIt->second.first};
+            const std::string c_DataPortTypeLabel{dataPortTypeIt->second.second};
+
+            if (c_DataPortTypeDescription.size() > 0 && c_DataPortTypeLabel.size() > 0)
+            {
+                _appendDataToDescription(" - " + c_DataPortTypeDescription + " port " + mPortNumber);
+                _appendDataToLabel("_" + c_DataPortTypeLabel + "_P" + mPortNumber);
+            }
+            else
+            {
+                _setInvalidDescriptionAndLabel(Ports::c_InvalidPortTypeErrorText);
+                assert(false);
+            }
         }
-        else if("N" == mPortType) // Ethernet port (but not embedded but on PCIe public slot)
-        {
-            _appendDataToDescription(" - Ethernet port " + mPortNumber);
-            _appendDataToLabel("_ETH_P" + mPortNumber);
-        }
-        else if ("E" == mPortType) // embedded port (Ethernet/Infiniband)
-        {
-            _appendDataToDescription(" - embedded port " + mPortNumber);
-            _appendDataToLabel("_EMB_P" + mPortNumber);
-        }
-        else if ("I" == mPortType) // Infiniband port (but not embedded but on PCIe public slot)
-        {
-            _appendDataToDescription(" - Infiniband port " + mPortNumber);
-            _appendDataToLabel("_IB_P" + mPortNumber);
-        }
-        else if ("S" == mPortType) // SAS port
-        {
-            _appendDataToDescription(" - SAS port " + mPortNumber);
-            _appendDataToLabel("_SAS_P" + mPortNumber);
-        }
-        else if ("P" == mPortType) // power supply
+        else if ("P" == mPortType)
         {
             _appendDataToDescription(" - power supply " + mPortNumber);
             _appendDataToLabel("_PS" + mPortNumber);
         }
         else
         {
+            _setInvalidDescriptionAndLabel(Ports::c_InvalidPortTypeErrorText);
             assert(false);
         }
     }
