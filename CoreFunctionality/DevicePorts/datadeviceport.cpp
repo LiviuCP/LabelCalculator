@@ -10,11 +10,10 @@
 namespace Core = Utilities::Core;
 namespace Ports = Utilities::DevicePorts;
 
-SwitchPort::SwitchPort(const std::string& deviceUPosition, const DevicePortTypesInfo_t& switchPortTypesInfo, const size_t fileRowNumber, const size_t fileColumnNumber, const size_t requiredNumberOfParameters, const bool isSourceDevice)
+SwitchPort::SwitchPort(const std::string& deviceUPosition, const DevicePortTypesInfo_t& switchPortTypesInfo, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
-                 requiredNumberOfParameters,
                  isSourceDevice}
     , mAllowedDataPortTypes{switchPortTypesInfo.mAllowedDataPortTypes}
     , mHasManagementPort{switchPortTypesInfo.mHasManagementPort}
@@ -92,9 +91,13 @@ LANSwitchPort::LANSwitchPort(const std::string& deviceUPosition, const size_t fi
                  Data::c_SwitchPortTypesInfoMap.at(Data::DeviceTypeID::LAN_SWITCH),
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::LAN_SWITCH),
                  isSourceDevice}
 {
+}
+
+size_t LANSwitchPort::_getInputParametersCount() const
+{
+    return Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::LAN_SWITCH);
 }
 
 std::pair<std::string, std::string> LANSwitchPort::_getDeviceTypeDescriptionAndLabel() const
@@ -107,9 +110,13 @@ SANSwitchPort::SANSwitchPort(const std::string& deviceUPosition, const size_t fi
                  Data::c_SwitchPortTypesInfoMap.at(Data::DeviceTypeID::SAN_SWITCH),
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::SAN_SWITCH),
                  isSourceDevice}
 {
+}
+
+size_t SANSwitchPort::_getInputParametersCount() const
+{
+    return Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::SAN_SWITCH);
 }
 
 std::pair<std::string, std::string> SANSwitchPort::_getDeviceTypeDescriptionAndLabel() const
@@ -122,9 +129,13 @@ InfinibandSwitchPort::InfinibandSwitchPort(const std::string& deviceUPosition, c
                  Data::c_SwitchPortTypesInfoMap.at(Data::DeviceTypeID::INFINIBAND_SWITCH),
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::INFINIBAND_SWITCH),
                  isSourceDevice}
 {
+}
+
+size_t InfinibandSwitchPort::_getInputParametersCount() const
+{
+    return Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::INFINIBAND_SWITCH);
 }
 
 std::pair<std::string, std::string> InfinibandSwitchPort::_getDeviceTypeDescriptionAndLabel() const
@@ -137,9 +148,13 @@ KVMSwitchPort::KVMSwitchPort(const std::string& deviceUPosition, const size_t fi
                  Data::c_SwitchPortTypesInfoMap.at(Data::DeviceTypeID::KVM_SWITCH),
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::KVM_SWITCH),
                  isSourceDevice}
 {
+}
+
+size_t KVMSwitchPort::_getInputParametersCount() const
+{
+    return Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::KVM_SWITCH);
 }
 
 std::pair<std::string, std::string> KVMSwitchPort::_getDeviceTypeDescriptionAndLabel() const
@@ -151,7 +166,6 @@ ServerPort::ServerPort(const std::string& deviceUPosition, const size_t fileRowN
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::RACK_SERVER),
                  isSourceDevice}
     , mAllowedDataPortTypes{Data::c_ServerDataPortTypes}
 {
@@ -194,6 +208,11 @@ void ServerPort::_registerRequiredParameters()
 {
     _registerRequiredParameter(&mPortType);
     _registerRequiredParameter(&mPortNumber);
+}
+
+size_t ServerPort::_getInputParametersCount() const
+{
+    return Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::RACK_SERVER);
 }
 
 std::pair<std::string, std::string> ServerPort::_getDeviceTypeDescriptionAndLabel() const
@@ -242,7 +261,6 @@ StoragePort::StoragePort(const std::string& deviceUPosition, const size_t fileRo
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::STORAGE),
                  isSourceDevice}
 {
 }
@@ -340,6 +358,11 @@ void StoragePort::_registerRequiredParameters()
     _registerRequiredParameter(&mPortNumber);
 }
 
+size_t StoragePort::_getInputParametersCount() const
+{
+    return Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::STORAGE);
+}
+
 std::pair<std::string, std::string> StoragePort::_getDeviceTypeDescriptionAndLabel() const
 {
     return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::STORAGE);
@@ -354,7 +377,6 @@ BladeServerPort::BladeServerPort(const std::string& deviceUPosition, const size_
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::BLADE_SERVER),
                  isSourceDevice}
 {
 }
@@ -390,6 +412,11 @@ void BladeServerPort::_registerRequiredParameters()
     _registerRequiredParameter(&mModuleType);
     _registerRequiredParameter(&mModuleNumber);
     _registerRequiredParameter(&mPortNumber);
+}
+
+size_t BladeServerPort::_getInputParametersCount() const
+{
+    return Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::BLADE_SERVER);
 }
 
 std::pair<std::string, std::string> BladeServerPort::_getDeviceTypeDescriptionAndLabel() const

@@ -14,6 +14,7 @@ public:
 
 protected:
     virtual void _registerRequiredParameters() override;
+    virtual size_t _getInputParametersCount() const override;
     virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
 
     std::string mDevicePlacementType; // rack placement (vertical left/right, horizontal)
@@ -31,6 +32,7 @@ public:
 
 protected:
     virtual void _registerRequiredParameters() override;
+    virtual size_t _getInputParametersCount() const override;
     virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
 
     std::string mDevicePlacementType; // rack placement (left/right)
@@ -47,6 +49,7 @@ public:
 
 protected:
     virtual void _registerRequiredParameters() override;
+    virtual size_t _getInputParametersCount() const override;
     virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
 
     std::string mLoadSegmentNumber;

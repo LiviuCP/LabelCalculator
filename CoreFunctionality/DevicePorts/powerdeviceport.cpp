@@ -13,7 +13,6 @@ PDUPort::PDUPort(const std::string& deviceUPosition, const size_t fileRowNumber,
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::PDU),
                  isSourceDevice}
 {
 }
@@ -81,6 +80,11 @@ void PDUPort::_registerRequiredParameters()
     _registerRequiredParameter(&mPortNumber);
 }
 
+size_t PDUPort::_getInputParametersCount() const
+{
+    return Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::PDU);
+}
+
 std::pair<std::string, std::string> PDUPort::_getDeviceTypeDescriptionAndLabel() const
 {
     return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::PDU);
@@ -90,7 +94,6 @@ ExtensionBarPort::ExtensionBarPort(const std::string& deviceUPosition, const siz
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::EXTENSION_BAR),
                  isSourceDevice}
 {
 }
@@ -140,6 +143,11 @@ void ExtensionBarPort::_registerRequiredParameters()
     _registerRequiredParameter(&mPortNumber);
 }
 
+size_t ExtensionBarPort::_getInputParametersCount() const
+{
+    return Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::EXTENSION_BAR);
+}
+
 std::pair<std::string, std::string> ExtensionBarPort::_getDeviceTypeDescriptionAndLabel() const
 {
     return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::EXTENSION_BAR);
@@ -149,7 +157,6 @@ UPSPort::UPSPort(const std::string& deviceUPosition, const size_t fileRowNumber,
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
-                 Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::UPS),
                  isSourceDevice}
 {
 }
@@ -192,6 +199,11 @@ void UPSPort::_registerRequiredParameters()
 {
     _registerRequiredParameter(&mLoadSegmentNumber);
     _registerRequiredParameter(&mPortNumber);
+}
+
+size_t UPSPort::_getInputParametersCount() const
+{
+    return Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::UPS);
 }
 
 std::pair<std::string, std::string> UPSPort::_getDeviceTypeDescriptionAndLabel() const

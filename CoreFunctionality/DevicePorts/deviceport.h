@@ -20,7 +20,6 @@ public:
     DevicePort(const std::string& deviceUPosition,
                const size_t fileRowNumber,
                const size_t fileColumnNumber,
-               const size_t requiredNumberOfParameters,
                const bool isSourceDevice);
 
     virtual ~DevicePort();
@@ -79,6 +78,10 @@ protected:
     */
     void _checkLabel();
 
+    /* Retrieves the number of input parameters required for each device port. Each port is responsible for determining the number of required params
+    */
+    virtual size_t _getInputParametersCount() const = 0;
+
     /* Required for initializing the device port description and label
     */
     virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const;
@@ -88,6 +91,10 @@ protected:
     std::string mPortNumber;
 
 private:
+    /*This function is used for initializing the input parameters for each device: determine their count, initiate registration process
+    */
+    void _initializeRequiredParameters();
+
     /* This function is used for setting initial data (device U position, device type) into device port description and label
     */
     void _initializeDescriptionAndLabel();

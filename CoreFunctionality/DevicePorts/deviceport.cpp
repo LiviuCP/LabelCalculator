@@ -10,25 +10,14 @@
 namespace Core = Utilities::Core;
 namespace Ports = Utilities::DevicePorts;
 
-DevicePort::DevicePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const size_t requiredNumberOfParameters, const bool isSourceDevice)
+DevicePort::DevicePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : mDeviceUPosition{deviceUPosition}
     , mFileRowNumber{fileRowNumber}
     , mFileColumnNumber{fileColumnNumber}
-    , mInputParametersCount{requiredNumberOfParameters}
     , mIsSourceDevice{isSourceDevice}
     , mIsInitialized{false}
 {
-    if (mFileRowNumber > 0u &&
-        mFileColumnNumber > 0u &&
-        mInputParametersCount > 1u &&
-        mInputParametersCount <= Data::c_MaxPortInputParametersCount) // there should be at least two parameters (device name and port number)
-    {
-        mInputData.reserve(mInputParametersCount);
-    }
-    else
-    {
-        assert(false);
-    }
+
 }
 
 DevicePort::~DevicePort()
@@ -39,8 +28,9 @@ void DevicePort::init()
 {
     if (!mIsInitialized)
     {
+        _initializeRequiredParameters();
         _initializeDescriptionAndLabel();
-        _registerRequiredParameters();
+
         mIsInitialized = true;
     }
 }
@@ -233,6 +223,31 @@ void DevicePort::_checkLabel()
 std::pair<std::string, std::string> DevicePort::_getDeviceTypeDescriptionAndLabel() const
 {
     return {"Device", ""};
+}
+
+void DevicePort::_initializeRequiredParameters()
+{
+    if (mFileRowNumber > 0u &&
+        mFileColumnNumber > 0u &&
+        !mIsInitialized)
+    {
+        mInputParametersCount = _getInputParametersCount();
+
+        if (mInputParametersCount > 1u &&
+            mInputParametersCount <= Data::c_MaxPortInputParametersCount) // there should be at least two parameters (device name and port number))
+        {
+            mInputData.reserve(mInputParametersCount);
+            _registerRequiredParameters();
+        }
+        else
+        {
+            assert(false);
+        }
+    }
+    else
+    {
+        assert(false);
+    }
 }
 
 void DevicePort::_initializeDescriptionAndLabel()

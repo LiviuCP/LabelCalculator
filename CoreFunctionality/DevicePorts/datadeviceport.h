@@ -14,7 +14,7 @@ public:
 
 protected:
     // constructor needs to be protected as this class is a switch abstraction (derived classes are the concrete switches for which labels are being created)
-    SwitchPort(const std::string& deviceUPosition, const DevicePortTypesInfo_t& switchPortTypesInfo, const size_t fileRowNumber, const size_t fileColumnNumber, const size_t requiredNumberOfParameters, const bool isSourceDevice);
+    SwitchPort(const std::string& deviceUPosition, const DevicePortTypesInfo_t& switchPortTypesInfo, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
     virtual void _registerRequiredParameters() override;
 
@@ -35,6 +35,7 @@ public:
     LANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
 protected:
+    virtual size_t _getInputParametersCount() const override;
     virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
 };
 
@@ -46,6 +47,7 @@ public:
     SANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
 protected:
+    virtual size_t _getInputParametersCount() const override;
     virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
 };
 
@@ -57,6 +59,7 @@ public:
     InfinibandSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
 protected:
+    virtual size_t _getInputParametersCount() const override;
     virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
 };
 
@@ -68,6 +71,7 @@ public:
     KVMSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
 protected:
+    virtual size_t _getInputParametersCount() const override;
     virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
 };
 
@@ -82,6 +86,7 @@ public:
 
 protected:
     virtual void _registerRequiredParameters() override;
+    virtual size_t _getInputParametersCount() const override;
     virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
     void _handleNumberedPortType();
 
@@ -102,6 +107,7 @@ public:
 
 protected:
     virtual void _registerRequiredParameters() override;
+    virtual size_t _getInputParametersCount() const override;
     virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
 
     std::string mControllerNr; // can be the controller number (for FC storage) or IO module number (for JBODs)
@@ -119,6 +125,7 @@ public:
 
 protected:
     virtual void _registerRequiredParameters() override;
+    virtual size_t _getInputParametersCount() const override;
     virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
     void _handleNumberedModuleType();
 
