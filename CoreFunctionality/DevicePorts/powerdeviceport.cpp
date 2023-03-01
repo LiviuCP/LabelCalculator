@@ -17,7 +17,7 @@ PDUPort::PDUPort(const std::string& deviceUPosition, const size_t fileRowNumber,
 {
 }
 
-void PDUPort::computeDescriptionAndLabel()
+void PDUPort::updateDescriptionAndLabel()
 {
     Core::convertStringCase(mDevicePlacementType, true);
     Core::convertStringCase(mPortNumber, true);
@@ -98,7 +98,7 @@ ExtensionBarPort::ExtensionBarPort(const std::string& deviceUPosition, const siz
 {
 }
 
-void ExtensionBarPort::computeDescriptionAndLabel()
+void ExtensionBarPort::updateDescriptionAndLabel()
 {
     Core::convertStringCase(mDevicePlacementType, true);
     Core::convertStringCase(mPortNumber, true);
@@ -161,7 +161,7 @@ UPSPort::UPSPort(const std::string& deviceUPosition, const size_t fileRowNumber,
 {
 }
 
-void UPSPort::computeDescriptionAndLabel()
+void UPSPort::updateDescriptionAndLabel()
 {
     if (Core::isDigitString(mLoadSegmentNumber))
     {

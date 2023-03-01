@@ -140,7 +140,7 @@ void ConnectionInputParser::_buildOutput()
         for (auto deviceIter{mDevicePorts.cbegin()}; deviceIter != mDevicePorts.cend(); ++deviceIter)
         {
             // for each device the description and lable are built by considering the even/odd index (even, e.g. 0: first device on the row; odd, e.g. 3: second device on the row)
-            (*deviceIter)->computeDescriptionAndLabel();
+            (*deviceIter)->updateDescriptionAndLabel();
         }
 
         mOutputData.resize(c_CablePartNumbersEntriesCount); // number of output rows should match the number of input rows

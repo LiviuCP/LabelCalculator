@@ -10,7 +10,7 @@ class SwitchPort : public DevicePort
 public:
     SwitchPort() = delete;
 
-    virtual void computeDescriptionAndLabel() override;
+    virtual void updateDescriptionAndLabel() override;
 
 protected:
     // constructor needs to be protected as this class is a switch abstraction (derived classes are the concrete switches for which labels are being created)
@@ -82,7 +82,7 @@ public:
     ServerPort() = delete;
     ServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
-    virtual void computeDescriptionAndLabel() override;
+    virtual void updateDescriptionAndLabel() override;
 
 protected:
     virtual void _registerRequiredParameters() override;
@@ -103,7 +103,7 @@ public:
     ScalableServerPort() = delete;
     ScalableServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
-    virtual void computeDescriptionAndLabel() override;
+    virtual void updateDescriptionAndLabel() override;
 
 protected:
     virtual void _registerRequiredParameters() override;
@@ -120,7 +120,7 @@ public:
     StoragePort() = delete;
     StoragePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
-    virtual void computeDescriptionAndLabel() override;
+    virtual void updateDescriptionAndLabel() override;
 
 protected:
     virtual void _registerRequiredParameters() override;
@@ -138,7 +138,7 @@ public:
     BladeServerPort() = delete;
     BladeServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
-    virtual void computeDescriptionAndLabel() override;
+    virtual void updateDescriptionAndLabel() override;
 
 protected:
     virtual void _registerRequiredParameters() override;

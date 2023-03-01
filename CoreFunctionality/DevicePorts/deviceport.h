@@ -30,10 +30,11 @@ public:
     */
     void init();
 
-    /* Calculates the description and label field for each device port
-       This data will be subsequently used for building the final table
+    /* Updates the description and label fields for each device port
+       These two had been previously initialized by the base class (e.g. by writing the rack U position of the device)
+       The updated data will subsequently be used for building the final labelling table
     */
-    virtual void computeDescriptionAndLabel() = 0;
+    virtual void updateDescriptionAndLabel() = 0;
 
     /* reads and parses the input fields for the device port from string starting position pos (which is subsequently updated)
        uses the ofstream for logging any errors in the corresponding file and the boolean to report the occurence of these errors

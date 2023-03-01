@@ -10,7 +10,7 @@ public:
     PDUPort() = delete;
     PDUPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
-    virtual void computeDescriptionAndLabel() override;
+    virtual void updateDescriptionAndLabel() override;
 
 protected:
     virtual void _registerRequiredParameters() override;
@@ -28,7 +28,7 @@ public:
     ExtensionBarPort() = delete;
     ExtensionBarPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
-    virtual void computeDescriptionAndLabel() override;
+    virtual void updateDescriptionAndLabel() override;
 
 protected:
     virtual void _registerRequiredParameters() override;
@@ -45,7 +45,7 @@ public:
     UPSPort() = delete;
     UPSPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
-    virtual void computeDescriptionAndLabel() override;
+    virtual void updateDescriptionAndLabel() override;
 
 protected:
     virtual void _registerRequiredParameters() override;

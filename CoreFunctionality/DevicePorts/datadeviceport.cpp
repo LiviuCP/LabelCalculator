@@ -27,7 +27,7 @@ void SwitchPort::_registerRequiredParameters()
     _registerRequiredParameter(&mPortNumber);
 }
 
-void SwitchPort::computeDescriptionAndLabel()
+void SwitchPort::updateDescriptionAndLabel()
 {
     Core::convertStringCase(mPortType, true);
 
@@ -171,7 +171,7 @@ ServerPort::ServerPort(const std::string& deviceUPosition, const size_t fileRowN
 {
 }
 
-void ServerPort::computeDescriptionAndLabel()
+void ServerPort::updateDescriptionAndLabel()
 {
     Core::convertStringCase(mPortType, true);
 
@@ -265,14 +265,14 @@ ScalableServerPort::ScalableServerPort(const std::string& deviceUPosition, const
 {
 }
 
-void ScalableServerPort::computeDescriptionAndLabel()
+void ScalableServerPort::updateDescriptionAndLabel()
 {
     if (Core::isDigitString(mSlotNumber))
     {
         _appendDataToDescription(" - slot " + mSlotNumber);
         _appendDataToLabel("_S" + mSlotNumber);
 
-        ServerPort::computeDescriptionAndLabel();
+        ServerPort::updateDescriptionAndLabel();
     }
     else
     {
@@ -306,7 +306,7 @@ StoragePort::StoragePort(const std::string& deviceUPosition, const size_t fileRo
 {
 }
 
-void StoragePort::computeDescriptionAndLabel()
+void StoragePort::updateDescriptionAndLabel()
 {
     bool shouldCheckNumberedPortType{false};
     bool shouldCheckManagementPort{false};
@@ -422,7 +422,7 @@ BladeServerPort::BladeServerPort(const std::string& deviceUPosition, const size_
 {
 }
 
-void BladeServerPort::computeDescriptionAndLabel()
+void BladeServerPort::updateDescriptionAndLabel()
 {
     Core::convertStringCase(mModuleType, true);
 
