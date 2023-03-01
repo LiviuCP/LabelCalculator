@@ -48,6 +48,9 @@ DevicePortPtr DevicePortsFactory::createDevicePort(const Data::DeviceTypeID devi
     case Data::DeviceTypeID::RACK_SERVER:
         pDevicePort = std::make_shared<ServerPort>(deviceUPosition, fileRowNumber, fileColumnNumber, isSourceDevice);
         break;
+    case Data::DeviceTypeID::SCALABLE_SERVER:
+        pDevicePort = std::make_shared<ScalableServerPort>(deviceUPosition, fileRowNumber, fileColumnNumber, isSourceDevice);
+        break;
     case Data::DeviceTypeID::STORAGE:
         pDevicePort = std::make_shared<StoragePort>(deviceUPosition, fileRowNumber, fileColumnNumber, isSourceDevice);
         break;

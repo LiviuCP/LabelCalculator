@@ -257,6 +257,47 @@ void ServerPort::_handleNumberedPortType()
     }
 }
 
+ScalableServerPort::ScalableServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+    : ServerPort{deviceUPosition,
+                 fileRowNumber,
+                 fileColumnNumber,
+                 isSourceDevice}
+{
+}
+
+void ScalableServerPort::computeDescriptionAndLabel()
+{
+    if (Core::isDigitString(mSlotNumber))
+    {
+        _appendDataToDescription(" - slot " + mSlotNumber);
+        _appendDataToLabel("_S" + mSlotNumber);
+
+        ServerPort::computeDescriptionAndLabel();
+    }
+    else
+    {
+        _setInvalidDescriptionAndLabel(Ports::c_InvalidSlotNumberErrorText);
+    }
+}
+
+void ScalableServerPort::_registerRequiredParameters()
+{
+    // slot number comes in addition to the input params of the Server class (and precedes them in the csv input file)
+    _registerRequiredParameter(&mSlotNumber);
+
+    ServerPort::_registerRequiredParameters();
+}
+
+size_t ScalableServerPort::_getInputParametersCount() const
+{
+    return Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::SCALABLE_SERVER);
+}
+
+std::pair<std::string, std::string> ScalableServerPort::_getDeviceTypeDescriptionAndLabel() const
+{
+    return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::SCALABLE_SERVER);
+}
+
 StoragePort::StoragePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : DevicePort{deviceUPosition,
                  fileRowNumber,

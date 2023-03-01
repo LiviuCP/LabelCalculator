@@ -96,6 +96,23 @@ private:
     const AllowedDataPortTypes_t mAllowedDataPortTypes;
 };
 
+// scalable server ports; a scalable server contains several slots within chassis, each slot being an independent server; one server might also occupy more slots
+class ScalableServerPort : public ServerPort
+{
+public:
+    ScalableServerPort() = delete;
+    ScalableServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+
+    virtual void computeDescriptionAndLabel() override;
+
+protected:
+    virtual void _registerRequiredParameters() override;
+    virtual size_t _getInputParametersCount() const override;
+    virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
+
+    std::string mSlotNumber;
+};
+
 // storage FC ports
 class StoragePort : public DevicePort
 {

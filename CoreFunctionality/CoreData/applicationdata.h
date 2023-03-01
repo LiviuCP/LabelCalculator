@@ -26,6 +26,7 @@ namespace Data
         INFINIBAND_SWITCH,
         KVM_SWITCH,
         RACK_SERVER,
+        SCALABLE_SERVER,
         STORAGE,
         BLADE_SERVER
     };
@@ -40,6 +41,7 @@ namespace Data
         {    "ib",      DeviceTypeID::INFINIBAND_SWITCH     },
         {    "kvm",     DeviceTypeID::KVM_SWITCH            },
         {    "svr",     DeviceTypeID::RACK_SERVER           },
+        {    "sls",     DeviceTypeID::SCALABLE_SERVER       },
         {    "sto",     DeviceTypeID::STORAGE               },
         {    "bld",     DeviceTypeID::BLADE_SERVER          }
     };
@@ -54,6 +56,7 @@ namespace Data
         {    DeviceTypeID::INFINIBAND_SWITCH,   2    },
         {    DeviceTypeID::KVM_SWITCH,          2    },
         {    DeviceTypeID::RACK_SERVER,         2    },
+        {    DeviceTypeID::SCALABLE_SERVER,     3    },
         {    DeviceTypeID::STORAGE,             3    },
         {    DeviceTypeID::BLADE_SERVER,        3    }
     };
@@ -65,6 +68,7 @@ namespace Data
         {   DeviceTypeID::EXTENSION_BAR,           "PLACEMENT,PORT NUMBER,-"                       },
         {   DeviceTypeID::UPS,                     "LOAD SEGMENT NUMBER,PORT NUMBER,-"             },
         {   DeviceTypeID::RACK_SERVER,             "PORT TYPE,PORT NUMBER,-"                       },
+        {   DeviceTypeID::SCALABLE_SERVER,         "SLOT NUMBER, PORT TYPE,PORT NUMBER"            },
         {   DeviceTypeID::BLADE_SERVER,            "MODULE TYPE,MODULE NUMBER,PORT NUMBER"         },
         {   DeviceTypeID::STORAGE,                 "CONTROLLER NUMBER,PORT TYPE,PORT NUMBER"       },
         {   DeviceTypeID::SAN_SWITCH,              "PORT TYPE,PORT NUMBER,-"                       },

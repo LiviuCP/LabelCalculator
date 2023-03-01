@@ -19,6 +19,14 @@ svr,rackmount server,port type,E,"embedded port (Ethernet, IB, etc)",port number
 ,,,K,KVM port,,,,,,,
 ,,,P,power supply port,,,,,,,
 ,,,,,,,,,,,
+sls,scalable server,slot number,positive integer,A chassis contains several slots each one being an independent server,port type,E,"embedded port (Ethernet, IB, etc)",port number,positive integer,data or power port number,The label of the scalable server is similar to the one of the rackmount server the only difference being the slot number.
+,,,,,,N,networking card port,,M,management port,
+,,,,,,F,FC card port,,,,
+,,,,,,I,Infiniband card port,,,,
+,,,,,,S,SAS card port,,,,
+,,,,,,K,KVM port,,,,
+,,,,,,P,power supply port,,,,
+,,,,,,,,,,,
 bld,blade server,module type,DM,data module (e.g. FC switch),module number,positive integer,"data module, management module or power supply (port) number",port number,positive integer,data module port number,"data module can be an Ethernet switch, SAN switch etc"
 ,,,MG,management module,,,,,,,uplink port connects management modules to the ones of next enclosure; for this module type the user can enter ‘-’ for module number (not mandatory but easiest choice)
 ,,,UP,management module uplink port,,,,,,,downlink port connects to uplink port of previous enclosure; for this module type the user can enter ‘-’ for module number (not mandatory but easiest choice)

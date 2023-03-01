@@ -27,6 +27,7 @@ namespace Data
         {   DeviceTypeID::EXTENSION_BAR,           {"Extension bar"    , "EXT"}   },
         {   DeviceTypeID::UPS,                     {"UPS"              , ""   }   },
         {   DeviceTypeID::RACK_SERVER,             {"Server"           , ""   }   },
+        {   DeviceTypeID::SCALABLE_SERVER,         {"Scalable server"  , ""   }   },
         {   DeviceTypeID::BLADE_SERVER,            {"Blade system"     , ""   }   },
         {   DeviceTypeID::STORAGE,                 {"Storage device"   , ""   }   },
         {   DeviceTypeID::SAN_SWITCH,              {"SAN switch"       , ""   }   },

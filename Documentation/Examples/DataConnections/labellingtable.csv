@@ -13,42 +13,66 @@ __Item number__,__Cable part number__,__Source device description__,__Source lab
 12,RJ45,Blade system placed at U1 - data module 2 - port 1,U1_DMO2_P1,LAN switch placed at U49 - Ethernet port 2,U49_P2
 13,RJ45,Blade system placed at U1 - data module 1 - port 2,U1_DMO1_P2,LAN switch placed at U50 - Ethernet port 1,U50_P1
 14,RJ45,Blade system placed at U1 - data module 2 - port 2,U1_DMO2_P2,LAN switch placed at U50 - Ethernet port 2,U50_P2
-15,RJ45,UPS placed at U11 - management port,U11_MGMT,LAN switch placed at U48 - Ethernet port 9,U48_P9
-16,RJ45,PDU placed at U15 in horizontal position - management port,U15_PDU_H_MGMT,LAN switch placed at U48 - Ethernet port 10,U48_P10
-17,RJ45,PDU placed at U16 in horizontal position - management port,U16_PDU_H_MGMT,LAN switch placed at U48 - Ethernet port 11,U48_P11
+15,RJ45,UPS placed at U11 - management port,U11_MGMT,LAN switch placed at U48 - Ethernet port 3,U48_P3
+16,RJ45,PDU placed at U15 in horizontal position - management port,U15_PDU_H_MGMT,LAN switch placed at U48 - Ethernet port 4,U48_P4
+17,RJ45,PDU placed at U16 in horizontal position - management port,U16_PDU_H_MGMT,LAN switch placed at U48 - Ethernet port 5,U48_P5
 18,fc-cable,Storage device placed at U21 - controller 1 - port 1,U21_C1_P1,SAN switch placed at U46 - FC port 3,U46_P3
 19,fc-cable,Storage device placed at U21 - controller 2 - port 1,U21_C2_P1,SAN switch placed at U46 - FC port 4,U46_P4
 20,fc-cable,Storage device placed at U21 - controller 1 - port 2,U21_C1_P2,SAN switch placed at U47 - FC port 3,U47_P3
 21,fc-cable,Storage device placed at U21 - controller 2 - port 2,U21_C2_P2,SAN switch placed at U47 - FC port 4,U47_P4
-22,RJ45,Storage device placed at U21 - controller 1 - management port,U21_C1_MGMT,LAN switch placed at U48 - Ethernet port 3,U48_P3
-23,RJ45,Storage device placed at U21 - controller 2 - management port,U21_C2_MGMT,LAN switch placed at U48 - Ethernet port 4,U48_P4
-24,kvm-cable,Server placed at U34 - KVM port,U34_KVM,KVM switch placed at U43 - port 1,U43_P1
-25,ib-cable,Server placed at U34 - Infiniband port 1,U34_IB_P1,Infiniband switch placed at U44 - port 3,U44_P3
-26,ib-cable,Server placed at U34 - Infiniband port 3,U34_IB_P3,Infiniband switch placed at U44 - port 4,U44_P4
-27,ib-cable,Server placed at U34 - Infiniband port 2,U34_IB_P2,Infiniband switch placed at U45 - port 3,U45_P3
-28,ib-cable,Server placed at U34 - Infiniband port 4,U34_IB_P4,Infiniband switch placed at U45 - port 4,U45_P4
-29,fc-cable,Server placed at U34 - FC port 1,U34_FC_P1,SAN switch placed at U46 - FC port 5,U46_P5
-30,fc-cable,Server placed at U34 - FC port 3,U34_FC_P3,SAN switch placed at U46 - FC port 6,U46_P6
-31,fc-cable,Server placed at U34 - FC port 2,U34_FC_P2,SAN switch placed at U47 - FC port 5,U47_P5
-32,fc-cable,Server placed at U34 - FC port 4,U34_FC_P4,SAN switch placed at U47 - FC port 6,U47_P6
-33,RJ45,Server placed at U34 - management port,U34_MGMT,LAN switch placed at U48 - Ethernet port 5,U48_P5
-34,RJ45,Server placed at U34 - embedded port 1,U34_EMB_P1,LAN switch placed at U49 - Ethernet port 3,U49_P3
-35,RJ45,Server placed at U34 - Ethernet port 1,U34_ETH_P1,LAN switch placed at U49 - Ethernet port 4,U49_P4
-36,RJ45,Server placed at U34 - embedded port 2,U34_EMB_P2,LAN switch placed at U50 - Ethernet port 3,U50_P3
-37,RJ45,Server placed at U34 - Ethernet port 2,U34_ETH_P2,LAN switch placed at U50 - Ethernet port 4,U50_P4
-38,kvm-cable,Server placed at U38 - KVM port,U38_KVM,KVM switch placed at U43 - port 2,U43_P2
-39,ib-cable,Server placed at U38 - Infiniband port 1,U38_IB_P1,Infiniband switch placed at U44 - port 5,U44_P5
-40,ib-cable,Server placed at U38 - Infiniband port 3,U38_IB_P3,Infiniband switch placed at U44 - port 6,U44_P6
-41,ib-cable,Server placed at U38 - Infiniband port 2,U38_IB_P2,Infiniband switch placed at U45 - port 5,U45_P5
-42,ib-cable,Server placed at U38 - Infiniband port 4,U38_IB_P4,Infiniband switch placed at U45 - port 6,U45_P6
-43,fc-cable,Server placed at U38 - FC port 1,U38_FC_P1,SAN switch placed at U46 - FC port 7,U46_P7
-44,fc-cable,Server placed at U38 - FC port 3,U38_FC_P3,SAN switch placed at U46 - FC port 8,U46_P8
-45,fc-cable,Server placed at U38 - FC port 2,U38_FC_P2,SAN switch placed at U47 - FC port 7,U47_P7
-46,fc-cable,Server placed at U38 - FC port 4,U38_FC_P4,SAN switch placed at U47 - FC port 8,U47_P8
-47,RJ45,Server placed at U38 - management port,U38_MGMT,LAN switch placed at U48 - Ethernet port 6,U48_P6
-48,RJ45,Server placed at U38 - embedded port 1,U38_EMB_P1,LAN switch placed at U49 - Ethernet port 5,U49_P5
-49,RJ45,Server placed at U38 - Ethernet port 1,U38_ETH_P1,LAN switch placed at U49 - Ethernet port 6,U49_P6
-50,RJ45,Server placed at U38 - embedded port 2,U38_EMB_P2,LAN switch placed at U50 - Ethernet port 5,U50_P5
-51,RJ45,Server placed at U38 - Ethernet port 2,U38_ETH_P2,LAN switch placed at U50 - Ethernet port 6,U50_P6
-52,RJ45,SAN switch placed at U46 - management port,U46_MGMT,LAN switch placed at U48 - Ethernet port 7,U48_P7
-53,RJ45,SAN switch placed at U47 - management port,U47_MGMT,LAN switch placed at U48 - Ethernet port 8,U48_P8
+22,RJ45,Storage device placed at U21 - controller 1 - management port,U21_C1_MGMT,LAN switch placed at U48 - Ethernet port 6,U48_P6
+23,RJ45,Storage device placed at U21 - controller 2 - management port,U21_C2_MGMT,LAN switch placed at U48 - Ethernet port 7,U48_P7
+24,kvm-cable,Scalable server placed at U29 - slot 1 - KVM port,U29_S1_KVM,KVM switch placed at U43 - port 1,U43_P1
+25,kvm-cable,Scalable server placed at U29 - slot 3 - KVM port,U29_S3_KVM,KVM switch placed at U43 - port 2,U43_P2
+26,kvm-cable,Scalable server placed at U29 - slot 4 - KVM port,U29_S4_KVM,KVM switch placed at U43 - port 3,U43_P3
+27,ib-cable,Scalable server placed at U29 - slot 1 - Infiniband port 1,U29_S1_IB_P1,Infiniband switch placed at U44 - port 3,U44_P3
+28,ib-cable,Scalable server placed at U29 - slot 3 - Infiniband port 1,U29_S3_IB_P1,Infiniband switch placed at U44 - port 4,U44_P4
+29,ib-cable,Scalable server placed at U29 - slot 1 - Infiniband port 2,U29_S1_IB_P2,Infiniband switch placed at U45 - port 3,U45_P3
+30,ib-cable,Scalable server placed at U29 - slot 3 - Infiniband port 2,U29_S3_IB_P2,Infiniband switch placed at U45 - port 4,U45_P4
+31,fc-cable,Scalable server placed at U29 - slot 1 - FC port 1,U29_S1_FC_P1,SAN switch placed at U46 - FC port 5,U46_P5
+32,fc-cable,Scalable server placed at U29 - slot 4 - FC port 1,U29_S4_FC_P1,SAN switch placed at U46 - FC port 6,U46_P6
+33,fc-cable,Scalable server placed at U29 - slot 1 - FC port 2,U29_S1_FC_P2,SAN switch placed at U47 - FC port 5,U47_P5
+34,fc-cable,Scalable server placed at U29 - slot 4 - FC port 2,U29_S4_FC_P2,SAN switch placed at U47 - FC port 6,U47_P6
+35,RJ45,Scalable server placed at U29 - slot 1 - management port,U29_S1_MGMT,LAN switch placed at U48 - Ethernet port 8,U48_P8
+36,RJ45,Scalable server placed at U29 - slot 3 - management port,U29_S3_MGMT,LAN switch placed at U48 - Ethernet port 9,U48_P9
+37,RJ45,Scalable server placed at U29 - slot 4 - management port,U29_S4_MGMT,LAN switch placed at U48 - Ethernet port 10,U48_P10
+38,RJ45,Scalable server placed at U29 - slot 1 - embedded port 1,U29_S1_EMB_P1,LAN switch placed at U49 - Ethernet port 3,U49_P3
+39,RJ45,Scalable server placed at U29 - slot 1 - Ethernet port 1,U29_S1_ETH_P1,LAN switch placed at U49 - Ethernet port 4,U49_P4
+40,RJ45,Scalable server placed at U29 - slot 3 - embedded port 1,U29_S3_EMB_P1,LAN switch placed at U49 - Ethernet port 5,U49_P5
+41,RJ45,Scalable server placed at U29 - slot 4 - embedded port 1,U29_S4_EMB_P1,LAN switch placed at U49 - Ethernet port 6,U49_P6
+42,RJ45,Scalable server placed at U29 - slot 1 - embedded port 2,U29_S1_EMB_P2,LAN switch placed at U50 - Ethernet port 3,U50_P3
+43,RJ45,Scalable server placed at U29 - slot 1 - Ethernet port 2,U29_S1_ETH_P2,LAN switch placed at U50 - Ethernet port 4,U50_P4
+44,RJ45,Scalable server placed at U29 - slot 3 - embedded port 2,U29_S3_EMB_P2,LAN switch placed at U50 - Ethernet port 5,U50_P5
+45,RJ45,Scalable server placed at U29 - slot 4 - embedded port 2,U29_S4_EMB_P2,LAN switch placed at U50 - Ethernet port 6,U50_P6
+46,RJ45,PDU placed at U32 on the left side - management port,U32_PDU_L_MGMT,LAN switch placed at U48 - Ethernet port 11,U48_P11
+47,RJ45,PDU placed at U32 on the right side - management port,U32_PDU_R_MGMT,LAN switch placed at U48 - Ethernet port 12,U48_P12
+48,kvm-cable,Server placed at U34 - KVM port,U34_KVM,KVM switch placed at U43 - port 4,U43_P4
+49,ib-cable,Server placed at U34 - Infiniband port 1,U34_IB_P1,Infiniband switch placed at U44 - port 5,U44_P5
+50,ib-cable,Server placed at U34 - Infiniband port 3,U34_IB_P3,Infiniband switch placed at U44 - port 6,U44_P6
+51,ib-cable,Server placed at U34 - Infiniband port 2,U34_IB_P2,Infiniband switch placed at U45 - port 5,U45_P5
+52,ib-cable,Server placed at U34 - Infiniband port 4,U34_IB_P4,Infiniband switch placed at U45 - port 6,U45_P6
+53,fc-cable,Server placed at U34 - FC port 1,U34_FC_P1,SAN switch placed at U46 - FC port 7,U46_P7
+54,fc-cable,Server placed at U34 - FC port 3,U34_FC_P3,SAN switch placed at U46 - FC port 8,U46_P8
+55,fc-cable,Server placed at U34 - FC port 2,U34_FC_P2,SAN switch placed at U47 - FC port 7,U47_P7
+56,fc-cable,Server placed at U34 - FC port 4,U34_FC_P4,SAN switch placed at U47 - FC port 8,U47_P8
+57,RJ45,Server placed at U34 - management port,U34_MGMT,LAN switch placed at U48 - Ethernet port 13,U48_P13
+58,RJ45,Server placed at U34 - embedded port 1,U34_EMB_P1,LAN switch placed at U49 - Ethernet port 7,U49_P7
+59,RJ45,Server placed at U34 - Ethernet port 1,U34_ETH_P1,LAN switch placed at U49 - Ethernet port 8,U49_P8
+60,RJ45,Server placed at U34 - embedded port 2,U34_EMB_P2,LAN switch placed at U50 - Ethernet port 7,U50_P7
+61,RJ45,Server placed at U34 - Ethernet port 2,U34_ETH_P2,LAN switch placed at U50 - Ethernet port 8,U50_P8
+62,kvm-cable,Server placed at U38 - KVM port,U38_KVM,KVM switch placed at U43 - port 5,U43_P5
+63,ib-cable,Server placed at U38 - Infiniband port 1,U38_IB_P1,Infiniband switch placed at U44 - port 7,U44_P7
+64,ib-cable,Server placed at U38 - Infiniband port 3,U38_IB_P3,Infiniband switch placed at U44 - port 8,U44_P8
+65,ib-cable,Server placed at U38 - Infiniband port 2,U38_IB_P2,Infiniband switch placed at U45 - port 7,U45_P7
+66,ib-cable,Server placed at U38 - Infiniband port 4,U38_IB_P4,Infiniband switch placed at U45 - port 8,U45_P8
+67,fc-cable,Server placed at U38 - FC port 1,U38_FC_P1,SAN switch placed at U46 - FC port 9,U46_P9
+68,fc-cable,Server placed at U38 - FC port 3,U38_FC_P3,SAN switch placed at U46 - FC port 10,U46_P10
+69,fc-cable,Server placed at U38 - FC port 2,U38_FC_P2,SAN switch placed at U47 - FC port 9,U47_P9
+70,fc-cable,Server placed at U38 - FC port 4,U38_FC_P4,SAN switch placed at U47 - FC port 10,U47_P10
+71,RJ45,Server placed at U38 - management port,U38_MGMT,LAN switch placed at U48 - Ethernet port 14,U48_P14
+72,RJ45,Server placed at U38 - embedded port 1,U38_EMB_P1,LAN switch placed at U49 - Ethernet port 9,U49_P9
+73,RJ45,Server placed at U38 - Ethernet port 1,U38_ETH_P1,LAN switch placed at U49 - Ethernet port 10,U49_P10
+74,RJ45,Server placed at U38 - embedded port 2,U38_EMB_P2,LAN switch placed at U50 - Ethernet port 9,U50_P9
+75,RJ45,Server placed at U38 - Ethernet port 2,U38_ETH_P2,LAN switch placed at U50 - Ethernet port 10,U50_P10
+76,RJ45,SAN switch placed at U46 - management port,U46_MGMT,LAN switch placed at U48 - Ethernet port 15,U48_P15
+77,RJ45,SAN switch placed at U47 - management port,U47_MGMT,LAN switch placed at U48 - Ethernet port 16,U48_P16
