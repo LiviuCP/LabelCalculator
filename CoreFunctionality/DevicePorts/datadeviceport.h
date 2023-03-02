@@ -91,9 +91,6 @@ protected:
     void _handleNumberedPortType();
 
     std::string mPortType;
-
-private:
-    const AllowedDataPortTypes_t mAllowedDataPortTypes;
 };
 
 // scalable server ports; a scalable server contains several slots within chassis, each slot being an independent server; one server might also occupy more slots

@@ -167,7 +167,6 @@ ServerPort::ServerPort(const std::string& deviceUPosition, const size_t fileRowN
                  fileRowNumber,
                  fileColumnNumber,
                  isSourceDevice}
-    , mAllowedDataPortTypes{Data::c_ServerDataPortTypes}
 {
 }
 
@@ -175,7 +174,7 @@ void ServerPort::updateDescriptionAndLabel()
 {
     Core::convertStringCase(mPortType, true);
 
-    if (mAllowedDataPortTypes.find(mPortType) != mAllowedDataPortTypes.cend() || "P" == mPortType)
+    if (Data::c_ServerDataPortTypes.find(mPortType) != Data::c_ServerDataPortTypes.cend() || "P" == mPortType)
     {
         _handleNumberedPortType();
     }
@@ -224,7 +223,7 @@ void ServerPort::_handleNumberedPortType()
 {
     if (Core::isDigitString(mPortNumber))
     {
-        if (auto dataPortTypeIt{mAllowedDataPortTypes.find(mPortType)}; mAllowedDataPortTypes.cend() != dataPortTypeIt)
+        if (auto dataPortTypeIt{Data::c_ServerDataPortTypes.find(mPortType)}; Data::c_ServerDataPortTypes.cend() != dataPortTypeIt)
         {
             const std::string c_DataPortTypeDescription{dataPortTypeIt->second.first};
             const std::string c_DataPortTypeLabel{dataPortTypeIt->second.second};
