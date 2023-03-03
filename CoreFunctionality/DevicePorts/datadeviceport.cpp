@@ -307,9 +307,6 @@ StoragePort::StoragePort(const std::string& deviceUPosition, const size_t fileRo
 
 void StoragePort::updateDescriptionAndLabel()
 {
-    bool shouldCheckNumberedPortType{false};
-    bool shouldCheckManagementPort{false};
-
     Core::convertStringCase(mPortType, true);
 
     if (Core::isDigitString(mControllerNr))
@@ -318,15 +315,13 @@ void StoragePort::updateDescriptionAndLabel()
         {
             _appendDataToDescription(" - controller " + mControllerNr + " - port ");
             _appendDataToLabel("_C" + mControllerNr + "_P");
-
-            shouldCheckNumberedPortType = true;
+            _handleNumberedPortType();
         }
         else if ("-" == mPortType)
         {
             _appendDataToDescription(" - controller " + mControllerNr);
             _appendDataToLabel("_C" + mControllerNr);
-
-            shouldCheckManagementPort = true; // one management port per controller
+            _handleManagementPort(); // one management port per controller
         }
         else
         {
@@ -337,7 +332,7 @@ void StoragePort::updateDescriptionAndLabel()
     {
         if ("-" == mPortType)
         {
-            shouldCheckManagementPort = true; // unified management port
+            _handleManagementPort(); // unified management port
         }
         else
         {
@@ -350,8 +345,7 @@ void StoragePort::updateDescriptionAndLabel()
         {
             _appendDataToDescription(" - power supply ");
             _appendDataToLabel("_PS");
-
-            shouldCheckNumberedPortType = true;
+            _handleNumberedPortType();
         }
         else
         {
@@ -361,31 +355,6 @@ void StoragePort::updateDescriptionAndLabel()
     else
     {
         _setInvalidDescriptionAndLabel(Ports::c_InvalidControllerNumberErrorText);
-    }
-
-    if (shouldCheckNumberedPortType)
-    {
-        if (Core::isDigitString(mPortNumber))
-        {
-            _appendDataToDescription(mPortNumber);
-            _appendDataToLabel(mPortNumber);
-        }
-        else
-        {
-            _setInvalidDescriptionAndLabel(Ports::c_InvalidPortNumberErrorText);
-        }
-    }
-    else if (shouldCheckManagementPort)
-    {
-        if ("m" == mPortNumber || "M" == mPortNumber)
-        {
-            _appendDataToDescription(" - management port");
-            _appendDataToLabel("_MGMT");
-        }
-        else
-        {
-            _setInvalidDescriptionAndLabel(Ports::c_InvalidPortNumberErrorText);
-        }
     }
 
     _checkLabel();
@@ -406,6 +375,32 @@ size_t StoragePort::_getInputParametersCount() const
 std::pair<std::string, std::string> StoragePort::_getDeviceTypeDescriptionAndLabel() const
 {
     return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::STORAGE);
+}
+
+void StoragePort::_handleNumberedPortType()
+{
+    if (Core::isDigitString(mPortNumber))
+    {
+        _appendDataToDescription(mPortNumber);
+        _appendDataToLabel(mPortNumber);
+    }
+    else
+    {
+        _setInvalidDescriptionAndLabel(Ports::c_InvalidPortNumberErrorText);
+    }
+}
+
+void StoragePort::_handleManagementPort()
+{
+    if ("m" == mPortNumber || "M" == mPortNumber)
+    {
+        _appendDataToDescription(" - management port");
+        _appendDataToLabel("_MGMT");
+    }
+    else
+    {
+        _setInvalidDescriptionAndLabel(Ports::c_InvalidPortNumberErrorText);
+    }
 }
 
 /* In order to avoid registering an additional parameter that might cause some confusion (and potential issues),

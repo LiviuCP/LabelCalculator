@@ -124,6 +124,9 @@ protected:
     virtual size_t _getInputParametersCount() const override;
     virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
 
+    void _handleNumberedPortType();
+    void _handleManagementPort();
+
     std::string mControllerNr; // can be the controller number (for FC storage) or IO module number (for JBODs)
     std::string mPortType;
 };
