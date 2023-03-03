@@ -1,9 +1,6 @@
 #include <cassert>
-#include <set>
 
-#include "applicationdata.h"
 #include "deviceportdata.h"
-#include "coreutils.h"
 #include "deviceportutils.h"
 #include "datadeviceport.h"
 

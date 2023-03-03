@@ -1,10 +1,7 @@
 #ifndef DEVICEPORT_H
 #define DEVICEPORT_H
 
-#include <fstream>
-#include <memory>
 #include <vector>
-#include <string>
 #include <string_view>
 
 #include "errorhandler.h"
