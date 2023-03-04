@@ -12,6 +12,7 @@ namespace Utilities::DevicePorts
     inline constexpr std::string_view c_InvalidControllerNumberErrorText{"LABELLING ERROR: INVALID OR INCOMPATIBLE CONTROLLER NUMBER"};
     inline constexpr std::string_view c_InvalidModuleNumberErrorText{"LABELLING ERROR: INVALID OR INCOMPATIBLE MODULE NUMBER"};
     inline constexpr std::string_view c_InvalidSlotNumberErrorText{"LABELLING ERROR: INVALID OR INCOMPATIBLE SLOT NUMBER"};
+    inline constexpr std::string_view c_InvalidBladeNumberErrorText{"LABELLING ERROR: INVALID OR INCOMPATIBLE BLADE NUMBER"};
     inline constexpr std::string_view c_InvalidLoadSegmentNumberErrorText{"LABELLING ERROR: INVALID OR INCOMPATIBLE LOAD SEGMENT NUMBER"};
     inline constexpr std::string_view c_InvalidPortNumberErrorText{"LABELLING ERROR: INVALID OR INCOMPATIBLE PORT NUMBER"};
     inline constexpr std::string_view c_MaxLabelCharsCountExceededErrorText{"LABELLING ERROR: MAXIMUM CHARACTERS COUNT EXCEEDED BY: "};

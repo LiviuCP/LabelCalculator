@@ -83,6 +83,54 @@ void SwitchPort::_handleNumberedPortType()
     }
 }
 
+DirectorPort::DirectorPort(const std::string& deviceUPosition, const AllowedDataPortTypes_t& directorDataPortTypesInfo, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+    : SwitchPort{deviceUPosition,
+                 {directorDataPortTypesInfo, true},
+                 fileRowNumber,
+                 fileColumnNumber,
+                 isSourceDevice}
+{
+}
+
+void DirectorPort::updateDescriptionAndLabel()
+{
+    if (const bool c_IsDataPortType{"p" != mPortType && "P" != mPortType && "-" != mPortType};
+        Core::isDigitString(mBladeNumber))
+    {
+        if (c_IsDataPortType)
+        {
+            _appendDataToDescription(" - blade " + mBladeNumber);
+            _appendDataToLabel("_B" + mBladeNumber);
+            SwitchPort::updateDescriptionAndLabel();
+        }
+        else
+        {
+            _setInvalidDescriptionAndLabel(Ports::c_InvalidPortTypeErrorText);
+        }
+    }
+    else if ("-" == mBladeNumber)
+    {
+        if (!c_IsDataPortType)
+        {
+            SwitchPort::updateDescriptionAndLabel();
+        }
+        else
+        {
+            _setInvalidDescriptionAndLabel(Ports::c_InvalidPortTypeErrorText);
+        }
+    }
+    else
+    {
+        _setInvalidDescriptionAndLabel(Ports::c_InvalidBladeNumberErrorText);
+    }
+}
+
+void DirectorPort::_registerRequiredParameters()
+{
+    _registerRequiredParameter(&mBladeNumber);
+    SwitchPort::_registerRequiredParameters();
+}
+
 LANSwitchPort::LANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : SwitchPort{deviceUPosition,
                  Data::c_SwitchPortTypesInfoMap.at(Data::DeviceTypeID::LAN_SWITCH),
@@ -119,6 +167,25 @@ size_t SANSwitchPort::_getInputParametersCount() const
 std::pair<std::string, std::string> SANSwitchPort::_getDeviceTypeDescriptionAndLabel() const
 {
     return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::SAN_SWITCH);
+}
+
+SANDirectorPort::SANDirectorPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+    : DirectorPort{deviceUPosition,
+                 Data::c_DirectorDataPortTypesInfoMap.at(Data::DeviceTypeID::SAN_DIRECTOR),
+                 fileRowNumber,
+                 fileColumnNumber,
+                 isSourceDevice}
+{
+}
+
+size_t SANDirectorPort::_getInputParametersCount() const
+{
+    return Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::SAN_DIRECTOR);
+}
+
+std::pair<std::string, std::string> SANDirectorPort::_getDeviceTypeDescriptionAndLabel() const
+{
+    return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::SAN_DIRECTOR);
 }
 
 InfinibandSwitchPort::InfinibandSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)

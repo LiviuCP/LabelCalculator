@@ -27,6 +27,23 @@ private:
     const bool mHasManagementPort;
 };
 
+// Generic director (multiple blades switch) ports
+class DirectorPort : public SwitchPort
+{
+public:
+    DirectorPort() = delete;
+
+    virtual void updateDescriptionAndLabel() override;
+
+protected:
+    // constructor needs to be protected as this class is a director abstraction (derived classes are the concrete directors for which labels are being created)
+    DirectorPort(const std::string& deviceUPosition, const AllowedDataPortTypes_t& directorDataPortTypesInfo, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+
+    virtual void _registerRequiredParameters() override;
+
+    std::string mBladeNumber;
+};
+
 // Ethernet switch ports
 class LANSwitchPort : public SwitchPort
 {
@@ -39,12 +56,24 @@ protected:
     virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
 };
 
-// FC (SAN) switch ports
+// SAN (FC) switch ports
 class SANSwitchPort : public SwitchPort
 {
 public:
     SANSwitchPort() = delete;
     SANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+
+protected:
+    virtual size_t _getInputParametersCount() const override;
+    virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
+};
+
+// SAN (FC, FCIP, iSCSI) director ports
+class SANDirectorPort : public DirectorPort
+{
+public:
+    SANDirectorPort() = delete;
+    SANDirectorPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
 protected:
     virtual size_t _getInputParametersCount() const override;

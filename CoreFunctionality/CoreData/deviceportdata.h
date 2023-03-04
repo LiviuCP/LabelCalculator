@@ -31,6 +31,7 @@ namespace Data
         {   DeviceTypeID::BLADE_SERVER,            {"Blade system"     , ""   }   },
         {   DeviceTypeID::STORAGE,                 {"Storage device"   , ""   }   },
         {   DeviceTypeID::SAN_SWITCH,              {"SAN switch"       , ""   }   },
+        {   DeviceTypeID::SAN_DIRECTOR,            {"SAN director"     , ""   }   },
         {   DeviceTypeID::LAN_SWITCH,              {"LAN switch"       , ""   }   },
         {   DeviceTypeID::INFINIBAND_SWITCH,       {"Infiniband switch", ""   }   },
         {   DeviceTypeID::KVM_SWITCH,              {"KVM switch"       , ""   }   }
@@ -42,6 +43,15 @@ namespace Data
         {   DeviceTypeID::SAN_SWITCH,          {  { {"F", {"FC"      , ""}} }, true   }   },
         {   DeviceTypeID::INFINIBAND_SWITCH,   {  { {"I", {""        , ""}} }, true   }   },
         {   DeviceTypeID::KVM_SWITCH,          {  { {"K", {""        , ""}} }, false  }   }
+    };
+
+    inline const std::map<DeviceTypeID, AllowedDataPortTypes_t> c_DirectorDataPortTypesInfoMap
+    {
+        {   DeviceTypeID::SAN_DIRECTOR,          {  { "F", {"FC"      ,  "FC"}},
+                                                    {"IS", {"iSCSI"   ,  "IS"}},
+                                                    {"IP", { "FCIP"    , "FI"}}
+                                                 }
+        }
     };
 
     inline const AllowedDataPortTypes_t c_ServerDataPortTypes
