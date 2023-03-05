@@ -36,6 +36,9 @@ DevicePortPtr DevicePortsFactory::createDevicePort(const Data::DeviceTypeID devi
     case Data::DeviceTypeID::LAN_SWITCH:
         pDevicePort = std::make_shared<LANSwitchPort>(deviceUPosition, fileRowNumber, fileColumnNumber, isSourceDevice);
         break;
+    case Data::DeviceTypeID::LAN_DIRECTOR:
+        pDevicePort = std::make_shared<LANDirectorPort>(deviceUPosition, fileRowNumber, fileColumnNumber, isSourceDevice);
+        break;
     case Data::DeviceTypeID::SAN_SWITCH:
         pDevicePort = std::make_shared<SANSwitchPort>(deviceUPosition, fileRowNumber, fileColumnNumber, isSourceDevice);
         break;

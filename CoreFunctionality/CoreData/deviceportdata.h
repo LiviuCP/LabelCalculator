@@ -33,6 +33,7 @@ namespace Data
         {   DeviceTypeID::SAN_SWITCH,              {"SAN switch"       , ""   }   },
         {   DeviceTypeID::SAN_DIRECTOR,            {"SAN director"     , ""   }   },
         {   DeviceTypeID::LAN_SWITCH,              {"LAN switch"       , ""   }   },
+        {   DeviceTypeID::LAN_DIRECTOR,            {"LAN director"     , ""   }   },
         {   DeviceTypeID::INFINIBAND_SWITCH,       {"Infiniband switch", ""   }   },
         {   DeviceTypeID::KVM_SWITCH,              {"KVM switch"       , ""   }   }
     };
@@ -51,6 +52,10 @@ namespace Data
                                                     {"IS", {"iSCSI"   ,  "IS"}},
                                                     {"IP", { "FCIP"    , "FI"}}
                                                  }
+        },
+        {
+            DeviceTypeID::LAN_DIRECTOR,         {   { "N", {"Ethernet",  "ETH"}}
+                                                }
         }
     };
 

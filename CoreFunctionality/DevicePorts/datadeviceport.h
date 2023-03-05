@@ -56,6 +56,18 @@ protected:
     virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
 };
 
+// Ethernet director ports
+class LANDirectorPort : public DirectorPort
+{
+public:
+    LANDirectorPort() = delete;
+    LANDirectorPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+
+protected:
+    virtual size_t _getInputParametersCount() const override;
+    virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
+};
+
 // SAN (FC) switch ports
 class SANSwitchPort : public SwitchPort
 {

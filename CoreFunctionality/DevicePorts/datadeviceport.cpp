@@ -150,6 +150,25 @@ std::pair<std::string, std::string> LANSwitchPort::_getDeviceTypeDescriptionAndL
     return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::LAN_SWITCH);
 }
 
+LANDirectorPort::LANDirectorPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+    : DirectorPort{deviceUPosition,
+                   Data::c_DirectorDataPortTypesInfoMap.at(Data::DeviceTypeID::LAN_DIRECTOR),
+                   fileRowNumber,
+                   fileColumnNumber,
+                   isSourceDevice}
+{
+}
+
+size_t LANDirectorPort::_getInputParametersCount() const
+{
+    return Data::c_RequiredInputParamsCount.at(Data::DeviceTypeID::LAN_DIRECTOR);
+}
+
+std::pair<std::string, std::string> LANDirectorPort::_getDeviceTypeDescriptionAndLabel() const
+{
+    return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::LAN_DIRECTOR);
+}
+
 SANSwitchPort::SANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : SwitchPort{deviceUPosition,
                  Data::c_SwitchPortTypesInfoMap.at(Data::DeviceTypeID::SAN_SWITCH),

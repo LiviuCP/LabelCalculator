@@ -22,6 +22,7 @@ namespace Data
         EXTENSION_BAR,
         UPS,
         LAN_SWITCH,
+        LAN_DIRECTOR,
         SAN_SWITCH,
         SAN_DIRECTOR,
         INFINIBAND_SWITCH,
@@ -38,6 +39,7 @@ namespace Data
         {    "ext",     DeviceTypeID::EXTENSION_BAR         },
         {    "ups",     DeviceTypeID::UPS                   },
         {    "lan",     DeviceTypeID::LAN_SWITCH            },
+        {    "lnd",     DeviceTypeID::LAN_DIRECTOR          },
         {    "san",     DeviceTypeID::SAN_SWITCH            },
         {    "snd",     DeviceTypeID::SAN_DIRECTOR          },
         {    "ib",      DeviceTypeID::INFINIBAND_SWITCH     },
@@ -54,6 +56,7 @@ namespace Data
         {    DeviceTypeID::EXTENSION_BAR,       2    },
         {    DeviceTypeID::UPS,                 2    },
         {    DeviceTypeID::LAN_SWITCH,          2    },
+        {    DeviceTypeID::LAN_DIRECTOR,        3    },
         {    DeviceTypeID::SAN_SWITCH,          2    },
         {    DeviceTypeID::SAN_DIRECTOR,        3    },
         {    DeviceTypeID::INFINIBAND_SWITCH,   2    },
@@ -77,6 +80,7 @@ namespace Data
         {   DeviceTypeID::SAN_SWITCH,              "PORT TYPE,PORT NUMBER,-"                       },
         {   DeviceTypeID::SAN_DIRECTOR,            "BLADE NUMBER,PORT TYPE,PORT NUMBER"            },
         {   DeviceTypeID::LAN_SWITCH,              "PORT TYPE,PORT NUMBER,-"                       },
+        {   DeviceTypeID::LAN_DIRECTOR,            "BLADE NUMBER,PORT TYPE,PORT NUMBER,-"          },
         {   DeviceTypeID::INFINIBAND_SWITCH,       "PORT TYPE,PORT NUMBER,-"                       },
         {   DeviceTypeID::KVM_SWITCH,              "PORT TYPE,PORT NUMBER,-"                       }
     };
