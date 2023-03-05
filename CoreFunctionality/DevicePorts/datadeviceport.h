@@ -44,8 +44,8 @@ protected:
     std::string mBladeNumber;
 };
 
-// Ethernet switch ports
-class LANSwitchPort : public SwitchPort
+// LAN (Ethernet) switch ports
+class LANSwitchPort final : public SwitchPort
 {
 public:
     LANSwitchPort() = delete;
@@ -56,8 +56,8 @@ protected:
     virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
 };
 
-// Ethernet director ports
-class LANDirectorPort : public DirectorPort
+// LAN (Ethernet) director ports
+class LANDirectorPort final : public DirectorPort
 {
 public:
     LANDirectorPort() = delete;
@@ -69,7 +69,7 @@ protected:
 };
 
 // SAN (FC) switch ports
-class SANSwitchPort : public SwitchPort
+class SANSwitchPort final : public SwitchPort
 {
 public:
     SANSwitchPort() = delete;
@@ -81,7 +81,7 @@ protected:
 };
 
 // SAN (FC, FCIP, iSCSI) director ports
-class SANDirectorPort : public DirectorPort
+class SANDirectorPort final : public DirectorPort
 {
 public:
     SANDirectorPort() = delete;
@@ -93,7 +93,7 @@ protected:
 };
 
 // Infiniband switch ports
-class InfinibandSwitchPort : public SwitchPort
+class InfinibandSwitchPort final : public SwitchPort
 {
 public:
     InfinibandSwitchPort() = delete;
@@ -105,7 +105,7 @@ protected:
 };
 
 // KVM switch ports
-class KVMSwitchPort : public SwitchPort
+class KVMSwitchPort final : public SwitchPort
 {
 public:
     KVMSwitchPort() = delete;
@@ -151,7 +151,7 @@ protected:
     std::string mSlotNumber;
 };
 
-// storage FC ports
+// storage ports (FC, SAS, etc)
 class StoragePort : public DevicePort
 {
 public:
