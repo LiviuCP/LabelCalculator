@@ -37,11 +37,21 @@ sto,storage device,controller number,positive integer,storage controller number,
 ,,,M,unified storage management port,,P,power supply,,M,management port,"When dedicated management ports are used (one per controller), please fill in a positive integer for controller number and ‘M’ for port number."
 ,,,,,,,,,,,In either of the management port scenarios it is mandatory to enter ‘-’ for port type.
 ,,,,,,,,,,,
-lan,networking switch,port type,N,networking port,port number,positive integer,networking or power port number,none,-,,
+lan,LAN switch,port type,N,networking port,port number,positive integer,networking or power port number,none,-,,
 ,,,P,power supply port,,,,,,,
+,,,,,,,,,,,
+lnd,LAN director,blade number,positive integer,A chassis contains several blades. Each blade has several networking ports.,port type,N,networking port,port number,positive integer,networking or power port number,All blades share the same pool of power supplies. Management port is also per chassis.
+,,,-,Fill this in when entering power supplies or management port.,,P,power supply port,,M,management port,
+,,,,,,-,Fill this in when entering management port.,,,,
 ,,,,,,,,,,,
 san,SAN switch,port type,F,FC port,port number,positive integer,FC or power port number,none,-,,When filling in management port it is mandatory to enter ‘-’ as input for port type.
 ,,,P,power supply port,,M,management port,,,,
+,,,,,,,,,,,
+snd,SAN director,blade number,positive integer,A chassis contains several blades. Each blade has several data ports of different types.,port type,F,FC port,port number,positive integer,data or power port number,All blades share the same pool of power supplies. Management port is also per chassis.
+,,,-,Fill this in when entering power supplies or management port.,,IS,iSCSI port,,M,management port,
+,,,,,,IP,FCIP port,,,,
+,,,,,,P,power supply port,,,,
+,,,,,,-,Fill this in when entering management port.,,,,
 ,,,,,,,,,,,
 ib,Infiniband switch,port type,I,infiniband port,port number,positive integer,Infiniband or power port number,none,-,,When filling in management port it is mandatory to enter ‘-’ as input for port type.
 ,,,P,power supply port,,M,management port,,,,
