@@ -17,14 +17,15 @@ protected:
     SwitchPort(const std::string& deviceUPosition, const DevicePortTypesInfo_t& switchPortTypesInfo, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
     virtual void _registerRequiredParameters() override;
-
-    std::string mPortType;
+    std::string _getPortType() const;
 
 private:
     void _handleNumberedPortType();
 
     const AllowedDataPortTypes_t mAllowedDataPortTypes;
-    const bool mHasManagementPort;
+    const bool mIsManagementPortAllowed;
+
+    std::string mPortType;
 };
 
 // Generic director (multiple blades switch) ports
@@ -41,6 +42,7 @@ protected:
 
     virtual void _registerRequiredParameters() override;
 
+private:
     std::string mBladeNumber;
 };
 
@@ -131,6 +133,7 @@ protected:
     virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
     void _handleNumberedPortType();
 
+private:
     std::string mPortType;
 };
 
@@ -168,6 +171,7 @@ protected:
     void _handleNumberedPortType();
     void _handleManagementPort();
 
+private:
     std::string mControllerNr; // can be the controller number (for FC storage) or IO module number (for JBODs)
     std::string mPortType;
 };
@@ -187,6 +191,7 @@ protected:
     virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const override;
     void _handleNumberedModuleType();
 
+private:
     std::string mModuleType; // blade system module type: interconnect, management module, power supply etc.
     std::string mModuleNumber; // data module number
 };

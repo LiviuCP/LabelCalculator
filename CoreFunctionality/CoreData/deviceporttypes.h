@@ -14,7 +14,7 @@ struct DevicePortTypesInfo_t
     // A std::map is required as there might be more data port types for a specific device (e.g. both FC and Ethernet)
     AllowedDataPortTypes_t mAllowedDataPortTypes;
 
-    bool mHasManagementPort;
+    bool mIsManagementPortAllowed;
 };
 
 #endif // DEVICEPORTTYPES_H
