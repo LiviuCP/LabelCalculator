@@ -73,16 +73,16 @@ namespace Data
         {   DeviceTypeID::PDU,                     "PLACEMENT,LOAD SEGMENT NUMBER,PORT NUMBER"     },
         {   DeviceTypeID::EXTENSION_BAR,           "PLACEMENT,PORT NUMBER,-"                       },
         {   DeviceTypeID::UPS,                     "LOAD SEGMENT NUMBER,PORT NUMBER,-"             },
-        {   DeviceTypeID::RACK_SERVER,             "PORT TYPE,PORT NUMBER,-"                       },
-        {   DeviceTypeID::SCALABLE_SERVER,         "SLOT NUMBER, PORT TYPE,PORT NUMBER"            },
-        {   DeviceTypeID::BLADE_SERVER,            "MODULE TYPE,MODULE NUMBER,PORT NUMBER"         },
-        {   DeviceTypeID::STORAGE,                 "CONTROLLER NUMBER,PORT TYPE,PORT NUMBER"       },
-        {   DeviceTypeID::SAN_SWITCH,              "PORT TYPE,PORT NUMBER,-"                       },
-        {   DeviceTypeID::SAN_DIRECTOR,            "BLADE NUMBER,PORT TYPE,PORT NUMBER"            },
         {   DeviceTypeID::LAN_SWITCH,              "PORT TYPE,PORT NUMBER,-"                       },
         {   DeviceTypeID::LAN_DIRECTOR,            "BLADE NUMBER,PORT TYPE,PORT NUMBER,-"          },
+        {   DeviceTypeID::SAN_SWITCH,              "PORT TYPE,PORT NUMBER,-"                       },
+        {   DeviceTypeID::SAN_DIRECTOR,            "BLADE NUMBER,PORT TYPE,PORT NUMBER"            },
         {   DeviceTypeID::INFINIBAND_SWITCH,       "PORT TYPE,PORT NUMBER,-"                       },
-        {   DeviceTypeID::KVM_SWITCH,              "PORT TYPE,PORT NUMBER,-"                       }
+        {   DeviceTypeID::KVM_SWITCH,              "PORT TYPE,PORT NUMBER,-"                       },
+        {   DeviceTypeID::RACK_SERVER,             "PORT TYPE,PORT NUMBER,-"                       },
+        {   DeviceTypeID::SCALABLE_SERVER,         "SLOT NUMBER, PORT TYPE,PORT NUMBER"            },
+        {   DeviceTypeID::STORAGE,                 "CONTROLLER NUMBER,PORT TYPE,PORT NUMBER"       },
+        {   DeviceTypeID::BLADE_SERVER,            "MODULE TYPE,MODULE NUMBER,PORT NUMBER"         }
     };
 
     inline constexpr std::string_view c_CablePartNumberPlaceholder{"CBL_PART_NR"};

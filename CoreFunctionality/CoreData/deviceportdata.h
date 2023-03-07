@@ -26,16 +26,16 @@ namespace Data
         {   DeviceTypeID::PDU,                     {"PDU"              , "PDU"}   },
         {   DeviceTypeID::EXTENSION_BAR,           {"Extension bar"    , "EXT"}   },
         {   DeviceTypeID::UPS,                     {"UPS"              , ""   }   },
-        {   DeviceTypeID::RACK_SERVER,             {"Server"           , ""   }   },
-        {   DeviceTypeID::SCALABLE_SERVER,         {"Scalable server"  , ""   }   },
-        {   DeviceTypeID::BLADE_SERVER,            {"Blade system"     , ""   }   },
-        {   DeviceTypeID::STORAGE,                 {"Storage device"   , ""   }   },
         {   DeviceTypeID::SAN_SWITCH,              {"SAN switch"       , ""   }   },
         {   DeviceTypeID::SAN_DIRECTOR,            {"SAN director"     , ""   }   },
         {   DeviceTypeID::LAN_SWITCH,              {"LAN switch"       , ""   }   },
         {   DeviceTypeID::LAN_DIRECTOR,            {"LAN director"     , ""   }   },
         {   DeviceTypeID::INFINIBAND_SWITCH,       {"Infiniband switch", ""   }   },
-        {   DeviceTypeID::KVM_SWITCH,              {"KVM switch"       , ""   }   }
+        {   DeviceTypeID::KVM_SWITCH,              {"KVM switch"       , ""   }   },
+        {   DeviceTypeID::RACK_SERVER,             {"Server"           , ""   }   },
+        {   DeviceTypeID::SCALABLE_SERVER,         {"Scalable server"  , ""   }   },
+        {   DeviceTypeID::STORAGE,                 {"Storage device"   , ""   }   },
+        {   DeviceTypeID::BLADE_SERVER,            {"Blade system"     , ""   }   }
     };
 
     inline const std::map<DeviceTypeID, DevicePortTypesInfo_t> c_SwitchPortTypesInfoMap
