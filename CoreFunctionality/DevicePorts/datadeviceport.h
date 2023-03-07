@@ -14,7 +14,7 @@ public:
 
 protected:
     // constructor needs to be protected as this class is a switch abstraction (derived classes are the concrete switches for which labels are being created)
-    SwitchPort(const std::string& deviceUPosition, const DevicePortTypesInfo_t& switchPortTypesInfo, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+    SwitchPort(const std::string_view deviceUPosition, const DevicePortTypesInfo_t& switchPortTypesInfo, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
     virtual void _registerRequiredParameters() override;
     std::string _getPortType() const;
@@ -38,7 +38,7 @@ public:
 
 protected:
     // constructor needs to be protected as this class is a director abstraction (derived classes are the concrete directors for which labels are being created)
-    DirectorPort(const std::string& deviceUPosition, const AllowedDataPortTypes_t& directorDataPortTypesInfo, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+    DirectorPort(const std::string_view deviceUPosition, const AllowedDataPortTypes_t& directorDataPortTypesInfo, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
     virtual void _registerRequiredParameters() override;
 
@@ -51,7 +51,7 @@ class LANSwitchPort final : public SwitchPort
 {
 public:
     LANSwitchPort() = delete;
-    LANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+    LANSwitchPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
 protected:
     virtual size_t _getInputParametersCount() const override;
@@ -63,7 +63,7 @@ class LANDirectorPort final : public DirectorPort
 {
 public:
     LANDirectorPort() = delete;
-    LANDirectorPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+    LANDirectorPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
 protected:
     virtual size_t _getInputParametersCount() const override;
@@ -75,7 +75,7 @@ class SANSwitchPort final : public SwitchPort
 {
 public:
     SANSwitchPort() = delete;
-    SANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+    SANSwitchPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
 protected:
     virtual size_t _getInputParametersCount() const override;
@@ -87,7 +87,7 @@ class SANDirectorPort final : public DirectorPort
 {
 public:
     SANDirectorPort() = delete;
-    SANDirectorPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+    SANDirectorPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
 protected:
     virtual size_t _getInputParametersCount() const override;
@@ -99,7 +99,7 @@ class InfinibandSwitchPort final : public SwitchPort
 {
 public:
     InfinibandSwitchPort() = delete;
-    InfinibandSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+    InfinibandSwitchPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
 protected:
     virtual size_t _getInputParametersCount() const override;
@@ -111,7 +111,7 @@ class KVMSwitchPort final : public SwitchPort
 {
 public:
     KVMSwitchPort() = delete;
-    KVMSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+    KVMSwitchPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
 protected:
     virtual size_t _getInputParametersCount() const override;
@@ -123,7 +123,7 @@ class ServerPort : public DevicePort
 {
 public:
     ServerPort() = delete;
-    ServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+    ServerPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
     virtual void updateDescriptionAndLabel() override;
 
@@ -142,7 +142,7 @@ class ScalableServerPort : public ServerPort
 {
 public:
     ScalableServerPort() = delete;
-    ScalableServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+    ScalableServerPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
     virtual void updateDescriptionAndLabel() override;
 
@@ -159,7 +159,7 @@ class StoragePort : public DevicePort
 {
 public:
     StoragePort() = delete;
-    StoragePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+    StoragePort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
     virtual void updateDescriptionAndLabel() override;
 
@@ -181,7 +181,7 @@ class BladeServerPort : public DevicePort
 {
 public:
     BladeServerPort() = delete;
-    BladeServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+    BladeServerPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
     virtual void updateDescriptionAndLabel() override;
 

@@ -14,7 +14,7 @@
 class DevicePort
 {
 public:
-    DevicePort(const std::string& deviceUPosition,
+    DevicePort(const std::string_view deviceUPosition,
                const size_t fileRowNumber,
                const size_t fileColumnNumber,
                const bool isSourceDevice);

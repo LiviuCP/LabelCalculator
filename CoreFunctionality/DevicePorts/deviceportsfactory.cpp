@@ -15,7 +15,7 @@ void DevicePortsFactory::reset()
 }
 
 DevicePortPtr DevicePortsFactory::createDevicePort(const Data::DeviceTypeID deviceTypeID,
-                                                   const std::string& deviceUPosition,
+                                                   const std::string_view deviceUPosition,
                                                    const size_t fileRowNumber,
                                                    const size_t fileColumnNumber,
                                                    const bool isSourceDevice)

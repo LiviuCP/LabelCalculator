@@ -1,8 +1,6 @@
 #ifndef DEVICEPORTSFACTORY_H
 #define DEVICEPORTSFACTORY_H
 
-#include <string>
-
 #include "applicationdata.h"
 #include "deviceport.h"
 
@@ -19,7 +17,7 @@ public:
        It implements the factory design pattern and returns a null pointer if the device cannot be created (unknown device)
     */
     DevicePortPtr createDevicePort(const Data::DeviceTypeID deviceTypeID,
-                                   const std::string& deviceUPosition,
+                                   const std::string_view deviceUPosition,
                                    const size_t fileRowNumber,
                                    const size_t fileColumnNumber,
                                    const bool isSourceDevice);

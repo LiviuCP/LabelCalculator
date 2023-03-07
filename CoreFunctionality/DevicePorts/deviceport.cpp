@@ -8,7 +8,7 @@
 namespace Core = Utilities::Core;
 namespace Ports = Utilities::DevicePorts;
 
-DevicePort::DevicePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+DevicePort::DevicePort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : mDeviceUPosition{deviceUPosition}
     , mFileRowNumber{fileRowNumber}
     , mFileColumnNumber{fileColumnNumber}

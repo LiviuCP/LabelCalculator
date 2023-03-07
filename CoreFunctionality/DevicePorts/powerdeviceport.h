@@ -8,7 +8,7 @@ class PDUPort : public DevicePort
 {
 public:
     PDUPort() = delete;
-    PDUPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+    PDUPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
     virtual void updateDescriptionAndLabel() override;
 
@@ -27,7 +27,7 @@ class ExtensionBarPort : public DevicePort
 {
 public:
     ExtensionBarPort() = delete;
-    ExtensionBarPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+    ExtensionBarPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
     virtual void updateDescriptionAndLabel() override;
 
@@ -45,7 +45,7 @@ class UPSPort : public DevicePort
 {
 public:
     UPSPort() = delete;
-    UPSPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
+    UPSPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice);
 
     virtual void updateDescriptionAndLabel() override;
 

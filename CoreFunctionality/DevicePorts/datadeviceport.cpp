@@ -7,7 +7,7 @@
 namespace Core = Utilities::Core;
 namespace Ports = Utilities::DevicePorts;
 
-SwitchPort::SwitchPort(const std::string& deviceUPosition, const DevicePortTypesInfo_t& switchPortTypesInfo, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+SwitchPort::SwitchPort(const std::string_view deviceUPosition, const DevicePortTypesInfo_t& switchPortTypesInfo, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
@@ -88,7 +88,7 @@ void SwitchPort::_handleNumberedPortType()
     }
 }
 
-DirectorPort::DirectorPort(const std::string& deviceUPosition, const AllowedDataPortTypes_t& directorDataPortTypesInfo, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+DirectorPort::DirectorPort(const std::string_view deviceUPosition, const AllowedDataPortTypes_t& directorDataPortTypesInfo, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : SwitchPort{deviceUPosition,
                  {directorDataPortTypesInfo, true},
                  fileRowNumber,
@@ -138,7 +138,7 @@ void DirectorPort::_registerRequiredParameters()
     SwitchPort::_registerRequiredParameters();
 }
 
-LANSwitchPort::LANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+LANSwitchPort::LANSwitchPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : SwitchPort{deviceUPosition,
                  Data::c_SwitchPortTypesInfoMap.at(Data::DeviceTypeID::LAN_SWITCH),
                  fileRowNumber,
@@ -157,7 +157,7 @@ std::pair<std::string, std::string> LANSwitchPort::_getDeviceTypeDescriptionAndL
     return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::LAN_SWITCH);
 }
 
-LANDirectorPort::LANDirectorPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+LANDirectorPort::LANDirectorPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : DirectorPort{deviceUPosition,
                    Data::c_DirectorDataPortTypesInfoMap.at(Data::DeviceTypeID::LAN_DIRECTOR),
                    fileRowNumber,
@@ -176,7 +176,7 @@ std::pair<std::string, std::string> LANDirectorPort::_getDeviceTypeDescriptionAn
     return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::LAN_DIRECTOR);
 }
 
-SANSwitchPort::SANSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+SANSwitchPort::SANSwitchPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : SwitchPort{deviceUPosition,
                  Data::c_SwitchPortTypesInfoMap.at(Data::DeviceTypeID::SAN_SWITCH),
                  fileRowNumber,
@@ -195,7 +195,7 @@ std::pair<std::string, std::string> SANSwitchPort::_getDeviceTypeDescriptionAndL
     return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::SAN_SWITCH);
 }
 
-SANDirectorPort::SANDirectorPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+SANDirectorPort::SANDirectorPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : DirectorPort{deviceUPosition,
                  Data::c_DirectorDataPortTypesInfoMap.at(Data::DeviceTypeID::SAN_DIRECTOR),
                  fileRowNumber,
@@ -214,7 +214,7 @@ std::pair<std::string, std::string> SANDirectorPort::_getDeviceTypeDescriptionAn
     return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::SAN_DIRECTOR);
 }
 
-InfinibandSwitchPort::InfinibandSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+InfinibandSwitchPort::InfinibandSwitchPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : SwitchPort{deviceUPosition,
                  Data::c_SwitchPortTypesInfoMap.at(Data::DeviceTypeID::INFINIBAND_SWITCH),
                  fileRowNumber,
@@ -233,7 +233,7 @@ std::pair<std::string, std::string> InfinibandSwitchPort::_getDeviceTypeDescript
     return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::INFINIBAND_SWITCH);
 }
 
-KVMSwitchPort::KVMSwitchPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+KVMSwitchPort::KVMSwitchPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : SwitchPort{deviceUPosition,
                  Data::c_SwitchPortTypesInfoMap.at(Data::DeviceTypeID::KVM_SWITCH),
                  fileRowNumber,
@@ -252,7 +252,7 @@ std::pair<std::string, std::string> KVMSwitchPort::_getDeviceTypeDescriptionAndL
     return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::KVM_SWITCH);
 }
 
-ServerPort::ServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+ServerPort::ServerPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
@@ -346,7 +346,7 @@ void ServerPort::_handleNumberedPortType()
     }
 }
 
-ScalableServerPort::ScalableServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+ScalableServerPort::ScalableServerPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : ServerPort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
@@ -387,7 +387,7 @@ std::pair<std::string, std::string> ScalableServerPort::_getDeviceTypeDescriptio
     return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::SCALABLE_SERVER);
 }
 
-StoragePort::StoragePort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+StoragePort::StoragePort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
@@ -498,7 +498,7 @@ void StoragePort::_handleManagementPort()
     - instead of mPortType: mModuleType is used for power supply
     - instead of port number: mModuleNumber is used for power supply number
 */
-BladeServerPort::BladeServerPort(const std::string& deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+BladeServerPort::BladeServerPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  fileColumnNumber,
