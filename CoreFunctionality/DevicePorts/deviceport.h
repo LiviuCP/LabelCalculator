@@ -84,11 +84,6 @@ protected:
     */
     virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const;
 
-    /* Port number related methods
-    */
-    void _registerPortNumber();
-    std::string _getPortNumber() const;
-
 private:
     /*This function is used for initializing the input parameters for each device: determine their count, initiate registration process
     */
@@ -124,9 +119,6 @@ private:
 
     // initialization flag, ensures label/description are initialized and required input parameters are registered
     bool mIsInitialized;
-
-    // power or data port number that should be mentioned on the cable label
-    std::string mPortNumber;
 };
 
 using DevicePortPtr = std::shared_ptr<DevicePort>;

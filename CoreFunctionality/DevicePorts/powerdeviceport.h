@@ -20,6 +20,7 @@ protected:
 private:
     std::string mDevicePlacementType; // rack placement (vertical left/right, horizontal)
     std::string mLoadSegmentNumber;
+    std::string mPortNumber;
 };
 
 // PDU extension bar ports
@@ -38,6 +39,7 @@ protected:
 
 private:
     std::string mDevicePlacementType; // rack placement (left/right)
+    std::string mPortNumber;
 };
 
 // UPS ports
@@ -56,6 +58,7 @@ protected:
 
 private:
     std::string mLoadSegmentNumber;
+    std::string mPortNumber;
 };
 
 #endif // POWERDEVICEPORT_H

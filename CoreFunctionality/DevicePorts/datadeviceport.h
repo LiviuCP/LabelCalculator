@@ -26,6 +26,7 @@ private:
     const bool mIsManagementPortAllowed;
 
     std::string mPortType;
+    std::string mPortNumber;
 };
 
 // Generic director (multiple blades switch) ports
@@ -135,6 +136,7 @@ protected:
 
 private:
     std::string mPortType;
+    std::string mPortNumber;
 };
 
 // scalable server ports; a scalable server contains several slots within chassis, each slot being an independent server; one server might also occupy more slots
@@ -174,6 +176,7 @@ protected:
 private:
     std::string mControllerNr; // can be the controller number (for FC storage) or IO module number (for JBODs)
     std::string mPortType;
+    std::string mPortNumber;
 };
 
 // blade system interconnect/management/uplink/downlink ports
@@ -194,6 +197,7 @@ protected:
 private:
     std::string mModuleType; // blade system module type: interconnect, management module, power supply etc.
     std::string mModuleNumber; // data module number
+    std::string mPortNumber;
 };
 
 #endif // DATADEVICEPORT_H

@@ -21,7 +21,7 @@ SwitchPort::SwitchPort(const std::string_view deviceUPosition, const DevicePortT
 void SwitchPort::_registerRequiredParameters()
 {
     _registerRequiredParameter(&mPortType);
-    _registerPortNumber();
+    _registerRequiredParameter(&mPortNumber);
 }
 
 std::string SwitchPort::_getPortType() const
@@ -39,7 +39,7 @@ void SwitchPort::updateDescriptionAndLabel()
     }
     else if ("-" == mPortType)
     {
-        if (Ports::isManagementPortNumber(_getPortNumber()) && mIsManagementPortAllowed) // management port
+        if (Ports::isManagementPortNumber(mPortNumber) && mIsManagementPortAllowed) // management port
         {
             _appendDataToDescription(" - management port");
             _appendDataToLabel("_MGMT");
@@ -59,7 +59,7 @@ void SwitchPort::updateDescriptionAndLabel()
 
 void SwitchPort::_handleNumberedPortType()
 {
-    if (const std::string c_PortNumber{_getPortNumber()}; Core::isDigitString(c_PortNumber)) // power or data port
+    if (Core::isDigitString(mPortNumber)) // power or data port
     {
         if (auto dataPortTypeIt{mAllowedDataPortTypes.find(mPortType)}; mAllowedDataPortTypes.cend() != dataPortTypeIt)
         {
@@ -68,13 +68,13 @@ void SwitchPort::_handleNumberedPortType()
             const std::string c_TrailingSpace{c_DataPortTypeDescription.size() > 0 ? " " : ""};
             const std::string c_PrecedingUnderscore{c_DataPortTypeLabel.size() > 0 ? "_" : ""};
 
-            _appendDataToDescription(" - " + c_DataPortTypeDescription + c_TrailingSpace + "port " + c_PortNumber);
-            _appendDataToLabel(c_PrecedingUnderscore + c_DataPortTypeLabel + "_P" + c_PortNumber);
+            _appendDataToDescription(" - " + c_DataPortTypeDescription + c_TrailingSpace + "port " + mPortNumber);
+            _appendDataToLabel(c_PrecedingUnderscore + c_DataPortTypeLabel + "_P" + mPortNumber);
         }
         else if (Ports::isPowerPortType(mPortType))
         {
-            _appendDataToDescription(" - power supply " + c_PortNumber);
-            _appendDataToLabel("_PS" + c_PortNumber);
+            _appendDataToDescription(" - power supply " + mPortNumber);
+            _appendDataToLabel("_PS" + mPortNumber);
         }
         else
         {
@@ -275,7 +275,7 @@ void ServerPort::updateDescriptionAndLabel()
     }
     else if ("-" == mPortType)
     {
-        if(Ports::isManagementPortNumber(_getPortNumber())) // management port
+        if(Ports::isManagementPortNumber(mPortNumber)) // management port
         {
             _appendDataToDescription(" - management port");
             _appendDataToLabel("_MGMT");
@@ -296,7 +296,7 @@ void ServerPort::updateDescriptionAndLabel()
 void ServerPort::_registerRequiredParameters()
 {
     _registerRequiredParameter(&mPortType);
-    _registerPortNumber();
+    _registerRequiredParameter(&mPortNumber);
 }
 
 size_t ServerPort::_getInputParametersCount() const
@@ -311,7 +311,7 @@ std::pair<std::string, std::string> ServerPort::_getDeviceTypeDescriptionAndLabe
 
 void ServerPort::_handleNumberedPortType()
 {
-    if (const std::string c_PortNumber{_getPortNumber()}; Core::isDigitString(c_PortNumber))
+    if (Core::isDigitString(mPortNumber))
     {
         if (auto dataPortTypeIt{Data::c_ServerDataPortTypes.find(mPortType)}; Data::c_ServerDataPortTypes.cend() != dataPortTypeIt)
         {
@@ -320,8 +320,8 @@ void ServerPort::_handleNumberedPortType()
 
             if (c_DataPortTypeDescription.size() > 0 && c_DataPortTypeLabel.size() > 0)
             {
-                _appendDataToDescription(" - " + c_DataPortTypeDescription + " port " + c_PortNumber);
-                _appendDataToLabel("_" + c_DataPortTypeLabel + "_P" + c_PortNumber);
+                _appendDataToDescription(" - " + c_DataPortTypeDescription + " port " + mPortNumber);
+                _appendDataToLabel("_" + c_DataPortTypeLabel + "_P" + mPortNumber);
             }
             else
             {
@@ -331,8 +331,8 @@ void ServerPort::_handleNumberedPortType()
         }
         else if (Ports::isPowerPortType(mPortType))
         {
-            _appendDataToDescription(" - power supply " + c_PortNumber);
-            _appendDataToLabel("_PS" + c_PortNumber);
+            _appendDataToDescription(" - power supply " + mPortNumber);
+            _appendDataToLabel("_PS" + mPortNumber);
         }
         else
         {
@@ -454,7 +454,7 @@ void StoragePort::_registerRequiredParameters()
 {
     _registerRequiredParameter(&mControllerNr);
     _registerRequiredParameter(&mPortType);
-    _registerPortNumber();
+    _registerRequiredParameter(&mPortNumber);
 }
 
 size_t StoragePort::_getInputParametersCount() const
@@ -469,10 +469,10 @@ std::pair<std::string, std::string> StoragePort::_getDeviceTypeDescriptionAndLab
 
 void StoragePort::_handleNumberedPortType()
 {
-    if (const std::string c_PortNumber{_getPortNumber()}; Core::isDigitString(c_PortNumber))
+    if (Core::isDigitString(mPortNumber))
     {
-        _appendDataToDescription(c_PortNumber);
-        _appendDataToLabel(c_PortNumber);
+        _appendDataToDescription(mPortNumber);
+        _appendDataToLabel(mPortNumber);
     }
     else
     {
@@ -482,7 +482,7 @@ void StoragePort::_handleNumberedPortType()
 
 void StoragePort::_handleManagementPort()
 {
-    if (Ports::isManagementPortNumber(_getPortNumber()))
+    if (Ports::isManagementPortNumber(mPortNumber))
     {
         _appendDataToDescription(" - management port");
         _appendDataToLabel("_MGMT");
@@ -536,7 +536,7 @@ void BladeServerPort::_registerRequiredParameters()
 {
     _registerRequiredParameter(&mModuleType);
     _registerRequiredParameter(&mModuleNumber);
-    _registerPortNumber();
+    _registerRequiredParameter(&mPortNumber);
 }
 
 size_t BladeServerPort::_getInputParametersCount() const
@@ -555,10 +555,10 @@ void BladeServerPort::_handleNumberedModuleType()
     {
         if ("DM" == mModuleType) // data module
         {
-            if (const std::string c_PortNumber{_getPortNumber()}; Core::isDigitString(c_PortNumber))
+            if (Core::isDigitString(mPortNumber))
             {
-                _appendDataToDescription(" - data module " + mModuleNumber + " - port " + c_PortNumber);
-                _appendDataToLabel("_DMO" + mModuleNumber + "_P" + c_PortNumber);
+                _appendDataToDescription(" - data module " + mModuleNumber + " - port " + mPortNumber);
+                _appendDataToLabel("_DMO" + mModuleNumber + "_P" + mPortNumber);
             }
             else
             {

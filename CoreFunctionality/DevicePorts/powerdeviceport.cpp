@@ -23,15 +23,14 @@ void PDUPort::updateDescriptionAndLabel()
     {
         const std::string c_DevicePlacementTypeDescription{"H" == devicePlacementTypeIt->first ? " in horizontal position" : " on the " + devicePlacementTypeIt->second + " side"};
 
-        std::string portNumber{_getPortNumber()};
-        Core::convertStringCase(portNumber, true);
+        Core::convertStringCase(mPortNumber, true);
 
         if (Core::isDigitString(mLoadSegmentNumber))
         {
-            if (Core::isDigitString(portNumber))
+            if (Core::isDigitString(mPortNumber))
             {
-                _appendDataToDescription(c_DevicePlacementTypeDescription + " - load segment number " + mLoadSegmentNumber + " - port number " + portNumber);
-                _appendDataToLabel("_" + mDevicePlacementType + "_P" + mLoadSegmentNumber + "." + portNumber);
+                _appendDataToDescription(c_DevicePlacementTypeDescription + " - load segment number " + mLoadSegmentNumber + " - port number " + mPortNumber);
+                _appendDataToLabel("_" + mDevicePlacementType + "_P" + mLoadSegmentNumber + "." + mPortNumber);
             }
             else
             {
@@ -40,17 +39,17 @@ void PDUPort::updateDescriptionAndLabel()
         }
         else if ("-" == mLoadSegmentNumber)
         {
-            if (Core::isDigitString(portNumber))
+            if (Core::isDigitString(mPortNumber))
             {
-                _appendDataToDescription(c_DevicePlacementTypeDescription + " - port number " + portNumber);
-                _appendDataToLabel("_" + mDevicePlacementType + "_P" + portNumber);
+                _appendDataToDescription(c_DevicePlacementTypeDescription + " - port number " + mPortNumber);
+                _appendDataToLabel("_" + mDevicePlacementType + "_P" + mPortNumber);
             }
-            else if (Ports::isManagementPortNumber(_getPortNumber())) // management port
+            else if (Ports::isManagementPortNumber(mPortNumber)) // management port
             {
                 _appendDataToDescription(c_DevicePlacementTypeDescription + " - management port");
                 _appendDataToLabel("_" + mDevicePlacementType + "_MGMT");
             }
-            else if ("IN" == portNumber)
+            else if ("IN" == mPortNumber)
             {
                 _appendDataToDescription(c_DevicePlacementTypeDescription + " - port number IN");
                 _appendDataToLabel("_" + mDevicePlacementType + "_IN");
@@ -77,7 +76,7 @@ void PDUPort::_registerRequiredParameters()
 {
     _registerRequiredParameter(&mDevicePlacementType);
     _registerRequiredParameter(&mLoadSegmentNumber);
-    _registerPortNumber();
+    _registerRequiredParameter(&mPortNumber);
 }
 
 size_t PDUPort::_getInputParametersCount() const
@@ -108,15 +107,14 @@ void ExtensionBarPort::updateDescriptionAndLabel()
         {
             const std::string c_DevicePlacementTypeDescription{" on the " + devicePlacementTypeIt->second + " side"};
 
-            std::string portNumber{_getPortNumber()};
-            Core::convertStringCase(portNumber, true);
+            Core::convertStringCase(mPortNumber, true);
 
-            if (Core::isDigitString(portNumber))
+            if (Core::isDigitString(mPortNumber))
             {
-                _appendDataToDescription(c_DevicePlacementTypeDescription + " - port number " + portNumber);
-                _appendDataToLabel("_" + mDevicePlacementType + "_P" + portNumber);
+                _appendDataToDescription(c_DevicePlacementTypeDescription + " - port number " + mPortNumber);
+                _appendDataToLabel("_" + mDevicePlacementType + "_P" + mPortNumber);
             }
-            else if ("IN" == portNumber)
+            else if ("IN" == mPortNumber)
             {
                 _appendDataToDescription(c_DevicePlacementTypeDescription + " - port number IN");
                 _appendDataToLabel("_" + mDevicePlacementType + "_IN");
@@ -142,7 +140,7 @@ void ExtensionBarPort::updateDescriptionAndLabel()
 void ExtensionBarPort::_registerRequiredParameters()
 {
     _registerRequiredParameter(&mDevicePlacementType);
-    _registerPortNumber();
+    _registerRequiredParameter(&mPortNumber);
 }
 
 size_t ExtensionBarPort::_getInputParametersCount() const
@@ -167,10 +165,10 @@ void UPSPort::updateDescriptionAndLabel()
 {
     if (Core::isDigitString(mLoadSegmentNumber))
     {
-        if (const std::string c_PortNumber{_getPortNumber()}; Core::isDigitString(c_PortNumber)) // power port
+        if (Core::isDigitString(mPortNumber)) // power port
         {
-            _appendDataToDescription(" - load segment " + mLoadSegmentNumber + " - port " + c_PortNumber);
-            _appendDataToLabel("_P" + mLoadSegmentNumber + "." + c_PortNumber);
+            _appendDataToDescription(" - load segment " + mLoadSegmentNumber + " - port " + mPortNumber);
+            _appendDataToLabel("_P" + mLoadSegmentNumber + "." + mPortNumber);
         }
         else
         {
@@ -179,7 +177,7 @@ void UPSPort::updateDescriptionAndLabel()
     }
     else if ("-" == mLoadSegmentNumber)
     {
-        if (Ports::isManagementPortNumber(_getPortNumber())) // management port
+        if (Ports::isManagementPortNumber(mPortNumber)) // management port
         {
             _appendDataToDescription(" - management port");
             _appendDataToLabel("_MGMT");
@@ -200,7 +198,7 @@ void UPSPort::updateDescriptionAndLabel()
 void UPSPort::_registerRequiredParameters()
 {
     _registerRequiredParameter(&mLoadSegmentNumber);
-    _registerPortNumber();
+    _registerRequiredParameter(&mPortNumber);
 }
 
 size_t UPSPort::_getInputParametersCount() const

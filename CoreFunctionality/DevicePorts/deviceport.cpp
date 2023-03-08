@@ -223,16 +223,6 @@ std::pair<std::string, std::string> DevicePort::_getDeviceTypeDescriptionAndLabe
     return {"Device", ""};
 }
 
-void DevicePort::_registerPortNumber()
-{
-    _registerRequiredParameter(&mPortNumber);
-}
-
-std::string DevicePort::_getPortNumber() const
-{
-    return mPortNumber;
-}
-
 void DevicePort::_initializeRequiredParameters()
 {
     if (mFileRowNumber > 0u &&
