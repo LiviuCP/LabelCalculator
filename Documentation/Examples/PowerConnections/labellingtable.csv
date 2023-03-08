@@ -4,7 +4,7 @@ __Item number__,__Cable part number__,__Source device description__,__Source lab
 3,C19-C20,Blade system placed at U1 - power supply 3,U1_PS3,PDU placed at U15 in horizontal position - load segment number 4 - port number 1,U15_PDU_H_P4.1
 4,C19-C20,Blade system placed at U1 - power supply 4,U1_PS4,PDU placed at U16 in horizontal position - load segment number 3 - port number 1,U16_PDU_H_P3.1
 5,C19-C20,Blade system placed at U1 - power supply 5,U1_PS5,PDU placed at U16 in horizontal position - load segment number 3 - port number 2,U16_PDU_H_P3.2
-6,C19-C20,Blade system placed at U1 - power supply 6,U1_PS6,PDU placed at U16 in horizontal position - load segment number 4 - port number 2,U16_PDU_H_P4.2
+6,C19-C20,Blade system placed at U1 - power supply 6,U1_PS6,PDU placed at U16 in horizontal position - load segment number 4 - port number 1,U16_PDU_H_P4.1
 7,UPS-PDU,UPS placed at U11 - load segment 1 - port 1,U11_P1.1,PDU placed at U15 in horizontal position - port number IN,U15_PDU_H_IN
 8,UPS-PDU,UPS placed at U11 - load segment 2 - port 1,U11_P2.1,PDU placed at U32 on the left side - port number IN,U32_PDU_L_IN
 9,C19-C20,PDU placed at U15 in horizontal position - load segment number 1 - port number 1,U15_PDU_H_P1.1,Extension bar placed at U39 on the left side - port number IN,U39_EXT_L_IN
