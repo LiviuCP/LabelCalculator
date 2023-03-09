@@ -6,7 +6,6 @@
 #include "deviceportsfactory.h"
 #include "deviceport.h"
 #include "parser.h"
-#include "coreutils.h"
 
 class ConnectionInputParser final : public Parser
 {
@@ -42,7 +41,7 @@ private:
        String is written to the labelling table in a subsequent operation.
     */
     static size_t _buildConnectionEntry(const size_t currentEntryNumber,
-                                        const std::string& cablePartNumber,
+                                        const std::string_view cablePartNumber,
                                         const DevicePortPtr pFirstDevicePort,
                                         const DevicePortPtr pSecondDevicePort,
                                         std::string& currentEntry);

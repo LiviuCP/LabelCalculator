@@ -2,6 +2,7 @@
 #define COREUTILS_H
 
 #include <string>
+#include <string_view>
 #include <optional>
 #include <filesystem>
 #include <chrono>
@@ -19,7 +20,7 @@ namespace Utilities::Core
     /* This function reads a substring starting with index until reaching a comma character (end of .csv cell) or the string has no more characters
        If the index points to CSV separator (',') then reading starts with next character
     */
-    Index_t readDataField(const std::string& src, std::string& dest, const Index_t index);
+    Index_t readDataField(const std::string_view src, std::string& dest, const Index_t index);
 
     /* This function converts the string case to upper or lower
     */
@@ -27,18 +28,18 @@ namespace Utilities::Core
 
     /* This function checks if the string contains only digits
     */
-    bool isDigitString(const std::string& str);
+    bool isDigitString(const std::string_view str);
 
     /* This function checks if the string contains invalid characters
        Only alphabet, numeric characters and '-' are considered valid.
     */
-    bool areInvalidCharactersContained(const std::string& str);
+    bool areInvalidCharactersContained(const std::string_view str);
 
     /* This function checks if a string contains parseable characters
        Any character that is not whitespace or comma is considered parseable
        Parseable chars are not necessarily valid ones
     */
-    bool areParseableCharactersContained(const std::string& str);
+    bool areParseableCharactersContained(const std::string_view str);
 
     /* This function returns a string that represents a customized date/time value (e.g. current date and time)
     */

@@ -2,7 +2,6 @@
 #define DEVICEPORT_H
 
 #include <vector>
-#include <string_view>
 
 #include "errorhandler.h"
 #include "coreutils.h"

@@ -5,7 +5,7 @@
 
 namespace Core = Utilities::Core;
 
-Data::DeviceTypeID Utilities::Parsers::getDeviceTypeID(const std::string& deviceType)
+Data::DeviceTypeID Utilities::Parsers::getDeviceTypeID(const std::string_view deviceType)
 {
     Data::DeviceTypeID deviceTypeID{Data::DeviceTypeID::UNKNOWN_DEVICE};
 

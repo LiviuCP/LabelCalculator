@@ -33,7 +33,7 @@ void DevicePort::init()
     }
 }
 
-Index_t DevicePort::parseInputData(const std::string& input, const Index_t initialPosition, ErrorHandler& errorHandler, std::ofstream& errorStream, std::vector<ErrorPtr>& parsingErrors)
+Index_t DevicePort::parseInputData(const std::string_view input, const Index_t initialPosition, ErrorHandler& errorHandler, std::ofstream& errorStream, std::vector<ErrorPtr>& parsingErrors)
 {
     assert(mInputData.size() == mInputParametersCount); // check if all required parameters have been registered by derived class
 

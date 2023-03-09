@@ -7,7 +7,7 @@
 #include "coreutils.h"
 
 /* An empty optional is returned if the CSV row string has been consumed */
-Index_t Utilities::Core::readDataField(const std::string& src, std::string& dest, const Index_t index)
+Index_t Utilities::Core::readDataField(const std::string_view src, std::string& dest, const Index_t index)
 {
     const size_t c_Length{src.size()};
     Index_t nextIndex;
@@ -72,7 +72,7 @@ void Utilities::Core::convertStringCase(std::string& str, bool upperCase)
     }
 }
 
-bool Utilities::Core::isDigitString(const std::string& str)
+bool Utilities::Core::isDigitString(const std::string_view str)
 {
     bool hasOnlyDigits{true};
 
@@ -88,7 +88,7 @@ bool Utilities::Core::isDigitString(const std::string& str)
     return hasOnlyDigits;
 }
 
-bool Utilities::Core::areInvalidCharactersContained(const std::string& str)
+bool Utilities::Core::areInvalidCharactersContained(const std::string_view str)
 {
     bool containsInvalidCharacters{false};
 
@@ -106,7 +106,7 @@ bool Utilities::Core::areInvalidCharactersContained(const std::string& str)
     return containsInvalidCharacters;
 }
 
-bool Utilities::Core::areParseableCharactersContained(const std::string& str)
+bool Utilities::Core::areParseableCharactersContained(const std::string_view str)
 {
     bool containsParseableCharacters{false};
 

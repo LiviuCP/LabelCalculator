@@ -302,7 +302,7 @@ void ConnectionInputParser::_storeMultipleParsingErrors(const std::vector<ErrorP
 }
 
 size_t ConnectionInputParser::_buildConnectionEntry(const size_t currentEntryNumber,
-                                                    const std::string& cablePartNumber,
+                                                    const std::string_view cablePartNumber,
                                                     const DevicePortPtr pFirstDevicePort,
                                                     const DevicePortPtr pSecondDevicePort,
                                                     std::string& currentEntry)

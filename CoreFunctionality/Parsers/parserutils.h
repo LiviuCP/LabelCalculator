@@ -18,7 +18,7 @@ namespace Utilities::Parsers
     /* This function converts the input string containing the device type into a numeric device type ID that is then used
        for further processing (Device object creation, etc)
     */
-    Data::DeviceTypeID getDeviceTypeID(const std::string& deviceType);
+    Data::DeviceTypeID getDeviceTypeID(const std::string_view deviceType);
 
     /* This function is used for getting the device type string for writing back into connection input file
     */
