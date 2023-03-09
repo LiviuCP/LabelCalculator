@@ -1,0 +1,22 @@
+__Cable part number__,__Source device type__,__Source U number__,__Parameter1__,__Parameter2__,__Parameter3__,__Destination device type__,__Destination U number__,__Parameter1__,__Parameter2__,__Parameter3__
+RJ45,bld,1,MG,1,-,lan,48,N,1,-
+,bld,1,MG,2,-,lan,48,N,2,-
+,ups,11,-,m,-,lan,48,N,3,-
+,pdu,15,H,-,m,lan,48,N,4,-
+,pdu,16,H,-,m,lan,48,N,5,-
+,sto,21,1,-,m,lan,48,N,6,-
+,sto,21,2,-,m,lan,48,N,7,-
+kvm-cable,sls,29,1,K,-,kvm,43,K,1,-
+,sls,29,3,K,-,kvm,43,K,2,-
+,sls,29,4,K,-,kvm,43,K,3,-
+RJ45,sls,29,1,-,m,lan,48,N,8,-
+,sls,29,3,-,m,lan,48,N,9,-
+,sls,29,4,-,m,lan,48,N,10,-
+,pdu,32,L,-,m,lan,48,N,11,-
+,pdu,32,R,-,m,lan,48,N,12,-
+kvm-cable,svr,34,K,-,-,kvm,43,K,4,-
+RJ45,svr,34,-,m,-,lan,48,N,13,-
+kvm-cable,svr,38,K,-,-,kvm,43,K,5,-
+RJ45,svr,38,-,m,-,lan,48,N,14,-
+,san,46,-,m,-,lan,48,N,15,-
+,san,47,-,m,-,lan,48,N,16,-

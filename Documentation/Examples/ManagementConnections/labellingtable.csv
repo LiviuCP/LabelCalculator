@@ -1,0 +1,22 @@
+__Item number__,__Cable part number__,__Source device description__,__Source label__,__Destination device description__,__Destination label__
+1,RJ45,Blade system placed at U1 - management module 1,U1_MGMT1,LAN switch placed at U48 - Ethernet port 1,U48_P1
+2,RJ45,Blade system placed at U1 - management module 2,U1_MGMT2,LAN switch placed at U48 - Ethernet port 2,U48_P2
+3,RJ45,UPS placed at U11 - management port,U11_MGMT,LAN switch placed at U48 - Ethernet port 3,U48_P3
+4,RJ45,PDU placed at U15 in horizontal position - management port,U15_PDU_H_MGMT,LAN switch placed at U48 - Ethernet port 4,U48_P4
+5,RJ45,PDU placed at U16 in horizontal position - management port,U16_PDU_H_MGMT,LAN switch placed at U48 - Ethernet port 5,U48_P5
+6,RJ45,Storage device placed at U21 - controller 1 - management port,U21_C1_MGMT,LAN switch placed at U48 - Ethernet port 6,U48_P6
+7,RJ45,Storage device placed at U21 - controller 2 - management port,U21_C2_MGMT,LAN switch placed at U48 - Ethernet port 7,U48_P7
+8,kvm-cable,Scalable server placed at U29 - slot 1 - KVM port,U29_S1_KVM,KVM switch placed at U43 - port 1,U43_P1
+9,kvm-cable,Scalable server placed at U29 - slot 3 - KVM port,U29_S3_KVM,KVM switch placed at U43 - port 2,U43_P2
+10,kvm-cable,Scalable server placed at U29 - slot 4 - KVM port,U29_S4_KVM,KVM switch placed at U43 - port 3,U43_P3
+11,RJ45,Scalable server placed at U29 - slot 1 - management port,U29_S1_MGMT,LAN switch placed at U48 - Ethernet port 8,U48_P8
+12,RJ45,Scalable server placed at U29 - slot 3 - management port,U29_S3_MGMT,LAN switch placed at U48 - Ethernet port 9,U48_P9
+13,RJ45,Scalable server placed at U29 - slot 4 - management port,U29_S4_MGMT,LAN switch placed at U48 - Ethernet port 10,U48_P10
+14,RJ45,PDU placed at U32 on the left side - management port,U32_PDU_L_MGMT,LAN switch placed at U48 - Ethernet port 11,U48_P11
+15,RJ45,PDU placed at U32 on the right side - management port,U32_PDU_R_MGMT,LAN switch placed at U48 - Ethernet port 12,U48_P12
+16,kvm-cable,Server placed at U34 - KVM port,U34_KVM,KVM switch placed at U43 - port 4,U43_P4
+17,RJ45,Server placed at U34 - management port,U34_MGMT,LAN switch placed at U48 - Ethernet port 13,U48_P13
+18,kvm-cable,Server placed at U38 - KVM port,U38_KVM,KVM switch placed at U43 - port 5,U43_P5
+19,RJ45,Server placed at U38 - management port,U38_MGMT,LAN switch placed at U48 - Ethernet port 14,U48_P14
+20,RJ45,SAN switch placed at U46 - management port,U46_MGMT,LAN switch placed at U48 - Ethernet port 15,U48_P15
+21,RJ45,SAN switch placed at U47 - management port,U47_MGMT,LAN switch placed at U48 - Ethernet port 16,U48_P16
