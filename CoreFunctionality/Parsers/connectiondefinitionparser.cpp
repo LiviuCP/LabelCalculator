@@ -286,7 +286,7 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
     }
 }
 
-bool ConnectionDefinitionParser::_parseConnectionFormatting(std::string_view source, Data::UNumber_t& secondDevice, size_t& connectionsCount)
+bool ConnectionDefinitionParser::_parseConnectionFormatting(const std::string_view source, Data::UNumber_t& secondDevice, size_t& connectionsCount)
 {
     bool isFormattingValid{true};
 

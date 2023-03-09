@@ -22,7 +22,7 @@
 class Parser
 {
 public:
-    Parser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream, std::string_view header);
+    Parser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream, const std::string_view header);
     virtual ~Parser();
 
     virtual bool parse();

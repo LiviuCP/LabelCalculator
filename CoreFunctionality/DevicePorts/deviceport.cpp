@@ -150,7 +150,7 @@ void DevicePort::_registerRequiredParameter(std::string* const pRequiredParamete
     }
 }
 
-void DevicePort::_appendDataToDescription(std::string_view data)
+void DevicePort::_appendDataToDescription(const std::string_view data)
 {
     if (mIsInitialized)
     {
@@ -162,7 +162,7 @@ void DevicePort::_appendDataToDescription(std::string_view data)
     }
 }
 
-void DevicePort::_appendDataToLabel(std::string_view data)
+void DevicePort::_appendDataToLabel(const std::string_view data)
 {
     if (mIsInitialized)
     {
@@ -174,7 +174,7 @@ void DevicePort::_appendDataToLabel(std::string_view data)
     }
 }
 
-void DevicePort::_setInvalidDescriptionAndLabel(std::string_view descriptionInput, std::string_view labelInput)
+void DevicePort::_setInvalidDescriptionAndLabel(const std::string_view descriptionInput, const std::string_view labelInput)
 {
     const size_t c_DescriptionInputLength{descriptionInput.size()};
     assert(c_DescriptionInputLength > 0u);

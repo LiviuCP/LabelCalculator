@@ -19,8 +19,8 @@ namespace Utilities::DevicePorts
     inline constexpr std::string_view c_LabelErrorText{"INVALID LABEL! "};
 
     std::string getCheckConnectionInputFileText();
-    bool isManagementPortNumber(std::string_view portNumber);
-    bool isPowerPortType(std::string_view portType);
+    bool isManagementPortNumber(const std::string_view portNumber);
+    bool isPowerPortType(const std::string_view portType);
 }
 
 #endif // DEVICEPORTUTILS_H

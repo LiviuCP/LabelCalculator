@@ -35,7 +35,7 @@ public:
     /* reads and parses the input fields for the device port from string starting position pos (which is subsequently updated)
        uses the ofstream for logging any errors in the corresponding file and the boolean to report the occurence of these errors
     */
-    Index_t parseInputData(const std::string& input, const Index_t initialPosition, ErrorHandler& errorHandler, std::ofstream& errorStream, std::vector<ErrorPtr>& parsingErrors);
+    Index_t parseInputData(const std::string_view input, const Index_t initialPosition, ErrorHandler& errorHandler, std::ofstream& errorStream, std::vector<ErrorPtr>& parsingErrors);
 
     // getters
     size_t getFileRowNumber() const;
@@ -58,18 +58,18 @@ protected:
     /* This function is used for appending data calculated based on the parsed input parameters
        (other than the ones used for initializing description and label) to device port description
     */
-    void _appendDataToDescription(std::string_view data);
+    void _appendDataToDescription(const std::string_view data);
 
     /* This function is used for appending data calculated based on the parsed input parameters
        (other than the ones used for initializing description and label) to device port label
     */
-    void _appendDataToLabel(std::string_view data);
+    void _appendDataToLabel(const std::string_view data);
 
     /* This function is used for replacing port description and label with a "soft" parsing error message
        "Hard" parsing errors are being logged within error file by using the error handling functionality (see ErrorHandling directory)
        If no label argument is entered the default invalid label message is filled-in
     */
-    void _setInvalidDescriptionAndLabel(std::string_view descriptionInput, std::string_view labelInput = "");
+    void _setInvalidDescriptionAndLabel(const std::string_view descriptionInput, const std::string_view labelInput = "");
 
     /* This function performs a final check on the calculated label and initiates a size check if no "soft" parsing errors occurred
     */
