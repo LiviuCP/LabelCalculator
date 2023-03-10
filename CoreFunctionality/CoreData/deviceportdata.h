@@ -10,8 +10,28 @@
 
 namespace Data
 {
+    // maximum number of characters allowed on a device port label
+    inline constexpr unsigned short c_MaxLabelCharsCount{16u};
+
     // number of fields that should be filled in connectioninput.csv for EACH device (unused fields can be filled in with '-')
     inline constexpr size_t c_MaxPortInputParametersCount{3};
+
+    inline const std::map<DeviceTypeID, size_t> c_RequiredInputParamsCount
+    {
+        {    DeviceTypeID::PDU,                 3    },
+        {    DeviceTypeID::EXTENSION_BAR,       2    },
+        {    DeviceTypeID::UPS,                 2    },
+        {    DeviceTypeID::LAN_SWITCH,          2    },
+        {    DeviceTypeID::LAN_DIRECTOR,        3    },
+        {    DeviceTypeID::SAN_SWITCH,          2    },
+        {    DeviceTypeID::SAN_DIRECTOR,        3    },
+        {    DeviceTypeID::INFINIBAND_SWITCH,   2    },
+        {    DeviceTypeID::KVM_SWITCH,          2    },
+        {    DeviceTypeID::RACK_SERVER,         2    },
+        {    DeviceTypeID::SCALABLE_SERVER,     3    },
+        {    DeviceTypeID::STORAGE,             3    },
+        {    DeviceTypeID::BLADE_SERVER,        3    }
+    };
 
     // placement types for specific power devices (PDUs, extension bars)
     inline const std::map<std::string, std::string> c_DevicePlacementIdentifiers

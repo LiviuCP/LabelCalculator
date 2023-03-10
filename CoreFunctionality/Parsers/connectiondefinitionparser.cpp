@@ -2,6 +2,7 @@
 #include <charconv>
 #include <cassert>
 
+#include "parserdata.h"
 #include "coreutils.h"
 #include "parserutils.h"
 #include "connectiondefinitionparser.h"
