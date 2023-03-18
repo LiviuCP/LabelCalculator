@@ -19,7 +19,6 @@ public:
     DevicePortPtr createDevicePort(const Data::DeviceTypeID deviceTypeID,
                                    const std::string_view deviceUPosition,
                                    const size_t fileRowNumber,
-                                   const size_t fileColumnNumber,
                                    const bool isSourceDevice);
 
     size_t getCreatedDevicePortsCount() const;

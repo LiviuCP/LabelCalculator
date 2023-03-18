@@ -3,19 +3,18 @@
 
 #include <vector>
 
-#include "errorhandler.h"
 #include "coreutils.h"
+#include "subparser.h"
 
 #ifdef _WIN32
 #include "auxdata.h"
 #endif
 
-class DevicePort
+class DevicePort : public ISubParser
 {
 public:
     DevicePort(const std::string_view deviceUPosition,
                const size_t fileRowNumber,
-               const size_t fileColumnNumber,
                const bool isSourceDevice);
 
     virtual ~DevicePort();
@@ -35,13 +34,19 @@ public:
     /* reads and parses the input fields for the device port from string starting position pos (which is subsequently updated)
        uses the ofstream for logging any errors in the corresponding file and the boolean to report the occurence of these errors
     */
-    Index_t parseInputData(const std::string_view input, const Index_t initialPosition, ErrorHandler& errorHandler, std::ofstream& errorStream, std::vector<ErrorPtr>& parsingErrors);
+    void parseInputData(const std::string_view input, std::vector<ErrorPtr>& parsingErrors);
 
     // getters
-    size_t getFileRowNumber() const;
-    size_t getFileColumnNumber() const;
+    virtual Index_t getCurrentPosition() const override final;
+    virtual size_t getFileColumnNumber() const override final;
+    virtual size_t getFileRowNumber() const override final;
     std::string getDescription() const;
     std::string getLabel() const;
+
+    // setters
+    virtual void setErrorHandler(std::shared_ptr<ErrorHandler> pErrorHandler) override final;
+    virtual void setFileColumnNumber(const size_t fileColumnNumber) override final;
+    virtual void setCurrentPosition(const Index_t currentPosition) override final;
 
 protected:
     /* Registers the required parameters; these are subsequently requested (parsed) from the connection input file:
@@ -107,6 +112,9 @@ private:
     // current CSV file column from which device info is being parsed, used for error reporting
     size_t mFileColumnNumber;
 
+    // current character index in the currently parsed CSV row string
+    Index_t mCurrentPosition;
+
     // reference to substrings storing the fields parsed by parseInputData()
     std::vector<std::string*> mInputData;
 
@@ -118,6 +126,8 @@ private:
 
     // initialization flag, ensures label/description are initialized and required input parameters are registered
     bool mIsInitialized;
+
+    std::shared_ptr<ErrorHandler> mpErrorHandler;
 };
 
 using DevicePortPtr = std::shared_ptr<DevicePort>;

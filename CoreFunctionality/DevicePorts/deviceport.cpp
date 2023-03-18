@@ -1,6 +1,7 @@
 #include <sstream>
 #include <cassert>
 
+#include "errorcodes.h"
 #include "deviceportdata.h"
 #include "deviceportutils.h"
 #include "deviceport.h"
@@ -8,14 +9,13 @@
 namespace Core = Utilities::Core;
 namespace Ports = Utilities::DevicePorts;
 
-DevicePort::DevicePort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+DevicePort::DevicePort(const std::string_view deviceUPosition, const size_t fileRowNumber, const bool isSourceDevice)
     : mDeviceUPosition{deviceUPosition}
     , mFileRowNumber{fileRowNumber}
-    , mFileColumnNumber{fileColumnNumber}
+    , mFileColumnNumber{1}
     , mIsSourceDevice{isSourceDevice}
     , mIsInitialized{false}
 {
-
 }
 
 DevicePort::~DevicePort()
@@ -33,11 +33,10 @@ void DevicePort::init()
     }
 }
 
-Index_t DevicePort::parseInputData(const std::string_view input, const Index_t initialPosition, ErrorHandler& errorHandler, std::ofstream& errorStream, std::vector<ErrorPtr>& parsingErrors)
+void DevicePort::parseInputData(const std::string_view input, std::vector<ErrorPtr>& parsingErrors)
 {
     assert(mInputData.size() == mInputParametersCount); // check if all required parameters have been registered by derived class
 
-    Index_t currentPosition{initialPosition}; // position in input string (.csv row) where the input parameters of the device begin
     size_t currentParameter{0u};              // current field (cell) containining a device input parameter (e.g. device name)
     bool fewerCellsProvided{false};       // for checking if the "fewer cells" error occurred
     ErrorPtr lastError{nullptr};          // last found error
@@ -49,19 +48,19 @@ Index_t DevicePort::parseInputData(const std::string_view input, const Index_t i
     {
         assert(nullptr != mInputData[currentParameter]); // defensive programming, this code should not evaluate to true (the registering function should prevent this)
 
-        if (currentPosition.has_value()) // check if characters are available for current (required) field
+        if (mCurrentPosition.has_value()) // check if characters are available for current (required) field
         {
-            currentPosition = Core::readDataField(input, *mInputData[currentParameter], currentPosition);
+            mCurrentPosition = Core::readDataField(input, *mInputData[currentParameter], mCurrentPosition);
 
             bool noErrorsDetectedInCell{false};
 
             if (0u == mInputData[currentParameter]->size())
             {
-                lastError = errorHandler.logError(ErrorCode::EMPTY_CELL, mFileRowNumber, mFileColumnNumber, errorStream);
+                lastError = mpErrorHandler->logError(static_cast<Error_t>(ErrorCode::EMPTY_CELL), mFileRowNumber, mFileColumnNumber);
             }
             else if (Core::areInvalidCharactersContained(*mInputData[currentParameter]))
             {
-                lastError = errorHandler.logError(ErrorCode::INVALID_CHARACTERS, mFileRowNumber, mFileColumnNumber, errorStream);
+                lastError = mpErrorHandler->logError(static_cast<Error_t>(ErrorCode::INVALID_CHARACTERS), mFileRowNumber, mFileColumnNumber);
             }
             else
             {
@@ -89,10 +88,10 @@ Index_t DevicePort::parseInputData(const std::string_view input, const Index_t i
     {
         while(currentParameter < Data::c_MaxPortInputParametersCount)
         {
-            if (currentPosition.has_value())
+            if (mCurrentPosition.has_value())
             {
                 std::string unusedField;
-                currentPosition = Core::readDataField(input, unusedField, currentPosition);
+                mCurrentPosition = Core::readDataField(input, unusedField, mCurrentPosition);
             }
             else
             {
@@ -111,21 +110,24 @@ Index_t DevicePort::parseInputData(const std::string_view input, const Index_t i
     // handle parameter-independent errors
     if (fewerCellsProvided)
     {
-        lastError = errorHandler.logError(ErrorCode::FEWER_CELLS, mFileRowNumber, mFileColumnNumber, errorStream);
+        lastError = mpErrorHandler->logError(static_cast<Error_t>(ErrorCode::FEWER_CELLS), mFileRowNumber, mFileColumnNumber);
         parsingErrors.push_back(lastError);
     }
-
-    return currentPosition;
 }
 
-size_t DevicePort::getFileRowNumber() const
+Index_t DevicePort::getCurrentPosition() const
 {
-    return mFileRowNumber;
+    return mCurrentPosition;
 }
 
 size_t DevicePort::getFileColumnNumber() const
 {
     return mFileColumnNumber;
+}
+
+size_t DevicePort::getFileRowNumber() const
+{
+    return mFileRowNumber;
 }
 
 std::string DevicePort::getDescription() const
@@ -136,6 +138,24 @@ std::string DevicePort::getDescription() const
 std::string DevicePort::getLabel() const
 {
     return mLabel;
+}
+
+void DevicePort::setErrorHandler(std::shared_ptr<ErrorHandler> pErrorHandler)
+{
+    if (!mpErrorHandler && pErrorHandler)
+    {
+        mpErrorHandler = pErrorHandler;
+    }
+}
+
+void DevicePort::setFileColumnNumber(const size_t fileColumnNumber)
+{
+    mFileColumnNumber = fileColumnNumber;
+}
+
+void DevicePort::setCurrentPosition(const Index_t currentPosition)
+{
+    mCurrentPosition = currentPosition;
 }
 
 void DevicePort::_registerRequiredParameter(std::string* const pRequiredParameter)

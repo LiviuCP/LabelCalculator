@@ -7,10 +7,9 @@
 namespace Core = Utilities::Core;
 namespace Ports = Utilities::DevicePorts;
 
-PDUPort::PDUPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+PDUPort::PDUPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const bool isSourceDevice)
     : DevicePort{deviceUPosition,
                  fileRowNumber,
-                 fileColumnNumber,
                  isSourceDevice}
 {
 }
@@ -89,10 +88,9 @@ std::pair<std::string, std::string> PDUPort::_getDeviceTypeDescriptionAndLabel()
     return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::PDU);
 }
 
-ExtensionBarPort::ExtensionBarPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+ExtensionBarPort::ExtensionBarPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const bool isSourceDevice)
     : DevicePort{deviceUPosition,
                  fileRowNumber,
-                 fileColumnNumber,
                  isSourceDevice}
 {
 }
@@ -153,10 +151,9 @@ std::pair<std::string, std::string> ExtensionBarPort::_getDeviceTypeDescriptionA
     return Data::c_DeviceTypeDescriptionsAndLabels.at(Data::DeviceTypeID::EXTENSION_BAR);
 }
 
-UPSPort::UPSPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const size_t fileColumnNumber, const bool isSourceDevice)
+UPSPort::UPSPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const bool isSourceDevice)
     : DevicePort{deviceUPosition,
                  fileRowNumber,
-                 fileColumnNumber,
                  isSourceDevice}
 {
 }

@@ -6,31 +6,17 @@
 class ErrorHandler
 {
 public:
-    ErrorHandler();
-
-    /* This function is used for resetting the factory functionality (currently only the counter of created errors)
-    */
-    void reset();
+    ErrorHandler() = delete;
+    ErrorHandler(std::ofstream* pErrorStream);
 
     /* This function is responsible for creating the actual error objects which are then used for logging parsing errors into error file
        An additional info string parameter could be added in case passing additional information to error objects is needed in the future
        Data items passed through this parameter should be separated by comma (',') similar to CSV cells
     */
-    ErrorPtr logError(ErrorCode errorCode, const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
-
-    /* This function checks if the "fewer cells" error occcurred on the last row number where an error was logged
-    */
-    bool fewerCellsErrorLogged() const;
-
-    /* This function returns the last CSV row where an error has been logged (0: no errors logged so far)
-    */
-    size_t getLastLoggingRowNumber() const;
+    ErrorPtr logError(const Error_t errorCode, const size_t fileRowNumber, const size_t fileColumnNumber);
 
 private:
-    void _setLastLoggingRowNumber(const size_t fileRowNumber);
-
-    size_t mLastLoggingRowNumber;
-    bool mFewerCellsErrorOccurred;
+    std::ofstream* const mpErrorStream;
 };
 
 #endif // ERRORHANDLER_H

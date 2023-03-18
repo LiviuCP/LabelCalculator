@@ -26,16 +26,11 @@ protected:
 private:
     /* Used for processing the cable PN cell for each CSV row
     */
-    Index_t _parseCablePartNumber(const size_t rowIndex, const Index_t currentPosition);
+    void _parseCablePartNumber(const size_t rowIndex);
 
     /* Used for parsing the data for one of the device ports contained in each CSV connection input row
     */
     bool _parseDevicePort(const size_t rowIndex);
-
-    /* Used for storing externally generated errors (from Device class and its subclasses)
-       It is assumed that the error location (row and column) has been correctly setup at error creation
-    */
-    void _storeMultipleParsingErrors(const std::vector<ErrorPtr>& parsingErrors);
 
     /* This function creates an entry for a connection between two devices.
        String is written to the labelling table in a subsequent operation.

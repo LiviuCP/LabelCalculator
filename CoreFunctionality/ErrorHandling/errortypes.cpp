@@ -1,11 +1,12 @@
 #include "errorsettingsproxy.h"
 #include "errortypes.h"
+#include "errorcodes.h"
 #include "applicationdata.h"
 #include "parserdata.h"
 #include "deviceportdata.h"
 
 EmptyCellError::EmptyCellError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
-    : Error{ErrorCode::EMPTY_CELL, fileRowNumber, fileColumnNumber, errorStream}
+    : Error{static_cast<Error_t>(ErrorCode::EMPTY_CELL), fileRowNumber, fileColumnNumber, errorStream}
 {
 }
 
@@ -18,7 +19,7 @@ void EmptyCellError::execute()
 }
 
 UnknownDeviceError::UnknownDeviceError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
-    : Error{ErrorCode::UNKNOWN_DEVICE, fileRowNumber, fileColumnNumber, errorStream}
+    : Error{static_cast<Error_t>(ErrorCode::UNKNOWN_DEVICE), fileRowNumber, fileColumnNumber, errorStream}
 {
 }
 
@@ -31,7 +32,7 @@ void UnknownDeviceError::execute()
 }
 
 FewerCellsError::FewerCellsError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream &errorStream)
-    : Error{ErrorCode::FEWER_CELLS, fileRowNumber, fileColumnNumber, errorStream}
+    : Error{static_cast<Error_t>(ErrorCode::FEWER_CELLS), fileRowNumber, fileColumnNumber, errorStream}
 {
 }
 
@@ -50,7 +51,7 @@ void FewerCellsError::execute()
 }
 
 InvalidConnectionFormatError::InvalidConnectionFormatError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
-    : Error{ErrorCode::INVALID_CONNECTION_FORMAT, fileRowNumber, fileColumnNumber, errorStream}
+    : Error{static_cast<Error_t>(ErrorCode::INVALID_CONNECTION_FORMAT), fileRowNumber, fileColumnNumber, errorStream}
 {
 }
 
@@ -65,7 +66,7 @@ void InvalidConnectionFormatError::execute()
 }
 
 DeviceUPositionOutOfRangeError::DeviceUPositionOutOfRangeError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
-    : Error{ErrorCode::DEVICE_U_POSITION_OUT_OF_RANGE, fileRowNumber, fileColumnNumber, errorStream}
+    : Error{static_cast<Error_t>(ErrorCode::DEVICE_U_POSITION_OUT_OF_RANGE), fileRowNumber, fileColumnNumber, errorStream}
 {
 }
 
@@ -79,7 +80,7 @@ void DeviceUPositionOutOfRangeError::execute()
 }
 
 TargetDeviceNotFoundError::TargetDeviceNotFoundError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
-    : Error{ErrorCode::TARGET_DEVICE_NOT_FOUND, fileRowNumber, fileColumnNumber, errorStream}
+    : Error{static_cast<Error_t>(ErrorCode::TARGET_DEVICE_NOT_FOUND), fileRowNumber, fileColumnNumber, errorStream}
 {
 }
 
@@ -94,7 +95,7 @@ void TargetDeviceNotFoundError::execute()
 }
 
 DeviceConnectedToItselfError::DeviceConnectedToItselfError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
-    : Error{ErrorCode::DEVICE_CONNECTED_TO_ITSELF, fileRowNumber, fileColumnNumber, errorStream}
+    : Error{static_cast<Error_t>(ErrorCode::DEVICE_CONNECTED_TO_ITSELF), fileRowNumber, fileColumnNumber, errorStream}
 {
 }
 
@@ -107,7 +108,7 @@ void DeviceConnectedToItselfError::execute()
 }
 
 NullNrOfConnectionsError::NullNrOfConnectionsError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
-    : Error{ErrorCode::NULL_NR_OF_CONNECTIONS, fileRowNumber, fileColumnNumber, errorStream}
+    : Error{static_cast<Error_t>(ErrorCode::NULL_NR_OF_CONNECTIONS), fileRowNumber, fileColumnNumber, errorStream}
 {
 }
 
@@ -121,7 +122,7 @@ void NullNrOfConnectionsError::execute()
 
 
 InvalidCharactersError::InvalidCharactersError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
-    : Error{ErrorCode::INVALID_CHARACTERS, fileRowNumber, fileColumnNumber, errorStream}
+    : Error{static_cast<Error_t>(ErrorCode::INVALID_CHARACTERS), fileRowNumber, fileColumnNumber, errorStream}
 {
 }
 
@@ -135,7 +136,7 @@ void InvalidCharactersError::execute()
 }
 
 InvalidUPositionValueError::InvalidUPositionValueError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream)
-    : Error{ErrorCode::INVALID_U_POSITION_VALUE, fileRowNumber, fileColumnNumber, errorStream}
+    : Error{static_cast<Error_t>(ErrorCode::INVALID_U_POSITION_VALUE), fileRowNumber, fileColumnNumber, errorStream}
 {
 }
 
@@ -150,7 +151,7 @@ void InvalidUPositionValueError::execute()
 }
 
 EmptyConnectionInputFileError::EmptyConnectionInputFileError(std::ofstream& errorStream)
-    : Error{ErrorCode::EMPTY_CONNECTION_INPUT_FILE, 2u, 1u, errorStream}
+    : Error{static_cast<Error_t>(ErrorCode::EMPTY_CONNECTION_INPUT_FILE), 2u, 1u, errorStream}
 {
 }
 
@@ -163,7 +164,7 @@ void EmptyConnectionInputFileError::execute()
 }
 
 NoConnectionsDefinedError::NoConnectionsDefinedError(std::ofstream& errorStream)
-    : Error{ErrorCode::NO_CONNECTIONS_DEFINED, 2u, 1u, errorStream}
+    : Error{static_cast<Error_t>(ErrorCode::NO_CONNECTIONS_DEFINED), 2u, 1u, errorStream}
 {
 }
 

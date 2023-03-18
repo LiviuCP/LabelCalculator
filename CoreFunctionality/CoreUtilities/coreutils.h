@@ -14,6 +14,7 @@
 
 using Index_t = std::optional<size_t>;
 using Path_t = std::filesystem::path;
+using Error_t = unsigned short;
 
 namespace Utilities::Core
 {
