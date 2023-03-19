@@ -18,5 +18,7 @@ kvm-cable,svr,34,K,-,-,kvm,43,K,4,-
 RJ45,svr,34,-,m,-,lan,48,N,13,-
 kvm-cable,svr,38,K,-,-,kvm,43,K,5,-
 RJ45,svr,38,-,m,-,lan,48,N,14,-
-,san,46,-,m,-,lan,48,N,15,-
-,san,47,-,m,-,lan,48,N,16,-
+,ib,44,-,m,-,lan,48,N,15,-
+,ib,45,-,m,-,lan,48,N,16,-
+,san,46,-,m,-,lan,48,N,17,-
+,san,47,-,m,-,lan,48,N,18,-

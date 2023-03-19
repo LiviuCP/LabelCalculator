@@ -18,5 +18,7 @@ __Item number__,__Cable part number__,__Source device description__,__Source lab
 17,RJ45,Server placed at U34 - management port,U34_MGMT,LAN switch placed at U48 - Ethernet port 13,U48_P13
 18,kvm-cable,Server placed at U38 - KVM port,U38_KVM,KVM switch placed at U43 - port 5,U43_P5
 19,RJ45,Server placed at U38 - management port,U38_MGMT,LAN switch placed at U48 - Ethernet port 14,U48_P14
-20,RJ45,SAN switch placed at U46 - management port,U46_MGMT,LAN switch placed at U48 - Ethernet port 15,U48_P15
-21,RJ45,SAN switch placed at U47 - management port,U47_MGMT,LAN switch placed at U48 - Ethernet port 16,U48_P16
+20,RJ45,Infiniband switch placed at U44 - management port,U44_MGMT,LAN switch placed at U48 - Ethernet port 15,U48_P15
+21,RJ45,Infiniband switch placed at U45 - management port,U45_MGMT,LAN switch placed at U48 - Ethernet port 16,U48_P16
+22,RJ45,SAN switch placed at U46 - management port,U46_MGMT,LAN switch placed at U48 - Ethernet port 17,U48_P17
+23,RJ45,SAN switch placed at U47 - management port,U47_MGMT,LAN switch placed at U48 - Ethernet port 18,U48_P18
