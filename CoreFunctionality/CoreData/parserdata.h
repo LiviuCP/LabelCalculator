@@ -32,7 +32,7 @@ namespace Data
         {   DeviceTypeID::INFINIBAND_SWITCH,       "PORT TYPE,PORT NUMBER,-"                       },
         {   DeviceTypeID::KVM_SWITCH,              "PORT TYPE,PORT NUMBER,-"                       },
         {   DeviceTypeID::RACK_SERVER,             "PORT TYPE,PORT NUMBER,-"                       },
-        {   DeviceTypeID::SCALABLE_SERVER,         "SLOT NUMBER, PORT TYPE,PORT NUMBER"            },
+        {   DeviceTypeID::SCALABLE_SERVER,         "SLOT NUMBER,PORT TYPE,PORT NUMBER"             },
         {   DeviceTypeID::STORAGE,                 "CONTROLLER NUMBER,PORT TYPE,PORT NUMBER"       },
         {   DeviceTypeID::BLADE_SERVER,            "MODULE TYPE,MODULE NUMBER,PORT NUMBER"         }
     };
