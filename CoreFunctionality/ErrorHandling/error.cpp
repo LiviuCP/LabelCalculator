@@ -33,3 +33,23 @@ Error_t Error::getErrorCode() const
 {
     return mErrorCode;
 }
+
+void Error::_logMessage(std::string_view message, bool shouldPrependErrorLabel)
+{
+    if (shouldPrependErrorLabel)
+    {
+        mErrorStream << "Error: ";
+    }
+
+    mErrorStream << message << "\n";
+}
+
+void Error::_logRowAndColumnNumber()
+{
+    mErrorStream << "Row number: " << mFileRowNumber << "    " << "Column number: " << mFileColumnNumber << "\n";
+}
+
+void Error::_logRowNumber()
+{
+    mErrorStream << "Row number: " << mFileRowNumber << "\n";
+}

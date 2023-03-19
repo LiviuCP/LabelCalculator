@@ -17,6 +17,11 @@ public:
     Error_t getErrorCode() const;
 
 protected:
+    void _logMessage(std::string_view message, bool shouldPrependErrorLabel = false);
+    void _logRowAndColumnNumber();
+    void _logRowNumber();
+
+private:
     Error_t mErrorCode;
     size_t mFileRowNumber;              // row from parsed CSV file where the error is located
     size_t mFileColumnNumber;           // column from parsed CSV file where the error is located
