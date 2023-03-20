@@ -23,17 +23,17 @@ __Item number__,__Cable part number__,__Source device description__,__Source lab
 22,C13-C14,Server placed at U34 - power supply 2,U34_PS2,Extension bar placed at U41 on the left side - port number 2,U41_EXT_L_P2
 23,C13-C14,Server placed at U38 - power supply 1,U38_PS1,Extension bar placed at U40 on the right side - port number 2,U40_EXT_R_P2
 24,C13-C14,Server placed at U38 - power supply 2,U38_PS2,Extension bar placed at U42 on the right side - port number 2,U42_EXT_R_P2
-25,C14-C13,Extension bar placed at U39 on the left side - port number 3,U39_EXT_L_P3,KVM switch placed at U43 - power supply 1,U43_PS1
-26,C14-C13,Extension bar placed at U39 on the left side - port number 4,U39_EXT_L_P4,Infiniband switch placed at U45 - power supply 1,U45_PS1
-27,C14-C13,Extension bar placed at U39 on the left side - port number 5,U39_EXT_L_P5,SAN switch placed at U47 - power supply 1,U47_PS1
-28,C14-C13,Extension bar placed at U39 on the left side - port number 6,U39_EXT_L_P6,LAN switch placed at U49 - power supply 1,U49_PS1
-29,C14-C13,Extension bar placed at U40 on the right side - port number 3,U40_EXT_R_P3,Infiniband switch placed at U44 - power supply 1,U44_PS1
-30,C14-C13,Extension bar placed at U40 on the right side - port number 4,U40_EXT_R_P4,SAN switch placed at U46 - power supply 1,U46_PS1
-31,C14-C13,Extension bar placed at U40 on the right side - port number 5,U40_EXT_R_P5,LAN switch placed at U50 - power supply 1,U50_PS1
-32,C14-C13,Extension bar placed at U41 on the left side - port number 3,U41_EXT_L_P3,Infiniband switch placed at U44 - power supply 2,U44_PS2
-33,C14-C13,Extension bar placed at U41 on the left side - port number 4,U41_EXT_L_P4,SAN switch placed at U46 - power supply 2,U46_PS2
-34,C14-C13,Extension bar placed at U41 on the left side - port number 5,U41_EXT_L_P5,LAN switch placed at U48 - power supply 1,U48_PS1
-35,C14-C13,Extension bar placed at U41 on the left side - port number 6,U41_EXT_L_P6,LAN switch placed at U49 - power supply 2,U49_PS2
-36,C14-C13,Extension bar placed at U42 on the right side - port number 3,U42_EXT_R_P3,Infiniband switch placed at U45 - power supply 2,U45_PS2
-37,C14-C13,Extension bar placed at U42 on the right side - port number 4,U42_EXT_R_P4,SAN switch placed at U47 - power supply 2,U47_PS2
-38,C14-C13,Extension bar placed at U42 on the right side - port number 5,U42_EXT_R_P5,LAN switch placed at U50 - power supply 2,U50_PS2
+25,C13-C14,Extension bar placed at U39 on the left side - port number 3,U39_EXT_L_P3,KVM switch placed at U43 - power supply 1,U43_PS1
+26,C13-C14,Extension bar placed at U39 on the left side - port number 4,U39_EXT_L_P4,Infiniband switch placed at U45 - power supply 1,U45_PS1
+27,C13-C14,Extension bar placed at U39 on the left side - port number 5,U39_EXT_L_P5,SAN switch placed at U47 - power supply 1,U47_PS1
+28,C13-C14,Extension bar placed at U39 on the left side - port number 6,U39_EXT_L_P6,LAN switch placed at U49 - power supply 1,U49_PS1
+29,C13-C14,Extension bar placed at U40 on the right side - port number 3,U40_EXT_R_P3,Infiniband switch placed at U44 - power supply 1,U44_PS1
+30,C13-C14,Extension bar placed at U40 on the right side - port number 4,U40_EXT_R_P4,SAN switch placed at U46 - power supply 1,U46_PS1
+31,C13-C14,Extension bar placed at U40 on the right side - port number 5,U40_EXT_R_P5,LAN switch placed at U50 - power supply 1,U50_PS1
+32,C13-C14,Extension bar placed at U41 on the left side - port number 3,U41_EXT_L_P3,Infiniband switch placed at U44 - power supply 2,U44_PS2
+33,C13-C14,Extension bar placed at U41 on the left side - port number 4,U41_EXT_L_P4,SAN switch placed at U46 - power supply 2,U46_PS2
+34,C13-C14,Extension bar placed at U41 on the left side - port number 5,U41_EXT_L_P5,LAN switch placed at U48 - power supply 1,U48_PS1
+35,C13-C14,Extension bar placed at U41 on the left side - port number 6,U41_EXT_L_P6,LAN switch placed at U49 - power supply 2,U49_PS2
+36,C13-C14,Extension bar placed at U42 on the right side - port number 3,U42_EXT_R_P3,Infiniband switch placed at U45 - power supply 2,U45_PS2
+37,C13-C14,Extension bar placed at U42 on the right side - port number 4,U42_EXT_R_P4,SAN switch placed at U47 - power supply 2,U47_PS2
+38,C13-C14,Extension bar placed at U42 on the right side - port number 5,U42_EXT_R_P5,LAN switch placed at U50 - power supply 2,U50_PS2
