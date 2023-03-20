@@ -1,0 +1,19 @@
+__Cable part number__,__Source device type__,__Source U number__,__Parameter1__,__Parameter2__,__Parameter3__,__Destination device type__,__Destination U number__,__Parameter1__,__Parameter2__,__Parameter3__
+BLD-MGMT-CBL,bld,1,UP,-,-,bld,9,DO,-,-
+RJ45,bld,1,MG,1,-,lan,50,N,1,-
+,bld,1,MG,2,-,lan,50,N,2,-
+,pdu,4,L,-,m,lan,50,N,3,-
+,pdu,4,R,-,m,lan,50,N,4,-
+,bld,9,MG,1,-,lan,50,N,5,-
+,bld,9,MG,2,-,lan,50,N,6,-
+,pdu,13,L,-,m,lan,50,N,7,-
+,pdu,13,R,-,m,lan,50,N,8,-
+,lnd,17,-,-,m,lan,50,N,9,-
+,pdu,23,L,-,m,lan,50,N,10,-
+,pdu,23,R,-,m,lan,50,N,11,-
+,snd,25,-,-,m,lan,50,N,12,-
+,sto,33,m,-,m,lan,50,N,13,-
+,pdu,41,H,-,m,lan,50,N,14,-
+,pdu,42,H,-,m,lan,50,N,15,-
+,svr,43,-,m,-,lan,50,N,16,-
+,svr,45,-,m,-,lan,50,N,17,-

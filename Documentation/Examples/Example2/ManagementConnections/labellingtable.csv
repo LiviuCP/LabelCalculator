@@ -1,0 +1,19 @@
+__Item number__,__Cable part number__,__Source device description__,__Source label__,__Destination device description__,__Destination label__
+1,BLD-MGMT-CBL,Blade system placed at U1 - management uplink port,U1_MG_UP,Blade system placed at U9 - management downlink port,U9_MG_DO
+2,RJ45,Blade system placed at U1 - management module 1,U1_MGMT1,LAN switch placed at U50 - Ethernet port 1,U50_P1
+3,RJ45,Blade system placed at U1 - management module 2,U1_MGMT2,LAN switch placed at U50 - Ethernet port 2,U50_P2
+4,RJ45,PDU placed at U4 on the left side - management port,U4_PDU_L_MGMT,LAN switch placed at U50 - Ethernet port 3,U50_P3
+5,RJ45,PDU placed at U4 on the right side - management port,U4_PDU_R_MGMT,LAN switch placed at U50 - Ethernet port 4,U50_P4
+6,RJ45,Blade system placed at U9 - management module 1,U9_MGMT1,LAN switch placed at U50 - Ethernet port 5,U50_P5
+7,RJ45,Blade system placed at U9 - management module 2,U9_MGMT2,LAN switch placed at U50 - Ethernet port 6,U50_P6
+8,RJ45,PDU placed at U13 on the left side - management port,U13_PDU_L_MGMT,LAN switch placed at U50 - Ethernet port 7,U50_P7
+9,RJ45,PDU placed at U13 on the right side - management port,U13_PDU_R_MGMT,LAN switch placed at U50 - Ethernet port 8,U50_P8
+10,RJ45,LAN director placed at U17 - management port,U17_MGMT,LAN switch placed at U50 - Ethernet port 9,U50_P9
+11,RJ45,PDU placed at U23 on the left side - management port,U23_PDU_L_MGMT,LAN switch placed at U50 - Ethernet port 10,U50_P10
+12,RJ45,PDU placed at U23 on the right side - management port,U23_PDU_R_MGMT,LAN switch placed at U50 - Ethernet port 11,U50_P11
+13,RJ45,SAN director placed at U25 - management port,U25_MGMT,LAN switch placed at U50 - Ethernet port 12,U50_P12
+14,RJ45,Storage device placed at U33 - management port,U33_MGMT,LAN switch placed at U50 - Ethernet port 13,U50_P13
+15,RJ45,PDU placed at U41 in horizontal position - management port,U41_PDU_H_MGMT,LAN switch placed at U50 - Ethernet port 14,U50_P14
+16,RJ45,PDU placed at U42 in horizontal position - management port,U42_PDU_H_MGMT,LAN switch placed at U50 - Ethernet port 15,U50_P15
+17,RJ45,Server placed at U43 - management port,U43_MGMT,LAN switch placed at U50 - Ethernet port 16,U50_P16
+18,RJ45,Server placed at U45 - management port,U45_MGMT,LAN switch placed at U50 - Ethernet port 17,U50_P17

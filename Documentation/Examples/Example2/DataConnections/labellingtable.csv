@@ -1,0 +1,30 @@
+__Item number__,__Cable part number__,__Source device description__,__Source label__,__Destination device description__,__Destination label__
+1,RJ45,Blade system placed at U1 - data module 1 - port 1,U1_DMO1_P1,LAN director placed at U17 - blade 1 - Ethernet port 1,U17_B1_ETH_P1
+2,RJ45,Blade system placed at U1 - data module 1 - port 2,U1_DMO1_P2,LAN director placed at U17 - blade 2 - Ethernet port 1,U17_B2_ETH_P1
+3,RJ45,Blade system placed at U1 - data module 2 - port 1,U1_DMO2_P1,LAN director placed at U17 - blade 1 - Ethernet port 2,U17_B1_ETH_P2
+4,RJ45,Blade system placed at U1 - data module 2 - port 2,U1_DMO2_P2,LAN director placed at U17 - blade 2 - Ethernet port 2,U17_B2_ETH_P2
+5,fc-cable,Blade system placed at U1 - data module 3 - port 1,U1_DMO3_P1,SAN director placed at U25 - blade 1 - FC port 1,U25_B1_FC_P1
+6,fc-cable,Blade system placed at U1 - data module 3 - port 2,U1_DMO3_P2,SAN director placed at U25 - blade 2 - FC port 1,U25_B2_FC_P1
+7,fc-cable,Blade system placed at U1 - data module 4 - port 1,U1_DMO4_P1,SAN director placed at U25 - blade 1 - FC port 2,U25_B1_FC_P2
+8,fc-cable,Blade system placed at U1 - data module 4 - port 2,U1_DMO4_P2,SAN director placed at U25 - blade 2 - FC port 2,U25_B2_FC_P2
+9,RJ45,Blade system placed at U9 - data module 1 - port 1,U9_DMO1_P1,LAN director placed at U17 - blade 1 - Ethernet port 3,U17_B1_ETH_P3
+10,RJ45,Blade system placed at U9 - data module 1 - port 2,U9_DMO1_P2,LAN director placed at U17 - blade 2 - Ethernet port 3,U17_B2_ETH_P3
+11,RJ45,Blade system placed at U9 - data module 2 - port 1,U9_DMO2_P1,LAN director placed at U17 - blade 1 - Ethernet port 4,U17_B1_ETH_P4
+12,RJ45,Blade system placed at U9 - data module 2 - port 2,U9_DMO2_P2,LAN director placed at U17 - blade 2 - Ethernet port 4,U17_B2_ETH_P4
+13,fc-cable,Blade system placed at U9 - data module 3 - port 1,U9_DMO3_P1,SAN director placed at U25 - blade 1 - FC port 3,U25_B1_FC_P3
+14,fc-cable,Blade system placed at U9 - data module 3 - port 2,U9_DMO3_P2,SAN director placed at U25 - blade 2 - FC port 3,U25_B2_FC_P3
+15,fc-cable,Blade system placed at U9 - data module 4 - port 1,U9_DMO4_P1,SAN director placed at U25 - blade 1 - FC port 4,U25_B1_FC_P4
+16,fc-cable,Blade system placed at U9 - data module 4 - port 2,U9_DMO4_P2,SAN director placed at U25 - blade 2 - FC port 4,U25_B2_FC_P4
+17,RJ45,LAN director placed at U17 - blade 1 - Ethernet port 5,U17_B1_ETH_P5,Server placed at U43 - embedded port 1,U43_EMB_P1
+18,RJ45,LAN director placed at U17 - blade 2 - Ethernet port 5,U17_B2_ETH_P5,Server placed at U43 - embedded port 2,U43_EMB_P2
+19,RJ45,LAN director placed at U17 - blade 1 - Ethernet port 6,U17_B1_ETH_P6,Server placed at U45 - embedded port 1,U45_EMB_P1
+20,RJ45,LAN director placed at U17 - blade 2 - Ethernet port 6,U17_B2_ETH_P6,Server placed at U45 - embedded port 2,U45_EMB_P2
+21,fc-cable,SAN director placed at U25 - blade 1 - FC port 5,U25_B1_FC_P5,Storage device placed at U33 - controller 1 - port 1,U33_C1_P1
+22,fc-cable,SAN director placed at U25 - blade 2 - FC port 5,U25_B2_FC_P5,Storage device placed at U33 - controller 1 - port 2,U33_C1_P2
+23,fc-cable,SAN director placed at U25 - blade 1 - FC port 6,U25_B1_FC_P6,Storage device placed at U33 - controller 2 - port 1,U33_C2_P1
+24,fc-cable,SAN director placed at U25 - blade 2 - FC port 6,U25_B2_FC_P6,Storage device placed at U33 - controller 2 - port 2,U33_C2_P2
+25,RJ45,SAN director placed at U25 - blade 3 - iSCSI port 1,U25_B3_IS_P1,Server placed at U43 - Ethernet port 1,U43_ETH_P1
+26,RJ45,SAN director placed at U25 - blade 4 - iSCSI port 1,U25_B4_IS_P1,Server placed at U43 - Ethernet port 2,U43_ETH_P2
+27,RJ45,SAN director placed at U25 - blade 3 - FCIP port 1,U25_B3_FI_P1,Server placed at U45 - Ethernet port 1,U45_ETH_P1
+28,RJ45,SAN director placed at U25 - blade 4 - FCIP port 1,U25_B4_FI_P1,Server placed at U45 - Ethernet port 2,U45_ETH_P2
+29,sas-cable,Server placed at U45 - SAS port 1,U45_SAS_P1,Storage device placed at U47 - controller 1 - port 1,U47_C1_P1

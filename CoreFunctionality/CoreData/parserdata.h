@@ -26,7 +26,7 @@ namespace Data
         {   DeviceTypeID::EXTENSION_BAR,           "PLACEMENT,PORT NUMBER,-"                       },
         {   DeviceTypeID::UPS,                     "LOAD SEGMENT NUMBER,PORT NUMBER,-"             },
         {   DeviceTypeID::LAN_SWITCH,              "PORT TYPE,PORT NUMBER,-"                       },
-        {   DeviceTypeID::LAN_DIRECTOR,            "BLADE NUMBER,PORT TYPE,PORT NUMBER,-"          },
+        {   DeviceTypeID::LAN_DIRECTOR,            "BLADE NUMBER,PORT TYPE,PORT NUMBER"            },
         {   DeviceTypeID::SAN_SWITCH,              "PORT TYPE,PORT NUMBER,-"                       },
         {   DeviceTypeID::SAN_DIRECTOR,            "BLADE NUMBER,PORT TYPE,PORT NUMBER"            },
         {   DeviceTypeID::INFINIBAND_SWITCH,       "PORT TYPE,PORT NUMBER,-"                       },

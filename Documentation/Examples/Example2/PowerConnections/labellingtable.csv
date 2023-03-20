@@ -1,0 +1,30 @@
+__Item number__,__Cable part number__,__Source device description__,__Source label__,__Destination device description__,__Destination label__
+1,C19-C20,Blade system placed at U1 - power supply 1,U1_PS1,PDU placed at U4 on the left side - port number 1,U4_PDU_L_P1
+2,C19-C20,Blade system placed at U1 - power supply 2,U1_PS2,PDU placed at U4 on the right side - port number 1,U4_PDU_R_P1
+3,C19-C20,Blade system placed at U1 - power supply 3,U1_PS3,PDU placed at U4 on the left side - port number 2,U4_PDU_L_P2
+4,C19-C20,Blade system placed at U1 - power supply 4,U1_PS4,PDU placed at U4 on the right side - port number 2,U4_PDU_R_P2
+5,C19-C20,Blade system placed at U9 - power supply 1,U9_PS1,PDU placed at U13 on the left side - port number 1,U13_PDU_L_P1
+6,C19-C20,Blade system placed at U9 - power supply 2,U9_PS2,PDU placed at U13 on the right side - port number 1,U13_PDU_R_P1
+7,C19-C20,Blade system placed at U9 - power supply 3,U9_PS3,PDU placed at U13 on the left side - port number 2,U13_PDU_L_P2
+8,C19-C20,Blade system placed at U9 - power supply 4,U9_PS4,PDU placed at U13 on the right side - port number 2,U13_PDU_R_P2
+9,C13-C14,LAN director placed at U17 - power supply 1,U17_PS1,PDU placed at U23 on the left side - load segment number 2 - port number 1,U23_PDU_L_P2.1
+10,C13-C14,LAN director placed at U17 - power supply 2,U17_PS2,PDU placed at U23 on the right side - load segment number 2 - port number 1,U23_PDU_R_P2.1
+11,C13-C14,LAN director placed at U17 - power supply 3,U17_PS3,PDU placed at U23 on the left side - load segment number 3 - port number 1,U23_PDU_L_P3.1
+12,C13-C14,LAN director placed at U17 - power supply 4,U17_PS4,PDU placed at U23 on the right side - load segment number 3 - port number 1,U23_PDU_R_P3.1
+13,C13-C14,PDU placed at U23 on the left side - load segment number 2 - port number 2,U23_PDU_L_P2.2,SAN director placed at U25 - power supply 1,U25_PS1
+14,C13-C14,PDU placed at U23 on the right side - load segment number 2 - port number 2,U23_PDU_R_P2.2,SAN director placed at U25 - power supply 2,U25_PS2
+15,C13-C14,PDU placed at U23 on the left side - load segment number 3 - port number 2,U23_PDU_L_P3.2,SAN director placed at U25 - power supply 3,U25_PS3
+16,C13-C14,PDU placed at U23 on the right side - load segment number 3 - port number 2,U23_PDU_R_P3.2,SAN director placed at U25 - power supply 4,U25_PS4
+17,C19-C20,PDU placed at U23 on the left side - load segment number 1 - port number 1,U23_PDU_L_P1.1,Extension bar placed at U30 on the left side - port number IN,U30_EXT_L_IN
+18,C19-C20,PDU placed at U23 on the right side - load segment number 1 - port number 1,U23_PDU_R_P1.1,Extension bar placed at U30 on the right side - port number IN,U30_EXT_R_IN
+19,C13-C14,Extension bar placed at U30 on the left side - port number 1,U30_EXT_L_P1,Storage device placed at U33 - power supply 1,U33_PS1
+20,C13-C14,Extension bar placed at U30 on the right side - port number 1,U30_EXT_R_P1,Storage device placed at U33 - power supply 2,U33_PS2
+21,C13-C14,Extension bar placed at U30 on the left side - port number 2,U30_EXT_L_P2,Storage device placed at U33 - power supply 3,U33_PS3
+22,C13-C14,Extension bar placed at U30 on the right side - port number 2,U30_EXT_R_P2,Storage device placed at U33 - power supply 4,U33_PS4
+23,C13-C14,PDU placed at U41 in horizontal position - port number 1,U41_PDU_H_P1,Server placed at U43 - power supply 1,U43_PS1
+24,C13-C14,PDU placed at U41 in horizontal position - port number 2,U41_PDU_H_P2,Server placed at U45 - power supply 1,U45_PS1
+25,C13-C14,PDU placed at U41 in horizontal position - port number 3,U41_PDU_H_P3,Storage device placed at U47 - power supply 1,U47_PS1
+26,C13-C14,PDU placed at U41 in horizontal position - port number 4,U41_PDU_H_P4,LAN switch placed at U50 - power supply 1,U50_PS1
+27,C13-C14,PDU placed at U42 in horizontal position - port number 1,U42_PDU_H_P1,Server placed at U43 - power supply 2,U43_PS2
+28,C13-C14,PDU placed at U42 in horizontal position - port number 2,U42_PDU_H_P2,Server placed at U45 - power supply 2,U45_PS2
+29,C13-C14,PDU placed at U42 in horizontal position - port number 3,U42_PDU_H_P3,Storage device placed at U47 - power supply 2,U47_PS2
