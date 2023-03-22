@@ -113,9 +113,9 @@ static constexpr std::string_view scClearScreenCommand{"cls"};
     Path_t mLabellingOutputFile;
     Path_t mParsingErrorsFile;
 
-    std::ifstream mInputStream;
-    std::ofstream mOutputStream;
-    std::ofstream mErrorStream;
+    const InputStreamPtr mpInputStream;
+    const OutputStreamPtr mpOutputStream;
+    const ErrorStreamPtr mpErrorStream;
 
     bool mIsInitialized;
     bool mIsFileIOEnabled;

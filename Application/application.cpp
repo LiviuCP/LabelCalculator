@@ -10,6 +10,9 @@ namespace Aux = Utilities::Other;
 
 Application::Application()
     : mParserType{ParserCreator::ParserTypes::UNKNOWN}
+    , mpInputStream{std::make_shared<std::ifstream>()}
+    , mpOutputStream{std::make_shared<std::ofstream>()}
+    , mpErrorStream{std::make_shared<std::ofstream>()}
     , mIsInitialized{false}
     , mIsFileIOEnabled{false}
     , mIsCSVParsingRequired{true}
@@ -20,7 +23,7 @@ Application::Application()
 
 std::shared_ptr<Application> Application::getInstance()
 {
-    if (nullptr == s_pApplication)
+    if (!s_pApplication)
     {
         s_pApplication.reset(new Application);
     }
@@ -48,9 +51,9 @@ int Application::run()
                     ParserCreator parserCreator;
                     assert(!parserCreator.isParserAlreadyCreated());
 
-                    ParserPtr pParser{parserCreator.createParser(mParserType, &mInputStream, &mOutputStream, &mErrorStream)};
+                    const ParserPtr pParser{parserCreator.createParser(mParserType, mpInputStream, mpOutputStream, mpErrorStream)};
 
-                    if (nullptr != pParser)
+                    if (pParser)
                     {
                         const bool c_ParsingErrorsOccurred{pParser->parse()};
 
@@ -70,7 +73,7 @@ int Application::run()
                 }
                 else
                 {
-                    Aux::createEmptyConnectionDefinitionsFile(mOutputStream);
+                    Aux::createEmptyConnectionDefinitionsFile(mpOutputStream);
                     mStatusCode = StatusCode::SUCCESS;
                 }
             }
@@ -109,30 +112,33 @@ void Application::_init()
                 mLabellingOutputFile = AppSettings::getInstance()->getLabellingOutputFile();
                 mParsingErrorsFile = AppSettings::getInstance()->getParsingErrorsFile();
 
-                mErrorStream.open(mParsingErrorsFile);
-
-                if (mErrorStream.is_open())
+                if (mpErrorStream)
                 {
-                    // it is always a good idea to provide the user with a good starting point, namely a connection definitions file ready to be filled-in
-                    if (!std::filesystem::exists(mConnectionDefinitionsFile))
+                    mpErrorStream->open(mParsingErrorsFile);
+
+                    if (mpErrorStream->is_open())
                     {
-                        if(!mOutputStream.is_open())
+                        // it is always a good idea to provide the user with a good starting point, namely a connection definitions file ready to be filled-in
+                        if (!std::filesystem::exists(mConnectionDefinitionsFile))
                         {
-                            mOutputStream.open(mConnectionDefinitionsFile);
-                            Aux::createEmptyConnectionDefinitionsFile(mOutputStream);
-                            mOutputStream.close();
+                            if(mpOutputStream && !mpOutputStream->is_open())
+                            {
+                                mpOutputStream->open(mConnectionDefinitionsFile);
+                                Aux::createEmptyConnectionDefinitionsFile(mpOutputStream);
+                                mpOutputStream->close();
+                            }
+                            else
+                            {
+                                assert(false);
+                            }
                         }
-                        else
-                        {
-                            assert(false);
-                        }
-                    }
 
-                    mIsInitialized = true;
-                }
-                else
-                {
-                    mStatusCode = StatusCode::ERROR_FILE_NOT_OPENED;
+                        mIsInitialized = true;
+                    }
+                    else
+                    {
+                        mStatusCode = StatusCode::ERROR_FILE_NOT_OPENED;
+                    }
                 }
             }
         }
@@ -219,20 +225,20 @@ void Application::_copyExamplesDir()
 
 void Application::_enableFileInputOutput()
 {
-    if (mIsInitialized && !mIsFileIOEnabled)
+    if (mpInputStream && mpOutputStream && mIsInitialized && !mIsFileIOEnabled)
     {
         // move existing output file to the appropriate backup folder to ensure it doesn't get overwritten
         _moveOutputFileToBackupDir();
 
-        mOutputStream.open(_getOutputFile());
+        mpOutputStream->open(_getOutputFile());
 
-        if (mOutputStream.is_open())
+        if (mpOutputStream->is_open())
         {
             if (mIsCSVParsingRequired)
             {
-                mInputStream.open(_getInputFile());
+                mpInputStream->open(_getInputFile());
 
-                if (mInputStream.is_open())
+                if (mpInputStream->is_open())
                 {
                     mIsFileIOEnabled = true; // proceed to parsing (options 1 & 2)
                 }
@@ -365,19 +371,30 @@ int Application::_handleStatusCode()
 
 void Application::_removeUnnecessaryFiles()
 {
+    Path_t fileToRemove{mParsingErrorsFile};
+
+    // appropriate stream should be closed prior to erasing the file
     if (StatusCode::PARSING_ERROR != mStatusCode)
     {
-        // for some statuses the errors file path might be empty
-        if (!mParsingErrorsFile.empty())
+        if(mpErrorStream)
         {
-            mErrorStream.close();
-            std::filesystem::remove(mParsingErrorsFile);
+            mpErrorStream->close();
         }
     }
     else
     {
-        mOutputStream.close();
-        std::filesystem::remove(_getOutputFile());
+        if (mpOutputStream)
+        {
+            mpOutputStream->close();
+        }
+
+        fileToRemove = _getOutputFile();
+    }
+
+    // for some statuses the errors file path might be empty (the output file should't but the check is made for consistency)
+    if (!fileToRemove.empty())
+    {
+        std::filesystem::remove(fileToRemove);
     }
 }
 

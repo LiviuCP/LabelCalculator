@@ -7,7 +7,7 @@ ParserCreator::ParserCreator()
 {
 }
 
-ParserPtr ParserCreator::createParser(ParserCreator::ParserTypes parserType, std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream)
+ParserPtr ParserCreator::createParser(const ParserCreator::ParserTypes parserType, const InputStreamPtr pInputStream, const OutputStreamPtr pOutputStream, const ErrorStreamPtr pErrorStream)
 {
     ParserPtr pCreatedParser{nullptr};
 

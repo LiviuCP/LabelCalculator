@@ -6,7 +6,7 @@
 class EmptyCellError final : public Error
 {
 public:
-    EmptyCellError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
+    EmptyCellError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
 
     virtual void execute() override;
 };
@@ -15,7 +15,7 @@ public:
 class UnknownDeviceError final : public Error
 {
 public:
-    UnknownDeviceError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
+    UnknownDeviceError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
 
     virtual void execute() override;
 };
@@ -24,7 +24,7 @@ public:
 class FewerCellsError final : public Error
 {
 public:
-    FewerCellsError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
+    FewerCellsError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
 
     virtual void execute() override;
 };
@@ -33,7 +33,7 @@ public:
 class InvalidConnectionFormatError final : public Error
 {
 public:
-    InvalidConnectionFormatError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
+    InvalidConnectionFormatError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
 
     virtual void execute() override;
 };
@@ -42,7 +42,7 @@ public:
 class DeviceUPositionOutOfRangeError final : public Error
 {
 public:
-    DeviceUPositionOutOfRangeError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
+    DeviceUPositionOutOfRangeError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
 
     virtual void execute() override;
 };
@@ -51,7 +51,7 @@ public:
 class TargetDeviceNotFoundError final : public Error
 {
 public:
-    TargetDeviceNotFoundError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
+    TargetDeviceNotFoundError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
 
     virtual void execute() override;
 };
@@ -60,7 +60,7 @@ public:
 class DeviceConnectedToItselfError final : public Error
 {
 public:
-    DeviceConnectedToItselfError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
+    DeviceConnectedToItselfError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
 
     virtual void execute() override;
 };
@@ -69,7 +69,7 @@ public:
 class NullNrOfConnectionsError final : public Error
 {
 public:
-    NullNrOfConnectionsError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
+    NullNrOfConnectionsError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
 
     virtual void execute() override;
 };
@@ -78,7 +78,7 @@ public:
 class InvalidCharactersError final : public Error
 {
 public:
-    InvalidCharactersError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
+    InvalidCharactersError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
 
     virtual void execute() override;
 };
@@ -87,7 +87,7 @@ public:
 class InvalidUPositionValueError final : public Error
 {
 public:
-    InvalidUPositionValueError(const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
+    InvalidUPositionValueError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
 
     virtual void execute() override;
 };
@@ -95,7 +95,7 @@ public:
 class EmptyConnectionInputFileError final : public Error
 {
 public:
-    EmptyConnectionInputFileError(std::ofstream& errorStream);
+    EmptyConnectionInputFileError(const ErrorStreamPtr pErrorStream);
 
     virtual void execute() override;
 };
@@ -103,7 +103,7 @@ public:
 class NoConnectionsDefinedError final : public Error
 {
 public:
-    NoConnectionsDefinedError(std::ofstream& errorStream);
+    NoConnectionsDefinedError(const ErrorStreamPtr pErrorStream);
 
     virtual void execute() override;
 };

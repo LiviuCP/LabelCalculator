@@ -5,7 +5,7 @@
 
 namespace Core = Utilities::Core;
 
-Parser::Parser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream, const std::string_view header)
+Parser::Parser(const InputStreamPtr pInputStream, const OutputStreamPtr pOutputStream, const ErrorStreamPtr pErrorStream, const std::string_view header)
     : mpInputStream{pInputStream}
     , mpOutputStream{pOutputStream}
     , mpErrorStream{pErrorStream}

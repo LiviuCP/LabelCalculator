@@ -7,7 +7,7 @@ class ErrorHandler
 {
 public:
     ErrorHandler() = delete;
-    ErrorHandler(std::ofstream* pErrorStream);
+    ErrorHandler(const ErrorStreamPtr pErrorStream);
 
     /* This function is responsible for creating the actual error objects which are then used for logging parsing errors into error file
        An additional info string parameter could be added in case passing additional information to error objects is needed in the future
@@ -16,7 +16,7 @@ public:
     ErrorPtr logError(const Error_t errorCode, const size_t fileRowNumber, const size_t fileColumnNumber);
 
 private:
-    std::ofstream* const mpErrorStream;
+    const ErrorStreamPtr mpErrorStream;
 };
 
 #endif // ERRORHANDLER_H

@@ -20,7 +20,7 @@ public:
     ParserCreator(const ParserCreator& parserCreator) = delete;
     ParserCreator& operator=(const ParserCreator&) = delete;
 
-    ParserPtr createParser(ParserTypes parserType, std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream);
+    ParserPtr createParser(const ParserTypes parserType, const InputStreamPtr pInputStream, const OutputStreamPtr pOutputStream, const ErrorStreamPtr pErrorStream);
 
     bool isParserAlreadyCreated() const;
 

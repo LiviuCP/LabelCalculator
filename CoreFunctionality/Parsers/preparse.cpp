@@ -3,15 +3,15 @@
 #include "applicationdata.h"
 #include "preparse.h"
 
-void Utilities::Other::createEmptyConnectionDefinitionsFile(std::ofstream& outputStream)
+void Utilities::Other::createEmptyConnectionDefinitionsFile(const OutputStreamPtr pOutputStream)
 {
-    if(outputStream.is_open())
+    if(pOutputStream && pOutputStream->is_open())
     {
-        outputStream << Data::c_ConnectionDefinitionsHeader << "\n";
+        *pOutputStream << Data::c_ConnectionDefinitionsHeader << "\n";
 
         for (Data::UNumber_t uNumber{Data::c_MaxRackUnitsCount}; uNumber > 0u; --uNumber)
         {
-            outputStream << uNumber << "\n";
+            *pOutputStream << uNumber << "\n";
         }
     }
     else

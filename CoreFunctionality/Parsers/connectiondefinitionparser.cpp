@@ -11,7 +11,7 @@
 namespace Core = Utilities::Core;
 namespace Parsers = Utilities::Parsers;
 
-ConnectionDefinitionParser::ConnectionDefinitionParser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream)
+ConnectionDefinitionParser::ConnectionDefinitionParser(const InputStreamPtr pInputStream, const OutputStreamPtr pOutputStream, const ErrorStreamPtr pErrorStream)
     : Parser{pInputStream, pOutputStream, pErrorStream, Data::c_ConnectionInputHeader}
 {
     mMapping.resize(Data::c_MaxRackUnitsCount, Data::DeviceTypeID::NO_DEVICE); // initial value: no device

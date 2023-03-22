@@ -22,7 +22,7 @@
 class Parser
 {
 public:
-    Parser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream, const std::string_view header);
+    Parser(const InputStreamPtr pInputStream, const OutputStreamPtr pOutputStream, const ErrorStreamPtr pErrorStream, const std::string_view header);
     virtual ~Parser();
 
     virtual bool parse();
@@ -110,9 +110,9 @@ protected:
 
 private:
     /* file streams used by parser, each one should correspond to a file that had been previously correctly opened */
-    std::ifstream* const mpInputStream;
-    std::ofstream* const mpOutputStream;
-    std::ofstream* const mpErrorStream;
+    const InputStreamPtr mpInputStream;
+    const OutputStreamPtr mpOutputStream;
+    const ErrorStreamPtr mpErrorStream;
 
     /* stores raw data (.csv rows) read from input file */
     std::vector<std::string> mInputData;

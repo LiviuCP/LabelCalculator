@@ -9,7 +9,7 @@
 class Error
 {
 public:
-    Error(Error_t errorCode, const size_t fileRowNumber, const size_t fileColumnNumber, std::ofstream& errorStream);
+    Error(Error_t errorCode, const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
     virtual ~Error();
 
     virtual void execute();
@@ -25,7 +25,7 @@ private:
     Error_t mErrorCode;
     size_t mFileRowNumber;              // row from parsed CSV file where the error is located
     size_t mFileColumnNumber;           // column from parsed CSV file where the error is located
-    std::ofstream& mErrorStream;
+    const ErrorStreamPtr mpErrorStream;
 };
 
 using ErrorPtr = std::shared_ptr<Error>;

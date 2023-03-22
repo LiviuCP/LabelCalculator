@@ -10,7 +10,7 @@
 class ConnectionInputParser final : public Parser
 {
 public:
-    ConnectionInputParser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream);
+    ConnectionInputParser(const InputStreamPtr pInputStream, const OutputStreamPtr pOutputStream, const ErrorStreamPtr pErrorStream);
 
     ConnectionInputParser() = delete;
     ConnectionInputParser(const ConnectionInputParser&) = delete;

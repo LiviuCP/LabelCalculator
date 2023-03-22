@@ -9,7 +9,7 @@
 namespace Core = Utilities::Core;
 namespace Parsers = Utilities::Parsers;
 
-ConnectionInputParser::ConnectionInputParser(std::ifstream* const pInputStream, std::ofstream* const pOutputStream, std::ofstream* const pErrorStream)
+ConnectionInputParser::ConnectionInputParser(const InputStreamPtr pInputStream, const OutputStreamPtr pOutputStream, const ErrorStreamPtr pErrorStream)
     : Parser(pInputStream, pOutputStream, pErrorStream, Data::c_LabellingTableHeader)
     , mRowPortsStillNotParsedCount{0}
     , mpDevicePortsFactory{nullptr}
