@@ -16,7 +16,7 @@ Application::Application()
     , mIsInitialized{false}
     , mIsFileIOEnabled{false}
     , mIsCSVParsingRequired{true}
-    , mStatusCode{StatusCode::UNINITIALIZED}
+    , mStatusCode{StatusCode::UNDEFINED}
 {
     _init();
 }
@@ -43,44 +43,23 @@ int Application::run()
         if (c_UserInputProvided)
         {
             _enableFileInputOutput();
-
-            if (mIsFileIOEnabled)
-            {
-                if (mIsCSVParsingRequired)
-                {
-                    ParserCreator parserCreator;
-                    assert(!parserCreator.isParserAlreadyCreated());
-
-                    const ParserPtr pParser{parserCreator.createParser(mParserType, mpInputStream, mpOutputStream, mpErrorStream)};
-
-                    if (pParser)
-                    {
-                        const bool c_ParsingErrorsOccurred{pParser->parse()};
-
-                        if (!c_ParsingErrorsOccurred)
-                        {
-                            mStatusCode = StatusCode::SUCCESS;
-                        }
-                        else
-                        {
-                            mStatusCode = StatusCode::PARSING_ERROR;
-                        }
-                    }
-                    else
-                    {
-                        mStatusCode = StatusCode::PARSER_NOT_CREATED;
-                    }
-                }
-                else
-                {
-                    Aux::createEmptyConnectionDefinitionsFile(mpOutputStream);
-                    mStatusCode = StatusCode::SUCCESS;
-                }
-            }
         }
         else
         {
             mStatusCode = StatusCode::ABORTED_BY_USER;
+        }
+
+        if (mIsFileIOEnabled)
+        {
+            if (mIsCSVParsingRequired)
+            {
+                _parseInput();
+            }
+            else
+            {
+                Aux::createEmptyConnectionDefinitionsFile(mpOutputStream);
+                mStatusCode = StatusCode::SUCCESS;
+            }
         }
     }
 
@@ -89,64 +68,105 @@ int Application::run()
     return returnCode;
 }
 
+void Application::_parseInput()
+{
+    if (mIsCSVParsingRequired)
+    {
+        ParserCreator parserCreator;
+
+        if (!parserCreator.isParserAlreadyCreated())
+        {
+            const ParserPtr pParser{parserCreator.createParser(mParserType, mpInputStream, mpOutputStream, mpErrorStream)};
+
+            if (pParser)
+            {
+                const bool c_ParsingErrorsOccurred{pParser->parse()};
+                mStatusCode = !c_ParsingErrorsOccurred ? StatusCode::SUCCESS : StatusCode::PARSING_ERROR;
+            }
+            else
+            {
+                mStatusCode = StatusCode::PARSER_NOT_CREATED;
+            }
+        }
+    }
+}
+
 void Application::_init()
 {
-    assert(!mIsFileIOEnabled);
-
     if (!mIsInitialized)
     {
-        if (AppSettings::getInstance()->areSettingsValid())
+        const bool c_EnvironmentSuccessfullySetup{_setApplicationEnvironment()};
+
+        if (c_EnvironmentSuccessfullySetup && mpErrorStream)
         {
-            mAppDataDir = AppSettings::getInstance()->getAppDataDir();
-            mInputBackupDir = AppSettings::getInstance()->getInputBackupDir();
-            mOutputBackupDir = AppSettings::getInstance()->getOutputBackupDir();
+            mpErrorStream->open(mParsingErrorsFile);
 
-            const bool c_DirsSuccessfullySetup{_setDirectories()};
-
-            if (c_DirsSuccessfullySetup)
+            if (mpErrorStream->is_open())
             {
-                _copyExamplesDir();
-
-                mConnectionDefinitionsFile = AppSettings::getInstance()->getConnectionDefinitionsFile();
-                mConnectionInputFile = AppSettings::getInstance()->getConnectionInputFile();
-                mLabellingOutputFile = AppSettings::getInstance()->getLabellingOutputFile();
-                mParsingErrorsFile = AppSettings::getInstance()->getParsingErrorsFile();
-
-                if (mpErrorStream)
-                {
-                    mpErrorStream->open(mParsingErrorsFile);
-
-                    if (mpErrorStream->is_open())
-                    {
-                        // it is always a good idea to provide the user with a good starting point, namely a connection definitions file ready to be filled-in
-                        if (!std::filesystem::exists(mConnectionDefinitionsFile))
-                        {
-                            if(mpOutputStream && !mpOutputStream->is_open())
-                            {
-                                mpOutputStream->open(mConnectionDefinitionsFile);
-                                Aux::createEmptyConnectionDefinitionsFile(mpOutputStream);
-                                mpOutputStream->close();
-                            }
-                            else
-                            {
-                                assert(false);
-                            }
-                        }
-
-                        mIsInitialized = true;
-                    }
-                    else
-                    {
-                        mStatusCode = StatusCode::ERROR_FILE_NOT_OPENED;
-                    }
-                }
+                mIsInitialized = true;
             }
+            else
+            {
+                mStatusCode = StatusCode::ERROR_FILE_NOT_OPENED;
+            }
+        }
+    }
+}
+
+bool Application::_setApplicationEnvironment()
+{
+    bool success{false};
+
+    if (AppSettings::getInstance()->areSettingsValid())
+    {
+        _retrieveDirPaths();
+
+        const bool c_DirsSuccessfullySetup{_setDirectories()};
+
+        if (c_DirsSuccessfullySetup)
+        {
+            _copyExamplesDir();
+            _retrieveFilePaths();
+
+            success = true;
+        }
+    }
+    else
+    {
+        mStatusCode = StatusCode::INVALID_SETTINGS;
+    }
+
+    // it is always a good idea to provide the user with a good starting point, namely a connection definitions file ready to be filled-in
+    if (success && !std::filesystem::exists(mConnectionDefinitionsFile))
+    {
+        OutputStreamPtr pEmptyFileStream{std::make_shared<std::ofstream>(mConnectionDefinitionsFile)};
+
+        if (pEmptyFileStream->is_open())
+        {
+            Aux::createEmptyConnectionDefinitionsFile(pEmptyFileStream);
         }
         else
         {
-            mStatusCode = StatusCode::INVALID_SETTINGS;
+            success = false;
         }
     }
+
+    return success;
+}
+
+void Application::_retrieveFilePaths()
+{
+    mConnectionDefinitionsFile = AppSettings::getInstance()->getConnectionDefinitionsFile();
+    mConnectionInputFile = AppSettings::getInstance()->getConnectionInputFile();
+    mLabellingOutputFile = AppSettings::getInstance()->getLabellingOutputFile();
+    mParsingErrorsFile = AppSettings::getInstance()->getParsingErrorsFile();
+}
+
+void Application::_retrieveDirPaths()
+{
+    mAppDataDir = AppSettings::getInstance()->getAppDataDir();
+    mInputBackupDir = AppSettings::getInstance()->getInputBackupDir();
+    mOutputBackupDir = AppSettings::getInstance()->getOutputBackupDir();
 }
 
 bool Application::_setDirectories()
@@ -225,41 +245,51 @@ void Application::_copyExamplesDir()
 
 void Application::_enableFileInputOutput()
 {
-    if (mpInputStream && mpOutputStream && mIsInitialized && !mIsFileIOEnabled)
+    if (!mIsInitialized)
+    {
+        assert(false);
+    }
+    else if (!mIsFileIOEnabled)
     {
         // move existing output file to the appropriate backup folder to ensure it doesn't get overwritten
         _moveOutputFileToBackupDir();
 
-        mpOutputStream->open(_getOutputFile());
+        bool isOutputEnabled{false};
 
-        if (mpOutputStream->is_open())
+        if (mpOutputStream)
         {
-            if (mIsCSVParsingRequired)
-            {
-                mpInputStream->open(_getInputFile());
+            mpOutputStream->open(_getOutputFile());
+            isOutputEnabled = mpOutputStream->is_open();
+        }
 
-                if (mpInputStream->is_open())
-                {
-                    mIsFileIOEnabled = true; // proceed to parsing (options 1 & 2)
-                }
-                else
-                {
-                    mStatusCode = StatusCode::INPUT_FILE_NOT_OPENED;
-                }
-            }
-            else
-            {
-                mIsFileIOEnabled = true; // proceed to generating an empty connection definitions file (option 3)
-            }
+        // for option 3 output enabling is sufficient (no input is required)
+        if (isOutputEnabled)
+        {
+            mIsFileIOEnabled = !mIsCSVParsingRequired;
         }
         else
         {
             mStatusCode = StatusCode::OUTPUT_FILE_NOT_OPENED;
         }
-    }
-    else
-    {
-        assert(false);
+
+        // for options 1 and 2 input should be enabled as well
+        if (isOutputEnabled && mIsCSVParsingRequired)
+        {
+            bool isInputEnabled{false};
+
+            if (mpInputStream)
+            {
+                mpInputStream->open(_getInputFile());
+                isInputEnabled = mpInputStream->is_open();
+            }
+
+            mIsFileIOEnabled = isInputEnabled;
+
+            if (!isInputEnabled)
+            {
+                mStatusCode = StatusCode::INPUT_FILE_NOT_OPENED;
+            }
+        }
     }
 }
 
@@ -331,7 +361,7 @@ int Application::_handleStatusCode()
 {
     switch(mStatusCode)
     {
-    case StatusCode::UNINITIALIZED:
+    case StatusCode::UNDEFINED:
         assert(false);
         break;
     case StatusCode::SUCCESS:

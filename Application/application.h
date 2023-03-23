@@ -20,7 +20,7 @@ private:
     // underlying type int for compatibility with the main() return type
     enum class StatusCode : int
     {
-        UNINITIALIZED = -1,
+        UNDEFINED = -1,
         SUCCESS,
         INVALID_SETTINGS,
         APP_DATA_DIR_NOT_SETUP,
@@ -38,9 +38,26 @@ private:
     */
     Application();
 
+    /* This function initiates the data parsing process by creating parser and putting it to work
+    */
+    void _parseInput();
+
     /* This function initializes the application no matter which option is chosen (define connections, process connection input from user)
     */
     void _init();
+
+    /* This function retrieves the paths of the required application files and directories from settings
+       Based on the retrieved data it creates the application data directories and (if required) an empty connection definitions file
+    */
+    bool _setApplicationEnvironment();
+
+    /* This function retrieves the paths of the application files from settings
+    */
+    void _retrieveFilePaths();
+
+    /* This function retrieves the paths of the application directories from settings
+    */
+    void _retrieveDirPaths();
 
     /* This function creates the required directories or confirms their existence if they are already available
     */
