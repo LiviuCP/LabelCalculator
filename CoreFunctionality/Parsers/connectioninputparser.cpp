@@ -215,16 +215,12 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
             if(pDevicePort)
             {
                 _registerSubParser(pDevicePort.get());
-                _passFileColumnNumberToSubParser(pDevicePort.get());
-                _passCurrentPositionToSubParser(pDevicePort.get());
                 pDevicePort->init();
 
                 mDevicePorts.push_back(pDevicePort);
 
                 std::vector<ErrorPtr> parsingErrors;
                 pDevicePort->parseInputData(_getInputRowContent(rowIndex), parsingErrors);
-                _retrieveFileColumnNumberFromSubParser(pDevicePort.get());
-                _retrieveCurrentPositionFromSubParser(pDevicePort.get());
 
                 bool fewerCellsErrorOccurred{false};
 

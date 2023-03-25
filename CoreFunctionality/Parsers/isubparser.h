@@ -1,15 +1,18 @@
-#ifndef SUBPARSER_H
-#define SUBPARSER_H
+#ifndef ISUBPARSER_H
+#define ISUBPARSER_H
 
 #include <memory>
 #include <utility>
 
 #include "errorhandler.h"
 
+class IParser;
+
 class ISubParser
 {
 public:
-    virtual void setErrorHandler(std::shared_ptr<ErrorHandler> pErrorHandler) = 0;
+    virtual void setParentParser(IParser* const pIParser) = 0;
+    virtual void setErrorHandler(const ErrorHandlerPtr pErrorHandler) = 0;
     virtual void setFileColumnNumber(const size_t fileColumnNumber) = 0;
     virtual void setCurrentPosition(const Index_t currentPosition) = 0;
 
@@ -18,4 +21,4 @@ public:
     virtual size_t getFileColumnNumber() const = 0;
 };
 
-#endif // SUBPARSER_H
+#endif // ISUBPARSER_H

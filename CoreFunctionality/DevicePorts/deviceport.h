@@ -4,11 +4,13 @@
 #include <vector>
 
 #include "coreutils.h"
-#include "subparser.h"
+#include "isubparser.h"
 
 #ifdef _WIN32
 #include "auxdata.h"
 #endif
+
+class IParser;
 
 class DevicePort : public ISubParser
 {
@@ -44,7 +46,8 @@ public:
     std::string getLabel() const;
 
     // setters
-    virtual void setErrorHandler(std::shared_ptr<ErrorHandler> pErrorHandler) override final;
+    virtual void setParentParser(IParser* const pIParser) override;
+    virtual void setErrorHandler(const ErrorHandlerPtr pErrorHandler) override final;
     virtual void setFileColumnNumber(const size_t fileColumnNumber) override final;
     virtual void setCurrentPosition(const Index_t currentPosition) override final;
 
@@ -128,6 +131,8 @@ private:
     bool mIsInitialized;
 
     std::shared_ptr<ErrorHandler> mpErrorHandler;
+
+    IParser* m_pParentParser;
 };
 
 using DevicePortPtr = std::shared_ptr<DevicePort>;

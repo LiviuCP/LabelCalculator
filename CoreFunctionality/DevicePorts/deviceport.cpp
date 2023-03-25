@@ -1,6 +1,7 @@
 #include <sstream>
 #include <cassert>
 
+#include "iparser.h"
 #include "errorcodes.h"
 #include "deviceportdata.h"
 #include "deviceportutils.h"
@@ -15,6 +16,7 @@ DevicePort::DevicePort(const std::string_view deviceUPosition, const size_t file
     , mFileColumnNumber{1}
     , mIsSourceDevice{isSourceDevice}
     , mIsInitialized{false}
+    , m_pParentParser{nullptr}
 {
 }
 
@@ -113,6 +115,12 @@ void DevicePort::parseInputData(const std::string_view input, std::vector<ErrorP
         lastError = mpErrorHandler->logError(static_cast<Error_t>(ErrorCode::FEWER_CELLS), mFileRowNumber, mFileColumnNumber);
         parsingErrors.push_back(lastError);
     }
+
+    // notify parser
+    if (m_pParentParser)
+    {
+        m_pParentParser->subParserFinished(this);
+    }
 }
 
 Index_t DevicePort::getCurrentPosition() const
@@ -140,7 +148,12 @@ std::string DevicePort::getLabel() const
     return mLabel;
 }
 
-void DevicePort::setErrorHandler(std::shared_ptr<ErrorHandler> pErrorHandler)
+void DevicePort::setParentParser(IParser* const pIParser)
+{
+    m_pParentParser = pIParser;
+}
+
+void DevicePort::setErrorHandler(const ErrorHandlerPtr pErrorHandler)
 {
     if (!mpErrorHandler && pErrorHandler)
     {
@@ -160,7 +173,7 @@ void DevicePort::setCurrentPosition(const Index_t currentPosition)
 
 void DevicePort::_registerRequiredParameter(std::string* const pRequiredParameter)
 {
-    if (nullptr != pRequiredParameter)
+    if (pRequiredParameter)
     {
         mInputData.push_back(pRequiredParameter);
     }

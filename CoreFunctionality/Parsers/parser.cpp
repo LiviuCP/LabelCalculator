@@ -1,7 +1,8 @@
 #include <cassert>
 
-#include "parser.h"
 #include "coreutils.h"
+#include "isubparser.h"
+#include "parser.h"
 
 namespace Core = Utilities::Core;
 
@@ -52,6 +53,15 @@ bool Parser::parse()
     }
 
     return c_ParsingErrorsOccurred;
+}
+
+void Parser::subParserFinished(ISubParser* const pISubParser)
+{
+    if (pISubParser)
+    {
+        _retrieveFileColumnNumberFromSubParser(pISubParser);
+        _retrieveCurrentPositionFromSubParser(pISubParser);
+    }
 }
 
 void Parser::_readInput()
@@ -254,8 +264,16 @@ void Parser::_registerSubParser(ISubParser* pISubParser)
 {
     if (pISubParser)
     {
+        pISubParser->setParentParser(this);
         pISubParser->setErrorHandler(mpErrorHandler);
+        _passFileColumnNumberToSubParser(pISubParser);
+        _passCurrentPositionToSubParser(pISubParser);
     }
+}
+
+bool Parser::_parsingErrorsExist() const
+{
+    return !mParsingErrors.empty();
 }
 
 void Parser::_passFileColumnNumberToSubParser(ISubParser* const pISubParser)
@@ -305,9 +323,4 @@ void Parser::_retrieveCurrentPositionFromSubParser(const ISubParser* const pISub
             }
         }
     }
-}
-
-bool Parser::_parsingErrorsExist() const
-{
-    return !mParsingErrors.empty();
 }

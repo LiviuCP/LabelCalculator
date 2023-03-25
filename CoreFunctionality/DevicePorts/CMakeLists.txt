@@ -15,6 +15,7 @@ add_library(${PROJECT_NAME} STATIC
     deviceportutils.cpp
 )
 
+target_link_libraries(${PROJECT_NAME} PRIVATE Parsers)
 target_link_libraries(${PROJECT_NAME} PRIVATE ErrorHandling)
 target_link_libraries(${PROJECT_NAME} PRIVATE CoreUtilities)
 target_link_libraries(${PROJECT_NAME} PRIVATE Settings)

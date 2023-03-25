@@ -8,24 +8,27 @@
 #include <memory>
 
 #include "coreutils.h"
-#include "subparser.h"
-
+#include "errorhandler.h"
+#include "iparser.h"
 
 #ifdef _WIN32
 #include "auxdata.h"
 #endif
 
+class ISubParser;
+
 /* This is a generic parser class for .csv files.
    The content of an input .csv file is read, parsed and the resulting output written to an output .csv file.
    If errors occur they are being logged to an error file. In this case the output file stays empty.
 */
-class Parser
+class Parser : public IParser
 {
 public:
     Parser(const InputStreamPtr pInputStream, const OutputStreamPtr pOutputStream, const ErrorStreamPtr pErrorStream, const std::string_view header);
     virtual ~Parser();
 
     virtual bool parse();
+    virtual void subParserFinished(ISubParser* const pISubParser) override;
 
 protected:
     /* This function reads all rows (header and payload) from input file. */
@@ -99,16 +102,16 @@ protected:
     /* Provides access to error handling mechanism to sub-parser */
     void _registerSubParser(ISubParser* pISubParser);
 
+    /* Checks if any parsing errors occured (either from parser or from sub-parser) */
+    bool _parsingErrorsExist() const;
+
+private:
     /* Methods used for communication with sub-parser (pass - retrieve mechanism) */
     void _passFileColumnNumberToSubParser(ISubParser* const pISubParser);
     void _retrieveFileColumnNumberFromSubParser(const ISubParser* const pISubParser);
     void _passCurrentPositionToSubParser(ISubParser* const pISubParser);
     void _retrieveCurrentPositionFromSubParser(const ISubParser* const pISubParser);
 
-    /* Checks if any parsing errors occured (either from parser or from sub-parser) */
-    bool _parsingErrorsExist() const;
-
-private:
     /* file streams used by parser, each one should correspond to a file that had been previously correctly opened */
     const InputStreamPtr mpInputStream;
     const OutputStreamPtr mpOutputStream;

@@ -19,4 +19,6 @@ private:
     const ErrorStreamPtr mpErrorStream;
 };
 
+using ErrorHandlerPtr = std::shared_ptr<ErrorHandler>;
+
 #endif // ERRORHANDLER_H
