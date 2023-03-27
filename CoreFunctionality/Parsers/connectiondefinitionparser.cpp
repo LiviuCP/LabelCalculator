@@ -160,7 +160,7 @@ void ConnectionDefinitionParser::_parseUPosition(const size_t rowIndex)
 
     // first cell on the row is ignored (contains the U number and is only used for informing the user about rack position; the row index is instead used in calculations in relationship with U number)
     _readFirstCell(rowIndex, currentCell);
-    _moveToNextInputColumn();
+    _moveToNextInputColumn(rowIndex);
 }
 
 bool ConnectionDefinitionParser::_parseDeviceType(const size_t rowIndex)
@@ -197,7 +197,7 @@ bool ConnectionDefinitionParser::_parseDeviceType(const size_t rowIndex)
             _storeParsingError(pError);
         }
 
-        _moveToNextInputColumn();
+        _moveToNextInputColumn(rowIndex);
     }
 
     return isValidDeviceType;
@@ -234,7 +234,7 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
                     // trigger error but continue parsing the next cells from the row
                     ErrorPtr pEmptyCellError{_logError(static_cast<Error_t>(ErrorCode::EMPTY_CELL), c_FileRowNumber)};
                     _storeParsingError(pEmptyCellError);
-                    _moveToNextInputColumn();
+                    _moveToNextInputColumn(rowIndex);
                     continue;
                 }
             }
@@ -280,7 +280,7 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
             _storeParsingError(pError);
         }
 
-        _moveToNextInputColumn();
+        _moveToNextInputColumn(rowIndex);
     }
 }
 

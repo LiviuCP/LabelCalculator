@@ -79,7 +79,7 @@ protected:
     void _moveToInputRowStart(const size_t rowIndex);
 
     /* Increments file column number (position updated separately) */
-    void _moveToNextInputColumn();
+    void _moveToNextInputColumn(const size_t rowIndex);
 
     /* Provides the whole input (payload) row content */
     std::string _getInputRowContent(const size_t rowIndex) const;
@@ -136,7 +136,7 @@ private:
     std::vector<Index_t> mCurrentPositions;
 
     /* current CSV column being parsed (the numbering starts from 1 as when opening the CSV with a spreadsheet tool) */
-    size_t mFileColumnNumber;
+    std::vector<size_t> mFileColumnNumbers;
 
     /* error handler used for creating the objects that are responsible for logging the parsing errors to file */
     std::shared_ptr<ErrorHandler> mpErrorHandler;

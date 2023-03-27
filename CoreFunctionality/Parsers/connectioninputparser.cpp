@@ -163,7 +163,7 @@ void ConnectionInputParser::_parseCablePartNumber(const size_t rowIndex)
             mCablePartNumbersEntries[rowIndex] = Parsers::c_InvalidCablePNErrorText;
         }
 
-        _moveToNextInputColumn();
+        _moveToNextInputColumn(rowIndex);
     }
 }
 
@@ -203,8 +203,8 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
             const bool c_IsSourceDevice{0 == mRowPortsStillNotParsedCount % Parsers::c_DevicesPerConnectionInputRowCount};
 
             // new CSV column number: pass through the device type and device U position columns and move to the first device parameter column
-            _moveToNextInputColumn();
-            _moveToNextInputColumn();
+            _moveToNextInputColumn(rowIndex);
+            _moveToNextInputColumn(rowIndex);
 
             DevicePortPtr pDevicePort{mpDevicePortsFactory->createDevicePort(deviceTypeID, deviceUPosition, c_FileRowNumber, c_IsSourceDevice)};
 
@@ -244,7 +244,7 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
         }
         else
         {
-            _moveToNextInputColumn();
+            _moveToNextInputColumn(rowIndex);
             ErrorPtr pInvalidUPositionValueError{_logError(static_cast<Error_t>(ErrorCode::INVALID_U_POSITION_VALUE), c_FileRowNumber)};
             _storeParsingError(pInvalidUPositionValueError);
             canContinueRowParsing = false;

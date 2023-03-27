@@ -12,7 +12,6 @@ Parser::Parser(const InputStreamPtr pInputStream, const OutputStreamPtr pOutputS
     , mpErrorStream{pErrorStream}
     , mOutputHeader{header}
     , mIsResetRequired{false}
-    , mFileColumnNumber{1}
     , mpErrorHandler{nullptr}
 {
     if (mpInputStream  && mpInputStream->is_open()  &&
@@ -103,9 +102,13 @@ ErrorPtr Parser::_logError(const Error_t errorCode, const size_t fileRowNumber)
 {
     ErrorPtr result{nullptr};
 
-    if (mpErrorHandler)
+    // file row numbering starts at 1 and the first row is reserved for the header (so payload rows start at 2)
+    if (mpErrorHandler && fileRowNumber > 1u)
     {
-        result = mpErrorHandler->logError(errorCode, fileRowNumber, mFileColumnNumber);
+        if (const size_t c_RowIndex{fileRowNumber - 2}; c_RowIndex < mInputData.size())
+        {
+            result = mpErrorHandler->logError(errorCode, fileRowNumber, mFileColumnNumbers[c_RowIndex]);
+        }
     }
 
     return result;
@@ -159,6 +162,7 @@ bool Parser::_readLineAndAppendToInput()
         {
             mInputData.push_back(input);
             mCurrentPositions.push_back(Index_t{});
+            mFileColumnNumbers.push_back(1u); // initialize each column number with 1 (this is where column numbering always starts at)
             success = true;
         }
     }
@@ -197,13 +201,16 @@ void Parser::_moveToInputRowStart(const size_t rowIndex)
     if (rowIndex < mInputData.size())
     {
         mCurrentPositions[rowIndex] = 0u;
-        mFileColumnNumber = 1u;
+        mFileColumnNumbers[rowIndex] = 1u;
     }
 }
 
-void Parser::_moveToNextInputColumn()
+void Parser::_moveToNextInputColumn(const size_t rowIndex)
 {
-    ++mFileColumnNumber;
+    if (rowIndex < mInputData.size())
+    {
+        ++(mFileColumnNumbers[rowIndex]);
+    }
 }
 
 std::string Parser::_getInputRowContent(const size_t rowIndex) const
@@ -277,7 +284,14 @@ void Parser::_passFileColumnNumberToSubParser(ISubParser* const pISubParser)
 {
     if (pISubParser)
     {
-        pISubParser->setFileColumnNumber(mFileColumnNumber);
+        // file row numbering starts at 1 and the first row is reserved for the header (so payload rows start at 2)
+        if (const size_t c_FileRowNumber{pISubParser->getFileRowNumber()}; c_FileRowNumber > 1u)
+        {
+            if (const size_t c_RowIndex{c_FileRowNumber - 2}; c_RowIndex < mInputData.size())
+            {
+                pISubParser->setFileColumnNumber(mFileColumnNumbers[c_RowIndex]);
+            }
+        }
     }
 }
 
@@ -285,12 +299,17 @@ void Parser::_retrieveFileColumnNumberFromSubParser(const ISubParser* const pISu
 {
     if (pISubParser)
     {
-        const size_t c_FileColumnNumber{pISubParser->getFileColumnNumber()};
-
-        // parsing goes from beginning to the end of the string so the resulting column number should never be lower than the initial one
-        if (c_FileColumnNumber >= mFileColumnNumber)
+        // file row numbering starts at 1 and the first row is reserved for the header (so payload rows start at 2)
+        if (const size_t c_FileRowNumber{pISubParser->getFileRowNumber()},
+                         c_FileColumnNumber{pISubParser->getFileColumnNumber()};
+            c_FileRowNumber > 1u)
         {
-            mFileColumnNumber = c_FileColumnNumber;
+            // parsing goes from beginning to the end of the string so the resulting column number should never be lower than the initial one
+            if (const size_t c_RowIndex{c_FileRowNumber - 2}; c_RowIndex < mInputData.size() && c_FileColumnNumber >= mFileColumnNumbers[c_RowIndex])
+            {
+
+                mFileColumnNumbers[c_RowIndex] = c_FileColumnNumber;
+            }
         }
     }
 }
@@ -317,14 +336,17 @@ void Parser::_retrieveCurrentPositionFromSubParser(const ISubParser* const pISub
         // file row numbering starts at 1 and the first row is reserved for the header (so payload rows start at 2)
         if (const size_t c_FileRowNumber{pISubParser->getFileRowNumber()}; c_FileRowNumber > 1u)
         {
-            if (const size_t c_RowIndex{c_FileRowNumber - 2}; c_RowIndex < mInputData.size())
+            const Index_t c_CurrentPosition{pISubParser->getCurrentPosition()};
+
+            // parsing goes from beginning to the end of the string so the resulting position should never be lower than the initial one
+            if (const size_t c_RowIndex{c_FileRowNumber - 2};
+                c_RowIndex < mInputData.size() &&
+                c_CurrentPosition.has_value() &&
+                mCurrentPositions[c_RowIndex].has_value() &&
+                c_CurrentPosition >= mCurrentPositions[c_RowIndex] &&
+                c_CurrentPosition <= mInputData[c_RowIndex].size())
             {
-                // parsing goes from beginning to the end of the string so the resulting position should never be lower than the initial one
-                if (const Index_t c_CurrentPosition{pISubParser->getCurrentPosition()};
-                    c_CurrentPosition.has_value() && mCurrentPositions[c_RowIndex].has_value() && c_CurrentPosition >= mCurrentPositions[c_RowIndex] && c_CurrentPosition <= mInputData[c_RowIndex].size())
-                {
-                    mCurrentPositions[c_RowIndex] = c_CurrentPosition;
-                }
+                mCurrentPositions[c_RowIndex] = c_CurrentPosition;
             }
         }
     }
