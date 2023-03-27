@@ -39,7 +39,7 @@ bool ConnectionDefinitionParser::_parseInput()
 
     for (size_t rowIndex{0u}; rowIndex < c_ConnectionDefinitionRowsCount; ++rowIndex)
     {
-        _moveToInputRowStart();
+        _moveToInputRowStart(rowIndex);
         std::string currentCell;
 
         // first cell on the row is ignored (contains the U number and is only used for informing the user about rack position; the row index is instead used in calculations in relationship with U number)
@@ -54,9 +54,6 @@ bool ConnectionDefinitionParser::_parseInput()
             _parseRowConnections(rowIndex);
         }
     }
-
-    // reset column reference once parsing is complete
-    _moveToInputRowStart();
 
     // if no parsing errors occurred, check whether this happened because there are actually no connected devices
     if (!_parsingErrorsExist())

@@ -45,7 +45,7 @@ bool ConnectionInputParser::_parseInput()
 
         for (size_t rowIndex{0u}; rowIndex < c_ConnectionInputRowsCount; ++rowIndex)
         {
-            _moveToInputRowStart(); // column number from connectioninput.csv
+            _moveToInputRowStart(rowIndex);
             bool isFirstCellParsed{false}; // flag: has the cable part number been parsed on current row?
 
             mRowPortsStillNotParsedCount = Parsers::c_DevicesPerConnectionInputRowCount; // devices that haven't been fully parsed on the current input csv row (maximum 2 - one connection)
@@ -78,13 +78,9 @@ bool ConnectionInputParser::_parseInput()
                 --mRowPortsStillNotParsedCount;
             }
         }
-
-        // reset column reference once parsing is complete
-        _moveToInputRowStart();
     }
     else
     {
-        _moveToInputRowStart();
         ErrorPtr pEmptyConnectionInputFileError{_logError(static_cast<Error_t>(ErrorCode::EMPTY_CONNECTION_INPUT_FILE), 1)};
         _storeParsingError(pEmptyConnectionInputFileError);
     }

@@ -158,6 +158,7 @@ bool Parser::_readLineAndAppendToInput()
         if (Core::areParseableCharactersContained(input))
         {
             mInputData.push_back(input);
+            mCurrentPositions.push_back(Index_t{});
             success = true;
         }
     }
@@ -171,7 +172,7 @@ bool Parser::_readFirstCell(const size_t rowIndex, std::string& firstCell)
 
     if (rowIndex < mInputData.size())
     {
-        mCurrentPosition = Core::readDataField(mInputData[rowIndex], firstCell, 0);
+        mCurrentPositions[rowIndex] = Core::readDataField(mInputData[rowIndex], firstCell, 0);
         success = true;
     }
 
@@ -182,19 +183,22 @@ bool Parser::_readCurrentCell(const size_t rowIndex, std::string& currentCell)
 {
     bool success{false};
 
-    if (mCurrentPosition.has_value() && rowIndex < mInputData.size())
+    if (_isValidCurrentPosition(rowIndex))
     {
-        mCurrentPosition = Core::readDataField(mInputData[rowIndex], currentCell, mCurrentPosition);
+        mCurrentPositions[rowIndex] = Core::readDataField(mInputData[rowIndex], currentCell, mCurrentPositions[rowIndex]);
         success = true;
     }
 
     return success;
 }
 
-void Parser::_moveToInputRowStart()
+void Parser::_moveToInputRowStart(const size_t rowIndex)
 {
-    mCurrentPosition = 0u;
-    mFileColumnNumber = 1u;
+    if (rowIndex < mInputData.size())
+    {
+        mCurrentPositions[rowIndex] = 0u;
+        mFileColumnNumber = 1u;
+    }
 }
 
 void Parser::_moveToNextInputColumn()
@@ -218,9 +222,9 @@ std::string Parser::_getUnparsedCellsContent(const size_t rowIndex) const
 {
     std::string result;
 
-    if (mCurrentPosition.has_value() && rowIndex < mInputData.size())
+    if (_isValidCurrentPosition(rowIndex))
     {
-        result.append(mInputData[rowIndex].substr(mCurrentPosition.value()));
+        result.append(mInputData[rowIndex].substr(mCurrentPositions[rowIndex].value()));
     }
 
     return result;
@@ -230,9 +234,9 @@ bool Parser::_isEndOfInputDataRow(const size_t rowIndex) const
 {
     bool result{false};
 
-    if (mCurrentPosition.has_value() && rowIndex < mInputData.size())
+    if (_isValidCurrentPosition(rowIndex))
     {
-        result = (mInputData[rowIndex].size() == mCurrentPosition);
+        result = (mInputData[rowIndex].size() == mCurrentPositions[rowIndex]);
     }
 
     return result;
@@ -240,14 +244,7 @@ bool Parser::_isEndOfInputDataRow(const size_t rowIndex) const
 
 bool Parser::_isValidCurrentPosition(const size_t rowIndex) const
 {
-    Index_t result;
-
-    if (mCurrentPosition.has_value() && rowIndex < mInputData.size() && mCurrentPosition <= mInputData[rowIndex].size())
-    {
-        result = mCurrentPosition;
-    }
-
-    return result.has_value();
+    return (rowIndex < mInputData.size() && mCurrentPositions[rowIndex].has_value() && mCurrentPositions[rowIndex] <= mInputData[rowIndex].size());
 }
 
 size_t Parser::_getInputRowsCount() const
@@ -302,7 +299,14 @@ void Parser::_passCurrentPositionToSubParser(ISubParser* const pISubParser)
 {
     if (pISubParser)
     {
-        pISubParser->setCurrentPosition(mCurrentPosition);
+        // file row numbering starts at 1 and the first row is reserved for the header (so payload rows start at 2)
+        if (const size_t c_FileRowNumber{pISubParser->getFileRowNumber()}; c_FileRowNumber > 1u)
+        {
+            if (const size_t c_RowIndex{c_FileRowNumber - 2}; _isValidCurrentPosition(c_RowIndex))
+            {
+                pISubParser->setCurrentPosition(mCurrentPositions[c_RowIndex]);
+            }
+        }
     }
 }
 
@@ -316,9 +320,10 @@ void Parser::_retrieveCurrentPositionFromSubParser(const ISubParser* const pISub
             if (const size_t c_RowIndex{c_FileRowNumber - 2}; c_RowIndex < mInputData.size())
             {
                 // parsing goes from beginning to the end of the string so the resulting position should never be lower than the initial one
-                if (const Index_t c_CurrentPosition{pISubParser->getCurrentPosition()}; c_CurrentPosition.has_value() && c_CurrentPosition >= mCurrentPosition && c_CurrentPosition <= mInputData[c_RowIndex].size())
+                if (const Index_t c_CurrentPosition{pISubParser->getCurrentPosition()};
+                    c_CurrentPosition.has_value() && mCurrentPositions[c_RowIndex].has_value() && c_CurrentPosition >= mCurrentPositions[c_RowIndex] && c_CurrentPosition <= mInputData[c_RowIndex].size())
                 {
-                    mCurrentPosition = c_CurrentPosition;
+                    mCurrentPositions[c_RowIndex] = c_CurrentPosition;
                 }
             }
         }

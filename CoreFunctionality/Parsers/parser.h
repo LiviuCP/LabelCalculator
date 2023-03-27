@@ -75,8 +75,8 @@ protected:
     /* Reads current column from given row */
     bool _readCurrentCell(const size_t rowIndex, std::string& currentCell);
 
-    /* Resets position and file column number */
-    void _moveToInputRowStart();
+    /* Sets position and file column number to beginning of row */
+    void _moveToInputRowStart(const size_t rowIndex);
 
     /* Increments file column number (position updated separately) */
     void _moveToNextInputColumn();
@@ -133,7 +133,7 @@ private:
     std::vector<ErrorPtr> mParsingErrors;
 
     /* current character index in the currently parsed CSV row string */
-    Index_t mCurrentPosition;
+    std::vector<Index_t> mCurrentPositions;
 
     /* current CSV column being parsed (the numbering starts from 1 as when opening the CSV with a spreadsheet tool) */
     size_t mFileColumnNumber;
