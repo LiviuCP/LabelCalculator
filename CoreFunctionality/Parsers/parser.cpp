@@ -340,9 +340,8 @@ void Parser::_retrieveCurrentPositionFromSubParser(const ISubParser* const pISub
 
             // parsing goes from beginning to the end of the string so the resulting position should never be lower than the initial one
             if (const size_t c_RowIndex{c_FileRowNumber - 2};
-                c_RowIndex < mInputData.size() &&
+                _isValidCurrentPosition(c_RowIndex) &&
                 c_CurrentPosition.has_value() &&
-                mCurrentPositions[c_RowIndex].has_value() &&
                 c_CurrentPosition >= mCurrentPositions[c_RowIndex] &&
                 c_CurrentPosition <= mInputData[c_RowIndex].size())
             {
