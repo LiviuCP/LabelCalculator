@@ -176,6 +176,7 @@ bool Parser::_readFirstCell(const size_t rowIndex, std::string& firstCell)
 
     if (rowIndex < mInputData.size())
     {
+        // from Parser point of view position (index) 0 is considered a valid index even when the string is empty
         mCurrentPositions[rowIndex] = Core::readDataField(mInputData[rowIndex], firstCell, 0);
         success = true;
     }
@@ -251,6 +252,7 @@ bool Parser::_isEndOfInputDataRow(const size_t rowIndex) const
 
 bool Parser::_isValidCurrentPosition(const size_t rowIndex) const
 {
+    // from Parser point of view the index equal to string length is considered valid (it's similar to the end() iterator)
     return (rowIndex < mInputData.size() && mCurrentPositions[rowIndex].has_value() && mCurrentPositions[rowIndex] <= mInputData[rowIndex].size());
 }
 

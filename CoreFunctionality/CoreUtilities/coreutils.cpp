@@ -6,13 +6,18 @@
 #include "applicationdata.h"
 #include "coreutils.h"
 
-/* An empty optional is returned if the CSV row string has been consumed */
+/* An empty optional is returned if:
+   - the CSV row string has been consumed or is empty
+   - a null or out-of-bounds index has been passed
+   It is the caller's responsibility to check if the passed index is valid (non-null and within string bounds)!
+   Note: a field can also be partially read if index is within field substring (starting with the given index until separator/end of string).
+*/
 Index_t Utilities::Core::readDataField(const std::string_view src, std::string& dest, const Index_t index)
 {
-    const size_t c_Length{src.size()};
     Index_t nextIndex;
 
-    if(c_Length > 0u && index.has_value() && index < c_Length)
+    if(const size_t c_Length{src.size()};
+       c_Length > 0u && index.has_value() && index < c_Length)
     {
         dest.clear();
 
@@ -38,11 +43,10 @@ Index_t Utilities::Core::readDataField(const std::string_view src, std::string& 
                 {
                     dest += src[currentIndex];
                     ++currentIndex;
+                    continue;
                 }
-                else
-                {
-                    break;
-                }
+
+                break;
             }
         }
 
