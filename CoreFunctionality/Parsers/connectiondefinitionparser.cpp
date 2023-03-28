@@ -154,13 +154,17 @@ void ConnectionDefinitionParser::_reset()
 
 void ConnectionDefinitionParser::_parseUPosition(const size_t rowIndex)
 {
-    assert(rowIndex < Data::c_MaxRackUnitsCount);
-
-    std::string currentCell;
+    std::string uPositionCell;
 
     // first cell on the row is ignored (contains the U number and is only used for informing the user about rack position; the row index is instead used in calculations in relationship with U number)
-    _readFirstCell(rowIndex, currentCell);
-    _moveToNextInputColumn(rowIndex);
+    if (const bool c_CellSuccessfullyRead{_readFirstCell(rowIndex, uPositionCell)}; c_CellSuccessfullyRead)
+    {
+        _moveToNextInputColumn(rowIndex);
+    }
+    else
+    {
+        assert(rowIndex < Data::c_MaxRackUnitsCount);
+    }
 }
 
 bool ConnectionDefinitionParser::_parseDeviceType(const size_t rowIndex)
@@ -171,7 +175,7 @@ bool ConnectionDefinitionParser::_parseDeviceType(const size_t rowIndex)
     std::string currentCell;
 
     // second cell on the row: device type
-    _readCurrentCell(rowIndex, currentCell);
+    (void)_readCurrentCell(rowIndex, currentCell); // TODO: refactor the whole method by taking the case when _readCurrentCell() returns false into account
 
     if (currentCell.size() > 0u)
     {
@@ -219,7 +223,7 @@ void ConnectionDefinitionParser::_parseRowConnections(const size_t rowIndex)
     {
         // read next cell (new current cell)
         std::string currentCell;
-        _readCurrentCell(rowIndex, currentCell);
+        (void)_readCurrentCell(rowIndex, currentCell); // TODO: refactor the whole method by taking the case when _readCurrentCell() returns false into account
 
         if (0u == currentCell.size())
         {

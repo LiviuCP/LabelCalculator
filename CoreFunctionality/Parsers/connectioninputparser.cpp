@@ -143,9 +143,7 @@ void ConnectionInputParser::_reset()
 
 void ConnectionInputParser::_parseCablePartNumber(const size_t rowIndex)
 {
-    const bool c_CellSuccessfullyRead{_readCurrentCell(rowIndex, mCablePartNumbersEntries[rowIndex])};
-
-    if (c_CellSuccessfullyRead)
+    if (const bool c_CellSuccessfullyRead{_readCurrentCell(rowIndex, mCablePartNumbersEntries[rowIndex])}; c_CellSuccessfullyRead)
     {
         // if no cable PN entered on current row take the PN for previous row
         if (0u == mCablePartNumbersEntries[rowIndex].size())
@@ -173,7 +171,7 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
     bool canContinueRowParsing{true};
 
     std::string deviceType;
-    _readCurrentCell(rowIndex, deviceType);
+    (void)_readCurrentCell(rowIndex, deviceType); // TODO: refactor the whole method by taking into account the case when the _readCurrentCell() returns false!
 
     const Data::DeviceTypeID deviceTypeID{Parsers::getDeviceTypeID(deviceType)};
 
@@ -186,7 +184,7 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
         bool isDeviceUPositionValid{false};
         std::string deviceUPosition;
 
-        _readCurrentCell(rowIndex, deviceUPosition);
+        (void)_readCurrentCell(rowIndex, deviceUPosition); // TODO: refactor the whole method by taking into account the case when the _readCurrentCell() returns false!
 
         if (deviceUPosition.size() > 0u &&
             Core::isDigitString(deviceUPosition))
