@@ -16,6 +16,9 @@ namespace Data
     // number of fields that should be filled in connectioninput.csv for EACH device (unused fields can be filled in with '-')
     inline constexpr size_t c_MaxPortInputParametersCount{3};
 
+    // padding data that is prepended to raw input data in case device port doesn't start parsing from beginning of row
+    inline constexpr std::string_view c_Padding{"--PREVIOUS_CELLS--"};
+
     inline const std::map<DeviceTypeID, size_t> c_RequiredInputParamsCount
     {
         {    DeviceTypeID::PDU,                 3    },

@@ -17,7 +17,8 @@ class DevicePort : public ISubParser
 public:
     DevicePort(const std::string_view deviceUPosition,
                const size_t fileRowNumber,
-               const bool isSourceDevice);
+               const bool isSourceDevice,
+               const bool parseFromRowStart = false);
 
     virtual ~DevicePort();
 
@@ -25,7 +26,7 @@ public:
       - initialize description and label
       - register required parameters
     */
-    void init();
+    virtual void init() override;
 
     /* Updates the description and label fields for each device port
        These two had been previously initialized by the base class (e.g. by writing the rack U position of the device)
@@ -36,7 +37,7 @@ public:
     /* reads and parses the input fields for the device port from string starting position pos (which is subsequently updated)
        uses the ofstream for logging any errors in the corresponding file and the boolean to report the occurence of these errors
     */
-    void parseInputData(const std::string_view input, std::vector<ErrorPtr>& parsingErrors);
+    void parseInputData(std::vector<ErrorPtr>& parsingErrors);
 
     // getters
     virtual Index_t getCurrentPosition() const override final;
@@ -49,7 +50,7 @@ public:
     virtual void setParentParser(IParser* const pIParser) override;
     virtual void setErrorHandler(const ErrorHandlerPtr pErrorHandler) override final;
     virtual void setFileColumnNumber(const size_t fileColumnNumber) override final;
-    virtual void setCurrentPosition(const Index_t currentPosition) override final;
+    virtual void setRawInputData(const std::string_view rawInputData) override final;
 
 protected:
     /* Registers the required parameters; these are subsequently requested (parsed) from the connection input file:
@@ -100,6 +101,9 @@ private:
     */
     void _initializeDescriptionAndLabel();
 
+    // string passed to the device port object for parsing; the device port might parse part or the whole content (padding prefix data might also be required)
+    std::string mRawInputData;
+
     // position of the device containing the port in rack
     std::string mDeviceUPosition;
 
@@ -130,9 +134,14 @@ private:
     // initialization flag, ensures label/description are initialized and required input parameters are registered
     bool mIsInitialized;
 
+    // error handler (should be received from parent parser)
     std::shared_ptr<ErrorHandler> mpErrorHandler;
 
+    // parent parser (used for passing data via callback after subparser finishes the parsing job)
     IParser* m_pParentParser;
+
+    // flag that signals that parsing begins from start of row (if false: some padding needs to be prepended to raw input data, otherwise first cell is always considered empty)
+    const bool mParseFromRowStart;
 };
 
 using DevicePortPtr = std::shared_ptr<DevicePort>;

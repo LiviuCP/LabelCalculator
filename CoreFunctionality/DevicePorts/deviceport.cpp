@@ -10,13 +10,14 @@
 namespace Core = Utilities::Core;
 namespace Ports = Utilities::DevicePorts;
 
-DevicePort::DevicePort(const std::string_view deviceUPosition, const size_t fileRowNumber, const bool isSourceDevice)
+DevicePort::DevicePort(const std::string_view deviceUPosition, const size_t fileRowNumber, const bool isSourceDevice, const bool parseFromRowStart)
     : mDeviceUPosition{deviceUPosition}
     , mFileRowNumber{fileRowNumber}
     , mFileColumnNumber{1}
     , mIsSourceDevice{isSourceDevice}
     , mIsInitialized{false}
     , m_pParentParser{nullptr}
+    , mParseFromRowStart{parseFromRowStart}
 {
 }
 
@@ -35,7 +36,8 @@ void DevicePort::init()
     }
 }
 
-void DevicePort::parseInputData(const std::string_view input, std::vector<ErrorPtr>& parsingErrors)
+// TODO: refactor method (+ check if mCurrentPosition is within bounds?)
+void DevicePort::parseInputData(std::vector<ErrorPtr>& parsingErrors)
 {
     assert(mInputData.size() == mInputParametersCount); // check if all required parameters have been registered by derived class
 
@@ -52,7 +54,7 @@ void DevicePort::parseInputData(const std::string_view input, std::vector<ErrorP
 
         if (mCurrentPosition.has_value()) // check if characters are available for current (required) field
         {
-            mCurrentPosition = Core::readDataField(input, *mInputData[currentParameter], mCurrentPosition);
+            mCurrentPosition = Core::readDataField(mRawInputData, *mInputData[currentParameter], mCurrentPosition);
 
             bool noErrorsDetectedInCell{false};
 
@@ -93,7 +95,7 @@ void DevicePort::parseInputData(const std::string_view input, std::vector<ErrorP
             if (mCurrentPosition.has_value())
             {
                 std::string unusedField;
-                mCurrentPosition = Core::readDataField(input, unusedField, mCurrentPosition);
+                mCurrentPosition = Core::readDataField(mRawInputData, unusedField, mCurrentPosition);
             }
             else
             {
@@ -125,7 +127,23 @@ void DevicePort::parseInputData(const std::string_view input, std::vector<ErrorP
 
 Index_t DevicePort::getCurrentPosition() const
 {
-    return mCurrentPosition;
+    Index_t currentPosition{mCurrentPosition};
+
+    if (mCurrentPosition.has_value() && !mParseFromRowStart)
+    {
+        if (const size_t c_CurrentPosition{mCurrentPosition.value()}, c_PaddingSize{Data::c_Padding.size()};
+            c_CurrentPosition >= c_PaddingSize)
+        {
+            currentPosition = c_CurrentPosition - c_PaddingSize;
+        }
+        else
+        {
+            currentPosition.reset();
+            assert(false);
+        }
+    }
+
+    return currentPosition;
 }
 
 size_t DevicePort::getFileColumnNumber() const
@@ -166,9 +184,17 @@ void DevicePort::setFileColumnNumber(const size_t fileColumnNumber)
     mFileColumnNumber = fileColumnNumber;
 }
 
-void DevicePort::setCurrentPosition(const Index_t currentPosition)
+void DevicePort::setRawInputData(const std::string_view rawInputData)
 {
-    mCurrentPosition = currentPosition;
+    mRawInputData.clear();
+
+    if (!mParseFromRowStart)
+    {
+        mRawInputData.append(Data::c_Padding);
+    }
+
+    mCurrentPosition = mRawInputData.size();
+    mRawInputData.append(rawInputData);
 }
 
 void DevicePort::_registerRequiredParameter(std::string* const pRequiredParameter)

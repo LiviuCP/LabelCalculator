@@ -206,15 +206,20 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
 
             DevicePortPtr pDevicePort{mpDevicePortsFactory->createDevicePort(deviceTypeID, deviceUPosition, c_FileRowNumber, c_IsSourceDevice)};
 
-            if(pDevicePort)
+            bool isSubParserActive{false};
+
+            if (pDevicePort)
             {
                 _registerSubParser(pDevicePort.get());
-                pDevicePort->init();
+                isSubParserActive = _activateSubParser(pDevicePort.get());
+            }
 
+            if (isSubParserActive)
+            {
                 mDevicePorts.push_back(pDevicePort);
 
                 std::vector<ErrorPtr> parsingErrors;
-                pDevicePort->parseInputData(_getInputRowContent(rowIndex), parsingErrors);
+                pDevicePort->parseInputData(parsingErrors);
 
                 bool fewerCellsErrorOccurred{false};
 
@@ -229,8 +234,7 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
                 }
 
                 // the remaining row part (second device) should no longer be parsed if there are fewer cells (in total) than necessary
-                if (fewerCellsErrorOccurred &&
-                    Parsers::c_DevicesPerConnectionInputRowCount == mRowPortsStillNotParsedCount)
+                if (fewerCellsErrorOccurred && Parsers::c_DevicesPerConnectionInputRowCount == mRowPortsStillNotParsedCount)
                 {
                     canContinueRowParsing = false;
                 }

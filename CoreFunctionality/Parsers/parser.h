@@ -81,9 +81,6 @@ protected:
     /* Increments file column number (position updated separately) */
     void _moveToNextInputColumn(const size_t rowIndex);
 
-    /* Provides the whole input (payload) row content */
-    std::string _getInputRowContent(const size_t rowIndex) const;
-
     /* Returns substring consisting of columns not yet parsed (from given row) */
     std::string _getUnparsedCellsContent(const size_t rowIndex) const;
 
@@ -100,17 +97,20 @@ protected:
     void _appendRowToOutput(const std::string& rowContent);
 
     /* Provides access to error handling mechanism to sub-parser */
-    void _registerSubParser(ISubParser* pISubParser);
+    void _registerSubParser(ISubParser* const pISubParser);
+
+    /* Activates the subparser so the it can start doing its part */
+    bool _activateSubParser(ISubParser* const pISubParser);
 
     /* Checks if any parsing errors occured (either from parser or from sub-parser) */
     bool _parsingErrorsExist() const;
 
 private:
-    /* Methods used for communication with sub-parser (pass - retrieve mechanism) */
-    void _passFileColumnNumberToSubParser(ISubParser* const pISubParser);
-    void _retrieveFileColumnNumberFromSubParser(const ISubParser* const pISubParser);
-    void _passCurrentPositionToSubParser(ISubParser* const pISubParser);
-    void _retrieveCurrentPositionFromSubParser(const ISubParser* const pISubParser);
+    /* Retrieves relevant data resulted from subparser work: current position, file column number, etc */
+    void _retrieveRequiredDataFromSubParser(const ISubParser* const pISubParser);
+
+    /* Checks if the subparser is registered within parser (otherwise it cannot be used) */
+    bool _isSubParserRegistered(const ISubParser* const pISubParser) const;
 
     /* file streams used by parser, each one should correspond to a file that had been previously correctly opened */
     const InputStreamPtr mpInputStream;
@@ -140,6 +140,12 @@ private:
 
     /* error handler used for creating the objects that are responsible for logging the parsing errors to file */
     std::shared_ptr<ErrorHandler> mpErrorHandler;
+
+    /* container for the registered subparsers on each row */
+    std::vector<std::vector<ISubParser*>> mRegisteredSubParsers;
+
+    /* one flag per row that checks if a subparser is active (only one subparser can be active for each row */
+    std::vector<bool> mIsSubParserActiveOnRow;
 };
 
 using ParserPtr = std::unique_ptr<Parser>;

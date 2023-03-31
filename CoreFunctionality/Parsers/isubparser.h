@@ -11,10 +11,15 @@ class IParser;
 class ISubParser
 {
 public:
+    virtual ~ISubParser() {};
+
+    // used for performing specific initializations that cannot be handled within constructor
+    virtual void init() {};
+
     virtual void setParentParser(IParser* const pIParser) = 0;
     virtual void setErrorHandler(const ErrorHandlerPtr pErrorHandler) = 0;
     virtual void setFileColumnNumber(const size_t fileColumnNumber) = 0;
-    virtual void setCurrentPosition(const Index_t currentPosition) = 0;
+    virtual void setRawInputData(const std::string_view rawInputData) = 0;
 
     virtual Index_t getCurrentPosition() const = 0;
     virtual size_t getFileRowNumber() const = 0;
