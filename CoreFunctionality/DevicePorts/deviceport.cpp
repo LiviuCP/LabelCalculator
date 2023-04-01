@@ -1,7 +1,7 @@
 #include <sstream>
 #include <cassert>
 
-#include "iparser.h"
+#include "isubparserobserver.h"
 #include "errorcodes.h"
 #include "deviceportdata.h"
 #include "deviceportutils.h"
@@ -16,7 +16,7 @@ DevicePort::DevicePort(const std::string_view deviceUPosition, const size_t file
     , mFileColumnNumber{1}
     , mIsSourceDevice{isSourceDevice}
     , mIsInitialized{false}
-    , m_pParentParser{nullptr}
+    , m_pISubParserObserver{nullptr}
     , mParseFromRowStart{parseFromRowStart}
 {
 }
@@ -119,9 +119,9 @@ void DevicePort::parseInputData(std::vector<ErrorPtr>& parsingErrors)
     }
 
     // notify parser
-    if (m_pParentParser)
+    if (m_pISubParserObserver)
     {
-        m_pParentParser->subParserFinished(this);
+        m_pISubParserObserver->subParserFinished(this);
     }
 }
 
@@ -166,9 +166,9 @@ std::string DevicePort::getLabel() const
     return mLabel;
 }
 
-void DevicePort::setParentParser(IParser* const pIParser)
+void DevicePort::setSubParserObserver(ISubParserObserver* const pISubParserObserver)
 {
-    m_pParentParser = pIParser;
+    m_pISubParserObserver = pISubParserObserver;
 }
 
 void DevicePort::setErrorHandler(const ErrorHandlerPtr pErrorHandler)

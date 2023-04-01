@@ -6,7 +6,7 @@
 
 #include "errorhandler.h"
 
-class IParser;
+class ISubParserObserver;
 
 class ISubParser
 {
@@ -16,7 +16,7 @@ public:
     // used for performing specific initializations that cannot be handled within constructor
     virtual void init() {};
 
-    virtual void setParentParser(IParser* const pIParser) = 0;
+    virtual void setSubParserObserver(ISubParserObserver* const pISubParserObserver) = 0;
     virtual void setErrorHandler(const ErrorHandlerPtr pErrorHandler) = 0;
     virtual void setFileColumnNumber(const size_t fileColumnNumber) = 0;
     virtual void setRawInputData(const std::string_view rawInputData) = 0;

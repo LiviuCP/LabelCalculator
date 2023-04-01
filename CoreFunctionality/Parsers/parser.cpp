@@ -272,7 +272,7 @@ void Parser::_registerSubParser(ISubParser* const pISubParser)
             if (const size_t c_RowIndex{c_FileRowNumber - 2}; c_RowIndex < mInputData.size())
             {
                 mRegisteredSubParsers[c_RowIndex].push_back(pISubParser);
-                pISubParser->setParentParser(this);
+                pISubParser->setSubParserObserver(this);
                 pISubParser->setErrorHandler(mpErrorHandler);
             }
         }

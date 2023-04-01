@@ -9,7 +9,7 @@
 
 #include "coreutils.h"
 #include "errorhandler.h"
-#include "iparser.h"
+#include "isubparserobserver.h"
 
 #ifdef _WIN32
 #include "auxdata.h"
@@ -21,7 +21,7 @@ class ISubParser;
    The content of an input .csv file is read, parsed and the resulting output written to an output .csv file.
    If errors occur they are being logged to an error file. In this case the output file stays empty.
 */
-class Parser : public IParser
+class Parser : public ISubParserObserver
 {
 public:
     Parser(const InputStreamPtr pInputStream, const OutputStreamPtr pOutputStream, const ErrorStreamPtr pErrorStream, const std::string_view header);

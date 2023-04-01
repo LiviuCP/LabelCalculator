@@ -10,7 +10,7 @@
 #include "auxdata.h"
 #endif
 
-class IParser;
+class ISubParserObserver;
 
 class DevicePort : public ISubParser
 {
@@ -47,7 +47,7 @@ public:
     std::string getLabel() const;
 
     // setters
-    virtual void setParentParser(IParser* const pIParser) override;
+    virtual void setSubParserObserver(ISubParserObserver* const pISubParserObserver) override;
     virtual void setErrorHandler(const ErrorHandlerPtr pErrorHandler) override final;
     virtual void setFileColumnNumber(const size_t fileColumnNumber) override final;
     virtual void setRawInputData(const std::string_view rawInputData) override final;
@@ -138,7 +138,7 @@ private:
     std::shared_ptr<ErrorHandler> mpErrorHandler;
 
     // parent parser (used for passing data via callback after subparser finishes the parsing job)
-    IParser* m_pParentParser;
+    ISubParserObserver* m_pISubParserObserver;
 
     // flag that signals that parsing begins from start of row (if false: some padding needs to be prepended to raw input data, otherwise first cell is always considered empty)
     const bool mParseFromRowStart;
