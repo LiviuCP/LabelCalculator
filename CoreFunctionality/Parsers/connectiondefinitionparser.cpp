@@ -71,8 +71,9 @@ bool ConnectionDefinitionParser::_parseInput()
 
         if (!areDeviceConnectionsDefined)
         {
-            ErrorPtr pEmptyConnectionsInputFileError{_logError(static_cast<Error_t>(ErrorCode::NO_CONNECTIONS_DEFINED), 1)};
-            _storeParsingError(pEmptyConnectionsInputFileError);
+            ErrorPtr pEmptyConnectionsDefinitionsFileError{_logError(static_cast<Error_t>(ErrorCode::NO_CONNECTIONS_DEFINED), 1, true)};
+            assert(pEmptyConnectionsDefinitionsFileError);
+            _storeParsingError(pEmptyConnectionsDefinitionsFileError);
         }
     }
 

@@ -52,8 +52,8 @@ protected:
     /* This function resets the internal parser state after each parsing session. */
     virtual void _reset();
 
-    /* Used for requesting error logging from error handler */
-    virtual ErrorPtr _logError(const Error_t errorCode, const size_t fileRowNumber);
+    /* Used for requesting error logging from error handler (force: used for non-localized error, e.g. empty file) */
+    virtual ErrorPtr _logError(const Error_t errorCode, const size_t fileRowNumber, bool force = false);
 
     /* Used for storing locally generated errors
        Error location is setup at error storing point

@@ -104,16 +104,23 @@ void Parser::_reset()
     mIsSubParserActiveOnRow.clear();
 }
 
-ErrorPtr Parser::_logError(const Error_t errorCode, const size_t fileRowNumber)
+ErrorPtr Parser::_logError(const Error_t errorCode, const size_t fileRowNumber, bool force)
 {
     ErrorPtr result{nullptr};
 
-    // file row numbering starts at 1 and the first row is reserved for the header (so payload rows start at 2)
-    if (mpErrorHandler && fileRowNumber > 1u)
+    if (mpErrorHandler)
     {
-        if (const size_t c_RowIndex{fileRowNumber - 2}; c_RowIndex < mInputData.size())
+        if (force)
         {
-            result = mpErrorHandler->logError(errorCode, fileRowNumber, mFileColumnNumbers[c_RowIndex]);
+            result = mpErrorHandler->logError(errorCode, fileRowNumber, 1);
+        }
+        else if (fileRowNumber > 1u)
+        {
+            // file row numbering starts at 1 and the first row is reserved for the header (so payload rows start at 2)
+            if (const size_t c_RowIndex{fileRowNumber - 2}; c_RowIndex < mInputData.size())
+            {
+                result = mpErrorHandler->logError(errorCode, fileRowNumber, mFileColumnNumbers[c_RowIndex]);
+            }
         }
     }
 

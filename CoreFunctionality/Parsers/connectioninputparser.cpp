@@ -81,7 +81,7 @@ bool ConnectionInputParser::_parseInput()
     }
     else
     {
-        ErrorPtr pEmptyConnectionInputFileError{_logError(static_cast<Error_t>(ErrorCode::EMPTY_CONNECTION_INPUT_FILE), 1)};
+        ErrorPtr pEmptyConnectionInputFileError{_logError(static_cast<Error_t>(ErrorCode::EMPTY_CONNECTION_INPUT_FILE), 1, true)};
         _storeParsingError(pEmptyConnectionInputFileError);
     }
 
