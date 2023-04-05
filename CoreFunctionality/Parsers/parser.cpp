@@ -29,6 +29,7 @@ Parser::Parser(const InputStreamPtr pInputStream, const OutputStreamPtr pOutputS
 
 Parser::~Parser()
 {
+    _destroySubParsers();
 }
 
 bool Parser::parse()
@@ -286,26 +287,46 @@ void Parser::_registerSubParser(ISubParser* const pISubParser)
     }
 }
 
-bool Parser::_activateSubParser(ISubParser* const pISubParser)
+bool Parser::_activateSubParser(const size_t rowIndex, const size_t subParserIndex)
 {
     bool success{false};
 
-    if (pISubParser && _isSubParserRegistered(pISubParser))
+    if (rowIndex < mRegisteredSubParsers.size() && subParserIndex < mRegisteredSubParsers[rowIndex].size())
     {
-        if (const size_t c_RowIndex{pISubParser->getFileRowNumber() - 2}; !mIsSubParserActiveOnRow[c_RowIndex])
+        if (ISubParser* const pISubParser{mRegisteredSubParsers[rowIndex][subParserIndex]}; pISubParser && !mIsSubParserActiveOnRow[rowIndex])
         {
-            std::string_view dataToPass{mInputData[c_RowIndex]};
-            dataToPass.remove_prefix(mCurrentPositions[c_RowIndex].value());
+            std::string_view dataToPass{mInputData[rowIndex]};
+            dataToPass.remove_prefix(mCurrentPositions[rowIndex].value());
 
             pISubParser->init();
             pISubParser->setRawInputData(dataToPass);
-            pISubParser->setFileColumnNumber(mFileColumnNumbers[c_RowIndex]);
+            pISubParser->setFileColumnNumber(mFileColumnNumbers[rowIndex]);
 
             success = true;
         }
     }
 
     return success;
+}
+
+void Parser::_doSubParsing(const size_t rowIndex, const size_t subParserIndex, std::vector<ErrorPtr>& parsingErrors)
+{
+    if (const bool c_SubParserActivated{_activateSubParser(rowIndex, subParserIndex)}; c_SubParserActivated)
+    {
+        mRegisteredSubParsers[rowIndex][subParserIndex]->parseInputData(parsingErrors);
+    }
+}
+
+ISubParser* Parser::_getSubParser(const size_t rowIndex, const size_t subParserIndex) const
+{
+    ISubParser* pISubParser{nullptr};
+
+    if (rowIndex < mRegisteredSubParsers.size() && subParserIndex < mRegisteredSubParsers[rowIndex].size())
+    {
+        pISubParser = mRegisteredSubParsers[rowIndex][subParserIndex];
+    }
+
+    return pISubParser;
 }
 
 bool Parser::_parsingErrorsExist() const
@@ -358,4 +379,19 @@ bool Parser::_isSubParserRegistered(const ISubParser* const pISubParser) const
     }
 
     return isRegistered;
+}
+
+void Parser::_destroySubParsers()
+{
+    for (auto& row : mRegisteredSubParsers)
+    {
+        for (auto& pSubParser : row)
+        {
+            if (pSubParser)
+            {
+                delete pSubParser;
+                pSubParser = nullptr;
+            }
+        }
+    }
 }

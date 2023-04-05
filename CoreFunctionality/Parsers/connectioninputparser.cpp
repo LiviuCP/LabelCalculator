@@ -27,9 +27,7 @@ void ConnectionInputParser::_readPayload()
 
 bool ConnectionInputParser::_parseInput()
 {
-    const size_t c_ConnectionInputRowsCount{_getInputRowsCount()};
-
-    if (c_ConnectionInputRowsCount > 0u)
+    if (const size_t c_ConnectionInputRowsCount{_getInputRowsCount()}; c_ConnectionInputRowsCount > 0u)
     {
         // lazy initialization of device factory
         if (nullptr == mpDevicePortsFactory.get())
@@ -98,46 +96,36 @@ bool ConnectionInputParser::_parseInput()
 
 void ConnectionInputParser::_buildOutput()
 {
-    const size_t c_CablePartNumbersEntriesCount{mCablePartNumbersEntries.size()};
-
-    if (c_CablePartNumbersEntriesCount > 0u)
+    if (const size_t c_ConnectionInputRowsCount{_getInputRowsCount()}; mCablePartNumbersEntries.size() == c_ConnectionInputRowsCount)
     {
-        // obviously 1 cable per connection between 2 device ports
-        assert(Parsers::c_DevicesPerConnectionInputRowCount * c_CablePartNumbersEntriesCount == mDevicePorts.size());
-
-        for (auto deviceIter{mDevicePorts.cbegin()}; deviceIter != mDevicePorts.cend(); ++deviceIter)
-        {
-            // for each device the description and lable are built by considering the even/odd index (even, e.g. 0: first device on the row; odd, e.g. 3: second device on the row)
-            (*deviceIter)->updateDescriptionAndLabel();
-        }
-
         size_t connectionNumber{1u}; // number of the connection to be written on each row of the output file
-        size_t srcDeviceIndex{0u}; // index of the first device of the connection
-        size_t destDeviceIndex{1u}; // index of the second device of the connection
 
-        // calculate the row strings for the output file (labellingtable.csv)
-        for (size_t connectionIndex{0u}; connectionIndex < c_CablePartNumbersEntriesCount; ++connectionIndex)
+        for (size_t rowIndex{0u}; rowIndex < c_ConnectionInputRowsCount; ++rowIndex)
         {
-            std::string outputRow;
-            connectionNumber = _buildConnectionEntry(connectionNumber,
-                                                     mCablePartNumbersEntries[connectionIndex],
-                                                     mDevicePorts[srcDeviceIndex],
-                                                     mDevicePorts[destDeviceIndex],
-                                                     outputRow);
+            DevicePort* pFirstDevicePort{dynamic_cast<DevicePort*>(_getSubParser(rowIndex, 0))};
+            DevicePort* pSecondDevicePort{dynamic_cast<DevicePort*>(_getSubParser(rowIndex, 1))};
 
-            _appendRowToOutput(outputRow);
+            if (pFirstDevicePort && pSecondDevicePort)
+            {
+                pFirstDevicePort->updateDescriptionAndLabel();
+                pSecondDevicePort->updateDescriptionAndLabel();
 
-            srcDeviceIndex += Parsers::c_DevicesPerConnectionInputRowCount;
-            destDeviceIndex += Parsers::c_DevicesPerConnectionInputRowCount;
+                std::string outputRow;
+                connectionNumber = _buildConnectionEntry(connectionNumber,
+                                                         mCablePartNumbersEntries[rowIndex],
+                                                         pFirstDevicePort,
+                                                         pSecondDevicePort,
+                                                         outputRow);
+
+                _appendRowToOutput(outputRow);
+            }
         }
     }
 }
 
 void ConnectionInputParser::_reset()
 {
-    mDevicePorts.clear();
     mCablePartNumbersEntries.clear();
-
     Parser::_reset();
 }
 
@@ -178,8 +166,11 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
     // the device should both be known (correct device type string entered by user) and supported (instantiatable) by device factory (code should be in place for factory instantiating it)
     bool isDeviceKnown{false};
 
-    if (Data::DeviceTypeID::UNKNOWN_DEVICE != deviceTypeID)
+    // NO_DEVICE should normally not be a case, it's added just for defensive programming purposes (considered equivalent to UNKNOWN_DEVICE)
+    if (Data::DeviceTypeID::UNKNOWN_DEVICE != deviceTypeID && Data::DeviceTypeID::NO_DEVICE != deviceTypeID)
     {
+        isDeviceKnown = true;
+
         // the U position of the device should be valid (1U - 50U)
         bool isDeviceUPositionValid{false};
         std::string deviceUPosition;
@@ -204,22 +195,12 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
             _moveToNextInputColumn(rowIndex);
             _moveToNextInputColumn(rowIndex);
 
-            DevicePortPtr pDevicePort{mpDevicePortsFactory->createDevicePort(deviceTypeID, deviceUPosition, c_FileRowNumber, c_IsSourceDevice)};
-
-            bool isSubParserActive{false};
-
-            if (pDevicePort)
+            if (mpDevicePortsFactory)
             {
-                _registerSubParser(pDevicePort.get());
-                isSubParserActive = _activateSubParser(pDevicePort.get());
-            }
-
-            if (isSubParserActive)
-            {
-                mDevicePorts.push_back(pDevicePort);
+                _registerSubParser(mpDevicePortsFactory->createDevicePort(deviceTypeID, deviceUPosition, c_FileRowNumber, c_IsSourceDevice));
 
                 std::vector<ErrorPtr> parsingErrors;
-                pDevicePort->parseInputData(parsingErrors);
+                _doSubParsing(rowIndex, mRowPortsStillNotParsedCount % Parsers::c_DevicesPerConnectionInputRowCount, parsingErrors);
 
                 bool fewerCellsErrorOccurred{false};
 
@@ -238,10 +219,10 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
                 {
                     canContinueRowParsing = false;
                 }
-                else
-                {
-                    isDeviceKnown = true;
-                }
+            }
+            else
+            {
+                assert(false);
             }
         }
         else
@@ -268,8 +249,8 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
 
 size_t ConnectionInputParser::_buildConnectionEntry(const size_t currentEntryNumber,
                                                     const std::string_view cablePartNumber,
-                                                    const DevicePortPtr pFirstDevicePort,
-                                                    const DevicePortPtr pSecondDevicePort,
+                                                    const DevicePort* pFirstDevicePort,
+                                                    const DevicePort* pSecondDevicePort,
                                                     std::string& currentEntry)
 {
     std::stringstream str;

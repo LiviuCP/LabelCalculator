@@ -16,6 +16,7 @@ DevicePort::DevicePort(const std::string_view deviceUPosition, const size_t file
     , mFileColumnNumber{1}
     , mIsSourceDevice{isSourceDevice}
     , mIsInitialized{false}
+    , mpErrorHandler{nullptr}
     , m_pISubParserObserver{nullptr}
     , mParseFromRowStart{parseFromRowStart}
 {

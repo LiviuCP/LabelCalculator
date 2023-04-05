@@ -37,12 +37,9 @@ private:
     */
     static size_t _buildConnectionEntry(const size_t currentEntryNumber,
                                         const std::string_view cablePartNumber,
-                                        const DevicePortPtr pFirstDevicePort,
-                                        const DevicePortPtr pSecondDevicePort,
+                                        const DevicePort* pFirstDevicePort,
+                                        const DevicePort* pSecondDevicePort,
                                         std::string& currentEntry);
-
-    /* all created DevicePort objects used for calculating labels and descriptions */
-    std::vector<DevicePortPtr> mDevicePorts;
 
     /* the cable part number of each connection to be stored here */
     std::vector<std::string> mCablePartNumbersEntries;

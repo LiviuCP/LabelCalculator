@@ -37,7 +37,7 @@ public:
     /* reads and parses the input fields for the device port from string starting position pos (which is subsequently updated)
        uses the ofstream for logging any errors in the corresponding file and the boolean to report the occurence of these errors
     */
-    void parseInputData(std::vector<ErrorPtr>& parsingErrors);
+    void parseInputData(std::vector<ErrorPtr>& parsingErrors) override;
 
     // getters
     virtual Index_t getCurrentPosition() const override final;

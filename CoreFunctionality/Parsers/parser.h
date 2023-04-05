@@ -100,7 +100,13 @@ protected:
     void _registerSubParser(ISubParser* const pISubParser);
 
     /* Activates the subparser so the it can start doing its part */
-    bool _activateSubParser(ISubParser* const pISubParser);
+    bool _activateSubParser(const size_t rowIndex, const size_t subParserIndex);
+
+    /* Launches sub-parsing for given sub-parser */
+    void _doSubParsing(const size_t rowIndex, const size_t subParserIndex, std::vector<ErrorPtr>& parsingErrors);
+
+    /* Used by derived classes to access the requested subparser for specific jobs */
+    ISubParser* _getSubParser(const size_t rowIndex, const size_t subParserIndex) const;
 
     /* Checks if any parsing errors occured (either from parser or from sub-parser) */
     bool _parsingErrorsExist() const;
@@ -111,6 +117,9 @@ private:
 
     /* Checks if the subparser is registered within parser (otherwise it cannot be used) */
     bool _isSubParserRegistered(const ISubParser* const pISubParser) const;
+
+    /* Deallocates all registered subparsers once Parser gets destroyed (once registered their ownership is assumed by Parser) */
+    void _destroySubParsers();
 
     /* file streams used by parser, each one should correspond to a file that had been previously correctly opened */
     const InputStreamPtr mpInputStream;

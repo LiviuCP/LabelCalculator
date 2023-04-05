@@ -16,7 +16,7 @@ public:
     /* This function is responsible for creating the actual device objects which are then used for generating the connection output data (descriptions and labels)
        It implements the factory design pattern and returns a null pointer if the device cannot be created (unknown device)
     */
-    DevicePortPtr createDevicePort(const Data::DeviceTypeID deviceTypeID,
+    DevicePort* createDevicePort(const Data::DeviceTypeID deviceTypeID,
                                    const std::string_view deviceUPosition,
                                    const size_t fileRowNumber,
                                    const bool isSourceDevice);

@@ -16,6 +16,8 @@ public:
     // used for performing specific initializations that cannot be handled within constructor
     virtual void init() {};
 
+    virtual void parseInputData(std::vector<ErrorPtr>& parsingErrors) = 0;
+
     virtual void setSubParserObserver(ISubParserObserver* const pISubParserObserver) = 0;
     virtual void setErrorHandler(const ErrorHandlerPtr pErrorHandler) = 0;
     virtual void setFileColumnNumber(const size_t fileColumnNumber) = 0;
