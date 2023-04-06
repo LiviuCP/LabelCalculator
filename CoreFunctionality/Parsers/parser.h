@@ -121,40 +121,50 @@ private:
     /* Deallocates all registered subparsers once Parser gets destroyed (once registered their ownership is assumed by Parser) */
     void _destroySubParsers();
 
+    /* Information required for parsing a csv row */
+    struct ParsedRowInfo
+    {
+        ParsedRowInfo() = delete;
+        ParsedRowInfo(const std::string_view rowData);
+
+        std::string mRowData; // input row (payload) data
+        Index_t mCurrentPosition; // current character index in the input string
+        size_t mFileColumnNumber; // csv column number
+        std::vector<ISubParser*> mRegisteredSubParsers; // subparsers used on the row
+        bool mIsSubParserActive; // checks if a subparser is active on the row (only one subparser can be active on each row)
+    };
+
+    using ParserInput = std::vector<ParsedRowInfo>;
+
+    /* Output created by parser (data rows + header) */
+    struct ParserOutput
+    {
+        ParserOutput() = delete;
+        ParserOutput(const std::string_view header);
+
+        std::vector<std::string> mData; // stores final data (.csv rows) to be written to output file
+        const std::string mHeader; // header (.csv row) to be written to output file
+    };
+
     /* file streams used by parser, each one should correspond to a file that had been previously correctly opened */
     const InputStreamPtr mpInputStream;
     const OutputStreamPtr mpOutputStream;
     const ErrorStreamPtr mpErrorStream;
 
-    /* stores raw data (.csv rows) read from input file */
-    std::vector<std::string> mInputData;
+    /* required info for parsing all (payload) input rows */
+    ParserInput mParserInput;
 
-    /* stores final data (.csv rows) to be written to output file */
-    std::vector<std::string> mOutputData;
-
-    /* header (.csv row) to be written to output file */
-    std::string mOutputHeader;
-
-    /* determines if the parser state needs to be reset before executing a parsing session */
-    bool mIsResetRequired;
+    /* parsing output (header and data) */
+    ParserOutput mParserOutput;
 
     /* gather all parsing errors here and write them to output file once parsing is complete (if any errors) */
     std::vector<ErrorPtr> mParsingErrors;
 
-    /* current character index in the currently parsed CSV row string */
-    std::vector<Index_t> mCurrentPositions;
-
-    /* current CSV column being parsed (the numbering starts from 1 as when opening the CSV with a spreadsheet tool) */
-    std::vector<size_t> mFileColumnNumbers;
-
     /* error handler used for creating the objects that are responsible for logging the parsing errors to file */
-    std::shared_ptr<ErrorHandler> mpErrorHandler;
+    ErrorHandlerPtr mpErrorHandler;
 
-    /* container for the registered subparsers on each row */
-    std::vector<std::vector<ISubParser*>> mRegisteredSubParsers;
-
-    /* one flag per row that checks if a subparser is active (only one subparser can be active for each row */
-    std::vector<bool> mIsSubParserActiveOnRow;
+    /* determines if the parser state needs to be reset before executing a parsing session */
+    bool mIsResetRequired;
 };
 
 using ParserPtr = std::unique_ptr<Parser>;
