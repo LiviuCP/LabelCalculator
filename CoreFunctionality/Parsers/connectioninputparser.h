@@ -35,11 +35,7 @@ private:
     /* This function creates an entry for a connection between two devices.
        String is written to the labelling table in a subsequent operation.
     */
-    static size_t _buildConnectionEntry(const size_t currentEntryNumber,
-                                        const std::string_view cablePartNumber,
-                                        const DevicePort* pFirstDevicePort,
-                                        const DevicePort* pSecondDevicePort,
-                                        std::string& currentEntry);
+    bool _buildOutputRow(const size_t rowIndex, std::string& currentRow);
 
     /* the cable part number of each connection to be stored here */
     std::vector<std::string> mCablePartNumbersEntries;
