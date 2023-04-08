@@ -4,7 +4,6 @@
 #include <memory>
 
 #include "deviceportsfactory.h"
-#include "deviceport.h"
 #include "parser.h"
 
 class ConnectionInputParser final : public Parser
@@ -37,14 +36,18 @@ private:
     */
     bool _buildOutputRow(const size_t rowIndex, std::string& currentRow);
 
-    /* the cable part number of each connection to be stored here */
-    std::vector<std::string> mCablePartNumbersEntries;
+    struct ParsedRowInfo
+    {
+        ParsedRowInfo();
 
-    /* number of devices still not parsed on current row */
-    int mRowPortsStillNotParsedCount;
+        std::string mCablePartNumber; // the cable part number of each connection
+        int mUnparsedPortsCount; // number of device ports still not parsed on current row
+    };
 
-    /* stores the cable part number determined for previous row */
-    std::string mCurrentCablePartNumber;
+    using ParsedRowsInfo = std::vector<ParsedRowInfo>;
+
+    /* Information used for or obtained from parsing input rows */
+    ParsedRowsInfo mParsedRowsInfo;
 
     /* device port factory used for creating the device port objects for each connection */
     std::unique_ptr<DevicePortsFactory> mpDevicePortsFactory;

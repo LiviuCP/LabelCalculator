@@ -2,7 +2,8 @@
 #define DEVICEPORTSFACTORY_H
 
 #include "applicationdata.h"
-#include "deviceport.h"
+
+class DevicePort;
 
 class DevicePortsFactory
 {
