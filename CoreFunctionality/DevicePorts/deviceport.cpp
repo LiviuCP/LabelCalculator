@@ -97,6 +97,7 @@ void DevicePort::parseInputData(std::vector<ErrorPtr>& parsingErrors)
             {
                 std::string unusedField;
                 mCurrentPosition = Core::readDataField(mRawInputData, unusedField, mCurrentPosition);
+                ++mFileColumnNumber;
             }
             else
             {
