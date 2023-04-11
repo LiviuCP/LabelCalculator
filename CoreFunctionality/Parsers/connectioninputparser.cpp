@@ -4,6 +4,7 @@
 #include "errorcodes.h"
 #include "coreutils.h"
 #include "parserutils.h"
+#include "deviceportsfactory.h"
 #include "deviceport.h"
 #include "connectioninputparser.h"
 
@@ -12,7 +13,6 @@ namespace Parsers = Utilities::Parsers;
 
 ConnectionInputParser::ConnectionInputParser(const InputStreamPtr pInputStream, const OutputStreamPtr pOutputStream, const ErrorStreamPtr pErrorStream)
     : Parser(pInputStream, pOutputStream, pErrorStream, Data::c_LabellingTableHeader)
-    , mpDevicePortsFactory{nullptr}
 {
 }
 
@@ -29,16 +29,6 @@ bool ConnectionInputParser::_parseInput()
 {
     if (const size_t c_ConnectionInputRowsCount{_getInputRowsCount()}; c_ConnectionInputRowsCount > 0u)
     {
-        // lazy initialization of device factory
-        if (nullptr == mpDevicePortsFactory.get())
-        {
-            mpDevicePortsFactory = std::make_unique<DevicePortsFactory>();
-        }
-        else
-        {
-            mpDevicePortsFactory->reset();
-        }
-
         mParsedRowsInfo.resize(c_ConnectionInputRowsCount);
 
         for (size_t rowIndex{0u}; rowIndex < c_ConnectionInputRowsCount; ++rowIndex)
@@ -67,9 +57,7 @@ bool ConnectionInputParser::_parseInput()
                     continue;
                 }
 
-                const bool c_CanContinueRowParsing{_parseDevicePort(rowIndex)};
-
-                if (!c_CanContinueRowParsing)
+                if (const bool c_CanContinueRowParsing{_parseDevicePort(rowIndex)}; !c_CanContinueRowParsing)
                 {
                     break;
                 }
@@ -85,12 +73,6 @@ bool ConnectionInputParser::_parseInput()
     }
 
     const bool c_ErrorsOccurred{_logParsingErrorsToFile()};
-
-    if (!c_ErrorsOccurred)
-    {
-        // 1 cable, two connected devices
-        assert(mpDevicePortsFactory->getCreatedDevicePortsCount() == mParsedRowsInfo.size() * Parsers::c_DevicesPerConnectionInputRowCount);
-    }
 
     return c_ErrorsOccurred;
 }
@@ -153,97 +135,106 @@ void ConnectionInputParser::_parseCablePartNumber(const size_t rowIndex)
 
 bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
 {
-    const size_t c_FileRowNumber{rowIndex + Parsers::c_RowNumberOffset}; // TODO: bounds checking for rowIndex (mParsedRowsInfo?)
-    bool canContinueRowParsing{true};
+    bool canContinueRowParsing{rowIndex < mParsedRowsInfo.size()};
+    Data::DeviceTypeID deviceTypeID{Data::DeviceTypeID::NO_DEVICE};
 
-    std::string deviceType;
-    (void)_readCurrentCell(rowIndex, deviceType); // TODO: refactor the whole method by taking into account the case when the _readCurrentCell() returns false!
-
-    const Data::DeviceTypeID deviceTypeID{Parsers::getDeviceTypeID(deviceType)};
-
-    // the device should both be known (correct device type string entered by user) and supported (instantiatable) by device factory (code should be in place for factory instantiating it)
-    bool isDeviceKnown{false};
-
-    // NO_DEVICE should normally not be a case, it's added just for defensive programming purposes (considered equivalent to UNKNOWN_DEVICE)
-    if (Data::DeviceTypeID::UNKNOWN_DEVICE != deviceTypeID && Data::DeviceTypeID::NO_DEVICE != deviceTypeID)
+    if (canContinueRowParsing)
     {
-        isDeviceKnown = true;
+        deviceTypeID = _parseDeviceType(rowIndex);
+        canContinueRowParsing = (Data::DeviceTypeID::UNKNOWN_DEVICE != deviceTypeID && Data::DeviceTypeID::NO_DEVICE != deviceTypeID);
+    }
 
-        // the U position of the device should be valid (1U - 50U)
-        bool isDeviceUPositionValid{false};
-        std::string deviceUPosition;
+    std::string deviceUPosition;
 
-        (void)_readCurrentCell(rowIndex, deviceUPosition); // TODO: refactor the whole method by taking into account the case when the _readCurrentCell() returns false!
-
-        if (deviceUPosition.size() > 0u &&
-            Core::isDigitString(deviceUPosition))
-        {
-            const Data::UNumber_t c_DeviceUPositionNum{static_cast<Data::UNumber_t>(std::stoi(deviceUPosition))};
-            if (c_DeviceUPositionNum > 0u && c_DeviceUPositionNum <= Data::c_MaxRackUnitsCount)
-            {
-                isDeviceUPositionValid = true;
-            }
-        }
-
-        if (isDeviceUPositionValid)
-        {
-            const int& unparsedPortsCount{mParsedRowsInfo[rowIndex].mUnparsedPortsCount};
-            const bool c_IsSourceDevice{0 == unparsedPortsCount % Parsers::c_DevicesPerConnectionInputRowCount};
-
-            // new CSV column number: pass through the device type and device U position columns and move to the first device parameter column
-            _moveToNextInputColumn(rowIndex);
-            _moveToNextInputColumn(rowIndex);
-
-            if (mpDevicePortsFactory)
-            {
-                _registerSubParser(mpDevicePortsFactory->createDevicePort(deviceTypeID, deviceUPosition, c_FileRowNumber, c_IsSourceDevice));
-
-                std::vector<ErrorPtr> parsingErrors;
-                _doSubParsing(rowIndex, unparsedPortsCount % Parsers::c_DevicesPerConnectionInputRowCount, parsingErrors);
-
-                bool fewerCellsErrorOccurred{false};
-
-                for(const auto& pError : parsingErrors)
-                {
-                    _storeParsingError(pError);
-
-                    if (pError && static_cast<Error_t>(ErrorCode::FEWER_CELLS) == pError->getErrorCode())
-                    {
-                        fewerCellsErrorOccurred = true;
-                    }
-                }
-
-                // the remaining row part (second device) should no longer be parsed if there are fewer cells (in total) than necessary
-                if (fewerCellsErrorOccurred && Parsers::c_DevicesPerConnectionInputRowCount == unparsedPortsCount)
-                {
-                    canContinueRowParsing = false;
-                }
-            }
-            else
-            {
-                assert(false);
-            }
-        }
-        else
-        {
-            _moveToNextInputColumn(rowIndex);
-            ErrorPtr pInvalidUPositionValueError{_logError(static_cast<Error_t>(ErrorCode::INVALID_U_POSITION_VALUE), c_FileRowNumber)};
-            _storeParsingError(pInvalidUPositionValueError);
-            canContinueRowParsing = false;
-        }
+    if (canContinueRowParsing)
+    {
+        _moveToNextInputColumn(rowIndex); // move to the U position column
+        canContinueRowParsing = _parseDeviceUPosition(rowIndex, deviceUPosition);
     }
 
     if (canContinueRowParsing)
     {
-        if (!isDeviceKnown)
+        _moveToNextInputColumn(rowIndex); // move to the next column after U position, start parsing the actual device port parameters
+
+        const int& unparsedPortsCount{mParsedRowsInfo[rowIndex].mUnparsedPortsCount};
+        const size_t c_FileRowNumber{rowIndex + Parsers::c_RowNumberOffset};
+        const bool c_IsSourceDevice{0 == unparsedPortsCount % Parsers::c_DevicesPerConnectionInputRowCount};
+
+        _registerSubParser(DevicePortsFactory::createDevicePort(deviceTypeID, deviceUPosition, c_FileRowNumber, c_IsSourceDevice));
+
+        std::vector<ErrorPtr> parsingErrors;
+        _doSubParsing(rowIndex, unparsedPortsCount % Parsers::c_DevicesPerConnectionInputRowCount, parsingErrors);
+
+        for(const auto& pError : parsingErrors)
         {
-            ErrorPtr pUnknownDeviceError{_logError(static_cast<Error_t>(ErrorCode::UNKNOWN_DEVICE), c_FileRowNumber)};
-            _storeParsingError(pUnknownDeviceError);
-            canContinueRowParsing = false;
+            _storeParsingError(pError);
+        }
+
+        if (parsingErrors.cend() != std::find_if(parsingErrors.cbegin(), parsingErrors.cend(), [](const ErrorPtr pError) {return pError && static_cast<Error_t>(ErrorCode::FEWER_CELLS) == pError->getErrorCode();}))
+        {
+            canContinueRowParsing = false; // the remaining row part should no longer be parsed if there are fewer cells (in total) than necessary
         }
     }
 
     return canContinueRowParsing;
+}
+
+Data::DeviceTypeID ConnectionInputParser::_parseDeviceType(const size_t rowIndex)
+{
+    Data::DeviceTypeID deviceTypeID{Data::DeviceTypeID::NO_DEVICE};
+
+    if (rowIndex < mParsedRowsInfo.size())
+    {
+        std::string deviceType;
+
+        if (const bool c_CellSuccessfullyRead{_readCurrentCell(rowIndex, deviceType)}; c_CellSuccessfullyRead)
+        {
+            deviceTypeID = Parsers::getDeviceTypeID(deviceType);
+        }
+
+        // NO_DEVICE should normally not be a case, it's added just for defensive programming purposes (considered equivalent to UNKNOWN_DEVICE)
+        if (Data::DeviceTypeID::NO_DEVICE == deviceTypeID)
+        {
+            deviceTypeID = Data::DeviceTypeID::UNKNOWN_DEVICE;
+        }
+
+        // the device should both be known (correct device type string entered by user) and supported (instantiatable) by device factory (code should be in place for factory instantiating it)
+        if (Data::DeviceTypeID::UNKNOWN_DEVICE == deviceTypeID)
+        {
+            const size_t c_FileRowNumber{rowIndex + Parsers::c_RowNumberOffset};
+            ErrorPtr pUnknownDeviceError{_logError(static_cast<Error_t>(ErrorCode::UNKNOWN_DEVICE), c_FileRowNumber)};
+            _storeParsingError(pUnknownDeviceError);
+        }
+    }
+
+    return deviceTypeID;
+}
+
+// the U position of the device should be valid (1U - 50U)
+bool ConnectionInputParser::_parseDeviceUPosition(const size_t rowIndex, std::string& deviceUPosition)
+{
+    bool isDeviceUPositionValid{false};
+
+    if (rowIndex < mParsedRowsInfo.size())
+    {
+        if (const bool c_CellSuccessfullyRead{_readCurrentCell(rowIndex, deviceUPosition)}; c_CellSuccessfullyRead)
+        {
+            if (deviceUPosition.size() > 0u && Core::isDigitString(deviceUPosition))
+            {
+                const Data::UNumber_t c_DeviceUPositionNum{static_cast<Data::UNumber_t>(std::stoi(deviceUPosition))};
+                isDeviceUPositionValid = c_DeviceUPositionNum > 0u && c_DeviceUPositionNum <= Data::c_MaxRackUnitsCount;
+            }
+
+            if (!isDeviceUPositionValid)
+            {
+                const size_t c_FileRowNumber{rowIndex + Parsers::c_RowNumberOffset};
+                ErrorPtr pInvalidUPositionValueError{_logError(static_cast<Error_t>(ErrorCode::INVALID_U_POSITION_VALUE), c_FileRowNumber)};
+                _storeParsingError(pInvalidUPositionValueError);
+            }
+        }
+    }
+
+    return isDeviceUPositionValid;
 }
 
 bool ConnectionInputParser::_buildOutputRow(const size_t rowIndex, std::string& currentRow)

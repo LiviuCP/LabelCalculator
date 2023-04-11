@@ -4,16 +4,6 @@
 #include "powerdeviceport.h"
 #include "deviceportsfactory.h"
 
-DevicePortsFactory::DevicePortsFactory()
-    : mCreatedDevicePortsCount{0u}
-{
-}
-
-void DevicePortsFactory::reset()
-{
-    mCreatedDevicePortsCount = 0u;
-}
-
 DevicePort* DevicePortsFactory::createDevicePort(const Data::DeviceTypeID deviceTypeID,
                                                    const std::string_view deviceUPosition,
                                                    const size_t fileRowNumber,
@@ -66,12 +56,5 @@ DevicePort* DevicePortsFactory::createDevicePort(const Data::DeviceTypeID device
         assert(false);
     }
 
-    ++mCreatedDevicePortsCount;
-
     return pDevicePort;
-}
-
-size_t DevicePortsFactory::getCreatedDevicePortsCount() const
-{
-    return mCreatedDevicePortsCount;
 }

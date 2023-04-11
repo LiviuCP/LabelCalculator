@@ -1,9 +1,7 @@
 #ifndef CONNECTIONINPUTPARSER_H
 #define CONNECTIONINPUTPARSER_H
 
-#include <memory>
-
-#include "deviceportsfactory.h"
+#include "applicationdata.h"
 #include "parser.h"
 
 class ConnectionInputParser final : public Parser
@@ -31,6 +29,14 @@ private:
     */
     bool _parseDevicePort(const size_t rowIndex);
 
+    /* Used for retrieving the device type id in order to be able to create the required device port object
+    */
+    Data::DeviceTypeID _parseDeviceType(const size_t rowIndex);
+
+    /* Used for retrieving the U position of the device as part of parsing the device port
+    */
+    bool _parseDeviceUPosition(const size_t rowIndex, std::string& deviceUPosition);
+
     /* This function creates an entry for a connection between two devices.
        String is written to the labelling table in a subsequent operation.
     */
@@ -48,9 +54,6 @@ private:
 
     /* Information used for or obtained from parsing input rows */
     ParsedRowsInfo mParsedRowsInfo;
-
-    /* device port factory used for creating the device port objects for each connection */
-    std::unique_ptr<DevicePortsFactory> mpDevicePortsFactory;
 };
 
 #endif // CONNECTIONINPUTPARSER_H
