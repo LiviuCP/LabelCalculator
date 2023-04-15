@@ -321,28 +321,24 @@ bool ConnectionDefinitionParser::_parseConnectionFormatting(const std::string_vi
 
 void ConnectionDefinitionParser::_buildTemplateDeviceParameters()
 {
-    mTemplateDeviceParameters.resize(Data::c_MaxRackUnitsCount); // resize so it has same size as the mapping vector
+    mTemplateDeviceParameters.resize(mRackPositionToDeviceTypeMapping.size()); // TODO: consolidate the 2 vectors into a struct vector?
 
     // uNumbers is traversed starting with the device placed at highest U position within rack
     for(auto deviceIter{mConnections.crbegin()}; deviceIter != mConnections.crend(); ++deviceIter)
     {
-        assert(deviceIter->mSourceDevice > 0u); // U positions start from 1
+        if (const Data::UNumber_t& sourceDevice{deviceIter->mSourceDevice}; sourceDevice > 0u) // U positions start from 1
+        {
+            // in mapping vector numbering starts at 0 so it is necessary to decrease the U number by 1
+            if (const size_t c_CurrentDeviceUPositionAsIndex{sourceDevice - 1}; c_CurrentDeviceUPositionAsIndex < mRackPositionToDeviceTypeMapping.size())
+            {
+                // append device type and U position
+                mTemplateDeviceParameters[c_CurrentDeviceUPositionAsIndex] += Parsers::getDeviceTypeAsString(mRackPositionToDeviceTypeMapping[c_CurrentDeviceUPositionAsIndex]) + Data::c_CSVSeparator;
+                mTemplateDeviceParameters[c_CurrentDeviceUPositionAsIndex] += std::to_string(sourceDevice) + Data::c_CSVSeparator;
 
-        std::stringstream stream;
-        std::string currentDeviceUPosition;
-
-        const size_t c_CurrentDeviceUPositionAsIndex{deviceIter->mSourceDevice - 1}; // in mapping vector numbering starts at 0 so it is necessary to decrease the U number by 1
-        const std::string c_DeviceType = Parsers::getDeviceTypeAsString(mRackPositionToDeviceTypeMapping[c_CurrentDeviceUPositionAsIndex]);
-
-        assert(c_DeviceType.size() > 0u); // there should always be a non-empty string describing the device type
-
-        mTemplateDeviceParameters[c_CurrentDeviceUPositionAsIndex] += c_DeviceType + Data::c_CSVSeparator; // appending device type
-        stream << deviceIter->mSourceDevice; // recover the original U number (real position in rack)
-        stream >> currentDeviceUPosition;
-        mTemplateDeviceParameters[c_CurrentDeviceUPositionAsIndex] += currentDeviceUPosition + Data::c_CSVSeparator;
-
-        // add the placeholders for the device parameters (to be filled in the next step (option 2) in connectioninput.csv so the final table can be calculated)
-        mTemplateDeviceParameters[c_CurrentDeviceUPositionAsIndex] += Data::c_ConnectionInputPlaceholders.at(mRackPositionToDeviceTypeMapping[c_CurrentDeviceUPositionAsIndex]);
+                // append the placeholders for the device parameters (to be filled in the next step (option 2) in connectioninput.csv so the final table can be calculated)
+                mTemplateDeviceParameters[c_CurrentDeviceUPositionAsIndex] += Data::c_ConnectionInputPlaceholders.at(mRackPositionToDeviceTypeMapping[c_CurrentDeviceUPositionAsIndex]);
+            }
+        }
     }
 }
 
