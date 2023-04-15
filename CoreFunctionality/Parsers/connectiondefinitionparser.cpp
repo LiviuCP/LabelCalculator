@@ -144,51 +144,51 @@ void ConnectionDefinitionParser::_reset()
 
 void ConnectionDefinitionParser::_parseUPosition(const size_t rowIndex)
 {
-    std::string uPositionCell;
+    if (rowIndex < Data::c_MaxRackUnitsCount)
+    {
+        std::string uPositionCell;
 
-    // first cell on the row is ignored (contains the U number and is only used for informing the user about rack position; the row index is instead used in calculations in relationship with U number)
-    if (const bool c_CellSuccessfullyRead{_readFirstCell(rowIndex, uPositionCell)}; c_CellSuccessfullyRead)
-    {
-        _moveToNextInputColumn(rowIndex);
-    }
-    else
-    {
-        assert(rowIndex < Data::c_MaxRackUnitsCount);
+        // first cell on the row is ignored (contains the U number and is only used for informing the user about rack position; the row index is instead used in calculations in relationship with U number)
+        if (const bool c_CellSuccessfullyRead{_readFirstCell(rowIndex, uPositionCell)}; c_CellSuccessfullyRead)
+        {
+            _moveToNextInputColumn(rowIndex);
+        }
     }
 }
 
 bool ConnectionDefinitionParser::_parseDeviceType(const size_t rowIndex)
 {
-    assert(rowIndex < Data::c_MaxRackUnitsCount);
-
     bool isValidDeviceType{false};
-    std::string currentCell;
 
-    // second cell on the row: device type
-    (void)_readCurrentCell(rowIndex, currentCell); // TODO: refactor the whole method by taking the case when _readCurrentCell() returns false into account
-
-    if (currentCell.size() > 0u)
+    if (rowIndex < Data::c_MaxRackUnitsCount)
     {
-        Data::DeviceTypeID deviceTypeID{Parsers::getDeviceTypeID(currentCell)};
+        std::string currentCell;
 
-        if (Data::DeviceTypeID::UNKNOWN_DEVICE != deviceTypeID)
+        // second cell on the row: device type
+        if (const bool c_CellSuccessfullyRead{_readCurrentCell(rowIndex, currentCell)};
+            c_CellSuccessfullyRead && currentCell.size() > 0u)
         {
-            isValidDeviceType = true;
-            const Data::UNumber_t c_DeviceUPosition{Data::c_MaxRackUnitsCount - rowIndex};
+            const Data::DeviceTypeID c_DeviceTypeID{Parsers::getDeviceTypeID(currentCell)};
 
-            // add device type to mapping table
-            mRackPositionToDeviceTypeMapping[c_DeviceUPosition - 1] = deviceTypeID;
+            if (Data::DeviceTypeID::UNKNOWN_DEVICE != c_DeviceTypeID)
+            {
+                isValidDeviceType = true;
+                const Data::UNumber_t c_DeviceUPosition{Data::c_MaxRackUnitsCount - rowIndex};
 
-            // add discovered device to list of device U numbers and adjust vectors of connected devices and number of connections between each two devices
-            mConnections.emplace_back(c_DeviceUPosition);
+                // add device type to mapping table
+                mRackPositionToDeviceTypeMapping[c_DeviceUPosition - 1] = c_DeviceTypeID;
+
+                // add discovered device to list of device U numbers and adjust vectors of connected devices and number of connections between each two devices
+                mConnections.emplace_back(c_DeviceUPosition);
+            }
+            else
+            {
+                ErrorPtr pError{_logError(static_cast<Error_t>(ErrorCode::UNKNOWN_DEVICE), rowIndex + Parsers::c_RowNumberOffset)};
+                _storeParsingError(pError);
+            }
+
+            _moveToNextInputColumn(rowIndex);
         }
-        else
-        {
-            ErrorPtr pError{_logError(static_cast<Error_t>(ErrorCode::UNKNOWN_DEVICE), rowIndex + Parsers::c_RowNumberOffset)};
-            _storeParsingError(pError);
-        }
-
-        _moveToNextInputColumn(rowIndex);
     }
 
     return isValidDeviceType;
@@ -196,83 +196,70 @@ bool ConnectionDefinitionParser::_parseDeviceType(const size_t rowIndex)
 
 void ConnectionDefinitionParser::_parseDeviceConnections(const size_t rowIndex)
 {
-    const size_t c_DevicesCount{mConnections.size()};
-
-    assert(c_DevicesCount > 0u);
-    assert(rowIndex < Data::c_MaxRackUnitsCount);
-
-    const size_t c_FileRowNumber{rowIndex + Parsers::c_RowNumberOffset};
-
-    while(_isValidCurrentPosition(rowIndex))
+    if (const size_t c_DevicesCount{mConnections.size()};
+        rowIndex < Data::c_MaxRackUnitsCount &&
+        c_DevicesCount > 0 &&
+        Data::c_MaxRackUnitsCount == mRackPositionToDeviceTypeMapping.size())
     {
-        // read next cell (new current cell)
-        std::string currentCell;
-        (void)_readCurrentCell(rowIndex, currentCell); // TODO: refactor the whole method by taking the case when _readCurrentCell() returns false into account
+        std::string currentCell; // read next cell (new current cell)
 
-        if (0u == currentCell.size())
+        while(_readCurrentCell(rowIndex, currentCell))
         {
-            // If the device type contained on the row (second column) is valid then all the connections of the device should be entered contiguously starting with the third column
-            if (_isValidCurrentPosition(rowIndex))
-            {
-                // unparsed cells on the row
-                const std::string c_RemainingCells{_getUnparsedCellsContent(rowIndex)};
+            const size_t c_FileRowNumber{rowIndex + Parsers::c_RowNumberOffset};
+            ErrorPtr pError{nullptr};
 
-                if (Core::areParseableCharactersContained(c_RemainingCells))
+            // If the device type contained on the row (second column) is valid then all the connections of the device should be entered contiguously starting with the third column
+            if (currentCell.empty())
+            {
+                // trigger error but continue parsing the next cells from the row
+                if (Core::areParseableCharactersContained(_getUnparsedCellsContent(rowIndex)))
                 {
-                    // trigger error but continue parsing the next cells from the row
-                    ErrorPtr pEmptyCellError{_logError(static_cast<Error_t>(ErrorCode::EMPTY_CELL), c_FileRowNumber)};
-                    _storeParsingError(pEmptyCellError);
+                    pError = _logError(static_cast<Error_t>(ErrorCode::EMPTY_CELL), c_FileRowNumber);
+                    _storeParsingError(pError);
                     _moveToNextInputColumn(rowIndex);
+                    currentCell.clear();
                     continue;
                 }
+
+                break;
             }
 
-            break;
-        }
+            ConnectedDevice connectedDevice;
 
-        Data::UNumber_t secondDevice;
-        size_t connectionsCount;
-        const bool c_IsConnectionFormattingInvalid{!_parseConnectionFormatting(currentCell, secondDevice, connectionsCount)};
+            if(const bool c_IsValidConnectionFormat{_parseConnectionFormatting(currentCell, connectedDevice)};
+               !c_IsValidConnectionFormat) // checking if the connection format is correct (e.g. 20/3: 3 connections to device located at U20)
+            {
+                pError = _logError(static_cast<Error_t>(ErrorCode::INVALID_CONNECTION_FORMAT), c_FileRowNumber);
+            }
+            else if (connectedDevice.first <= 0 || connectedDevice.first > Data::c_MaxRackUnitsCount) // checking if the device is in the accepted U interval within rack
+            {
+                pError = _logError(static_cast<Error_t>(ErrorCode::DEVICE_U_POSITION_OUT_OF_RANGE), c_FileRowNumber);
+            }
+            else if (Data::DeviceTypeID::NO_DEVICE == mRackPositionToDeviceTypeMapping[connectedDevice.first - 1]) // check if the second device is actually placed within rack (contained in mapping table)
+            {
+                pError = _logError(static_cast<Error_t>(ErrorCode::TARGET_DEVICE_NOT_FOUND), c_FileRowNumber);
+            }
+            else if (Data::c_MaxRackUnitsCount - rowIndex == connectedDevice.first) // connection of a device to itself (connection loop) is not allowed
+            {
+                pError = _logError(static_cast<Error_t>(ErrorCode::DEVICE_CONNECTED_TO_ITSELF), c_FileRowNumber);
+            }
+            else if (0 == connectedDevice.second) // if the devices are marked as connected there should be minimum 1 connection between them
+            {
+                pError = _logError(static_cast<Error_t>(ErrorCode::NULL_NR_OF_CONNECTIONS), c_FileRowNumber);
+            }
+            else // add the U number of the second device to the list of devices connected to current device; also add the number of connections between the current device and the second device
+            {
+                mConnections[c_DevicesCount - 1].mConnectedDevices.emplace_back(connectedDevice.first, connectedDevice.second);
+            }
 
-        ErrorPtr pError{nullptr};
-
-        if(c_IsConnectionFormattingInvalid) // checking if the connection format is correct (e.g. 20/3: 3 connections to device located at U20)
-        {
-            pError = _logError(static_cast<Error_t>(ErrorCode::INVALID_CONNECTION_FORMAT), c_FileRowNumber);
-        }
-        else if (secondDevice <= 0 || secondDevice > Data::c_MaxRackUnitsCount) // checking if the device is in the accepted U interval within rack
-        {
-
-            pError = _logError(static_cast<Error_t>(ErrorCode::DEVICE_U_POSITION_OUT_OF_RANGE), c_FileRowNumber);
-        }
-        else if (Data::DeviceTypeID::NO_DEVICE == mRackPositionToDeviceTypeMapping[secondDevice - 1]) // check if the second device is actually placed within rack (contained in mapping table)
-        {
-            pError = _logError(static_cast<Error_t>(ErrorCode::TARGET_DEVICE_NOT_FOUND), c_FileRowNumber);
-        }
-        else if (Data::c_MaxRackUnitsCount - rowIndex == secondDevice) // connection of a device to itself (connection loop) is not allowed
-        {
-            pError = _logError(static_cast<Error_t>(ErrorCode::DEVICE_CONNECTED_TO_ITSELF), c_FileRowNumber);
-        }
-        else if (0 == connectionsCount) // if the devices are marked as connected there should be minimum 1 connection between them
-        {
-            pError = _logError(static_cast<Error_t>(ErrorCode::NULL_NR_OF_CONNECTIONS), c_FileRowNumber);
-        }
-        else
-        {
-            // add the U number of the second device to the list of devices connected to current device; also add the number of connections between the current device and the second device
-            mConnections[c_DevicesCount - 1].mConnectedDevices.emplace_back(secondDevice, connectionsCount);
-        }
-
-        if (nullptr != pError)
-        {
             _storeParsingError(pError);
+            _moveToNextInputColumn(rowIndex);
+            currentCell.clear();
         }
-
-        _moveToNextInputColumn(rowIndex);
     }
 }
 
-bool ConnectionDefinitionParser::_parseConnectionFormatting(const std::string_view source, Data::UNumber_t& secondDevice, size_t& connectionsCount)
+bool ConnectionDefinitionParser::_parseConnectionFormatting(const std::string_view source, ConnectedDevice& connectedDevice)
 {
     bool isFormattingValid{true};
 
@@ -319,8 +306,8 @@ bool ConnectionDefinitionParser::_parseConnectionFormatting(const std::string_vi
                 const char* const pSource{source.data()};
                 const size_t c_SlashCharIndex{slashCharIndex.value()};
 
-                std::from_chars(pSource, pSource + c_SlashCharIndex, secondDevice);
-                std::from_chars(pSource + c_SlashCharIndex + 1, pSource + c_SourceLength, connectionsCount);
+                std::from_chars(pSource, pSource + c_SlashCharIndex, connectedDevice.first);
+                std::from_chars(pSource + c_SlashCharIndex + 1, pSource + c_SourceLength, connectedDevice.second);
             }
         }
     }

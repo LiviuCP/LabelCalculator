@@ -23,6 +23,16 @@ protected:
     void _reset() override;
 
 private:
+    /* Describes connection of current (source) device to a destination device (a.k.a. connected device);
+       - first: connected device U number
+       - second: number of connections from source to destination device
+    */
+    using ConnectedDevice = std::pair<Data::UNumber_t, size_t>;
+
+    /* All destination devices to which a (source) device defined at a specific U position connects (bottom-up connections)
+    */
+    using ConnectedDevices = std::vector<ConnectedDevice>;
+
     /* This function passes through the first cell on each CSV row (rack U position).
        It discards the cell content.
     */
@@ -44,22 +54,12 @@ private:
     /* This function checks the format of the connection of the first device from each row of the connectiondefinitions.csv file to another device from the row.
        If the format is correct (true returned) it will also fill in the two arguments with the U placement of the other device and the number of connections between the two.
     */
-    static bool _parseConnectionFormatting(const std::string_view source, Data::UNumber_t& secondDevice, size_t& connectionsCount);
+    static bool _parseConnectionFormatting(const std::string_view source, ConnectedDevice& connectedDevice);
 
     /* This function creates the template parameters (including device type and U position) for each device.
        These parameters are being filled in into output file (connection input file) for each entry where the device is connected to another one.
     */
     void _buildTemplateDeviceParameters();
-
-    /* Describes connection of current (source) device to a destination device (a.k.a. connected device);
-       - first: connected device U number
-       - second: number of connections from source to destination device
-    */
-    using ConnectedDevice = std::pair<Data::UNumber_t, size_t>;
-
-    /* All destination devices to which a (source) device defined at a specific U position connects (bottom-up connections)
-    */
-    using ConnectedDevices = std::vector<ConnectedDevice>;
 
     struct DeviceConnections
     {
