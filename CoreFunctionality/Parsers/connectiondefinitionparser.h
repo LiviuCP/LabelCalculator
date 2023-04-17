@@ -56,10 +56,18 @@ private:
     */
     static bool _parseConnectionFormatting(const std::string_view source, ConnectedDevice& connectedDevice);
 
-    /* This function creates the template parameters (including device type and U position) for each device.
-       These parameters are being filled in into output file (connection input file) for each entry where the device is connected to another one.
+    /* This function computes the output data for each device. This includes template parameters to be subsequently filled-in by user (in next step, in order to get the labelling table calculated).
+       This data is being appended to connection input file for each entry where the device is connected to another one.
     */
-    void _buildTemplateDeviceParameters();
+    void _buildDeviceOutputData();
+
+    struct DeviceData
+    {
+        DeviceData();
+
+        Data::DeviceTypeID mDeviceTypeID;
+        std::string mDeviceOutputData; // data to be written into csv file for the device wherever there is a connection between it and another device
+    };
 
     struct DeviceConnections
     {
@@ -70,22 +78,19 @@ private:
         ConnectedDevices mConnectedDevices; // destination devices to which the source connects (all of them on higher U positions than source)
     };
 
-    /* Stores devices contained within rack.
-       For each device the type will be memorized at the index representing the lowest U position occupied within rack.
-       The vector will have 50 elements (maximum rack size).
+    /* Stores data for the devices contained within rack:
+       - device type ID
+       - a string containing the computed output data for the device (including device type as string, U position, other (template) parameters that should later be filled-in by user)
+       Each array element is mapped to a rack U position (e.g. element at index 3 to rack position U4) so the array size equals the maximum number of units within a rack.
+       For each device only the lowest U position should be marked within array (all other positions are marked "empty" (a.k.a. NO_DEVICE) although they might actually be occupied by physical devices).
     */
-    std::vector<Data::DeviceTypeID> mRackPositionToDeviceTypeMapping;
+    std::vector<DeviceData> mRackPositionToDeviceDataMapping;
 
     /* Stores the U positions (lowest in rack, e.g. U5 for a device occupying U5-10) of all discovered devices (in the order of their discovery).
        Storing occurs in decreasing order of their appearance (first device is the one from the highest U position).
        Also for each stored (source) device the (destination) devices to which it connects and the number of connections to each destination device are memorized.
     */
     std::vector<DeviceConnections> mConnections;
-
-    /* Stores the device parameters for each device (including device type and U position)
-       which will be used for creating the connection input file template
-    */
-    std::vector<std::string> mTemplateDeviceParameters;
 };
 
 #endif // CONNECTIONDEFINITIONPARSER_H
