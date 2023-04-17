@@ -84,48 +84,58 @@ bool ConnectionDefinitionParser::_parseInput()
 // Placeholders are included and need to be subsequently filled in by user before running the application with option 2 for getting the final labelling table
 void ConnectionDefinitionParser::_buildOutput()
 {
-    const size_t c_DevicesCount{mConnections.size()};
+    _buildTemplateDeviceParameters();
 
-    if (c_DevicesCount > 0u)
+    // each output row and number of times to append it to output
+    std::vector<std::pair<std::string, size_t>> outputRowsAndAppends;
+
+    size_t validSourceDevicesCount{0u};
+
+    // traverse the rack from top to bottom and check if each discovered device is connected to devices placed at upper U positions
+    for(auto deviceIter{mConnections.crbegin()}; deviceIter != mConnections.crend() && deviceIter->mSourceDevice > 0u; ++deviceIter) // source device U position starts at 1
     {
-        _buildTemplateDeviceParameters();
+        const size_t c_CurrentDeviceIndex{static_cast<size_t>(std::distance(deviceIter, mConnections.crend() - 1))};
+        const size_t c_CurrentDeviceUPositionAsIndex{deviceIter->mSourceDevice - 1};
 
-        size_t outputRowsCount{0u};
+        size_t validConnectedDevicesCount{0u};
 
-        // traverse the rack from top to bottom and check if each discovered device is connected to devices placed at upper U positions
-        for(auto deviceIter{mConnections.crbegin()}; deviceIter != mConnections.crend(); ++deviceIter)
+        // connected (destination device U position starts at 1
+        for (auto connectedDevIter{mConnections[c_CurrentDeviceIndex].mConnectedDevices.cbegin()};
+             connectedDevIter != mConnections[c_CurrentDeviceIndex].mConnectedDevices.cend() && connectedDevIter->first > 0u;
+             ++connectedDevIter)
         {
-            assert(deviceIter->mSourceDevice > 0u); // U positions start from 1
+            const size_t c_ConnectedDeviceIndex{static_cast<size_t>(std::distance(mConnections[c_CurrentDeviceIndex].mConnectedDevices.cbegin(), connectedDevIter))};
 
-            const size_t c_CurrentDeviceIndex{static_cast<size_t>(std::distance(deviceIter, mConnections.crend() - 1))};
-            const size_t c_CurrentDeviceUPositionAsIndex{deviceIter->mSourceDevice - 1};
-            const size_t c_CurrentDeviceConnectedDevicesCount{mConnections[c_CurrentDeviceIndex].mConnectedDevices.size()};
+            /* The output string per connection row is calculated by adding following substrings: cable part number placeholder and the template parameters for each connected device
+               The decrease by 1 is necessary due to vector indexing (which starts at 0)
+            */
+            std::string output{Data::c_CablePartNumberPlaceholder};
+            output.push_back(Data::c_CSVSeparator);
+            output.append(mTemplateDeviceParameters[c_CurrentDeviceUPositionAsIndex]);
+            output.push_back(Data::c_CSVSeparator);
+            output.append(mTemplateDeviceParameters[connectedDevIter->first - 1]);
+            outputRowsAndAppends.push_back({output, mConnections[c_CurrentDeviceIndex].mConnectedDevices[c_ConnectedDeviceIndex].second});
+            ++validConnectedDevicesCount;
+        }
 
-            if (c_CurrentDeviceConnectedDevicesCount > 0u)
+        if (validConnectedDevicesCount == mConnections[c_CurrentDeviceIndex].mConnectedDevices.size())
+        {
+            ++validSourceDevicesCount;
+            continue;
+        }
+
+        break;
+    }
+
+    // build the actual output once all source devices have been correctly processed
+    if (validSourceDevicesCount == mConnections.size())
+    {
+        // write the resulting output string a number of times equal to the number of connections between the two devices
+        for (const auto& outputRowAndAppends : outputRowsAndAppends)
+        {
+            for (size_t appendNumber{0}; appendNumber < outputRowAndAppends.second; ++appendNumber)
             {
-                for (auto connectedDevIter{mConnections[c_CurrentDeviceIndex].mConnectedDevices.cbegin()}; connectedDevIter != mConnections[c_CurrentDeviceIndex].mConnectedDevices.cend(); ++connectedDevIter)
-                {
-                    assert(connectedDevIter->first > 0u); // U positions start from 1
-
-                    const size_t c_ConnectedDeviceIndex{static_cast<size_t>(std::distance(mConnections[c_CurrentDeviceIndex].mConnectedDevices.cbegin(), connectedDevIter))};
-
-                    /* The output string per connection row is calculated by adding following substrings: cable part number placeholder and the template parameters for each connected device
-                       The decrease by 1 is necessary due to vector indexing (which starts at 0)
-                    */
-                    std::string output{Data::c_CablePartNumberPlaceholder};
-                    output.push_back(Data::c_CSVSeparator);
-                    output.append(mTemplateDeviceParameters[c_CurrentDeviceUPositionAsIndex]);
-                    output.push_back(Data::c_CSVSeparator);
-                    output.append(mTemplateDeviceParameters[connectedDevIter->first - 1]);
-
-                    outputRowsCount += mConnections[c_CurrentDeviceIndex].mConnectedDevices[c_ConnectedDeviceIndex].second;
-
-                    // write the resulting output string a number of times equal to the number of connections between the two devices
-                    for (size_t connectionNumber{outputRowsCount - mConnections[c_CurrentDeviceIndex].mConnectedDevices[c_ConnectedDeviceIndex].second}; connectionNumber < outputRowsCount; ++connectionNumber)
-                    {
-                        _appendRowToOutput(output);
-                    }
-                }
+                _appendRowToOutput(outputRowAndAppends.first);
             }
         }
     }
