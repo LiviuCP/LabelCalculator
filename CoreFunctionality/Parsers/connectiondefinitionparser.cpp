@@ -268,58 +268,46 @@ void ConnectionDefinitionParser::_parseDeviceConnections(const size_t rowIndex)
 bool ConnectionDefinitionParser::_parseConnectionFormatting(const std::string_view source, ConnectedDevice& connectedDevice)
 {
     bool isFormattingValid{true};
-
-    const size_t c_SourceLength{source.size()};
     Index_t slashCharIndex; // index of '/'
 
-    if (c_SourceLength > 0)
+    for (size_t index{0}; index < source.size(); ++index)
     {
-        for (size_t index{0}; index < c_SourceLength; ++index)
+        if (isdigit(source[index]))
         {
-            if (isdigit(source[index]))
-            {
-                continue;
-            }
-            else if ('/' == source[index])
-            {
-                if (slashCharIndex.has_value()) // more than one slash
-                {
-                    isFormattingValid = false;
-                    break;
-                }
-                else
-                {
-                    slashCharIndex = index;
-                    continue;
-                }
-            }
-            else
+            continue;
+        }
+        else if ('/' == source[index])
+        {
+            if (slashCharIndex.has_value()) // more than one slash
             {
                 isFormattingValid = false;
                 break;
             }
+
+            slashCharIndex = index;
+            continue;
         }
 
-        // there should be exactly one slash character and it should NOT be located in the first/last string character position
-        isFormattingValid = isFormattingValid && slashCharIndex.has_value();
-
-        if (isFormattingValid)
-        {
-            isFormattingValid = isFormattingValid && (slashCharIndex > 0 && slashCharIndex < c_SourceLength - 1);
-
-            if (isFormattingValid)
-            {
-                const char* const pSource{source.data()};
-                const size_t c_SlashCharIndex{slashCharIndex.value()};
-
-                std::from_chars(pSource, pSource + c_SlashCharIndex, connectedDevice.first);
-                std::from_chars(pSource + c_SlashCharIndex + 1, pSource + c_SourceLength, connectedDevice.second);
-            }
-        }
-    }
-    else
-    {
         isFormattingValid = false;
+        break;
+    }
+
+    // there should be exactly one slash character and it should NOT be located in the first/last string character position
+    isFormattingValid = isFormattingValid && slashCharIndex.has_value();
+
+    if (isFormattingValid)
+    {
+        if (const size_t c_SourceLength{source.size()}; slashCharIndex > 0 && slashCharIndex < c_SourceLength - 1)
+        {
+            const char* const pSource{source.data()};
+            const size_t c_SlashCharIndex{slashCharIndex.value()};
+            std::from_chars(pSource, pSource + c_SlashCharIndex, connectedDevice.first);
+            std::from_chars(pSource + c_SlashCharIndex + 1, pSource + c_SourceLength, connectedDevice.second);
+        }
+        else
+        {
+            isFormattingValid = false;
+        }
     }
 
     return isFormattingValid;
