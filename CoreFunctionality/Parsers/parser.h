@@ -93,8 +93,8 @@ protected:
     /* Provides the number of input rows (payload) */
     size_t _getInputRowsCount() const;
 
-    /* Appends the row content to output */
-    void _appendRowToOutput(const std::string& rowContent);
+    /* Appends the row content to output once or multiple times (no operation if timesToAppend is 0) */
+    void _appendRowToOutput(const std::string& rowContent, const size_t timesToAppend = 1);
 
     /* Provides access to error handling mechanism to sub-parser */
     void _registerSubParser(ISubParser* const pISubParser);

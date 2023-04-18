@@ -133,10 +133,7 @@ void ConnectionDefinitionParser::_buildOutput()
         // write the resulting output string a number of times equal to the number of connections between the two devices
         for (const auto& outputRowAndAppends : outputRowsAndAppends)
         {
-            for (size_t appendNumber{0}; appendNumber < outputRowAndAppends.second; ++appendNumber)
-            {
-                _appendRowToOutput(outputRowAndAppends.first);
-            }
+            _appendRowToOutput(outputRowAndAppends.first, outputRowAndAppends.second);
         }
     }
 }

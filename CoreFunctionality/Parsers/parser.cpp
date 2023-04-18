@@ -262,9 +262,12 @@ size_t Parser::_getInputRowsCount() const
     return mParserInput.size();
 }
 
-void Parser::_appendRowToOutput(const std::string& rowContent)
+void Parser::_appendRowToOutput(const std::string& rowContent, const size_t timesToAppend)
 {
-    mParserOutput.mData.push_back(rowContent);
+    for (size_t appendNumber{0}; appendNumber < timesToAppend; ++appendNumber)
+    {
+        mParserOutput.mData.push_back(rowContent);
+    }
 }
 
 void Parser::_registerSubParser(ISubParser* const pISubParser)
