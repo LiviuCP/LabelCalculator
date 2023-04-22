@@ -92,6 +92,10 @@ protected:
     */
     virtual std::pair<std::string, std::string> _getDeviceTypeDescriptionAndLabel() const;
 
+    /* Checks if current position can be used in the parsing process (should either be null or within raw data bounds - including end position)
+    */
+    bool _isCurrentPositionAllowed() const;
+
 private:
     /*This function is used for initializing the input parameters for each device: determine their count, initiate registration process
     */

@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <sstream>
 #include <cassert>
 
@@ -37,91 +38,70 @@ void DevicePort::init()
     }
 }
 
-// TODO: refactor method (+ check if mCurrentPosition is within bounds?)
 void DevicePort::parseInputData(std::vector<ErrorPtr>& parsingErrors)
 {
-    assert(mInputData.size() == mInputParametersCount); // check if all required parameters have been registered by derived class
-
-    size_t currentParameter{0u};              // current field (cell) containining a device input parameter (e.g. device name)
-    bool fewerCellsProvided{false};       // for checking if the "fewer cells" error occurred
-    ErrorPtr lastError{nullptr};          // last found error
-
-    parsingErrors.clear();
-
-    // check the "useful" fields (required input parameters for the device)
-    while(currentParameter < mInputParametersCount)
+    if (_isCurrentPositionAllowed() &&
+        mInputParametersCount == mInputData.size() &&
+        0u == std::count_if(mInputData.cbegin(), mInputData.cend(), [](const std::string* pElement) {return !pElement;}))
     {
-        assert(nullptr != mInputData[currentParameter]); // defensive programming, this code should not evaluate to true (the registering function should prevent this)
+        size_t currentParameter{0u};          // current field (cell) containining a device input parameter (e.g. device name)
+        bool fewerCellsProvided{false};       // for checking if the "fewer cells" error occurred
+        ErrorPtr lastError{nullptr};          // last found error
 
-        if (mCurrentPosition.has_value()) // check if characters are available for current (required) field
+        parsingErrors.clear();
+
+        while(currentParameter < mInputParametersCount) // check the "useful" fields (required input parameters for the device)
         {
-            mCurrentPosition = Core::readDataField(mRawInputData, *mInputData[currentParameter], mCurrentPosition);
+            if (!mCurrentPosition.has_value()) // check if characters are available for current (required) field
+            {
+                fewerCellsProvided = true;
+                break;
+            }
 
-            bool noErrorsDetectedInCell{false};
+            mCurrentPosition = Core::readDataField(mRawInputData, *mInputData[currentParameter], mCurrentPosition);
 
             if (0u == mInputData[currentParameter]->size())
             {
                 lastError = mpErrorHandler->logError(static_cast<Error_t>(ErrorCode::EMPTY_CELL), mFileRowNumber, mFileColumnNumber);
+                parsingErrors.push_back(lastError);
             }
             else if (Core::areInvalidCharactersContained(*mInputData[currentParameter]))
             {
                 lastError = mpErrorHandler->logError(static_cast<Error_t>(ErrorCode::INVALID_CHARACTERS), mFileRowNumber, mFileColumnNumber);
-            }
-            else
-            {
-                noErrorsDetectedInCell = true;
-            }
-
-            if (!noErrorsDetectedInCell)
-            {
                 parsingErrors.push_back(lastError);
             }
 
             ++mFileColumnNumber;
-        }
-        else
-        {
-            fewerCellsProvided = true;
-            break;
+            ++currentParameter;
         }
 
-        ++currentParameter;
-    }
-
-    // check the padding fields (if any)
-    if (!fewerCellsProvided)
-    {
-        while(currentParameter < Data::c_MaxPortInputParametersCount)
+        while(!fewerCellsProvided && currentParameter < Data::c_MaxPortInputParametersCount) // check the padding fields (if any)
         {
-            if (mCurrentPosition.has_value())
-            {
-                std::string unusedField;
-                mCurrentPosition = Core::readDataField(mRawInputData, unusedField, mCurrentPosition);
-                ++mFileColumnNumber;
-            }
-            else
+            if (!mCurrentPosition.has_value())
             {
                 if (mIsSourceDevice)
                 {
                     fewerCellsProvided = true;
+                    continue;
                 }
 
                 break;
             }
 
+            std::string unusedField;
+            mCurrentPosition = Core::readDataField(mRawInputData, unusedField, mCurrentPosition);
+            ++mFileColumnNumber;
             ++currentParameter;
+        }
+
+        if (fewerCellsProvided) // handle parameter-independent errors
+        {
+            lastError = mpErrorHandler->logError(static_cast<Error_t>(ErrorCode::FEWER_CELLS), mFileRowNumber, mFileColumnNumber);
+            parsingErrors.push_back(lastError);
         }
     }
 
-    // handle parameter-independent errors
-    if (fewerCellsProvided)
-    {
-        lastError = mpErrorHandler->logError(static_cast<Error_t>(ErrorCode::FEWER_CELLS), mFileRowNumber, mFileColumnNumber);
-        parsingErrors.push_back(lastError);
-    }
-
-    // notify parser
-    if (m_pISubParserObserver)
+    if (m_pISubParserObserver) // notify parser no matter the (sub)parsing outcome
     {
         m_pISubParserObserver->subParserFinished(this);
     }
@@ -189,14 +169,18 @@ void DevicePort::setFileColumnNumber(const size_t fileColumnNumber)
 void DevicePort::setRawInputData(const std::string_view rawInputData)
 {
     mRawInputData.clear();
+    mCurrentPosition.reset();
 
-    if (!mParseFromRowStart)
+    if (!rawInputData.empty())
     {
-        mRawInputData.append(Data::c_Padding);
-    }
+        if (!mParseFromRowStart)
+        {
+            mRawInputData.append(Data::c_Padding);
+        }
 
-    mCurrentPosition = mRawInputData.size();
-    mRawInputData.append(rawInputData);
+        mCurrentPosition = mRawInputData.size();
+        mRawInputData.append(rawInputData);
+    }
 }
 
 void DevicePort::_registerRequiredParameter(std::string* const pRequiredParameter)
@@ -204,10 +188,6 @@ void DevicePort::_registerRequiredParameter(std::string* const pRequiredParamete
     if (pRequiredParameter)
     {
         mInputData.push_back(pRequiredParameter);
-    }
-    else
-    {
-        assert(false);
     }
 }
 
@@ -217,10 +197,6 @@ void DevicePort::_appendDataToDescription(const std::string_view data)
     {
         mDescription += data;
     }
-    else
-    {
-        assert(false);
-    }
 }
 
 void DevicePort::_appendDataToLabel(const std::string_view data)
@@ -229,59 +205,71 @@ void DevicePort::_appendDataToLabel(const std::string_view data)
     {
         mLabel += data;
     }
-    else
-    {
-        assert(false);
-    }
 }
 
 void DevicePort::_setInvalidDescriptionAndLabel(const std::string_view descriptionInput, const std::string_view labelInput)
 {
-    const size_t c_DescriptionInputLength{descriptionInput.size()};
-    assert(c_DescriptionInputLength > 0u);
-
-    mDescription.clear();
-    mDescription.reserve(1/*"U"*/ + mDeviceUPosition.size()  + 2/*": "*/ + c_DescriptionInputLength);
-    mDescription.push_back('U');
-    mDescription.append(mDeviceUPosition);
-    mDescription.append(": ");
-    mDescription.append(descriptionInput);
-
-    if (labelInput.size() > 0u)
+    if (const size_t c_DescriptionInputLength{descriptionInput.size()}; c_DescriptionInputLength > 0u)
     {
-        mLabel = labelInput;
-    }
-    else
-    {
-        const std::string c_CheckConnectionInputFileText{Ports::getCheckConnectionInputFileText()};
+        mDescription.clear();
+        mDescription.reserve(1/*"U"*/ + mDeviceUPosition.size()  + 2/*": "*/ + c_DescriptionInputLength);
+        mDescription.push_back('U');
+        mDescription.append(mDeviceUPosition);
+        mDescription.append(": ");
+        mDescription.append(descriptionInput);
 
-        mLabel.clear();
-        mLabel.reserve(Ports::c_LabelErrorText.size() + c_CheckConnectionInputFileText.size());
-        mLabel.append(Ports::c_LabelErrorText);
-        mLabel.append(c_CheckConnectionInputFileText);
+        if (labelInput.size() > 0u)
+        {
+            mLabel = labelInput;
+        }
+        else
+        {
+            const std::string c_CheckConnectionInputFileText{Ports::getCheckConnectionInputFileText()};
+
+            mLabel.clear();
+            mLabel.reserve(Ports::c_LabelErrorText.size() + c_CheckConnectionInputFileText.size());
+            mLabel.append(Ports::c_LabelErrorText);
+            mLabel.append(c_CheckConnectionInputFileText);
+        }
     }
 }
 
 void DevicePort::_checkLabel()
 {
-    const size_t c_LabelCharsCount{mLabel.size()};
-
-    assert(c_LabelCharsCount > 0u);
-
-    if (std::string::npos == mLabel.find(Ports::c_LabelErrorText) &&
-        c_LabelCharsCount > Data::c_MaxLabelCharsCount)
+    if (const size_t c_LabelCharsCount{mLabel.size()}; c_LabelCharsCount > 0u)
     {
-        std::stringstream stream;
-        const ssize_t c_DeltaCharsCount{static_cast<ssize_t>(c_LabelCharsCount - Data::c_MaxLabelCharsCount)};
-        stream << Ports::c_MaxLabelCharsCountExceededErrorText << c_DeltaCharsCount;
+        if (std::string::npos == mLabel.find(Ports::c_LabelErrorText) &&
+            c_LabelCharsCount > Data::c_MaxLabelCharsCount)
+        {
+            std::stringstream stream;
+            const ssize_t c_DeltaCharsCount{static_cast<ssize_t>(c_LabelCharsCount - Data::c_MaxLabelCharsCount)};
+            stream << Ports::c_MaxLabelCharsCountExceededErrorText << c_DeltaCharsCount;
 
-        _setInvalidDescriptionAndLabel(stream.str());
+            _setInvalidDescriptionAndLabel(stream.str());
+        }
+    }
+    else
+    {
+        _setInvalidDescriptionAndLabel(Ports::c_LabelErrorText, Ports::c_LabelErrorText); // defensive programming
+        assert(false);
     }
 }
 
 std::pair<std::string, std::string> DevicePort::_getDeviceTypeDescriptionAndLabel() const
 {
     return {"Device", ""};
+}
+
+bool DevicePort::_isCurrentPositionAllowed() const
+{
+    bool isAllowed{true};
+
+    if (mCurrentPosition.has_value())
+    {
+        isAllowed = (mCurrentPosition <= mRawInputData.size()); // end position (similar to end iterator) is also allowed
+    }
+
+    return isAllowed;
 }
 
 void DevicePort::_initializeRequiredParameters()
@@ -292,8 +280,9 @@ void DevicePort::_initializeRequiredParameters()
     {
         mInputParametersCount = _getInputParametersCount();
 
+        // there should be at least two parameters (device name and port number))
         if (mInputParametersCount > 1u &&
-            mInputParametersCount <= Data::c_MaxPortInputParametersCount) // there should be at least two parameters (device name and port number))
+            mInputParametersCount <= Data::c_MaxPortInputParametersCount)
         {
             mInputData.reserve(mInputParametersCount);
             _registerRequiredParameters();
@@ -311,18 +300,20 @@ void DevicePort::_initializeRequiredParameters()
 
 void DevicePort::_initializeDescriptionAndLabel()
 {
-    const auto[deviceTypeDescription, deviceTypeLabel]{_getDeviceTypeDescriptionAndLabel()};
-    const std::string c_DeviceTypeDescription{deviceTypeDescription.size() > 0 ? deviceTypeDescription : "Device"};
-
-    mDescription = c_DeviceTypeDescription;
-    mDescription += " placed at U";
-    mDescription += mDeviceUPosition;
-
-    mLabel = "U" + mDeviceUPosition;
-
-    if (deviceTypeLabel.size() > 0)
+    if (!mIsInitialized)
     {
-        mLabel += "_";
-        mLabel += deviceTypeLabel;
+        const auto[deviceTypeDescription, deviceTypeLabel]{_getDeviceTypeDescriptionAndLabel()};
+
+        mDescription = deviceTypeDescription.size() > 0 ? deviceTypeDescription : "Device";
+        mDescription += " placed at U";
+        mDescription += mDeviceUPosition;
+
+        mLabel = "U" + mDeviceUPosition;
+
+        if (deviceTypeLabel.size() > 0)
+        {
+            mLabel += "_";
+            mLabel += deviceTypeLabel;
+        }
     }
 }
