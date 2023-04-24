@@ -296,8 +296,14 @@ bool Parser::_activateSubParser(const size_t rowIndex, const size_t subParserInd
         if (ISubParser* const pISubParser{mParserInput[rowIndex].mRegisteredSubParsers[subParserIndex]};
             pISubParser && !mParserInput[rowIndex].mIsSubParserActive)
         {
-            std::string_view dataToPass{mParserInput[rowIndex].mRowData};
-            dataToPass.remove_prefix(mParserInput[rowIndex].mCurrentPosition.value());
+            std::string_view dataToPass{""};
+
+            // the sub-parser should not get access to any data parsed before it came into action
+            if (mParserInput[rowIndex].mCurrentPosition.has_value())
+            {
+                dataToPass = mParserInput[rowIndex].mRowData;
+                dataToPass.remove_prefix(mParserInput[rowIndex].mCurrentPosition.value());
+            }
 
             pISubParser->init();
             pISubParser->setRawInputData(dataToPass);
