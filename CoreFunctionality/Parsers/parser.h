@@ -84,9 +84,6 @@ protected:
     /* Returns substring consisting of columns not yet parsed (from given row) */
     std::string _getUnparsedCellsContent(const size_t rowIndex) const;
 
-    /* Checks if the input row has been entirely parsed */
-    bool _isEndOfInputDataRow(const size_t rowIndex) const;
-
     /* Checks if current position index is valid for the given row */
     bool _isValidCurrentPosition(const size_t rowIndex) const;
 

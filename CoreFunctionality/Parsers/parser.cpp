@@ -237,18 +237,6 @@ std::string Parser::_getUnparsedCellsContent(const size_t rowIndex) const
     return result;
 }
 
-bool Parser::_isEndOfInputDataRow(const size_t rowIndex) const
-{
-    bool result{false};
-
-    if (_isValidCurrentPosition(rowIndex))
-    {
-        result = (mParserInput[rowIndex].mRowData.size() == mParserInput[rowIndex].mCurrentPosition);
-    }
-
-    return result;
-}
-
 bool Parser::_isValidCurrentPosition(const size_t rowIndex) const
 {
     // from Parser point of view the index equal to string length is considered valid (it's similar to the end() iterator)
@@ -357,14 +345,24 @@ void Parser::_retrieveRequiredDataFromSubParser(const ISubParser* const pISubPar
                 mParserInput[c_RowIndex].mFileColumnNumber = c_FileColumnNumber;
             }
 
-            if (const Index_t c_CurrentPosition{pISubParser->getCurrentPosition()};
-                _isValidCurrentPosition(c_RowIndex) && c_CurrentPosition.has_value())
+            if (_isValidCurrentPosition(c_RowIndex))
             {
-                // parsing goes from beginning to the end of the string so the resulting position should never be lower than the initial one
-                if (const size_t c_NewCurrentPosition{mParserInput[c_RowIndex].mCurrentPosition.value() + c_CurrentPosition.value()};
-                    c_NewCurrentPosition <= mParserInput[c_RowIndex].mRowData.size())
+                if (const Index_t c_SubParserCurrentPosition{pISubParser->getCurrentPosition()}; c_SubParserCurrentPosition.has_value())
                 {
-                    mParserInput[c_RowIndex].mCurrentPosition = c_NewCurrentPosition;
+                    if (const size_t c_NewCurrentPosition{mParserInput[c_RowIndex].mCurrentPosition.value() + c_SubParserCurrentPosition.value()};
+                        c_NewCurrentPosition <= mParserInput[c_RowIndex].mRowData.size())
+                    {
+                        mParserInput[c_RowIndex].mCurrentPosition = c_NewCurrentPosition;
+                    }
+                    else
+                    {
+                        assert(false); // new position should not exceed the row bounds
+                    }
+                }
+                else
+                {
+                    // if string had been consumed by sub-parser, then current position should be invalidated
+                    mParserInput[c_RowIndex].mCurrentPosition.reset();
                 }
             }
         }

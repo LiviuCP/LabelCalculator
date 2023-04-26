@@ -35,29 +35,15 @@ bool ConnectionInputParser::_parseInput()
         for (size_t rowIndex{0u}; rowIndex < c_ConnectionInputRowsCount; ++rowIndex)
         {
             _moveToInputRowStart(rowIndex);
-            bool isFirstCellParsed{false}; // flag: has the cable part number been parsed on current row?
+
+            // the cable field should only be parsed before parsing any device on the row
+            _parseCablePartNumber(rowIndex);
 
             int& unparsedPortsCount{mParsedRowsInfo[rowIndex].mUnparsedPortsCount};
             unparsedPortsCount = Parsers::c_DevicesPerConnectionInputRowCount; // devices that haven't been fully parsed on the current input csv row (maximum 2 - one connection)
 
             while (unparsedPortsCount > 0)
             {
-                // total number of csv cells from the connection row (cable + 2 devices) is less than required (parsing of the row should stop at once)
-                if (!_isValidCurrentPosition(rowIndex) || _isEndOfInputDataRow(rowIndex))
-                {
-                    ErrorPtr pFewerCellsError{_logError(static_cast<Error_t>(ErrorCode::FEWER_CELLS), rowIndex + Parsers::c_RowNumberOffset)};
-                    _storeParsingError(pFewerCellsError);
-                    break;
-                }
-
-                // the cable field should only be parsed before parsing any device on the row
-                if (!isFirstCellParsed)
-                {
-                    _parseCablePartNumber(rowIndex);
-                    isFirstCellParsed = true;
-                    continue;
-                }
-
                 if (const bool c_CanContinueRowParsing{_parseDevicePort(rowIndex)}; !c_CanContinueRowParsing)
                 {
                     break;
@@ -187,10 +173,17 @@ Data::DeviceTypeID ConnectionInputParser::_parseDeviceType(const size_t rowIndex
     if (rowIndex < mParsedRowsInfo.size())
     {
         std::string deviceType;
+        const bool c_CellSuccessfullyRead{_readCurrentCell(rowIndex, deviceType)};
 
-        if (const bool c_CellSuccessfullyRead{_readCurrentCell(rowIndex, deviceType)}; c_CellSuccessfullyRead)
+        if (c_CellSuccessfullyRead)
         {
             deviceTypeID = Parsers::getDeviceTypeID(deviceType);
+        }
+        else
+        {
+            // total number of csv cells from the connection row (cable + 2 devices) is less than required (parsing of the row should stop at once)
+            ErrorPtr pFewerCellsError{_logError(static_cast<Error_t>(ErrorCode::FEWER_CELLS), rowIndex + Parsers::c_RowNumberOffset)};
+            _storeParsingError(pFewerCellsError);
         }
 
         // NO_DEVICE should normally not be a case, it's added just for defensive programming purposes (considered equivalent to UNKNOWN_DEVICE)
@@ -200,7 +193,7 @@ Data::DeviceTypeID ConnectionInputParser::_parseDeviceType(const size_t rowIndex
         }
 
         // the device should both be known (correct device type string entered by user) and supported (instantiatable) by device factory (code should be in place for factory instantiating it)
-        if (Data::DeviceTypeID::UNKNOWN_DEVICE == deviceTypeID)
+        if (c_CellSuccessfullyRead && Data::DeviceTypeID::UNKNOWN_DEVICE == deviceTypeID)
         {
             const size_t c_FileRowNumber{rowIndex + Parsers::c_RowNumberOffset};
             ErrorPtr pUnknownDeviceError{_logError(static_cast<Error_t>(ErrorCode::UNKNOWN_DEVICE), c_FileRowNumber)};
@@ -232,6 +225,12 @@ bool ConnectionInputParser::_parseDeviceUPosition(const size_t rowIndex, std::st
                 ErrorPtr pInvalidUPositionValueError{_logError(static_cast<Error_t>(ErrorCode::INVALID_U_POSITION_VALUE), c_FileRowNumber)};
                 _storeParsingError(pInvalidUPositionValueError);
             }
+        }
+        else
+        {
+            // total number of csv cells from the connection row (cable + 2 devices) is less than required (parsing of the row should stop at once)
+            ErrorPtr pFewerCellsError{_logError(static_cast<Error_t>(ErrorCode::FEWER_CELLS), rowIndex + Parsers::c_RowNumberOffset)};
+            _storeParsingError(pFewerCellsError);
         }
     }
 
