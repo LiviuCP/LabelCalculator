@@ -27,16 +27,10 @@ public:
     Parser(const InputStreamPtr pInputStream, const OutputStreamPtr pOutputStream, const ErrorStreamPtr pErrorStream, const std::string_view header);
     virtual ~Parser();
 
-    virtual bool parse();
+    bool parse();
     virtual void subParserFinished(ISubParser* const pISubParser) override;
 
 protected:
-    /* This function reads all rows (header and payload) from input file. */
-    virtual void _readInput();
-
-    /* This function reads the first (header) row from input file and discards it. */
-    virtual void _readHeader();
-
     /* This function reads all rows from input file starting with the second one (a.k.a. payload) and prepares them for parsing. */
     virtual void _readPayload() = 0;
 
@@ -46,22 +40,19 @@ protected:
     /* This function builds the rows to be written into the output file. */
     virtual void _buildOutput() = 0;
 
-    /* This function writes the resulting output to file. */
-    virtual void _writeOutput();
-
     /* This function resets the internal parser state after each parsing session. */
     virtual void _reset();
 
     /* Used for requesting error logging from error handler (force: used for non-localized error, e.g. empty file) */
-    virtual ErrorPtr _logError(const Error_t errorCode, const size_t fileRowNumber, bool force = false);
+    ErrorPtr _logError(const Error_t errorCode, const size_t fileRowNumber, bool force = false);
 
     /* Used for storing locally generated errors
        Error location is setup at error storing point
     */
-    virtual void _storeParsingError(ErrorPtr pError);
+    void _storeParsingError(ErrorPtr pError);
 
     /* Used for logging all parsing errors to file */
-    virtual bool _logParsingErrorsToFile();
+    bool _logParsingErrorsToFile();
 
     /* Checks that input stream is at the end of file */
     bool _isInputStreamConsumed() const;
@@ -109,6 +100,15 @@ protected:
     bool _parsingErrorsExist() const;
 
 private:
+    /* This function reads all rows (header and payload) from input file. */
+    void _readInput();
+
+    /* This function reads the first (header) row from input file and discards it. */
+    void _readHeader();
+
+    /* This function writes the resulting output to file. */
+    void _writeOutput();
+
     /* Retrieves relevant data resulted from subparser work: current position, file column number, etc */
     void _retrieveRequiredDataFromSubParser(const ISubParser* const pISubParser);
 

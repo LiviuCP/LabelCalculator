@@ -128,14 +128,14 @@ Index_t DevicePort::getCurrentPosition() const
     return currentPosition;
 }
 
-size_t DevicePort::getFileColumnNumber() const
-{
-    return mFileColumnNumber;
-}
-
 size_t DevicePort::getFileRowNumber() const
 {
     return mFileRowNumber;
+}
+
+size_t DevicePort::getFileColumnNumber() const
+{
+    return mFileColumnNumber;
 }
 
 std::string DevicePort::getDescription() const

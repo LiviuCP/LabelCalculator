@@ -16,11 +16,10 @@ public:
     ConnectionDefinitionParser& operator=(const ConnectionDefinitionParser&) = delete;
 
 protected:
-    void _readPayload() override;
-    bool _parseInput() override;
-    void _buildOutput() override;
-
-    void _reset() override;
+    virtual void _readPayload() override;
+    virtual bool _parseInput() override;
+    virtual void _buildOutput() override;
+    virtual void _reset() override;
 
 private:
     /* Describes connection of current (source) device to a destination device (a.k.a. connected device);

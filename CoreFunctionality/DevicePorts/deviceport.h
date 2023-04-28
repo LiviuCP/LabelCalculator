@@ -37,17 +37,17 @@ public:
     /* reads and parses the input fields for the device port from string starting position pos (which is subsequently updated)
        uses the ofstream for logging any errors in the corresponding file and the boolean to report the occurence of these errors
     */
-    void parseInputData(std::vector<ErrorPtr>& parsingErrors) override;
+    virtual void parseInputData(std::vector<ErrorPtr>& parsingErrors) override;
 
     // getters
     virtual Index_t getCurrentPosition() const override final;
-    virtual size_t getFileColumnNumber() const override final;
     virtual size_t getFileRowNumber() const override final;
+    virtual size_t getFileColumnNumber() const override final;
     std::string getDescription() const;
     std::string getLabel() const;
 
     // setters
-    virtual void setSubParserObserver(ISubParserObserver* const pISubParserObserver) override;
+    virtual void setSubParserObserver(ISubParserObserver* const pISubParserObserver) override final;
     virtual void setErrorHandler(const ErrorHandlerPtr pErrorHandler) override final;
     virtual void setFileColumnNumber(const size_t fileColumnNumber) override final;
     virtual void setRawInputData(const std::string_view rawInputData) override final;
@@ -147,7 +147,5 @@ private:
     // flag that signals that parsing begins from start of row (if false: some padding needs to be prepended to raw input data, otherwise first cell is always considered empty)
     const bool mParseFromRowStart;
 };
-
-using DevicePortPtr = std::shared_ptr<DevicePort>;
 
 #endif // DEVICEPORT_H

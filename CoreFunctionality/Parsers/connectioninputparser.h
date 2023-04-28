@@ -17,7 +17,6 @@ protected:
     virtual void _readPayload() override;
     virtual bool _parseInput() override;
     virtual void _buildOutput() override;
-
     virtual void _reset() override;
 
 private:

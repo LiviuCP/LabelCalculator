@@ -7,7 +7,6 @@ class EmptyCellError final : public Error
 {
 public:
     EmptyCellError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
-
     virtual void execute() override;
 };
 
@@ -16,7 +15,6 @@ class UnknownDeviceError final : public Error
 {
 public:
     UnknownDeviceError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
-
     virtual void execute() override;
 };
 
@@ -25,7 +23,6 @@ class FewerCellsError final : public Error
 {
 public:
     FewerCellsError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
-
     virtual void execute() override;
 };
 
@@ -34,7 +31,6 @@ class InvalidConnectionFormatError final : public Error
 {
 public:
     InvalidConnectionFormatError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
-
     virtual void execute() override;
 };
 
@@ -43,7 +39,6 @@ class DeviceUPositionOutOfRangeError final : public Error
 {
 public:
     DeviceUPositionOutOfRangeError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
-
     virtual void execute() override;
 };
 
@@ -52,7 +47,6 @@ class TargetDeviceNotFoundError final : public Error
 {
 public:
     TargetDeviceNotFoundError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
-
     virtual void execute() override;
 };
 
@@ -61,7 +55,6 @@ class DeviceConnectedToItselfError final : public Error
 {
 public:
     DeviceConnectedToItselfError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
-
     virtual void execute() override;
 };
 
@@ -70,7 +63,6 @@ class NullNrOfConnectionsError final : public Error
 {
 public:
     NullNrOfConnectionsError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
-
     virtual void execute() override;
 };
 
@@ -79,7 +71,6 @@ class InvalidCharactersError final : public Error
 {
 public:
     InvalidCharactersError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
-
     virtual void execute() override;
 };
 
@@ -88,7 +79,6 @@ class InvalidUPositionValueError final : public Error
 {
 public:
     InvalidUPositionValueError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
-
     virtual void execute() override;
 };
 
@@ -96,7 +86,6 @@ class EmptyConnectionInputFileError final : public Error
 {
 public:
     EmptyConnectionInputFileError(const ErrorStreamPtr pErrorStream);
-
     virtual void execute() override;
 };
 
@@ -104,7 +93,6 @@ class NoConnectionsDefinedError final : public Error
 {
 public:
     NoConnectionsDefinedError(const ErrorStreamPtr pErrorStream);
-
     virtual void execute() override;
 };
 

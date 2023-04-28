@@ -68,35 +68,6 @@ void Parser::subParserFinished(ISubParser* const pISubParser)
     }
 }
 
-void Parser::_readInput()
-{
-    _readHeader();
-    _readPayload();
-}
-
-void Parser::_readHeader()
-{
-    if (mpInputStream && mpInputStream->is_open())
-    {
-        mpInputStream->seekg(0);
-        std::string header;
-        getline(*mpInputStream, header);
-    }
-}
-
-void Parser::_writeOutput()
-{
-    if (mpOutputStream && mpOutputStream->is_open())
-    {
-        *mpOutputStream << mParserOutput.mHeader << "\n";
-
-        for (const auto& payloadRow : mParserOutput.mData)
-        {
-            *mpOutputStream << payloadRow << "\n";
-        }
-    }
-}
-
 void Parser::_reset()
 {
     mParserInput.clear();
@@ -327,6 +298,35 @@ ISubParser* Parser::_getSubParser(const size_t rowIndex, const size_t subParserI
 bool Parser::_parsingErrorsExist() const
 {
     return !mParsingErrors.empty();
+}
+
+void Parser::_readInput()
+{
+    _readHeader();
+    _readPayload();
+}
+
+void Parser::_readHeader()
+{
+    if (mpInputStream && mpInputStream->is_open())
+    {
+        mpInputStream->seekg(0);
+        std::string header;
+        getline(*mpInputStream, header);
+    }
+}
+
+void Parser::_writeOutput()
+{
+    if (mpOutputStream && mpOutputStream->is_open())
+    {
+        *mpOutputStream << mParserOutput.mHeader << "\n";
+
+        for (const auto& payloadRow : mParserOutput.mData)
+        {
+            *mpOutputStream << payloadRow << "\n";
+        }
+    }
 }
 
 void Parser::_retrieveRequiredDataFromSubParser(const ISubParser* const pISubParser)
