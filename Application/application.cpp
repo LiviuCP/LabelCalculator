@@ -503,12 +503,15 @@ void Application::_displayFileOpeningErrorMessage() const
     switch(mStatusCode)
     {
     case StatusCode::INPUT_FILE_NOT_OPENED:
-        assert(ParserCreator::ParserTypes::UNKNOWN != mParserType);
-        file = _getInputFile();
-        break;
     case StatusCode::OUTPUT_FILE_NOT_OPENED:
-        assert(ParserCreator::ParserTypes::UNKNOWN != mParserType);
-        file = _getOutputFile();
+        if (ParserCreator::ParserTypes::UNKNOWN != mParserType)
+        {
+            file = StatusCode::INPUT_FILE_NOT_OPENED == mStatusCode ? _getInputFile() : _getOutputFile();
+        }
+        else
+        {
+            assert(false);
+        }
         break;
     case StatusCode::ERROR_FILE_NOT_OPENED:
         file = mParsingErrorsFile;
@@ -521,7 +524,7 @@ void Application::_displayFileOpeningErrorMessage() const
 
     system(scClearScreenCommand.data());
     std::cerr << "Error! File cannot be opened for " << c_Operation << ".\n\n";
-    std::cerr << "File path: "<< file << "\n\n";
+    std::cerr << "File path: "<< file.string() << "\n\n";
     std::cerr << "The file might not exist or the user might not have the required permissions to open it.\n\n";
 }
 
