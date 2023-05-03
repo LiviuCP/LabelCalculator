@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <sstream>
-#include <cassert>
 
 #include "errorcodes.h"
 #include "coreutils.h"

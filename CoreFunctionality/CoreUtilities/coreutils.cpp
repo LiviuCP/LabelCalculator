@@ -1,7 +1,6 @@
 #include <algorithm>
 #include <ctime>
 #include <iomanip>
-#include <cassert>
 
 #include "applicationdata.h"
 #include "coreutils.h"

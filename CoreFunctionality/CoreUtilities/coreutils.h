@@ -6,10 +6,24 @@
 #include <optional>
 #include <filesystem>
 #include <chrono>
+#include <iostream>
 #include <sstream>
+#include <cassert>
 
 #ifdef _WIN32
 #include "auxdata.h"
+#endif
+
+#ifdef NDEBUG
+#define ASSERT(condition, message) \
+    if (!(condition) && (std::string{} != message)) \
+    { \
+        std::cerr << "\n\nWARNING! " << message << "\n\n"; \
+    }
+#else
+#define ASSERT(condition, message) \
+    (void)message; \
+    assert(condition);
 #endif
 
 using Index_t = std::optional<size_t>;

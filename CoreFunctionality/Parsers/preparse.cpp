@@ -1,5 +1,3 @@
-#include <cassert>
-
 #include "applicationdata.h"
 #include "preparse.h"
 
@@ -16,6 +14,6 @@ void Utilities::Other::createEmptyConnectionDefinitionsFile(const OutputStreamPt
     }
     else
     {
-        assert(false);
+        ASSERT(false, "");
     }
 }

@@ -16,6 +16,10 @@ include_directories(
     Settings
 )
 
+if (CMAKE_BUILD_TYPE MATCHES Release)
+    add_definitions(-DNDEBUG)
+endif()
+
 add_subdirectory(Application)
 add_subdirectory(CoreFunctionality)
 add_subdirectory(Settings)

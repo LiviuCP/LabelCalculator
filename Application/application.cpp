@@ -1,8 +1,6 @@
-#include <iostream>
-#include <cassert>
-
 #include "preparse.h"
 #include "appsettings.h"
+#include "coreutils.h"
 #include "application.h"
 
 namespace Core = Utilities::Core;
@@ -225,8 +223,7 @@ bool Application::_setDirectory(const Path_t& dirPath)
     }
     else
     {
-        std::cerr << "Empty path, cannot create directory\n\n";
-        assert(false);
+        ASSERT(false, "Empty path, cannot create directory");
     }
 
     return success;
@@ -247,7 +244,7 @@ void Application::_enableFileInputOutput()
 {
     if (!mIsInitialized)
     {
-        assert(false);
+        ASSERT(false, "");
     }
     else if (!mIsFileIOEnabled)
     {
@@ -314,7 +311,7 @@ void Application::_moveOutputFileToBackupDir()
         }
         else
         {
-            assert(false);
+            ASSERT(false, "");
         }
     }
 }
@@ -362,7 +359,7 @@ int Application::_handleStatusCode()
     switch(mStatusCode)
     {
     case StatusCode::UNDEFINED:
-        assert(false);
+        ASSERT(false, "");
         break;
     case StatusCode::SUCCESS:
         _displaySuccessMessage(ParserCreator::ParserTypes::CONNECTION_DEFINITION == mParserType);
@@ -488,7 +485,7 @@ void Application::_displayDirectoryNotSetupMessage() const
         dirType = "output backup";
         break;
     default:
-        assert(false);
+        ASSERT(false, "");
     }
 
     system(scClearScreenCommand.data());
@@ -510,14 +507,14 @@ void Application::_displayFileOpeningErrorMessage() const
         }
         else
         {
-            assert(false);
+            ASSERT(false, "");
         }
         break;
     case StatusCode::ERROR_FILE_NOT_OPENED:
         file = mParsingErrorsFile;
         break;
     default:
-        assert(false);
+        ASSERT(false, "");
     }
 
     const std::string c_Operation{StatusCode::INPUT_FILE_NOT_OPENED == mStatusCode ? "reading" : "writing"};
@@ -570,7 +567,7 @@ Path_t Application::_getInputFile() const
     }
     else
     {
-        assert(false);
+        ASSERT(false, "");
     }
 
     return inputFile;
@@ -594,7 +591,7 @@ Path_t Application::_getOutputFile() const
     }
     else
     {
-        assert(false);
+        ASSERT(false, "");
     }
 
     return outputFile;

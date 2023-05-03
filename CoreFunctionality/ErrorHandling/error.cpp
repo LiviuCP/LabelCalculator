@@ -1,5 +1,3 @@
-#include <cassert>
-
 #include "errorcodes.h"
 #include "error.h"
 
@@ -11,13 +9,9 @@ Error::Error(Error_t errorCode, const size_t fileRowNumber, const size_t fileCol
 {
     const Error_t c_ErrorCode{static_cast<Error_t>(mErrorCode)};
 
-    assert(c_ErrorCode > 0u &&
-           c_ErrorCode < static_cast<Error_t>(ErrorCode::ErrorCodesUpperBound));
-
-    assert(mFileRowNumber > 0u &&
-           mFileColumnNumber > 0u);
-
-    assert(mpErrorStream && mpErrorStream->is_open());
+    ASSERT(c_ErrorCode > 0u && c_ErrorCode < static_cast<Error_t>(ErrorCode::ErrorCodesUpperBound), "");
+    ASSERT(mFileRowNumber > 0u && mFileColumnNumber > 0u, "");
+    ASSERT(mpErrorStream && mpErrorStream->is_open(), "");
 }
 
 Error::~Error()

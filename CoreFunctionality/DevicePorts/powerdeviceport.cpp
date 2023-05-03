@@ -1,5 +1,3 @@
-#include <cassert>
-
 #include "deviceportdata.h"
 #include "deviceportutils.h"
 #include "powerdeviceport.h"
@@ -124,7 +122,7 @@ void ExtensionBarPort::updateDescriptionAndLabel()
         }
         else
         {
-            assert(false);
+            ASSERT(false, "");
         }
     }
     else

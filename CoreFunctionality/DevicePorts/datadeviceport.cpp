@@ -1,5 +1,3 @@
-#include <cassert>
-
 #include "deviceportdata.h"
 #include "deviceportutils.h"
 #include "datadeviceport.h"
@@ -78,7 +76,7 @@ void SwitchPort::_handleNumberedPortType()
         else
         {
             _setInvalidDescriptionAndLabel(Ports::c_InvalidPortTypeErrorText);
-            assert(false);
+            ASSERT(false, "");
         }
     }
     else
@@ -317,7 +315,7 @@ void ServerPort::_handleNumberedPortType()
             else
             {
                 _setInvalidDescriptionAndLabel(Ports::c_InvalidPortTypeErrorText);
-                assert(false);
+                ASSERT(false, "");
             }
         }
         else if (Ports::isPowerPortType(mPortType))
@@ -328,7 +326,7 @@ void ServerPort::_handleNumberedPortType()
         else
         {
             _setInvalidDescriptionAndLabel(Ports::c_InvalidPortTypeErrorText);
-            assert(false);
+            ASSERT(false, "");
         }
     }
     else
@@ -565,7 +563,7 @@ void BladeServerPort::_handleNumberedModuleType()
         }
         else
         {
-            assert(false);
+            ASSERT(false, "");
         }
     }
     else

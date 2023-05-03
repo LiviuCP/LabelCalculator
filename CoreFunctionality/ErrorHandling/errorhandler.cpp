@@ -1,5 +1,3 @@
-#include <cassert>
-
 #include "errortypes.h"
 #include "errorcodes.h"
 #include "errorhandler.h"
@@ -7,7 +5,7 @@
 ErrorHandler::ErrorHandler(const ErrorStreamPtr pErrorStream)
     : mpErrorStream{pErrorStream}
 {
-    assert(mpErrorStream && mpErrorStream->is_open());
+    ASSERT(mpErrorStream && mpErrorStream->is_open(), "");
 }
 
 ErrorPtr ErrorHandler::logError(const Error_t errorCode,
@@ -57,7 +55,7 @@ ErrorPtr ErrorHandler::logError(const Error_t errorCode,
             pError = std::make_shared<NoConnectionsDefinedError>(mpErrorStream);
             break;
         default:
-            assert(false);
+            ASSERT(false, "");
         }
     }
 

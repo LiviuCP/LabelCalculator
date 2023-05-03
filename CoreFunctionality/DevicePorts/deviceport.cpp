@@ -1,6 +1,5 @@
 #include <algorithm>
 #include <sstream>
-#include <cassert>
 
 #include "isubparserobserver.h"
 #include "errorcodes.h"
@@ -121,7 +120,7 @@ Index_t DevicePort::getCurrentPosition() const
         else
         {
             currentPosition.reset();
-            assert(false);
+            ASSERT(false, "");
         }
     }
 
@@ -251,7 +250,7 @@ void DevicePort::_checkLabel()
     else
     {
         _setInvalidDescriptionAndLabel(Ports::c_LabelErrorText, Ports::c_LabelErrorText); // defensive programming
-        assert(false);
+        ASSERT(false, "");
     }
 }
 
@@ -289,12 +288,12 @@ void DevicePort::_initializeRequiredParameters()
         }
         else
         {
-            assert(false);
+            ASSERT(false, "");
         }
     }
     else
     {
-        assert(false);
+        ASSERT(false, "");
     }
 }
 

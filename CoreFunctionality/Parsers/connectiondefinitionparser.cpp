@@ -1,6 +1,5 @@
 #include <sstream>
 #include <charconv>
-#include <cassert>
 
 #include "errorcodes.h"
 #include "parserdata.h"

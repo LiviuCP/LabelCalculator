@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <cassert>
 
 #include "coreutils.h"
 #include "isubparser.h"
@@ -23,7 +22,7 @@ Parser::Parser(const InputStreamPtr pInputStream, const OutputStreamPtr pOutputS
     }
     else
     {
-        assert(false);
+        ASSERT(false, "");
     }
 }
 
@@ -356,7 +355,7 @@ void Parser::_retrieveRequiredDataFromSubParser(const ISubParser* const pISubPar
                     }
                     else
                     {
-                        assert(false); // new position should not exceed the row bounds
+                        ASSERT(false, ""); // new position should not exceed the row bounds
                     }
                 }
                 else

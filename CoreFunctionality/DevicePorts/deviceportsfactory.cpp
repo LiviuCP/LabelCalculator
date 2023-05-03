@@ -1,5 +1,3 @@
-#include <cassert>
-
 #include "datadeviceport.h"
 #include "powerdeviceport.h"
 #include "deviceportsfactory.h"
@@ -53,7 +51,7 @@ DevicePort* DevicePortsFactory::createDevicePort(const Data::DeviceTypeID device
         pDevicePort = new BladeServerPort(deviceUPosition, fileRowNumber, isSourceDevice);
         break;
     default:
-        assert(false);
+        ASSERT(false, "");
     }
 
     return pDevicePort;
