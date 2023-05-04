@@ -112,8 +112,8 @@ private:
     /* Retrieves relevant data resulted from subparser work: current position, file column number, etc */
     void _retrieveRequiredDataFromSubParser(const ISubParser* const pISubParser);
 
-    /* Checks if the subparser is registered within parser (otherwise it cannot be used) */
-    bool _isSubParserRegistered(const ISubParser* const pISubParser) const;
+    /* Checks if the subparser is registered within parser and has valid row number (otherwise it cannot be used) */
+    bool _isValidSubParser(const ISubParser* const pISubParser) const;
 
     /* Deallocates all registered subparsers once Parser gets destroyed (once registered their ownership is assumed by Parser) */
     void _destroySubParsers();
