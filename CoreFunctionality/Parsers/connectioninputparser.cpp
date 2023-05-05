@@ -69,20 +69,11 @@ void ConnectionInputParser::_buildOutput()
     {
         for (size_t rowIndex{0u}; rowIndex < c_ConnectionInputRowsCount; ++rowIndex)
         {
-            DevicePort* pFirstDevicePort{dynamic_cast<DevicePort*>(_getSubParser(rowIndex, 0))};
-            DevicePort* pSecondDevicePort{dynamic_cast<DevicePort*>(_getSubParser(rowIndex, 1))};
+            std::string outputRow;
 
-            if (pFirstDevicePort && pSecondDevicePort)
+            if (const bool c_IsValidConnection{_buildOutputRow(rowIndex, outputRow)}; c_IsValidConnection)
             {
-                pFirstDevicePort->updateDescriptionAndLabel();
-                pSecondDevicePort->updateDescriptionAndLabel();
-
-                std::string outputRow;
-
-                if (const bool c_IsValidConnection{_buildOutputRow(rowIndex, outputRow)}; c_IsValidConnection)
-                {
-                    _appendRowToOutput(outputRow);
-                }
+                _appendRowToOutput(outputRow);
             }
         }
     }
@@ -238,35 +229,50 @@ bool ConnectionInputParser::_parseDeviceUPosition(const size_t rowIndex, std::st
 
 bool ConnectionInputParser::_buildOutputRow(const size_t rowIndex, std::string& currentRow)
 {
-    const DevicePort* const pFirstDevicePort{dynamic_cast<DevicePort*>(_getSubParser(rowIndex, 0))};
-    const DevicePort* const pSecondDevicePort{dynamic_cast<DevicePort*>(_getSubParser(rowIndex, 1))};
+    DevicePort* pFirstDevicePort{nullptr};
+    DevicePort* pSecondDevicePort{nullptr};
 
-    const bool c_IsValidConnection{pFirstDevicePort && pSecondDevicePort && rowIndex < mParsedRowsInfo.size()};
+    bool success{false};
 
-    if (c_IsValidConnection)
+    if (rowIndex < mParsedRowsInfo.size())
     {
-        std::stringstream str;
+        pFirstDevicePort = dynamic_cast<DevicePort*>(_getSubParser(rowIndex, 0));
 
-        // number of the connection to be written on each row of the output file
-        const size_t c_ConnectionNumber{rowIndex + 1};
+        if (pFirstDevicePort)
+        {
+            pSecondDevicePort = dynamic_cast<DevicePort*>(_getSubParser(rowIndex, 1));
+        }
 
-        currentRow.clear();
-        str << c_ConnectionNumber;
-        str >> currentRow;
+        if (pSecondDevicePort)
+        {
+            pFirstDevicePort->updateDescriptionAndLabel();
+            pSecondDevicePort->updateDescriptionAndLabel();
 
-        currentRow += Data::c_CSVSeparator;
-        currentRow += mParsedRowsInfo[rowIndex].mCablePartNumber;
-        currentRow += Data::c_CSVSeparator;
-        currentRow += pFirstDevicePort->getDescription();
-        currentRow += Data::c_CSVSeparator;
-        currentRow += pFirstDevicePort->getLabel();
-        currentRow += Data::c_CSVSeparator;
-        currentRow += pSecondDevicePort->getDescription();
-        currentRow += Data::c_CSVSeparator;
-        currentRow += pSecondDevicePort->getLabel();
+            std::stringstream str;
+
+            // number of the connection to be written on each row of the output file
+            const size_t c_ConnectionNumber{rowIndex + 1};
+
+            currentRow.clear();
+            str << c_ConnectionNumber;
+            str >> currentRow;
+
+            currentRow += Data::c_CSVSeparator;
+            currentRow += mParsedRowsInfo[rowIndex].mCablePartNumber;
+            currentRow += Data::c_CSVSeparator;
+            currentRow += pFirstDevicePort->getDescription();
+            currentRow += Data::c_CSVSeparator;
+            currentRow += pFirstDevicePort->getLabel();
+            currentRow += Data::c_CSVSeparator;
+            currentRow += pSecondDevicePort->getDescription();
+            currentRow += Data::c_CSVSeparator;
+            currentRow += pSecondDevicePort->getLabel();
+
+            success = true;
+        }
     }
 
-    return c_IsValidConnection;
+    return success;
 }
 
 ConnectionInputParser::ParsedRowInfo::ParsedRowInfo()
