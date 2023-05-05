@@ -61,8 +61,10 @@ void Parser::subParserFinished(ISubParser* const pISubParser)
     {
         _retrieveRequiredDataFromSubParser(pISubParser);
 
-        // file row numbering starts at 1 and the first row is reserved for the header (so payload rows start at 2)
+        // file row numbering starts at 1 and the first row is reserved for the header so payload rows start at 2 (row number already checked, sub-parser is valid)
         const size_t c_RowIndex{pISubParser->getFileRowNumber() - 2};
+
+        // no matter the retrieved data this flag needs to be updated to signal that the row is free for further parsing
         mParserInput[c_RowIndex].mIsSubParserActive = false;
     }
 }
@@ -328,20 +330,22 @@ void Parser::_writeOutput()
     }
 }
 
+/* Each data item retrieved from sub-parser is checked for validity individually and independently from the other received items
+   It is the responsibility of the sub-parser to provide correct parameters in relation to each other
+   (e.g. a correct column number update in relation to the new current position)
+*/
 void Parser::_retrieveRequiredDataFromSubParser(const ISubParser* const pISubParser)
 {
     Index_t subParserRowIndex;
 
     if (pISubParser && _isValidSubParser(pISubParser))
     {
-        if (const size_t c_FileRowNumber{pISubParser->getFileRowNumber()}; c_FileRowNumber > 1u)
-        {
-            subParserRowIndex = c_FileRowNumber - 2;
+        // file row numbering starts at 1 and the first row is reserved for the header so payload rows start at 2 (row number already checked, sub-parser is valid)
+        subParserRowIndex = pISubParser->getFileRowNumber() - 2;
 
-            if (!_isValidCurrentPosition(subParserRowIndex.value()))
-            {
-                subParserRowIndex.reset();
-            }
+        if (!_isValidCurrentPosition(subParserRowIndex.value()))
+        {
+            subParserRowIndex.reset();
         }
     }
 
@@ -358,7 +362,7 @@ void Parser::_retrieveRequiredDataFromSubParser(const ISubParser* const pISubPar
             }
             else
             {
-                ASSERT(false, ""); // new position should not exceed the row bounds
+                ASSERT(false, "Invalid csv row character index detected"); // new position should not exceed the row bounds
             }
         }
         else
@@ -372,6 +376,10 @@ void Parser::_retrieveRequiredDataFromSubParser(const ISubParser* const pISubPar
             c_FileColumnNumber >= mParserInput[c_RowIndex].mFileColumnNumber)
         {
             mParserInput[c_RowIndex].mFileColumnNumber = c_FileColumnNumber;
+        }
+        else
+        {
+            ASSERT(false, "Invalid csv column number detected");
         }
     }
 }
