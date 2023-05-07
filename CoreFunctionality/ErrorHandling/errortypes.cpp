@@ -43,8 +43,8 @@ void FewerCellsError::execute()
                                            (Data::c_NrOfDeviceTypeAndUPositionCellsPerPort +
                                             Data::c_MaxPortInputParametersCount)};
 
-    _logMessage("less cells have been filled on the row than required in order to store the parameters of the two device ports.", true);
-    _logMessage("A total number of " + std::to_string(c_RequiredCellsCountPerRow) + " contiguous cells are required to be filled (starting with the first cell on the row)");
+    _logMessage("less cells exist on the row than required in order to store the connection data of the two device ports.", true);
+    _logMessage("A total number of " + std::to_string(c_RequiredCellsCountPerRow) + " contiguous cells are required.");
     _logRowNumber();
 
     Error::execute();
