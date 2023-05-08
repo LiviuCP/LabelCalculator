@@ -85,48 +85,38 @@ void ConnectionDefinitionParser::_buildOutput()
 {
     _buildDeviceOutputData();
 
-    // each output row and number of times to append it to output
-    std::vector<std::pair<std::string, size_t>> outputRowsAndAppends;
-
+    std::vector<std::pair<std::string, size_t>> outputRowsAndAppends; // each output row and number of times to append it to output
     size_t validSourceDevicesCount{0u};
 
     // traverse the rack from top to bottom and check if each discovered device is connected to devices placed at upper U positions
-    for(auto deviceIter{mConnections.crbegin()}; deviceIter != mConnections.crend() && deviceIter->mSourceDevice > 0u; ++deviceIter) // source device U position starts at 1
+    for(auto sourceDevIter{mConnections.crbegin()}; sourceDevIter != mConnections.crend() && sourceDevIter->mSourceDevice > 0u; ++sourceDevIter)
     {
-        const size_t c_CurrentDeviceIndex{static_cast<size_t>(std::distance(deviceIter, mConnections.crend() - 1))};
-        const size_t c_CurrentDeviceUPositionAsIndex{deviceIter->mSourceDevice - 1};
-
         size_t validConnectedDevicesCount{0u};
+        const ConnectedDevices& connectedDevices{sourceDevIter->mConnectedDevices};
 
-        // connected (destination device U position starts at 1
-        for (auto connectedDevIter{mConnections[c_CurrentDeviceIndex].mConnectedDevices.cbegin()};
-             connectedDevIter != mConnections[c_CurrentDeviceIndex].mConnectedDevices.cend() && connectedDevIter->first > 0u;
-             ++connectedDevIter)
+        // connected (destination) device U position starts at 1
+        for (auto connectedDevIter{connectedDevices.cbegin()}; connectedDevIter != connectedDevices.cend() && connectedDevIter->first > 0u; ++connectedDevIter)
         {
-            const size_t c_ConnectedDeviceIndex{static_cast<size_t>(std::distance(mConnections[c_CurrentDeviceIndex].mConnectedDevices.cbegin(), connectedDevIter))};
-
             /* The output string per connection row is calculated by adding following substrings: cable part number placeholder and the template parameters for each connected device
                The decrease by 1 is necessary due to vector indexing (which starts at 0)
             */
             std::string output{Data::c_CablePartNumberPlaceholder};
             output.push_back(Data::c_CSVSeparator);
-            output.append(mRackPositionToDeviceDataMapping[c_CurrentDeviceUPositionAsIndex].mDeviceOutputData);
+            output.append(mRackPositionToDeviceDataMapping[sourceDevIter->mSourceDevice - 1].mDeviceOutputData); // source device U position starts at 1 (already checked above)
             output.push_back(Data::c_CSVSeparator);
-            output.append(mRackPositionToDeviceDataMapping[connectedDevIter->first - 1].mDeviceOutputData);
-            outputRowsAndAppends.push_back({output, mConnections[c_CurrentDeviceIndex].mConnectedDevices[c_ConnectedDeviceIndex].second});
+            output.append(mRackPositionToDeviceDataMapping[connectedDevIter->first - 1].mDeviceOutputData); // destination (connected) device U position starts at 1 (already checked above)
+            outputRowsAndAppends.push_back({output, connectedDevIter->second});
             ++validConnectedDevicesCount;
         }
 
-        if (validConnectedDevicesCount == mConnections[c_CurrentDeviceIndex].mConnectedDevices.size())
+        if (validConnectedDevicesCount != connectedDevices.size())
         {
-            ++validSourceDevicesCount;
-            continue;
+            break;
         }
 
-        break;
+        ++validSourceDevicesCount;
     }
 
-    // build the actual output once all source devices have been correctly processed
     if (validSourceDevicesCount == mConnections.size())
     {
         // write the resulting output string a number of times equal to the number of connections between the two devices
@@ -134,6 +124,10 @@ void ConnectionDefinitionParser::_buildOutput()
         {
             _appendRowToOutput(outputRowAndAppends.first, outputRowAndAppends.second);
         }
+    }
+    else
+    {
+        ASSERT(false, "invalid U position of at least one source/destination device detected");
     }
 }
 
