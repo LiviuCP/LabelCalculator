@@ -14,6 +14,6 @@ void Utilities::Other::createEmptyConnectionDefinitionsFile(const OutputStreamPt
     }
     else
     {
-        ASSERT(false, "");
+        ASSERT(false, "The output file stream is invalid or not open");
     }
 }

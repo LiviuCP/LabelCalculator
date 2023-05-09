@@ -120,7 +120,7 @@ Index_t DevicePort::getCurrentPosition() const
         else
         {
             currentPosition.reset();
-            ASSERT(false, "");
+            ASSERT(false, "Invalid string index provided for device port data");
         }
     }
 
@@ -250,7 +250,7 @@ void DevicePort::_checkLabel()
     else
     {
         _setInvalidDescriptionAndLabel(Ports::c_LabelErrorText, Ports::c_LabelErrorText); // defensive programming
-        ASSERT(false, "");
+        ASSERT(false, "Empty device port label detected");
     }
 }
 
@@ -273,27 +273,29 @@ bool DevicePort::_isCurrentPositionAllowed() const
 
 void DevicePort::_initializeRequiredParameters()
 {
-    if (mFileRowNumber > 0u &&
-        mFileColumnNumber > 0u &&
-        !mIsInitialized)
+    if (!mIsInitialized)
     {
-        mInputParametersCount = _getInputParametersCount();
-
-        // there should be at least two parameters (device name and port number))
-        if (mInputParametersCount > 1u &&
-            mInputParametersCount <= Data::c_MaxPortInputParametersCount)
+        if (mFileRowNumber > 0u &&
+            mFileColumnNumber > 0u)
         {
-            mInputData.reserve(mInputParametersCount);
-            _registerRequiredParameters();
+            mInputParametersCount = _getInputParametersCount();
+
+            // there should be at least two parameters (device name and port number))
+            if (mInputParametersCount > 1u &&
+                    mInputParametersCount <= Data::c_MaxPortInputParametersCount)
+            {
+                mInputData.reserve(mInputParametersCount);
+                _registerRequiredParameters();
+            }
+            else
+            {
+                ASSERT(false, "Number of required device port input parameters is invalid");
+            }
         }
         else
         {
-            ASSERT(false, "");
+            ASSERT(false, "Invalid device port row/column number");
         }
-    }
-    else
-    {
-        ASSERT(false, "");
     }
 }
 

@@ -77,6 +77,10 @@ void ConnectionInputParser::_buildOutput()
             }
         }
     }
+    else
+    {
+        ASSERT(false, "Unable to labelling output");
+    }
 }
 
 void ConnectionInputParser::_reset()

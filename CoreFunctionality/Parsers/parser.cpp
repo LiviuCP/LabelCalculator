@@ -22,7 +22,7 @@ Parser::Parser(const InputStreamPtr pInputStream, const OutputStreamPtr pOutputS
     }
     else
     {
-        ASSERT(false, "");
+        ASSERT(false, "At least one of the file streams is invalid or not open");
     }
 }
 
@@ -362,7 +362,7 @@ void Parser::_retrieveRequiredDataFromSubParser(const ISubParser* const pISubPar
             }
             else
             {
-                ASSERT(false, "Invalid csv row character index detected"); // new position should not exceed the row bounds
+                ASSERT(false, "Invalid csv string index provided"); // new position should not exceed the row bounds
             }
         }
         else
@@ -379,7 +379,7 @@ void Parser::_retrieveRequiredDataFromSubParser(const ISubParser* const pISubPar
         }
         else
         {
-            ASSERT(false, "Invalid csv column number detected");
+            ASSERT(false, "Invalid csv column number provided");
         }
     }
 }

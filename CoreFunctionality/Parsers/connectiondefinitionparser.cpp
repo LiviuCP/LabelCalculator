@@ -127,7 +127,7 @@ void ConnectionDefinitionParser::_buildOutput()
     }
     else
     {
-        ASSERT(false, "invalid U position of at least one source/destination device detected");
+        ASSERT(false, "Invalid U position provided for at least one source/destination device");
     }
 }
 

@@ -76,7 +76,7 @@ void SwitchPort::_handleNumberedPortType()
         else
         {
             _setInvalidDescriptionAndLabel(Ports::c_InvalidPortTypeErrorText);
-            ASSERT(false, "");
+            ASSERT(false, "Invalid switch port type provided");
         }
     }
     else
@@ -315,7 +315,7 @@ void ServerPort::_handleNumberedPortType()
             else
             {
                 _setInvalidDescriptionAndLabel(Ports::c_InvalidPortTypeErrorText);
-                ASSERT(false, "");
+                ASSERT(false, "Invalid server data port type provided");
             }
         }
         else if (Ports::isPowerPortType(mPortType))
@@ -326,7 +326,7 @@ void ServerPort::_handleNumberedPortType()
         else
         {
             _setInvalidDescriptionAndLabel(Ports::c_InvalidPortTypeErrorText);
-            ASSERT(false, "");
+            ASSERT(false, "Invalid server port type provided");
         }
     }
     else
@@ -563,7 +563,7 @@ void BladeServerPort::_handleNumberedModuleType()
         }
         else
         {
-            ASSERT(false, "");
+            ASSERT(false, "Invalid blade module type provided");
         }
     }
     else

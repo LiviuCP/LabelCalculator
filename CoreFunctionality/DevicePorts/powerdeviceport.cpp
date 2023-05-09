@@ -122,7 +122,7 @@ void ExtensionBarPort::updateDescriptionAndLabel()
         }
         else
         {
-            ASSERT(false, "");
+            ASSERT(false, "Invalid extension bar placement type provided");
         }
     }
     else

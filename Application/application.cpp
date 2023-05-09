@@ -242,11 +242,7 @@ void Application::_copyExamplesDir()
 
 void Application::_enableFileInputOutput()
 {
-    if (!mIsInitialized)
-    {
-        ASSERT(false, "");
-    }
-    else if (!mIsFileIOEnabled)
+    if (mIsInitialized && !mIsFileIOEnabled)
     {
         // move existing output file to the appropriate backup folder to ensure it doesn't get overwritten
         _moveOutputFileToBackupDir();
@@ -311,7 +307,7 @@ void Application::_moveOutputFileToBackupDir()
         }
         else
         {
-            ASSERT(false, "");
+            ASSERT(false, "The path of the backup directory is empty or the file does not exist/is not a directory");
         }
     }
 }
@@ -359,7 +355,7 @@ int Application::_handleStatusCode()
     switch(mStatusCode)
     {
     case StatusCode::UNDEFINED:
-        ASSERT(false, "");
+        ASSERT(false, "Undefined application status");
         break;
     case StatusCode::SUCCESS:
         _displaySuccessMessage(ParserCreator::ParserTypes::CONNECTION_DEFINITION == mParserType);
@@ -485,7 +481,7 @@ void Application::_displayDirectoryNotSetupMessage() const
         dirType = "output backup";
         break;
     default:
-        ASSERT(false, "");
+        ASSERT(false, "Undefined application status at directory setup");
     }
 
     system(scClearScreenCommand.data());
@@ -507,14 +503,14 @@ void Application::_displayFileOpeningErrorMessage() const
         }
         else
         {
-            ASSERT(false, "");
+            ASSERT(false, "Parser is invalid");
         }
         break;
     case StatusCode::ERROR_FILE_NOT_OPENED:
         file = mParsingErrorsFile;
         break;
     default:
-        ASSERT(false, "");
+        ASSERT(false, "Undefined application status at file opening");
     }
 
     const std::string c_Operation{StatusCode::INPUT_FILE_NOT_OPENED == mStatusCode ? "reading" : "writing"};
@@ -567,7 +563,7 @@ Path_t Application::_getInputFile() const
     }
     else
     {
-        ASSERT(false, "");
+        ASSERT(false, "Parser is invalid");
     }
 
     return inputFile;
@@ -591,7 +587,7 @@ Path_t Application::_getOutputFile() const
     }
     else
     {
-        ASSERT(false, "");
+        ASSERT(false, "Parser is invalid");
     }
 
     return outputFile;

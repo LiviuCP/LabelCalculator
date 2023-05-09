@@ -51,7 +51,7 @@ DevicePort* DevicePortsFactory::createDevicePort(const Data::DeviceTypeID device
         pDevicePort = new BladeServerPort(deviceUPosition, fileRowNumber, isSourceDevice);
         break;
     default:
-        ASSERT(false, "");
+        ASSERT(false, "Cannot create device port");
     }
 
     return pDevicePort;
