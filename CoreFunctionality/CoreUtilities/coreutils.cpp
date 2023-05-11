@@ -62,8 +62,8 @@ Index_t Utilities::Core::readDataField(const std::string_view src, std::string& 
 */
 void Utilities::Core::convertStringCase(std::string& str, bool upperCase)
 {
-    auto toUpperTransformation{[](char c){return std::toupper(c);}};
-    auto toLowerTransformation{[](char c){return std::tolower(c);}};
+    auto toUpperTransformation{[](unsigned char c){return std::toupper(c);}};
+    auto toLowerTransformation{[](unsigned char c){return std::tolower(c);}};
 
     if (upperCase)
     {
@@ -81,7 +81,7 @@ bool Utilities::Core::isDigitString(const std::string_view str)
 
     for (const auto& c : str)
     {
-        if (!std::isdigit(c))
+        if (!std::isdigit(static_cast<unsigned char>(c)))
         {
             hasOnlyDigits = false;
             break;
@@ -97,8 +97,8 @@ bool Utilities::Core::areInvalidCharactersContained(const std::string_view str)
 
     for (const auto& c : str)
     {
-        if (!std::isdigit(c) &&
-            !std::isalpha(c) &&
+        if (!std::isdigit(static_cast<unsigned char>(c)) &&
+            !std::isalpha(static_cast<unsigned char>(c)) &&
             '-' != c)
         {
             containsInvalidCharacters = true;
@@ -115,7 +115,7 @@ bool Utilities::Core::areParseableCharactersContained(const std::string_view str
 
     for (const auto& c : str)
     {
-        if (!std::isspace(c) && Data::c_CSVSeparator != c)
+        if (!std::isspace(static_cast<unsigned char>(c)) && Data::c_CSVSeparator != c)
         {
             containsParseableCharacters = true;
             break;

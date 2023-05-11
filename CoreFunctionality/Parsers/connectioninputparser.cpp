@@ -94,7 +94,9 @@ void ConnectionInputParser::_parseCablePartNumber(const size_t rowIndex)
     if (rowIndex < mParsedRowsInfo.size())
     {
         std::string& cablePartNumber{mParsedRowsInfo[rowIndex].mCablePartNumber};
-        const std::string_view previousCablePartNumber{rowIndex > 0u ? mParsedRowsInfo[rowIndex - 1].mCablePartNumber : ""};
+
+        // there were some issues on Windows because of std::string_view for this particular case so it had to be replaced with std::string&
+        const std::string& previousCablePartNumber{rowIndex > 0u ? mParsedRowsInfo[rowIndex - 1].mCablePartNumber : ""};
 
         if (const bool c_CellSuccessfullyRead{_readCurrentCell(rowIndex, cablePartNumber)}; c_CellSuccessfullyRead)
         {

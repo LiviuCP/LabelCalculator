@@ -265,7 +265,7 @@ bool ConnectionDefinitionParser::_parseConnectionFormatting(const std::string_vi
 
     for (size_t index{0}; index < source.size(); ++index)
     {
-        if (isdigit(source[index]))
+        if (std::isdigit(static_cast<unsigned char>(source[index])))
         {
             continue;
         }
