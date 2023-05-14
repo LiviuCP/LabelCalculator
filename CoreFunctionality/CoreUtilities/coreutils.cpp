@@ -1,6 +1,4 @@
 #include <algorithm>
-#include <ctime>
-#include <iomanip>
 
 #include "applicationdata.h"
 #include "coreutils.h"

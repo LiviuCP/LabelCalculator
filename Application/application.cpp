@@ -1,6 +1,5 @@
 #include "preparse.h"
 #include "appsettings.h"
-#include "coreutils.h"
 #include "application.h"
 
 namespace Core = Utilities::Core;

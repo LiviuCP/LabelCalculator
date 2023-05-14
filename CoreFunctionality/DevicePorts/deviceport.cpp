@@ -1,5 +1,4 @@
 #include <algorithm>
-#include <sstream>
 
 #include "isubparserobserver.h"
 #include "errorcodes.h"

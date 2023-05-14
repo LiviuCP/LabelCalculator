@@ -1,6 +1,5 @@
 #include <algorithm>
 
-#include "coreutils.h"
 #include "isubparser.h"
 #include "parser.h"
 

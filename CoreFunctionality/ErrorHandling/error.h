@@ -1,9 +1,6 @@
 #ifndef ERROR_H
 #define ERROR_H
 
-#include <fstream>
-#include <memory>
-
 #include "coreutils.h"
 
 class Error

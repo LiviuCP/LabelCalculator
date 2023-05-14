@@ -1,8 +1,6 @@
 #include <algorithm>
-#include <sstream>
 
 #include "errorcodes.h"
-#include "coreutils.h"
 #include "parserutils.h"
 #include "deviceportsfactory.h"
 #include "deviceport.h"

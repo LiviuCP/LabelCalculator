@@ -2,8 +2,8 @@
 #define DEVICEPORT_H
 
 #include <vector>
+#include <utility>
 
-#include "coreutils.h"
 #include "isubparser.h"
 
 #ifdef _WIN32

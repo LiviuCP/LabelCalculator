@@ -1,13 +1,7 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include <memory>
-#include <string>
-#include <string_view>
-#include <fstream>
-
 #include "parsercreator.h"
-#include "coreutils.h"
 
 class Application
 {

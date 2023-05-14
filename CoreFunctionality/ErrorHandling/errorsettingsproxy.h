@@ -1,8 +1,6 @@
 #ifndef ERRORSETTINGSPROXY_H
 #define ERRORSETTINGSPROXY_H
 
-#include <string>
-
 #include "coreutils.h"
 
 namespace Settings

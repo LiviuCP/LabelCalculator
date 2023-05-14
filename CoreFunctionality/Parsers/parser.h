@@ -1,13 +1,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <fstream>
-#include <string>
-#include <string_view>
 #include <vector>
-#include <memory>
 
-#include "coreutils.h"
 #include "errorhandler.h"
 #include "isubparserobserver.h"
 

@@ -1,9 +1,6 @@
 #ifndef ISUBPARSER_H
 #define ISUBPARSER_H
 
-#include <memory>
-#include <utility>
-
 #include "errorhandler.h"
 
 class ISubParserObserver;

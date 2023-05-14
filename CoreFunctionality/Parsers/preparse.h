@@ -1,8 +1,6 @@
 #ifndef PREPARSE_H
 #define PREPARSE_H
 
-#include <fstream>
-
 #include "coreutils.h"
 
 namespace Utilities::Other

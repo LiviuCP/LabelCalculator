@@ -1,7 +1,6 @@
 #include "errorsettingsproxy.h"
 #include "errortypes.h"
 #include "errorcodes.h"
-#include "applicationdata.h"
 #include "parserdata.h"
 #include "deviceportdata.h"
 

@@ -1,10 +1,6 @@
 #ifndef APPSETTINGS_H
 #define APPSETTINGS_H
 
-#include <memory>
-#include <string>
-#include <string_view>
-
 #include "coreutils.h"
 
 class AppSettings

@@ -7,7 +7,11 @@
 #include <filesystem>
 #include <chrono>
 #include <iostream>
+#include <fstream>
 #include <sstream>
+#include <memory>
+#include <ctime>
+#include <iomanip>
 #include <cassert>
 
 #ifdef _WIN32

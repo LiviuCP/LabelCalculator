@@ -1,8 +1,6 @@
 #ifndef PARSERCREATOR_H
 #define PARSERCREATOR_H
 
-#include <fstream>
-
 #include "parser.h"
 
 class ParserCreator
