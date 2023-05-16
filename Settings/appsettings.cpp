@@ -8,8 +8,6 @@
 #include "mach-o/dyld.h"
 #endif
 
-namespace Core = Utilities::Core;
-
 AppSettings::AppSettings()
     : mIsInitialized{false}
 {
@@ -36,47 +34,47 @@ std::string AppSettings::getUsername() const
     return mUsername;
 }
 
-Path_t AppSettings::getAppDataDir() const
+Core::Path_t AppSettings::getAppDataDir() const
 {
     return mAppDataDir;
 }
 
-Path_t AppSettings::getInputBackupDir() const
+Core::Path_t AppSettings::getInputBackupDir() const
 {
     return mInputBackupDir;
 }
 
-Path_t AppSettings::getOutputBackupDir() const
+Core::Path_t AppSettings::getOutputBackupDir() const
 {
     return mOutputBackupDir;
 }
 
-Path_t AppSettings::getAppExamplesDir() const
+Core::Path_t AppSettings::getAppExamplesDir() const
 {
     return mAppExamplesDir;
 }
 
-Path_t AppSettings::getAppDataExamplesDir() const
+Core::Path_t AppSettings::getAppDataExamplesDir() const
 {
     return mAppDataExamplesDir;
 }
 
-Path_t AppSettings::getConnectionDefinitionsFile() const
+Core::Path_t AppSettings::getConnectionDefinitionsFile() const
 {
     return mConnectionDefinitionsFile;
 }
 
-Path_t AppSettings::getConnectionInputFile() const
+Core::Path_t AppSettings::getConnectionInputFile() const
 {
     return mConnectionInputFile;
 }
 
-Path_t AppSettings::getLabellingOutputFile() const
+Core::Path_t AppSettings::getLabellingOutputFile() const
 {
     return mLabellingOutputFile;
 }
 
-Path_t AppSettings::getParsingErrorsFile() const
+Core::Path_t AppSettings::getParsingErrorsFile() const
 {
     return mParsingErrorsFile;
 }
@@ -160,10 +158,10 @@ void AppSettings::_retrieveAppDir()
     uint32_t pathSize = scCharBufferLength;
     if (0 == _NSGetExecutablePath(path, &pathSize))
     {
-        mAppDir = Path_t{path}.parent_path();
+        mAppDir = Core::Path_t{path}.parent_path();
     }
 #elif defined (__unix__)
-    const Path_t c_AppExecFilePath{std::filesystem::canonical("/proc/self/exe")};
+    const Core::Path_t c_AppExecFilePath{std::filesystem::canonical("/proc/self/exe")};
     if (!c_AppExecFilePath.empty())
     {
         mAppDir = c_AppExecFilePath.parent_path();
@@ -175,7 +173,7 @@ void AppSettings::_retrieveAppDir()
 
     if (c_Result > 0 && c_Result < scCharBufferLength)
     {
-        mAppDir = Path_t{path}.parent_path();
+        mAppDir = Core::Path_t{path}.parent_path();
     }
 #endif
     if (mAppDir.empty())
@@ -192,7 +190,7 @@ void AppSettings::_retrieveAppExamplesDir()
     {
         for (const auto& dirEntry : std::filesystem::directory_iterator{mAppDir})
         {
-            const Path_t c_CurrentPath{dirEntry.path()};
+            const Core::Path_t c_CurrentPath{dirEntry.path()};
 
             if (std::filesystem::is_directory(c_CurrentPath))
             {

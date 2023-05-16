@@ -6,7 +6,7 @@
 class EmptyCellError final : public Error
 {
 public:
-    EmptyCellError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
+    EmptyCellError(const size_t fileRowNumber, const size_t fileColumnNumber, const Core::ErrorStreamPtr pErrorStream);
     virtual void execute() override;
 };
 
@@ -14,7 +14,7 @@ public:
 class UnknownDeviceError final : public Error
 {
 public:
-    UnknownDeviceError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
+    UnknownDeviceError(const size_t fileRowNumber, const size_t fileColumnNumber, const Core::ErrorStreamPtr pErrorStream);
     virtual void execute() override;
 };
 
@@ -22,7 +22,7 @@ public:
 class FewerCellsError final : public Error
 {
 public:
-    FewerCellsError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
+    FewerCellsError(const size_t fileRowNumber, const size_t fileColumnNumber, const Core::ErrorStreamPtr pErrorStream);
     virtual void execute() override;
 };
 
@@ -30,7 +30,7 @@ public:
 class InvalidConnectionFormatError final : public Error
 {
 public:
-    InvalidConnectionFormatError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
+    InvalidConnectionFormatError(const size_t fileRowNumber, const size_t fileColumnNumber, const Core::ErrorStreamPtr pErrorStream);
     virtual void execute() override;
 };
 
@@ -38,7 +38,7 @@ public:
 class DeviceUPositionOutOfRangeError final : public Error
 {
 public:
-    DeviceUPositionOutOfRangeError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
+    DeviceUPositionOutOfRangeError(const size_t fileRowNumber, const size_t fileColumnNumber, const Core::ErrorStreamPtr pErrorStream);
     virtual void execute() override;
 };
 
@@ -46,7 +46,7 @@ public:
 class TargetDeviceNotFoundError final : public Error
 {
 public:
-    TargetDeviceNotFoundError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
+    TargetDeviceNotFoundError(const size_t fileRowNumber, const size_t fileColumnNumber, const Core::ErrorStreamPtr pErrorStream);
     virtual void execute() override;
 };
 
@@ -54,7 +54,7 @@ public:
 class DeviceConnectedToItselfError final : public Error
 {
 public:
-    DeviceConnectedToItselfError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
+    DeviceConnectedToItselfError(const size_t fileRowNumber, const size_t fileColumnNumber, const Core::ErrorStreamPtr pErrorStream);
     virtual void execute() override;
 };
 
@@ -62,7 +62,7 @@ public:
 class NullNrOfConnectionsError final : public Error
 {
 public:
-    NullNrOfConnectionsError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
+    NullNrOfConnectionsError(const size_t fileRowNumber, const size_t fileColumnNumber, const Core::ErrorStreamPtr pErrorStream);
     virtual void execute() override;
 };
 
@@ -70,7 +70,7 @@ public:
 class InvalidCharactersError final : public Error
 {
 public:
-    InvalidCharactersError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
+    InvalidCharactersError(const size_t fileRowNumber, const size_t fileColumnNumber, const Core::ErrorStreamPtr pErrorStream);
     virtual void execute() override;
 };
 
@@ -78,21 +78,21 @@ public:
 class InvalidUPositionValueError final : public Error
 {
 public:
-    InvalidUPositionValueError(const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream);
+    InvalidUPositionValueError(const size_t fileRowNumber, const size_t fileColumnNumber, const Core::ErrorStreamPtr pErrorStream);
     virtual void execute() override;
 };
 
 class EmptyConnectionInputFileError final : public Error
 {
 public:
-    EmptyConnectionInputFileError(const ErrorStreamPtr pErrorStream);
+    EmptyConnectionInputFileError(const Core::ErrorStreamPtr pErrorStream);
     virtual void execute() override;
 };
 
 class NoConnectionsDefinedError final : public Error
 {
 public:
-    NoConnectionsDefinedError(const ErrorStreamPtr pErrorStream);
+    NoConnectionsDefinedError(const Core::ErrorStreamPtr pErrorStream);
     virtual void execute() override;
 };
 

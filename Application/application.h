@@ -59,7 +59,7 @@ private:
 
     /* This function creates a directory or confirms its existence
     */
-    static bool _setDirectory(const Path_t& dirPath);
+    static bool _setDirectory(const Core::Path_t& dirPath);
 
     /* This function copies the example files directory from application folder into application data directory
     */
@@ -101,8 +101,8 @@ private:
     void _displaySuccessMessage(bool additionalOutputRequired) const;
 
     /* Getters */
-    Path_t _getInputFile() const;
-    Path_t _getOutputFile() const;
+    Core::Path_t _getInputFile() const;
+    Core::Path_t _getOutputFile() const;
 
     /* Attributes */
     static std::shared_ptr<Application> s_pApplication;
@@ -115,18 +115,18 @@ static constexpr std::string_view scClearScreenCommand{"cls"};
 
     ParserCreator::ParserTypes mParserType;
 
-    Path_t mAppDataDir;
-    Path_t mInputBackupDir;
-    Path_t mOutputBackupDir;
+    Core::Path_t mAppDataDir;
+    Core::Path_t mInputBackupDir;
+    Core::Path_t mOutputBackupDir;
 
-    Path_t mConnectionDefinitionsFile;
-    Path_t mConnectionInputFile;
-    Path_t mLabellingOutputFile;
-    Path_t mParsingErrorsFile;
+    Core::Path_t mConnectionDefinitionsFile;
+    Core::Path_t mConnectionInputFile;
+    Core::Path_t mLabellingOutputFile;
+    Core::Path_t mParsingErrorsFile;
 
-    const InputStreamPtr mpInputStream;
-    const OutputStreamPtr mpOutputStream;
-    const ErrorStreamPtr mpErrorStream;
+    const Core::InputStreamPtr mpInputStream;
+    const Core::OutputStreamPtr mpOutputStream;
+    const Core::ErrorStreamPtr mpErrorStream;
 
     bool mIsInitialized;
     bool mIsFileIOEnabled;

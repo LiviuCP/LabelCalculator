@@ -19,7 +19,7 @@ class ISubParser;
 class Parser : public ISubParserObserver
 {
 public:
-    Parser(const InputStreamPtr pInputStream, const OutputStreamPtr pOutputStream, const ErrorStreamPtr pErrorStream, const std::string_view header);
+    Parser(const Core::InputStreamPtr pInputStream, const Core::OutputStreamPtr pOutputStream, const Core::ErrorStreamPtr pErrorStream, const std::string_view header);
     virtual ~Parser();
 
     bool parse();
@@ -39,7 +39,7 @@ protected:
     virtual void _reset();
 
     /* Used for requesting error logging from error handler (force: used for non-localized error, e.g. empty file) */
-    ErrorPtr _logError(const Error_t errorCode, const size_t fileRowNumber, bool force = false);
+    ErrorPtr _logError(const Core::Error_t errorCode, const size_t fileRowNumber, bool force = false);
 
     /* Used for storing locally generated errors
        Error location is setup at error storing point
@@ -120,7 +120,7 @@ private:
         ParsedRowInfo(const std::string_view rowData);
 
         std::string mRowData; // input row (payload) data
-        Index_t mCurrentPosition; // current character index in the input string
+        Core::Index_t mCurrentPosition; // current character index in the input string
         size_t mFileColumnNumber; // csv column number
         std::vector<ISubParser*> mRegisteredSubParsers; // subparsers used on the row
         bool mIsSubParserActive; // checks if a subparser is active on the row (only one subparser can be active on each row)
@@ -139,9 +139,9 @@ private:
     };
 
     /* file streams used by parser, each one should correspond to a file that had been previously correctly opened */
-    const InputStreamPtr mpInputStream;
-    const OutputStreamPtr mpOutputStream;
-    const ErrorStreamPtr mpErrorStream;
+    const Core::InputStreamPtr mpInputStream;
+    const Core::OutputStreamPtr mpOutputStream;
+    const Core::ErrorStreamPtr mpErrorStream;
 
     /* required info for parsing all (payload) input rows */
     ParserInput mParserInput;

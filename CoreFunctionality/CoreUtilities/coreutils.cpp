@@ -9,7 +9,7 @@
    It is the caller's responsibility to check if the passed index is valid (non-null and within string bounds)!
    Note: a field can also be partially read if index is within field substring (starting with the given index until separator/end of string).
 */
-Index_t Utilities::Core::readDataField(const std::string_view src, std::string& dest, const Index_t index)
+Utilities::Core::Index_t Utilities::Core::readDataField(const std::string_view src, std::string& dest, const Utilities::Core::Index_t index)
 {
     Index_t nextIndex;
 

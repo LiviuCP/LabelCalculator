@@ -30,16 +30,16 @@
     assert(condition);
 #endif
 
-using Index_t = std::optional<size_t>;
-using Path_t = std::filesystem::path;
-using Error_t = unsigned short;
-
-using InputStreamPtr = std::shared_ptr<std::ifstream>;
-using OutputStreamPtr = std::shared_ptr<std::ofstream>;
-using ErrorStreamPtr = std::shared_ptr<std::ofstream>;
-
 namespace Utilities::Core
 {
+    using Index_t = std::optional<size_t>;
+    using Path_t = std::filesystem::path;
+    using Error_t = unsigned short;
+
+    using InputStreamPtr = std::shared_ptr<std::ifstream>;
+    using OutputStreamPtr = std::shared_ptr<std::ofstream>;
+    using ErrorStreamPtr = std::shared_ptr<std::ofstream>;
+
     /* This function reads a substring starting with index until reaching a comma character (end of .csv cell) or the string has no more characters
        If the index points to CSV separator (',') then reading starts with next character
     */

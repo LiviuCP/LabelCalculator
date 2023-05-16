@@ -6,7 +6,6 @@
 #include "deviceportutils.h"
 #include "deviceport.h"
 
-namespace Core = Utilities::Core;
 namespace Ports = Utilities::DevicePorts;
 
 DevicePort::DevicePort(const std::string_view deviceUPosition, const size_t fileRowNumber, const bool isSourceDevice, const bool parseFromRowStart)
@@ -60,12 +59,12 @@ void DevicePort::parseInputData(std::vector<ErrorPtr>& parsingErrors)
 
             if (0u == mInputData[currentParameter]->size())
             {
-                lastError = mpErrorHandler->logError(static_cast<Error_t>(ErrorCode::EMPTY_CELL), mFileRowNumber, mFileColumnNumber);
+                lastError = mpErrorHandler->logError(static_cast<Core::Error_t>(ErrorCode::EMPTY_CELL), mFileRowNumber, mFileColumnNumber);
                 parsingErrors.push_back(lastError);
             }
             else if (Core::areInvalidCharactersContained(*mInputData[currentParameter]))
             {
-                lastError = mpErrorHandler->logError(static_cast<Error_t>(ErrorCode::INVALID_CHARACTERS), mFileRowNumber, mFileColumnNumber);
+                lastError = mpErrorHandler->logError(static_cast<Core::Error_t>(ErrorCode::INVALID_CHARACTERS), mFileRowNumber, mFileColumnNumber);
                 parsingErrors.push_back(lastError);
             }
 
@@ -94,7 +93,7 @@ void DevicePort::parseInputData(std::vector<ErrorPtr>& parsingErrors)
 
         if (fewerCellsProvided) // handle parameter-independent errors
         {
-            lastError = mpErrorHandler->logError(static_cast<Error_t>(ErrorCode::FEWER_CELLS), mFileRowNumber, mFileColumnNumber);
+            lastError = mpErrorHandler->logError(static_cast<Core::Error_t>(ErrorCode::FEWER_CELLS), mFileRowNumber, mFileColumnNumber);
             parsingErrors.push_back(lastError);
         }
     }
@@ -105,9 +104,9 @@ void DevicePort::parseInputData(std::vector<ErrorPtr>& parsingErrors)
     }
 }
 
-Index_t DevicePort::getCurrentPosition() const
+Core::Index_t DevicePort::getCurrentPosition() const
 {
-    Index_t currentPosition{mCurrentPosition};
+    Core::Index_t currentPosition{mCurrentPosition};
 
     if (mCurrentPosition.has_value() && !mParseFromRowStart)
     {

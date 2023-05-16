@@ -2,13 +2,13 @@
 #include "errorcodes.h"
 #include "errorhandler.h"
 
-ErrorHandler::ErrorHandler(const ErrorStreamPtr pErrorStream)
+ErrorHandler::ErrorHandler(const Core::ErrorStreamPtr pErrorStream)
     : mpErrorStream{pErrorStream}
 {
     ASSERT(mpErrorStream && mpErrorStream->is_open(), "");
 }
 
-ErrorPtr ErrorHandler::logError(const Error_t errorCode,
+ErrorPtr ErrorHandler::logError(const Core::Error_t errorCode,
                                 const size_t fileRowNumber,
                                 const size_t fileColumnNumber)
 {

@@ -2,7 +2,6 @@
 #include "deviceportutils.h"
 #include "powerdeviceport.h"
 
-namespace Core = Utilities::Core;
 namespace Ports = Utilities::DevicePorts;
 
 PDUPort::PDUPort(const std::string_view deviceUPosition, const size_t fileRowNumber, const bool isSourceDevice)

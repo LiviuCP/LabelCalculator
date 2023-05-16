@@ -20,7 +20,7 @@ public:
     virtual void setFileColumnNumber(const size_t fileColumnNumber) = 0;
     virtual void setRawInputData(const std::string_view rawInputData) = 0;
 
-    virtual Index_t getCurrentPosition() const = 0;
+    virtual Core::Index_t getCurrentPosition() const = 0;
     virtual size_t getFileRowNumber() const = 0;
     virtual size_t getFileColumnNumber() const = 0;
 };

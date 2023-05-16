@@ -7,7 +7,7 @@
 class ConnectionInputParser final : public Parser
 {
 public:
-    ConnectionInputParser(const InputStreamPtr pInputStream, const OutputStreamPtr pOutputStream, const ErrorStreamPtr pErrorStream);
+    ConnectionInputParser(const Core::InputStreamPtr pInputStream, const Core::OutputStreamPtr pOutputStream, const Core::ErrorStreamPtr pErrorStream);
 
     ConnectionInputParser() = delete;
     ConnectionInputParser(const ConnectionInputParser&) = delete;

@@ -6,10 +6,9 @@
 #include "deviceport.h"
 #include "connectioninputparser.h"
 
-namespace Core = Utilities::Core;
 namespace Parsers = Utilities::Parsers;
 
-ConnectionInputParser::ConnectionInputParser(const InputStreamPtr pInputStream, const OutputStreamPtr pOutputStream, const ErrorStreamPtr pErrorStream)
+ConnectionInputParser::ConnectionInputParser(const Core::InputStreamPtr pInputStream, const Core::OutputStreamPtr pOutputStream, const Core::ErrorStreamPtr pErrorStream)
     : Parser(pInputStream, pOutputStream, pErrorStream, Data::c_LabellingTableHeader)
 {
 }
@@ -52,7 +51,7 @@ bool ConnectionInputParser::_parseInput()
     }
     else
     {
-        ErrorPtr pEmptyConnectionInputFileError{_logError(static_cast<Error_t>(ErrorCode::EMPTY_CONNECTION_INPUT_FILE), 1, true)};
+        ErrorPtr pEmptyConnectionInputFileError{_logError(static_cast<Core::Error_t>(ErrorCode::EMPTY_CONNECTION_INPUT_FILE), 1, true)};
         _storeParsingError(pEmptyConnectionInputFileError);
     }
 
@@ -151,7 +150,7 @@ bool ConnectionInputParser::_parseDevicePort(const size_t rowIndex)
             _storeParsingError(pError);
         }
 
-        if (parsingErrors.cend() != std::find_if(parsingErrors.cbegin(), parsingErrors.cend(), [](const ErrorPtr pError) {return pError && static_cast<Error_t>(ErrorCode::FEWER_CELLS) == pError->getErrorCode();}))
+        if (parsingErrors.cend() != std::find_if(parsingErrors.cbegin(), parsingErrors.cend(), [](const ErrorPtr pError) {return pError && static_cast<Core::Error_t>(ErrorCode::FEWER_CELLS) == pError->getErrorCode();}))
         {
             canContinueRowParsing = false; // the remaining row part should no longer be parsed if there are fewer cells (in total) than necessary
         }
@@ -176,7 +175,7 @@ Data::DeviceTypeID ConnectionInputParser::_parseDeviceType(const size_t rowIndex
         else
         {
             // total number of csv cells from the connection row (cable + 2 devices) is less than required (parsing of the row should stop at once)
-            ErrorPtr pFewerCellsError{_logError(static_cast<Error_t>(ErrorCode::FEWER_CELLS), rowIndex + Parsers::c_RowNumberOffset)};
+            ErrorPtr pFewerCellsError{_logError(static_cast<Core::Error_t>(ErrorCode::FEWER_CELLS), rowIndex + Parsers::c_RowNumberOffset)};
             _storeParsingError(pFewerCellsError);
         }
 
@@ -190,7 +189,7 @@ Data::DeviceTypeID ConnectionInputParser::_parseDeviceType(const size_t rowIndex
         if (c_CellSuccessfullyRead && Data::DeviceTypeID::UNKNOWN_DEVICE == deviceTypeID)
         {
             const size_t c_FileRowNumber{rowIndex + Parsers::c_RowNumberOffset};
-            ErrorPtr pUnknownDeviceError{_logError(static_cast<Error_t>(ErrorCode::UNKNOWN_DEVICE), c_FileRowNumber)};
+            ErrorPtr pUnknownDeviceError{_logError(static_cast<Core::Error_t>(ErrorCode::UNKNOWN_DEVICE), c_FileRowNumber)};
             _storeParsingError(pUnknownDeviceError);
         }
     }
@@ -216,14 +215,14 @@ bool ConnectionInputParser::_parseDeviceUPosition(const size_t rowIndex, std::st
             if (!isDeviceUPositionValid)
             {
                 const size_t c_FileRowNumber{rowIndex + Parsers::c_RowNumberOffset};
-                ErrorPtr pInvalidUPositionValueError{_logError(static_cast<Error_t>(ErrorCode::INVALID_U_POSITION_VALUE), c_FileRowNumber)};
+                ErrorPtr pInvalidUPositionValueError{_logError(static_cast<Core::Error_t>(ErrorCode::INVALID_U_POSITION_VALUE), c_FileRowNumber)};
                 _storeParsingError(pInvalidUPositionValueError);
             }
         }
         else
         {
             // total number of csv cells from the connection row (cable + 2 devices) is less than required (parsing of the row should stop at once)
-            ErrorPtr pFewerCellsError{_logError(static_cast<Error_t>(ErrorCode::FEWER_CELLS), rowIndex + Parsers::c_RowNumberOffset)};
+            ErrorPtr pFewerCellsError{_logError(static_cast<Core::Error_t>(ErrorCode::FEWER_CELLS), rowIndex + Parsers::c_RowNumberOffset)};
             _storeParsingError(pFewerCellsError);
         }
     }

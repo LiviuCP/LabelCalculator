@@ -3,6 +3,8 @@
 
 #include "coreutils.h"
 
+namespace Core = Utilities::Core;
+
 class AppSettings
 {
 public:
@@ -12,15 +14,15 @@ public:
 
     std::string getUsername() const;
 
-    Path_t getAppDataDir() const;
-    Path_t getInputBackupDir() const;
-    Path_t getOutputBackupDir() const;
-    Path_t getAppExamplesDir() const;
-    Path_t getAppDataExamplesDir() const;
-    Path_t getConnectionDefinitionsFile() const;
-    Path_t getConnectionInputFile() const;
-    Path_t getLabellingOutputFile() const;
-    Path_t getParsingErrorsFile() const;
+    Core::Path_t getAppDataDir() const;
+    Core::Path_t getInputBackupDir() const;
+    Core::Path_t getOutputBackupDir() const;
+    Core::Path_t getAppExamplesDir() const;
+    Core::Path_t getAppDataExamplesDir() const;
+    Core::Path_t getConnectionDefinitionsFile() const;
+    Core::Path_t getConnectionInputFile() const;
+    Core::Path_t getLabellingOutputFile() const;
+    Core::Path_t getParsingErrorsFile() const;
 
 private:
     /* Private constructor (singleton)
@@ -69,17 +71,17 @@ private:
 
     bool mIsInitialized;
 
-    Path_t mAppDir;             // build folder, directory where the application executable resides
-    Path_t mAppDataDir;         // data folder, directory where the input/output files processed by application reside
-    Path_t mInputBackupDir;     // backup for input files
-    Path_t mOutputBackupDir;    // backup for output files
-    Path_t mAppExamplesDir;     // examples dir from build folder
-    Path_t mAppDataExamplesDir; // examples dir copied from build folder to app data directory
+    Core::Path_t mAppDir;             // build folder, directory where the application executable resides
+    Core::Path_t mAppDataDir;         // data folder, directory where the input/output files processed by application reside
+    Core::Path_t mInputBackupDir;     // backup for input files
+    Core::Path_t mOutputBackupDir;    // backup for output files
+    Core::Path_t mAppExamplesDir;     // examples dir from build folder
+    Core::Path_t mAppDataExamplesDir; // examples dir copied from build folder to app data directory
 
-    Path_t mConnectionDefinitionsFile;
-    Path_t mConnectionInputFile;
-    Path_t mLabellingOutputFile;
-    Path_t mParsingErrorsFile;
+    Core::Path_t mConnectionDefinitionsFile;
+    Core::Path_t mConnectionInputFile;
+    Core::Path_t mLabellingOutputFile;
+    Core::Path_t mParsingErrorsFile;
 
     std::string mUsername;
 };

@@ -18,7 +18,7 @@ public:
     ParserCreator(const ParserCreator& parserCreator) = delete;
     ParserCreator& operator=(const ParserCreator&) = delete;
 
-    ParserPtr createParser(const ParserTypes parserType, const InputStreamPtr pInputStream, const OutputStreamPtr pOutputStream, const ErrorStreamPtr pErrorStream);
+    ParserPtr createParser(const ParserTypes parserType, const Core::InputStreamPtr pInputStream, const Core::OutputStreamPtr pOutputStream, const Core::ErrorStreamPtr pErrorStream);
 
     bool isParserAlreadyCreated() const;
 

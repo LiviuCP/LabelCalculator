@@ -2,10 +2,9 @@
 #include "deviceportutils.h"
 #include "datadeviceport.h"
 
-namespace Core = Utilities::Core;
 namespace Ports = Utilities::DevicePorts;
 
-SwitchPort::SwitchPort(const std::string_view deviceUPosition, const DevicePortTypesInfo_t& switchPortTypesInfo, const size_t fileRowNumber, const bool isSourceDevice)
+SwitchPort::SwitchPort(const std::string_view deviceUPosition, const Data::DevicePortTypesInfo_t& switchPortTypesInfo, const size_t fileRowNumber, const bool isSourceDevice)
     : DevicePort{deviceUPosition,
                  fileRowNumber,
                  isSourceDevice}
@@ -85,7 +84,7 @@ void SwitchPort::_handleNumberedPortType()
     }
 }
 
-DirectorPort::DirectorPort(const std::string_view deviceUPosition, const AllowedDataPortTypes_t& directorDataPortTypesInfo, const size_t fileRowNumber, const bool isSourceDevice)
+DirectorPort::DirectorPort(const std::string_view deviceUPosition, const Data::AllowedDataPortTypes_t& directorDataPortTypesInfo, const size_t fileRowNumber, const bool isSourceDevice)
     : SwitchPort{deviceUPosition,
                  {directorDataPortTypesInfo, true},
                  fileRowNumber,

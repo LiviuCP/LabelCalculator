@@ -1,8 +1,6 @@
 #ifndef PARSERDATA_H
 #define PARSERDATA_H
 
-#include <cstdlib>
-
 #include "applicationdata.h"
 
 namespace Data

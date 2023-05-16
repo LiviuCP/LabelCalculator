@@ -2,7 +2,6 @@
 #include "appsettings.h"
 #include "application.h"
 
-namespace Core = Utilities::Core;
 namespace Aux = Utilities::Other;
 
 Application::Application()
@@ -136,7 +135,7 @@ bool Application::_setApplicationEnvironment()
     // it is always a good idea to provide the user with a good starting point, namely a connection definitions file ready to be filled-in
     if (success && !std::filesystem::exists(mConnectionDefinitionsFile))
     {
-        OutputStreamPtr pEmptyFileStream{std::make_shared<std::ofstream>(mConnectionDefinitionsFile)};
+        Core::OutputStreamPtr pEmptyFileStream{std::make_shared<std::ofstream>(mConnectionDefinitionsFile)};
 
         if (pEmptyFileStream->is_open())
         {
@@ -198,7 +197,7 @@ bool Application::_setDirectories()
     return success;
 }
 
-bool Application::_setDirectory(const Path_t& dirPath)
+bool Application::_setDirectory(const Core::Path_t& dirPath)
 {
     bool success{false};
 
@@ -230,8 +229,8 @@ bool Application::_setDirectory(const Path_t& dirPath)
 
 void Application::_copyExamplesDir()
 {
-    const Path_t c_AppExamplesDir{AppSettings::getInstance()->getAppExamplesDir()};
-    const Path_t c_AppDataExamplesDir{AppSettings::getInstance()->getAppDataExamplesDir()};
+    const Core::Path_t c_AppExamplesDir{AppSettings::getInstance()->getAppExamplesDir()};
+    const Core::Path_t c_AppDataExamplesDir{AppSettings::getInstance()->getAppDataExamplesDir()};
 
     if (std::filesystem::exists(c_AppExamplesDir) && std::filesystem::is_directory(c_AppExamplesDir) && !std::filesystem::exists(c_AppDataExamplesDir))
     {
@@ -287,15 +286,15 @@ void Application::_enableFileInputOutput()
 
 void Application::_moveOutputFileToBackupDir()
 {
-    const Path_t c_OutputFile{_getOutputFile()};
+    const Core::Path_t c_OutputFile{_getOutputFile()};
 
     if (!c_OutputFile.empty() && std::filesystem::exists(c_OutputFile))
     {
-        const Path_t c_BackupDir{c_OutputFile == mLabellingOutputFile ? mOutputBackupDir : mInputBackupDir};
+        const Core::Path_t c_BackupDir{c_OutputFile == mLabellingOutputFile ? mOutputBackupDir : mInputBackupDir};
 
         if (!c_BackupDir.empty() && std::filesystem::exists(c_BackupDir) && std::filesystem::is_directory(c_BackupDir))
         {
-            Path_t movedOutputFile{c_BackupDir};
+            Core::Path_t movedOutputFile{c_BackupDir};
 
             // prepend timestamp (last modified date/time) to output file name in order to differentiate it from other files stored in the backup dir
             movedOutputFile /= Core::getDateTimeString(std::chrono::system_clock::now());
@@ -393,7 +392,7 @@ int Application::_handleStatusCode()
 
 void Application::_removeUnnecessaryFiles()
 {
-    Path_t fileToRemove{mParsingErrorsFile};
+    Core::Path_t fileToRemove{mParsingErrorsFile};
 
     // appropriate stream should be closed prior to erasing the file
     if (StatusCode::PARSING_ERROR != mStatusCode)
@@ -462,7 +461,7 @@ void Application::_displayAbortMessage()
 
 void Application::_displayDirectoryNotSetupMessage() const
 {
-    Path_t dirPath;
+    Core::Path_t dirPath;
     std::string dirType;
 
     switch(mStatusCode)
@@ -490,7 +489,7 @@ void Application::_displayDirectoryNotSetupMessage() const
 
 void Application::_displayFileOpeningErrorMessage() const
 {
-    Path_t file;
+    Core::Path_t file;
 
     switch(mStatusCode)
     {
@@ -548,9 +547,9 @@ void Application::_displaySuccessMessage(bool additionalOutputRequired) const
     std::cout << "Thank you for using LabelCalculator!\n\n";
 }
 
-Path_t Application::_getInputFile() const
+Core::Path_t Application::_getInputFile() const
 {
-    Path_t inputFile;
+    Core::Path_t inputFile;
 
     if (ParserCreator::ParserTypes::CONNECTION_DEFINITION == mParserType)
     {
@@ -568,9 +567,9 @@ Path_t Application::_getInputFile() const
     return inputFile;
 }
 
-Path_t Application::_getOutputFile() const
+Core::Path_t Application::_getOutputFile() const
 {
-    Path_t outputFile;
+    Core::Path_t outputFile;
 
     if (ParserCreator::ParserTypes::CONNECTION_DEFINITION == mParserType)
     {

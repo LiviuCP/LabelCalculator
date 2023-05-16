@@ -1,15 +1,15 @@
 #include "errorcodes.h"
 #include "error.h"
 
-Error::Error(Error_t errorCode, const size_t fileRowNumber, const size_t fileColumnNumber, const ErrorStreamPtr pErrorStream)
+Error::Error(Core::Error_t errorCode, const size_t fileRowNumber, const size_t fileColumnNumber, const Core::ErrorStreamPtr pErrorStream)
     : mErrorCode{errorCode}
     , mFileRowNumber{fileRowNumber}
     , mFileColumnNumber{fileColumnNumber}
     , mpErrorStream{pErrorStream}
 {
-    const Error_t c_ErrorCode{static_cast<Error_t>(mErrorCode)};
+    const Core::Error_t c_ErrorCode{static_cast<Core::Error_t>(mErrorCode)};
 
-    ASSERT(c_ErrorCode > 0u && c_ErrorCode < static_cast<Error_t>(ErrorCode::ErrorCodesUpperBound), "");
+    ASSERT(c_ErrorCode > 0u && c_ErrorCode < static_cast<Core::Error_t>(ErrorCode::ErrorCodesUpperBound), "");
     ASSERT(mFileRowNumber > 0u && mFileColumnNumber > 0u, "");
     ASSERT(mpErrorStream && mpErrorStream->is_open(), "");
 }
@@ -27,7 +27,7 @@ void Error::execute()
 
 }
 
-Error_t Error::getErrorCode() const
+Core::Error_t Error::getErrorCode() const
 {
     return mErrorCode;
 }

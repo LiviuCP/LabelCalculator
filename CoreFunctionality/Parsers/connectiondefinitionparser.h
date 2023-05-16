@@ -9,7 +9,7 @@
 class ConnectionDefinitionParser final : public Parser
 {
 public:
-    ConnectionDefinitionParser(const InputStreamPtr pInputStream, const OutputStreamPtr pOutputStream, const ErrorStreamPtr pErrorStream);
+    ConnectionDefinitionParser(const Core::InputStreamPtr pInputStream, const Core::OutputStreamPtr pOutputStream, const Core::ErrorStreamPtr pErrorStream);
 
     ConnectionDefinitionParser() = delete;
     ConnectionDefinitionParser(const ConnectionDefinitionParser&) = delete;

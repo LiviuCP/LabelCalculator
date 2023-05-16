@@ -1,8 +1,6 @@
 #ifndef DEVICEPORTDATA_H
 #define DEVICEPORTDATA_H
 
-#include <cstdlib>
-
 #include "deviceporttypes.h"
 #include "applicationdata.h"
 

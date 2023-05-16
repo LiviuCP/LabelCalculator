@@ -3,9 +3,7 @@
 #include "isubparser.h"
 #include "parser.h"
 
-namespace Core = Utilities::Core;
-
-Parser::Parser(const InputStreamPtr pInputStream, const OutputStreamPtr pOutputStream, const ErrorStreamPtr pErrorStream, const std::string_view header)
+Parser::Parser(const Core::InputStreamPtr pInputStream, const Core::OutputStreamPtr pOutputStream, const Core::ErrorStreamPtr pErrorStream, const std::string_view header)
     : mpInputStream{pInputStream}
     , mpOutputStream{pOutputStream}
     , mpErrorStream{pErrorStream}
@@ -75,7 +73,7 @@ void Parser::_reset()
     mParsingErrors.clear();
 }
 
-ErrorPtr Parser::_logError(const Error_t errorCode, const size_t fileRowNumber, bool force)
+ErrorPtr Parser::_logError(const Core::Error_t errorCode, const size_t fileRowNumber, bool force)
 {
     ErrorPtr result{nullptr};
 
@@ -335,7 +333,7 @@ void Parser::_writeOutput()
 */
 void Parser::_retrieveRequiredDataFromSubParser(const ISubParser* const pISubParser)
 {
-    Index_t subParserRowIndex;
+    Core::Index_t subParserRowIndex;
 
     if (pISubParser && _isValidSubParser(pISubParser))
     {
@@ -352,7 +350,7 @@ void Parser::_retrieveRequiredDataFromSubParser(const ISubParser* const pISubPar
     {
         const size_t c_RowIndex{subParserRowIndex.value()};
 
-        if (const Index_t c_SubParserCurrentPosition{pISubParser->getCurrentPosition()}; c_SubParserCurrentPosition.has_value())
+        if (const Core::Index_t c_SubParserCurrentPosition{pISubParser->getCurrentPosition()}; c_SubParserCurrentPosition.has_value())
         {
             if (const size_t c_NewCurrentPosition{mParserInput[c_RowIndex].mCurrentPosition.value() + c_SubParserCurrentPosition.value()};
                 c_NewCurrentPosition <= mParserInput[c_RowIndex].mRowData.size())

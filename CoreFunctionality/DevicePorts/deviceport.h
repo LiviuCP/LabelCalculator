@@ -40,7 +40,7 @@ public:
     virtual void parseInputData(std::vector<ErrorPtr>& parsingErrors) override;
 
     // getters
-    virtual Index_t getCurrentPosition() const override final;
+    virtual Core::Index_t getCurrentPosition() const override final;
     virtual size_t getFileRowNumber() const override final;
     virtual size_t getFileColumnNumber() const override final;
     std::string getDescription() const;
@@ -124,7 +124,7 @@ private:
     size_t mFileColumnNumber;
 
     // current character index in the currently parsed CSV row string
-    Index_t mCurrentPosition;
+    Core::Index_t mCurrentPosition;
 
     // reference to substrings storing the fields parsed by parseInputData()
     std::vector<std::string*> mInputData;

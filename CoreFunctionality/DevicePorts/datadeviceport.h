@@ -14,7 +14,7 @@ public:
 
 protected:
     // constructor needs to be protected as this class is a switch abstraction (derived classes are the concrete switches for which labels are being created)
-    SwitchPort(const std::string_view deviceUPosition, const DevicePortTypesInfo_t& switchPortTypesInfo, const size_t fileRowNumber, const bool isSourceDevice);
+    SwitchPort(const std::string_view deviceUPosition, const Data::DevicePortTypesInfo_t& switchPortTypesInfo, const size_t fileRowNumber, const bool isSourceDevice);
 
     virtual void _registerRequiredParameters() override;
     std::string _getPortType() const;
@@ -22,7 +22,7 @@ protected:
 private:
     void _handleNumberedPortType();
 
-    const AllowedDataPortTypes_t mAllowedDataPortTypes;
+    const Data::AllowedDataPortTypes_t mAllowedDataPortTypes;
     const bool mIsManagementPortAllowed;
 
     std::string mPortType;
@@ -39,7 +39,7 @@ public:
 
 protected:
     // constructor needs to be protected as this class is a director abstraction (derived classes are the concrete directors for which labels are being created)
-    DirectorPort(const std::string_view deviceUPosition, const AllowedDataPortTypes_t& directorDataPortTypesInfo, const size_t fileRowNumber, const bool isSourceDevice);
+    DirectorPort(const std::string_view deviceUPosition, const Data::AllowedDataPortTypes_t& directorDataPortTypesInfo, const size_t fileRowNumber, const bool isSourceDevice);
 
     virtual void _registerRequiredParameters() override;
 

@@ -1,7 +1,7 @@
 #include "applicationdata.h"
 #include "preparse.h"
 
-void Utilities::Other::createEmptyConnectionDefinitionsFile(const OutputStreamPtr pOutputStream)
+void Utilities::Other::createEmptyConnectionDefinitionsFile(const Core::OutputStreamPtr pOutputStream)
 {
     if(pOutputStream && pOutputStream->is_open())
     {
