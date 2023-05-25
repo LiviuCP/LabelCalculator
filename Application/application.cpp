@@ -296,12 +296,21 @@ void Application::_moveOutputFileToBackupDir()
         {
             Core::Path_t movedOutputFile{c_BackupDir};
 
-            // prepend timestamp (last modified date/time) to output file name in order to differentiate it from other files stored in the backup dir
+            // prepend timestamp (current date/time) to output file name in order to differentiate it from other files stored in the backup dir
             movedOutputFile /= Core::getDateTimeString(std::chrono::system_clock::now());
             movedOutputFile += "_";
             movedOutputFile += c_OutputFile.filename();
 
-            std::filesystem::rename(c_OutputFile, movedOutputFile);
+            // on Windows if the file is open an exception occurs when attempting to move it, this needs to be caught
+            try
+            {
+                std::filesystem::rename(c_OutputFile, movedOutputFile);
+            }
+            catch (const std::filesystem::filesystem_error& err)
+            {
+                std::cerr << "An error occurred when attempting to move the existing output file to the backup directory\n";
+                std::cerr << "More details: \n" << err.what() << "\nPath1:" << err.path1() << "\nPath2:" << err.path2() << "\nError code: " << err.code() << "\n";
+            }
         }
         else
         {
@@ -495,14 +504,7 @@ void Application::_displayFileOpeningErrorMessage() const
     {
     case StatusCode::INPUT_FILE_NOT_OPENED:
     case StatusCode::OUTPUT_FILE_NOT_OPENED:
-        if (ParserCreator::ParserTypes::UNKNOWN != mParserType)
-        {
-            file = StatusCode::INPUT_FILE_NOT_OPENED == mStatusCode ? _getInputFile() : _getOutputFile();
-        }
-        else
-        {
-            ASSERT(false, "Parser is invalid");
-        }
+        file = StatusCode::INPUT_FILE_NOT_OPENED == mStatusCode ? _getInputFile() : _getOutputFile();
         break;
     case StatusCode::ERROR_FILE_NOT_OPENED:
         file = mParsingErrorsFile;
@@ -516,7 +518,12 @@ void Application::_displayFileOpeningErrorMessage() const
     system(scClearScreenCommand.data());
     std::cerr << "Error! File cannot be opened for " << c_Operation << ".\n\n";
     std::cerr << "File path: "<< file.string() << "\n\n";
-    std::cerr << "The file might not exist or the user might not have the required permissions to open it.\n\n";
+    std::cerr << "Possible reasons:\n";
+    std::cerr << "- the file might not exist\n";
+#ifdef _WIN32
+    std::cerr << "- the file might already be open in another process\n";
+#endif
+    std::cerr << "- the user might not have the required permissions to open it\n\n";
 }
 
 void Application::_displayParsingErrorMessage() const
