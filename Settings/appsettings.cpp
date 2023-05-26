@@ -92,7 +92,7 @@ void AppSettings::_init()
 
             mAppDataDir = scCentralHomeDir;
             mAppDataDir /= mUsername;
-            mAppDataDir /= scDocumentsDirName;
+            mAppDataDir /= scUserDocumentsDirName;
             mAppDataDir /= scAppDataDirName;
 
             mInputBackupDir = mAppDataDir;
@@ -188,20 +188,25 @@ void AppSettings::_retrieveAppExamplesDir()
 
     if (!mAppDir.empty())
     {
-        for (const auto& dirEntry : std::filesystem::directory_iterator{mAppDir})
+        Core::Path_t documentationDir{mAppDir};
+        documentationDir /= scAppDocumentationDirName;
+
+        for (const auto& dirEntry : std::filesystem::directory_iterator{documentationDir})
         {
             const Core::Path_t c_CurrentPath{dirEntry.path()};
+            bool matchingCurrentPathFound{false};
 
             if (std::filesystem::is_directory(c_CurrentPath))
             {
                 std::string dirName{c_CurrentPath.filename().string()};
                 Core::convertStringCase(dirName, false);
+                matchingCurrentPathFound = (std::string::npos != dirName.find(scExamplesDirSearchKeyword, 0));
+            }
 
-                if (std::string::npos != dirName.find(scExamplesDirSearchKeyword, 0))
-                {
-                    mAppExamplesDir = c_CurrentPath;
-                    break;
-                }
+            if (matchingCurrentPathFound)
+            {
+                mAppExamplesDir = c_CurrentPath;
+                break;
             }
         }
     }

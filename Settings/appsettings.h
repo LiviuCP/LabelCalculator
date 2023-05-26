@@ -55,7 +55,7 @@ private:
 #else
     static constexpr std::string_view scCentralHomeDir{"C:\\Users"};
 #endif
-    static constexpr std::string_view scDocumentsDirName{"Documents"};
+    static constexpr std::string_view scUserDocumentsDirName{"Documents"};
     static constexpr std::string_view scAppDataDirName{"LabelCalculatorData"};
     static constexpr std::string_view scInputBackupDirName{"LabellingInputBackup"};
     static constexpr std::string_view scOutputBackupDirName{"LabellingOutputBackup"};
@@ -65,6 +65,8 @@ private:
     static constexpr std::string_view scConnectionInputFilename{"connectioninput.csv"};
     static constexpr std::string_view scLabellingTableFilename{"labellingtable.csv"};
     static constexpr std::string_view scParsingErrorsFilename{"error.txt"};
+
+    static constexpr std::string_view scAppDocumentationDirName{"Documentation"};
 
     static constexpr std::string_view scExamplesDirSearchKeyword{"example"};
     static constexpr size_t scCharBufferLength{1024}; // used for reading various strings of previously unknown size (e.g. application dir path)
