@@ -39,6 +39,8 @@ void DevicePort::parseInputData(std::vector<ErrorPtr>& parsingErrors)
 {
     if (_isCurrentPositionAllowed() &&
         mInputParametersCount == mInputData.size() &&
+        mInputParametersCount > 0u &&
+        mInputParametersCount <= Data::c_MaxPortInputParametersCount &&
         0u == std::count_if(mInputData.cbegin(), mInputData.cend(), [](const std::string* pElement) {return !pElement;}))
     {
         size_t currentParameter{0u};          // current field (cell) containining a device input parameter (e.g. device name)
@@ -273,17 +275,17 @@ void DevicePort::_initializeRequiredParameters()
 {
     if (!mIsInitialized)
     {
-        if (mFileRowNumber > 0u &&
-            mFileColumnNumber > 0u)
+        if (mFileRowNumber > 0u && mFileColumnNumber > 0u)
         {
             mInputParametersCount = _getInputParametersCount();
 
-            // there should be at least two parameters (device name and port number))
-            if (mInputParametersCount > 1u &&
-                    mInputParametersCount <= Data::c_MaxPortInputParametersCount)
+            // there should be at least one parameter (port number))
+            if (mInputParametersCount > 0u && mInputParametersCount <= Data::c_MaxPortInputParametersCount)
             {
                 mInputData.reserve(mInputParametersCount);
                 _registerRequiredParameters();
+
+                ASSERT(mInputParametersCount == mInputData.size(), "Incorrect registration of device port input parameters detected");
             }
             else
             {
