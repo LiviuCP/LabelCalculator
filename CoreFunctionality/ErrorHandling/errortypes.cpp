@@ -1,8 +1,7 @@
 #include "errorsettingsproxy.h"
 #include "errortypes.h"
 #include "errorcodes.h"
-#include "parserdata.h"
-#include "deviceportdata.h"
+#include "applicationdata.h"
 
 EmptyCellError::EmptyCellError(const size_t fileRowNumber, const size_t fileColumnNumber, const Core::ErrorStreamPtr pErrorStream)
     : Error{static_cast<Core::Error_t>(ErrorCode::EMPTY_CELL), fileRowNumber, fileColumnNumber, pErrorStream}
@@ -37,13 +36,13 @@ FewerCellsError::FewerCellsError(const size_t fileRowNumber, const size_t fileCo
 
 void FewerCellsError::execute()
 {
-    const size_t c_RequiredCellsCountPerRow{Data::c_NrOfCablesPerConnectionInputRow +
-                                            Data::c_NrOfPortsPerConnectionInputRow *
-                                           (Data::c_NrOfDeviceTypeAndUPositionCellsPerPort +
-                                            Data::c_MaxPortInputParametersCount)};
-
-    _logMessage("less cells exist on the row than required in order to store the connection data of the two device ports.", true);
-    _logMessage("A total number of " + std::to_string(c_RequiredCellsCountPerRow) + " contiguous cells are required.");
+    _logMessage("fewer cells exist on the row than required for storing the connection data of the two device ports.", true);
+    _logMessage("Please ensure a minimum number of cells are available for filling-in:");
+    _logMessage(" - cable part number");
+    _logMessage(" - device type and U position of each connected port");
+    _logMessage(" - required input parameters for each port depeding on device type");
+    _logMessage(" - padding fields (for first device port) if the number of input parameters is less than the maximum allowed");
+    _logMessage("Please check Documentation for more details and only use spreadsheet editors (avoid text file editors) to modify each csv file.");
     _logRowNumber();
 
     Error::execute();

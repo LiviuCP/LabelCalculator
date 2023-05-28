@@ -6,13 +6,6 @@
 namespace Data
 {
 
-    /* Used by error handling mechanism
-    */
-
-    inline constexpr size_t c_NrOfCablesPerConnectionInputRow{1u};
-    inline constexpr size_t c_NrOfPortsPerConnectionInputRow{2u};
-    inline constexpr size_t c_NrOfDeviceTypeAndUPositionCellsPerPort{2u};
-
     /* placeholders used for creating the connection input template file (should be filled in by user in next step)
     */
 
