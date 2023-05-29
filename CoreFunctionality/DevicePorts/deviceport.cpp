@@ -11,7 +11,8 @@ namespace Ports = Utilities::DevicePorts;
 DevicePort::DevicePort(const std::string_view deviceUPosition, const size_t fileRowNumber, const bool isSourceDevice, const bool parseFromRowStart)
     : mDeviceUPosition{deviceUPosition}
     , mFileRowNumber{fileRowNumber}
-    , mFileColumnNumber{1}
+    , mFileColumnNumber{1u}
+    , mInputParametersCount{0u} // should be updated by init() method
     , mIsSourceDevice{isSourceDevice}
     , mIsInitialized{false}
     , mpErrorHandler{nullptr}

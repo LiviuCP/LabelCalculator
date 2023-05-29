@@ -132,8 +132,8 @@ private:
     // total number of parameters that should be entered by user in the CSV file for the device port (including port number)
     size_t mInputParametersCount;
 
-    // true if first of the two devices in each connection entered in the input .csv file
-    bool mIsSourceDevice;
+    // true if port belongs to the source device (first port in each connection entered in the input .csv file)
+    const bool mIsSourceDevice;
 
     // initialization flag, ensures label/description are initialized and required input parameters are registered
     bool mIsInitialized;
