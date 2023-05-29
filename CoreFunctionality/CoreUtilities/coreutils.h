@@ -68,10 +68,15 @@ namespace Utilities::Core
     */
     template<typename clockType> std::string getDateTimeString(const std::chrono::time_point<clockType>& timePoint)
     {
-        const std::time_t c_Time = clockType::to_time_t(timePoint);
-
+        const std::time_t c_Time{clockType::to_time_t(timePoint)};
+        struct std::tm timeStruct;
+#ifndef _WIN32
+        (void)localtime_r(&c_Time, &timeStruct);
+#else
+        (void)localtime_s(&timeStruct, &c_Time);
+#endif
         std::stringstream stream;
-        stream << std::put_time(std::localtime(&c_Time), "%F_%H%M%S");
+        stream << std::put_time(&timeStruct, "%F_%H%M%S");
 
         const std::string c_DateTimeString{stream.str()};
 
