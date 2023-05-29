@@ -35,14 +35,21 @@ void SwitchPort::updateDescriptionAndLabel()
     }
     else if ("-" == mPortType)
     {
-        if (Ports::isManagementPortNumber(mPortNumber) && mIsManagementPortAllowed) // management port
+        if (mIsManagementPortAllowed)
         {
-            _appendDataToDescription(" - management port");
-            _appendDataToLabel("_MGMT");
+            if (Ports::isManagementPortNumber(mPortNumber)) // management port
+            {
+                _appendDataToDescription(" - management port");
+                _appendDataToLabel("_MGMT");
+            }
+            else
+            {
+                _setInvalidDescriptionAndLabel(Ports::c_InvalidPortNumberErrorText);
+            }
         }
         else
         {
-            _setInvalidDescriptionAndLabel(Ports::c_InvalidPortNumberErrorText);
+            _setInvalidDescriptionAndLabel(Ports::c_InvalidPortTypeErrorText);
         }
     }
     else
