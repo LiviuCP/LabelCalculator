@@ -1,6 +1,5 @@
-#include "deviceports.h"
+#include "errorhandling.h"
 
-
-DevicePorts::DevicePorts()
+ErrorHandling::ErrorHandling()
 {
 }
