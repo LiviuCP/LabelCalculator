@@ -255,12 +255,22 @@ void ConnectionDefinitionParser::_parseDeviceConnections(const size_t rowIndex)
     }
 }
 
+/* In spreadsheets the apostrophe (') might be required for enforcing the handling of the string as text (otherwise it might be converted  by spreadsheet app to another format)
+   For connection formatting it is highly necessary that the user is allowed (but not required) to precede the string with this character (connection formatting resembles date format)
+*/
 bool ConnectionDefinitionParser::_parseConnectionFormatting(const std::string_view source, ConnectedDevice& connectedDevice)
 {
     bool isFormattingValid{true};
     Core::Index_t slashCharIndex; // index of '/'
 
-    for (size_t index{0}; index < source.size(); ++index)
+    size_t startIndex{0u};
+
+    if (!source.empty() && '\'' == source[startIndex])
+    {
+        ++startIndex; // apostrophe is considered valid only when preceding the connection string
+    }
+
+    for (size_t index{startIndex}; index < source.size(); ++index)
     {
         if (std::isdigit(static_cast<unsigned char>(source[index])))
         {
@@ -287,11 +297,11 @@ bool ConnectionDefinitionParser::_parseConnectionFormatting(const std::string_vi
 
     if (isFormattingValid)
     {
-        if (const size_t c_SourceLength{source.size()}; slashCharIndex > 0 && slashCharIndex < c_SourceLength - 1)
+        if (const size_t c_SourceLength{source.size()}; slashCharIndex > startIndex && slashCharIndex < c_SourceLength - 1)
         {
             const char* const pSource{source.data()};
             const size_t c_SlashCharIndex{slashCharIndex.value()};
-            std::from_chars(pSource, pSource + c_SlashCharIndex, connectedDevice.first);
+            std::from_chars(pSource + startIndex, pSource + c_SlashCharIndex, connectedDevice.first);
             std::from_chars(pSource + c_SlashCharIndex + 1, pSource + c_SourceLength, connectedDevice.second);
         }
         else
