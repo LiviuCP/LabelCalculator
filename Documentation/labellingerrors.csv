@@ -1,0 +1,32 @@
+Error text,Device type,User action
+INVALID OR INCOMPATIBLE PORT TYPE,san,"Correct the port type input parameter so it matches an allowed value (e.g. F for fiber channel on a server, SAN switch or SAN director). "
+,lan,Note that the allowed port type values are in connection with the allowed port number values and sometimes with other input parameters.
+,ib,For more details check deviceportinput.csv.
+,kvm,
+,snd,
+,lnd,
+,svr,
+,sto,
+,,
+INVALID OR INCOMPATIBLE MODULE TYPE,bld,Check deviceportinput.csv for the list of allowed module type values and the values that would be entered for the other parameters depending on module type.
+,,
+INVALID OR INCOMPATIBLE PLACEMENT TYPE,pdu,A PDU or extension bar can be placed either horizontally (H) or vertically (left – enter L or right – enter R).
+,ext,Check deviceportinput.csv for more details.
+,,
+INVALID OR INCOMPATIBLE CONTROLLER NUMBER,sto,Correct the controller number input parameter. Note that the entered value also determines the allowed values for the other input paramters. Check deviceportinput.csv for more details.
+,,
+INVALID OR INCOMPATIBLE MODULE NUMBER,bld,Correct the module number so it is entered according to the chosen module type. Port number should also be adjusted accordingly. Check deviceportinput.csv for more details.
+,,
+INVALID OR INCOMPATIBLE SLOT NUMBER,sls,"Correct the slot number, positive integer required."
+,,
+INVALID OR INCOMPATIBLE BLADE NUMBER,snd,Correct the blade number of the SAN/LAN director according to allowed values mentioned in deviceportinput.csv. Adjust the other parameters if required.
+,lnd,
+,,
+INVALID OR INCOMPATIBLE LOAD SEGMENT NUMBER,pdu,"If a load segment has more than one port, then it should be explicitly mentioned along with port number. Otherwise the port number is sufficient. Check deviceportinput.csv for more info regarding allowed load segment number and port number values."
+,ups,
+,,
+INVALID OR INCOMPATIBLE PORT NUMBER,all devices,Port number parameter value should be entered accordingly. Usually a (variable) numeric value could be entered but there might be exceptions. The values entered for the preceding input parameters determine how the port number should be entered. Check deviceportinput.csv for more details.
+,,
+MAXIMUM CHARACTERS COUNT EXCEEDED BY: [COUNT],all devices,"Each label should contain a maximum number of characters which is hardcoded in the application settings. Currently this value is 16, which should be more than sufficient for most use cases."
+,,"Adjust the values of the parameters with variable number of characters (usually the numeric ones, e.g. controller number, port number) so the resulting label doesn’t exceed the maximum allowed number of chars."
+,,Check error message to determine how many characters should be taken out (in total) from the input parameters mentioned above.
