@@ -401,30 +401,37 @@ int Application::_handleStatusCode()
 
 void Application::_removeUnnecessaryFiles()
 {
-    Core::Path_t fileToRemove{mParsingErrorsFile};
+    std::vector<Core::Path_t> filesToRemove;
+    filesToRemove.reserve(2u); // maximum number of files to remove is 2: error file and output file
 
-    // appropriate stream should be closed prior to erasing the file
+    // the error file should only exist for parsing errors (other errors are displayed in terminal)
     if (StatusCode::PARSING_ERROR != mStatusCode)
     {
         if(mpErrorStream)
         {
             mpErrorStream->close();
         }
+
+        filesToRemove.push_back(mParsingErrorsFile);
     }
-    else
+
+    // there should be no output file when parsing errors occured or the input file could not be opened for reading
+    if (StatusCode::PARSING_ERROR == mStatusCode || StatusCode::INPUT_FILE_NOT_OPENED == mStatusCode)
     {
         if (mpOutputStream)
         {
             mpOutputStream->close();
         }
 
-        fileToRemove = _getOutputFile();
+        filesToRemove.push_back(_getOutputFile());
     }
 
-    // for some statuses the errors file path might be empty (the output file should't but the check is made for consistency)
-    if (!fileToRemove.empty())
+    for (const auto& path : filesToRemove)
     {
-        std::filesystem::remove(fileToRemove);
+        if (!path.empty())
+        {
+            std::filesystem::remove(path);
+        }
     }
 }
 
